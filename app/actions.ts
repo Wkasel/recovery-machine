@@ -4,7 +4,7 @@ import { encodedRedirect } from "@/utils/utils";
 import { getSupabaseClient } from "@/services/supabase/clientFactory";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
-import { Logger } from "@/lib/logger/Logger";
+import { Logger } from "@/lib/logger";
 import { z } from "zod";
 
 export const signUpAction = async (formData: FormData) => {
