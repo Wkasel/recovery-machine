@@ -1,13 +1,9 @@
-import { getSupabaseClient } from "@/services/supabase/clientFactory";
+import { getUser } from "@/services/supabase/queries/auth";
 import { InfoIcon } from "lucide-react";
 import { redirect } from "next/navigation";
 
 export default async function ProtectedPage() {
-  const supabase = await getSupabaseClient();
-
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  const user = await getUser();
 
   if (!user) {
     return redirect("/sign-in");

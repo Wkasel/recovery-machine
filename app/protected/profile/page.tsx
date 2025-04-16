@@ -1,65 +1,23 @@
 "use client";
 
-import { getSupabaseClient } from "@/services/supabase/clientFactory";
-import { useEffect, useState } from "react";
+import { useUser, useUpdateUser } from "@/services/auth/hooks";
 import { toast } from "sonner";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Logger } from "@/lib/logger/Logger";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export default function ProfilePage() {
-  const [user, setUser] = useState<any>(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const [isUpdating, setIsUpdating] = useState(false);
-  const [supabase, setSupabase] = useState<any>(null);
-
-  useEffect(() => {
-    async function loadProfile() {
-      try {
-        const supabaseClient = await getSupabaseClient();
-        setSupabase(supabaseClient);
-        const {
-          data: { user },
-          error,
-        } = await supabaseClient.auth.getUser();
-        if (error) throw error;
-        setUser(user);
-      } catch (error) {
-        Logger.getInstance().error(
-          "Error loading profile",
-          { component: "ProfilePage" },
-          error instanceof Error ? error : new Error(String(error))
-        );
-        toast.error("Failed to load profile");
-      } finally {
-        setIsLoading(false);
-      }
-    }
-    loadProfile();
-  }, []);
+  const { data: user, isLoading } = useUser();
+  const { mutate: updateUser, isPending: isUpdating } = useUpdateUser();
 
   const handleUpdateEmail = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
-    const newEmail = formData.get("email") as string;
-    try {
-      setIsUpdating(true);
-      if (!supabase) throw new Error("Supabase client not ready");
-      const { error } = await supabase.auth.updateUser({ email: newEmail });
-      if (error) throw error;
-      toast.success("Email update confirmation sent");
-    } catch (error) {
-      Logger.getInstance().error(
-        "Error updating email",
-        { component: "ProfilePage" },
-        error instanceof Error ? error : new Error(String(error))
-      );
-      toast.error("Failed to update email");
-    } finally {
-      setIsUpdating(false);
-    }
+    const email = formData.get("email") as string;
+
+    updateUser({ email });
   };
 
   const handleUpdatePassword = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -67,31 +25,37 @@ export default function ProfilePage() {
     const formData = new FormData(e.currentTarget);
     const password = formData.get("password") as string;
     const confirmPassword = formData.get("confirmPassword") as string;
+
     if (password !== confirmPassword) {
       toast.error("Passwords do not match");
       return;
     }
-    try {
-      setIsUpdating(true);
-      if (!supabase) throw new Error("Supabase client not ready");
-      const { error } = await supabase.auth.updateUser({ password });
-      if (error) throw error;
-      toast.success("Password updated successfully");
-      (e.target as HTMLFormElement).reset();
-    } catch (error) {
-      Logger.getInstance().error(
-        "Error updating password",
-        { component: "ProfilePage" },
-        error instanceof Error ? error : new Error(String(error))
-      );
-      toast.error("Failed to update password");
-    } finally {
-      setIsUpdating(false);
-    }
+
+    updateUser({ password });
+    (e.target as HTMLFormElement).reset();
   };
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return (
+      <div className="container max-w-2xl mx-auto p-4 space-y-8">
+        <Card>
+          <CardHeader>
+            <Skeleton className="h-8 w-48" />
+            <Skeleton className="h-4 w-72 mt-2" />
+          </CardHeader>
+          <CardContent className="space-y-8">
+            <div className="space-y-2">
+              <Skeleton className="h-6 w-36" />
+              <div className="space-y-1">
+                <Skeleton className="h-4 w-64" />
+                <Skeleton className="h-4 w-48" />
+                <Skeleton className="h-4 w-56" />
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    );
   }
 
   return (
@@ -108,7 +72,10 @@ export default function ProfilePage() {
             <div className="text-sm text-muted-foreground">
               <p>User ID: {user?.id}</p>
               <p>Current Email: {user?.email}</p>
-              <p>Last Sign In: {new Date(user?.last_sign_in_at).toLocaleString()}</p>
+              <p>
+                Last Sign In:{" "}
+                {user?.last_sign_in_at ? new Date(user.last_sign_in_at).toLocaleString() : "Never"}
+              </p>
             </div>
           </div>
 

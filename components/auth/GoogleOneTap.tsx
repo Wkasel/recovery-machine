@@ -1,7 +1,7 @@
 "use client";
 
 import Script from "next/script";
-import { getSupabaseClient } from "@/services/supabase/clientFactory";
+import { createBrowserSupabaseClient } from "@/services/supabase/client";
 import { CredentialResponse } from "google-one-tap";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -39,11 +39,8 @@ const GoogleOneTap = () => {
 
   useEffect(() => {
     setIsClient(true);
-    async function initSupabase() {
-      const client = await getSupabaseClient();
-      setSupabase(client);
-    }
-    initSupabase();
+    const client = createBrowserSupabaseClient();
+    setSupabase(client);
   }, []);
 
   // generate nonce to use for google id token sign-in

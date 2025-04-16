@@ -1,4 +1,4 @@
-import { getSupabaseClient } from "@/services/supabase/clientFactory";
+import { createBrowserSupabaseClient } from "@/services/supabase/client";
 import { Logger } from "@/lib/logger/Logger";
 import { CredentialResponse } from "google-one-tap";
 
@@ -25,7 +25,7 @@ export async function initializeDebug() {
     return;
   }
 
-  const supabase = await getSupabaseClient();
+  const supabase = createBrowserSupabaseClient();
 
   window.__DEBUG__ = {
     supabase: {

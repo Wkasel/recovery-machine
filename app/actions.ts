@@ -1,135 +1,198 @@
 "use server";
 
 import { encodedRedirect } from "@/utils/utils";
-import { getSupabaseClient } from "@/services/supabase/clientFactory";
+import { createServerSupabaseClient } from "@/services/supabase/server";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { Logger } from "@/lib/logger";
 import { z } from "zod";
+import { AppError } from "@/lib/errors/AppError";
+import { AuthError } from "@/lib/errors/AuthError";
+
+const authSchema = {
+  signUp: z.object({
+    email: z.string().email("Invalid email address"),
+    password: z.string().min(6, "Password must be at least 6 characters"),
+  }),
+  signIn: z.object({
+    email: z.string().email("Invalid email address"),
+    password: z.string().min(1, "Password is required"),
+  }),
+  resetPassword: z
+    .object({
+      password: z.string().min(6, "Password must be at least 6 characters"),
+      confirmPassword: z.string(),
+    })
+    .refine((data) => data.password === data.confirmPassword, {
+      message: "Passwords do not match",
+      path: ["confirmPassword"],
+    }),
+};
 
 export const signUpAction = async (formData: FormData) => {
-  const email = formData.get("email")?.toString();
-  const password = formData.get("password")?.toString();
-  const supabase = await getSupabaseClient();
-  const origin = (await headers()).get("origin");
+  try {
+    const parsed = authSchema.signUp.parse({
+      email: formData.get("email"),
+      password: formData.get("password"),
+    });
 
-  if (!email || !password) {
-    return encodedRedirect("error", "/sign-up", "Email and password are required");
-  }
+    const supabase = await createServerSupabaseClient();
+    const origin = (await headers()).get("origin");
 
-  const { error } = await supabase.auth.signUp({
-    email,
-    password,
-    options: {
-      emailRedirectTo: `${origin}/auth/callback`,
-    },
-  });
+    const { error } = await supabase.auth.signUp({
+      email: parsed.email,
+      password: parsed.password,
+      options: {
+        emailRedirectTo: `${origin}/auth/callback`,
+      },
+    });
 
-  if (error) {
-    Logger.getInstance().error(
-      error.code + " " + error.message,
-      { component: "signUpAction" },
-      error instanceof Error ? error : new Error(String(error))
-    );
-    return encodedRedirect("error", "/sign-up", error.message);
-  } else {
+    if (error) throw AuthError.from(error);
+
     return encodedRedirect(
       "success",
       "/sign-up",
       "Thanks for signing up! Please check your email for a verification link."
     );
+  } catch (error) {
+    if (error instanceof z.ZodError) {
+      const message = error.errors[0]?.message || "Invalid form data";
+      return encodedRedirect("error", "/sign-up", message);
+    }
+
+    Logger.getInstance().error(
+      "Sign up failed",
+      { component: "signUpAction" },
+      AppError.from(error)
+    );
+    return encodedRedirect(
+      "error",
+      "/sign-up",
+      error instanceof AuthError ? error.toUserMessage() : "Sign up failed"
+    );
   }
 };
 
 export const signInAction = async (formData: FormData) => {
-  const email = formData.get("email") as string;
-  const password = formData.get("password") as string;
-  const supabase = await getSupabaseClient();
+  try {
+    const parsed = authSchema.signIn.parse({
+      email: formData.get("email"),
+      password: formData.get("password"),
+    });
 
-  const { error } = await supabase.auth.signInWithPassword({
-    email,
-    password,
-  });
+    const supabase = await createServerSupabaseClient();
+    const { error } = await supabase.auth.signInWithPassword(parsed);
 
-  if (error) {
-    return encodedRedirect("error", "/sign-in", error.message);
+    if (error) throw AuthError.from(error);
+
+    return redirect("/protected");
+  } catch (error) {
+    if (error instanceof z.ZodError) {
+      const message = error.errors[0]?.message || "Invalid form data";
+      return encodedRedirect("error", "/sign-in", message);
+    }
+
+    Logger.getInstance().error(
+      "Sign in failed",
+      { component: "signInAction" },
+      AppError.from(error)
+    );
+    return encodedRedirect(
+      "error",
+      "/sign-in",
+      error instanceof AuthError ? error.toUserMessage() : "Sign in failed"
+    );
   }
-
-  return redirect("/protected");
 };
 
 export const forgotPasswordAction = async (formData: FormData) => {
-  const email = formData.get("email")?.toString();
-  const supabase = await getSupabaseClient();
-  const origin = (await headers()).get("origin");
-  const callbackUrl = formData.get("callbackUrl")?.toString();
+  try {
+    const email = z.string().email("Invalid email address").parse(formData.get("email"));
+    const supabase = await createServerSupabaseClient();
+    const origin = (await headers()).get("origin");
+    const callbackUrl = formData.get("callbackUrl")?.toString();
 
-  if (!email) {
-    return encodedRedirect("error", "/forgot-password", "Email is required");
-  }
+    const { error } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: `${origin}/auth/callback?redirect_to=/protected/reset-password`,
+    });
 
-  const { error } = await supabase.auth.resetPasswordForEmail(email, {
-    redirectTo: `${origin}/auth/callback?redirect_to=/protected/reset-password`,
-  });
+    if (error) throw AuthError.from(error);
 
-  if (error) {
-    Logger.getInstance().error(
-      error.message,
-      { component: "forgotPasswordAction" },
-      error instanceof Error ? error : new Error(String(error))
+    if (callbackUrl) {
+      return redirect(callbackUrl);
+    }
+
+    return encodedRedirect(
+      "success",
+      "/forgot-password",
+      "Check your email for a link to reset your password."
     );
-    return encodedRedirect("error", "/forgot-password", "Could not reset password");
-  }
+  } catch (error) {
+    if (error instanceof z.ZodError) {
+      return encodedRedirect("error", "/forgot-password", "Please enter a valid email address");
+    }
 
-  if (callbackUrl) {
-    return redirect(callbackUrl);
+    Logger.getInstance().error(
+      "Password reset failed",
+      { component: "forgotPasswordAction" },
+      AppError.from(error)
+    );
+    return encodedRedirect(
+      "error",
+      "/forgot-password",
+      error instanceof AuthError ? error.toUserMessage() : "Could not reset password"
+    );
   }
-
-  return encodedRedirect(
-    "success",
-    "/forgot-password",
-    "Check your email for a link to reset your password."
-  );
 };
 
 export const resetPasswordAction = async (formData: FormData) => {
-  const supabase = await getSupabaseClient();
+  try {
+    const parsed = authSchema.resetPassword.parse({
+      password: formData.get("password"),
+      confirmPassword: formData.get("confirmPassword"),
+    });
 
-  const password = formData.get("password") as string;
-  const confirmPassword = formData.get("confirmPassword") as string;
+    const supabase = await createServerSupabaseClient();
+    const { error } = await supabase.auth.updateUser({
+      password: parsed.password,
+    });
 
-  if (!password || !confirmPassword) {
+    if (error) throw AuthError.from(error);
+
+    return encodedRedirect("success", "/protected/reset-password", "Password updated");
+  } catch (error) {
+    if (error instanceof z.ZodError) {
+      const message = error.errors[0]?.message || "Invalid password";
+      return encodedRedirect("error", "/protected/reset-password", message);
+    }
+
+    Logger.getInstance().error(
+      "Password reset failed",
+      { component: "resetPasswordAction" },
+      AppError.from(error)
+    );
     return encodedRedirect(
       "error",
       "/protected/reset-password",
-      "Password and confirm password are required"
+      error instanceof AuthError ? error.toUserMessage() : "Password update failed"
     );
   }
-
-  if (password !== confirmPassword) {
-    return encodedRedirect("error", "/protected/reset-password", "Passwords do not match");
-  }
-
-  const { error } = await supabase.auth.updateUser({
-    password: password,
-  });
-
-  if (error) {
-    Logger.getInstance().error(
-      error.message,
-      { component: "resetPasswordAction" },
-      error instanceof Error ? error : new Error(String(error))
-    );
-    return encodedRedirect("error", "/protected/reset-password", "Password update failed");
-  }
-
-  return encodedRedirect("success", "/protected/reset-password", "Password updated");
 };
 
 export const signOutAction = async () => {
-  const supabase = await getSupabaseClient();
-  await supabase.auth.signOut();
-  return redirect("/sign-in");
+  try {
+    const supabase = await createServerSupabaseClient();
+    const { error } = await supabase.auth.signOut();
+    if (error) throw AuthError.from(error);
+    return redirect("/sign-in");
+  } catch (error) {
+    Logger.getInstance().error(
+      "Sign out failed",
+      { component: "signOutAction" },
+      AppError.from(error)
+    );
+    return redirect("/sign-in");
+  }
 };
 
 // Example Zod schema for a server action

@@ -1,11 +1,11 @@
 import { useQuery } from "@tanstack/react-query";
-import { getSupabaseClient } from "@/services/supabase/clientFactory";
+import { createBrowserSupabaseClient } from "@/services/supabase/client";
 
 export function useUserQuery() {
   return useQuery({
     queryKey: ["supabase", "user"],
     queryFn: async () => {
-      const supabase = await getSupabaseClient();
+      const supabase = createBrowserSupabaseClient();
       const { data, error } = await supabase.auth.getUser();
       if (error) throw error;
       return data.user;

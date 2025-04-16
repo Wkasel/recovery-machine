@@ -1,6 +1,6 @@
 "use client";
 
-import { getSupabaseClient } from "@/services/supabase/clientFactory";
+import { createBrowserSupabaseClient } from "@/services/supabase/client";
 import Script from "next/script";
 import { useEffect, useState } from "react";
 import { CredentialResponse } from "google-one-tap";
@@ -11,11 +11,8 @@ export default function GoogleSignInButton() {
   const [supabase, setSupabase] = useState<any>(null);
 
   useEffect(() => {
-    async function initSupabase() {
-      const client = await getSupabaseClient();
-      setSupabase(client);
-    }
-    initSupabase();
+    const client = createBrowserSupabaseClient();
+    setSupabase(client);
   }, []);
 
   async function handleSignInWithGoogle(response: CredentialResponse) {

@@ -1,6 +1,6 @@
 "use client";
 
-import { getSupabaseClient } from "@/services/supabase/clientFactory";
+import { createBrowserSupabaseClient } from "@/services/supabase/client";
 import { useState, useEffect } from "react";
 import { toast } from "sonner";
 import { Input } from "../ui/input";
@@ -16,11 +16,8 @@ export default function PhoneSignIn() {
   const [supabase, setSupabase] = useState<any>(null);
 
   useEffect(() => {
-    async function initSupabase() {
-      const client = await getSupabaseClient();
-      setSupabase(client);
-    }
-    initSupabase();
+    const client = createBrowserSupabaseClient();
+    setSupabase(client);
   }, []);
 
   const handleSendOTP = async (e: React.FormEvent) => {
