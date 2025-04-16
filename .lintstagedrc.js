@@ -1,7 +1,7 @@
-module.exports = {
-  // Run ESLint on all staged JS/TS files
-  "**/*.{js,jsx,ts,tsx}": ["eslint --fix"],
+export default {
+  // Type check and lint TypeScript/JavaScript files
+  "*.{js,jsx,ts,tsx}": ["prettier --write", "eslint --fix"],
 
-  // Run Prettier on all staged files that Prettier supports
-  "**/*.{js,jsx,ts,tsx,json,css,scss,md}": ["prettier --write"],
+  // Format other files with Prettier
+  "*.{json,css,scss,md}": ["prettier --write"],
 };
