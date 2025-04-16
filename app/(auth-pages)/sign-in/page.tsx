@@ -1,44 +1,43 @@
-import { signInAction } from "@/app/actions";
-import { FormMessage, Message } from "@/components/form-message";
-import { SubmitButton } from "@/components/submit-button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import Link from "next/link";
+"use client";
 
-export default async function Login(props: { searchParams: Promise<Message> }) {
-  const searchParams = await props.searchParams;
+import Link from "next/link";
+import GoogleSignInButton from "@/components/auth/GoogleSignInButton";
+import MagicLink from "@/components/auth/MagicLink";
+import PhoneSignIn from "@/components/auth/PhoneSignIn";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Toaster } from "sonner";
+
+export default function Login() {
   return (
-    <form className="flex-1 flex flex-col min-w-64">
-      <h1 className="text-2xl font-medium">Sign in</h1>
-      <p className="text-sm text-foreground">
-        Don't have an account?{" "}
-        <Link className="text-foreground font-medium underline" href="/sign-up">
-          Sign up
-        </Link>
-      </p>
-      <div className="flex flex-col gap-2 [&>input]:mb-3 mt-8">
-        <Label htmlFor="email">Email</Label>
-        <Input name="email" placeholder="you@example.com" required />
-        <div className="flex justify-between items-center">
-          <Label htmlFor="password">Password</Label>
-          <Link
-            className="text-xs text-foreground underline"
-            href="/forgot-password"
-          >
-            Forgot Password?
-          </Link>
+    <>
+      <Toaster position="top-right" />
+      <div className="flex-1 flex flex-col items-center justify-center min-w-80 max-w-md mx-auto p-4">
+        <div className="w-full">
+          <h1 className="text-2xl font-medium mb-2">Sign in</h1>
+          <p className="text-sm text-muted-foreground mb-8">
+            Don't have an account?{" "}
+            <Link className="text-primary font-medium hover:underline" href="/sign-up">
+              Sign up
+            </Link>
+          </p>
+          <Tabs defaultValue="google" className="w-full">
+            <TabsList className="grid w-full grid-cols-3 mb-8">
+              <TabsTrigger value="google">Google</TabsTrigger>
+              <TabsTrigger value="magic-link">Magic Link</TabsTrigger>
+              <TabsTrigger value="phone">Phone</TabsTrigger>
+            </TabsList>
+            <TabsContent value="google">
+              <GoogleSignInButton />
+            </TabsContent>
+            <TabsContent value="magic-link">
+              <MagicLink />
+            </TabsContent>
+            <TabsContent value="phone">
+              <PhoneSignIn />
+            </TabsContent>
+          </Tabs>
         </div>
-        <Input
-          type="password"
-          name="password"
-          placeholder="Your password"
-          required
-        />
-        <SubmitButton pendingText="Signing In..." formAction={signInAction}>
-          Sign in
-        </SubmitButton>
-        <FormMessage message={searchParams} />
       </div>
-    </form>
+    </>
   );
 }

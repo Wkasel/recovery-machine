@@ -1,51 +1,41 @@
-import { signUpAction } from "@/app/actions";
-import { FormMessage, Message } from "@/components/form-message";
-import { SubmitButton } from "@/components/submit-button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import Link from "next/link";
-import { SmtpMessage } from "../smtp-message";
+import GoogleSignInButton from "@/components/auth/GoogleSignInButton";
+import MagicLink from "@/components/auth/MagicLink";
+import PhoneSignIn from "@/components/auth/PhoneSignIn";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Toaster } from "sonner";
 
-export default async function Signup(props: {
-  searchParams: Promise<Message>;
-}) {
-  const searchParams = await props.searchParams;
-  if ("message" in searchParams) {
-    return (
-      <div className="w-full flex-1 flex items-center h-screen sm:max-w-md justify-center gap-2 p-4">
-        <FormMessage message={searchParams} />
-      </div>
-    );
-  }
-
+export default function Signup() {
   return (
     <>
-      <form className="flex flex-col min-w-64 max-w-64 mx-auto">
-        <h1 className="text-2xl font-medium">Sign up</h1>
-        <p className="text-sm text text-foreground">
-          Already have an account?{" "}
-          <Link className="text-primary font-medium underline" href="/sign-in">
-            Sign in
-          </Link>
-        </p>
-        <div className="flex flex-col gap-2 [&>input]:mb-3 mt-8">
-          <Label htmlFor="email">Email</Label>
-          <Input name="email" placeholder="you@example.com" required />
-          <Label htmlFor="password">Password</Label>
-          <Input
-            type="password"
-            name="password"
-            placeholder="Your password"
-            minLength={6}
-            required
-          />
-          <SubmitButton formAction={signUpAction} pendingText="Signing up...">
-            Sign up
-          </SubmitButton>
-          <FormMessage message={searchParams} />
+      <Toaster position="top-right" />
+      <div className="flex-1 flex flex-col items-center justify-center min-w-80 max-w-md mx-auto p-4">
+        <div className="w-full">
+          <h1 className="text-2xl font-medium mb-2">Sign up</h1>
+          <p className="text-sm text-muted-foreground mb-8">
+            Already have an account?{" "}
+            <Link className="text-primary font-medium hover:underline" href="/sign-in">
+              Sign in
+            </Link>
+          </p>
+          <Tabs defaultValue="google" className="w-full">
+            <TabsList className="grid w-full grid-cols-3 mb-8">
+              <TabsTrigger value="google">Google</TabsTrigger>
+              <TabsTrigger value="magic-link">Magic Link</TabsTrigger>
+              <TabsTrigger value="phone">Phone</TabsTrigger>
+            </TabsList>
+            <TabsContent value="google">
+              <GoogleSignInButton />
+            </TabsContent>
+            <TabsContent value="magic-link">
+              <MagicLink />
+            </TabsContent>
+            <TabsContent value="phone">
+              <PhoneSignIn />
+            </TabsContent>
+          </Tabs>
         </div>
-      </form>
-      <SmtpMessage />
+      </div>
     </>
   );
 }

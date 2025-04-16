@@ -4,9 +4,10 @@ import HeaderAuth from "@/components/header-auth";
 import { ThemeSwitcher } from "@/components/theme-switcher";
 import { hasEnvVars } from "@/utils/supabase/check-env-vars";
 import { Geist } from "next/font/google";
-import { ThemeProvider } from "next-themes";
 import Link from "next/link";
 import "./globals.css";
+import Script from "next/script";
+import AppProvider from "./providers";
 
 const defaultUrl = process.env.VERCEL_URL
   ? `https://${process.env.VERCEL_URL}`
@@ -28,15 +29,32 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const isDevelopment = process.env.NODE_ENV === "development";
+
   return (
     <html lang="en" className={geistSans.className} suppressHydrationWarning>
+      <head>
+        <Script
+          id="env-init"
+          dangerouslySetInnerHTML={{
+            __html: `
+              window.__env__ = {
+                NEXT_PUBLIC_GOOGLE_CLIENT_ID: '${process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID || ""}',
+                NEXT_PUBLIC_SUPABASE_URL: '${process.env.NEXT_PUBLIC_SUPABASE_URL || ""}',
+                NEXT_PUBLIC_SUPABASE_ANON_KEY: '${process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || ""}'
+              };
+            `,
+          }}
+          strategy="beforeInteractive"
+        />
+        <Script
+          src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"
+          strategy="beforeInteractive"
+        />
+        {isDevelopment && <Script src="/debug-init.js" strategy="afterInteractive" />}
+      </head>
       <body className="bg-background text-foreground">
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
+        <AppProvider>
           <main className="min-h-screen flex flex-col items-center">
             <div className="flex-1 w-full flex flex-col gap-20 items-center">
               <nav className="w-full flex justify-center border-b border-b-foreground/10 h-16">
@@ -50,9 +68,7 @@ export default function RootLayout({
                   {!hasEnvVars ? <EnvVarWarning /> : <HeaderAuth />}
                 </div>
               </nav>
-              <div className="flex flex-col gap-20 max-w-5xl p-5">
-                {children}
-              </div>
+              <div className="flex flex-col gap-20 max-w-5xl p-5">{children}</div>
 
               <footer className="w-full flex items-center justify-center border-t mx-auto text-center text-xs gap-8 py-16">
                 <p>
@@ -70,7 +86,7 @@ export default function RootLayout({
               </footer>
             </div>
           </main>
-        </ThemeProvider>
+        </AppProvider>
       </body>
     </html>
   );
