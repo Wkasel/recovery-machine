@@ -1,12 +1,12 @@
 "use client";
 
-import { useUser, useUpdateUser } from "@/services/auth/hooks";
-import { toast } from "sonner";
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { Skeleton } from "@/components/ui/skeleton";
+import { useUpdateUser, useUser } from "@/services/auth/hooks";
+import { toast } from "sonner";
 
 export default function ProfilePage() {
   const { data: user, isLoading } = useUser();

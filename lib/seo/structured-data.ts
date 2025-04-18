@@ -1,11 +1,11 @@
-type Organization = {
+interface Organization {
   name: string;
   url: string;
   logo?: string;
   sameAs?: string[];
-};
+}
 
-type Article = {
+interface Article {
   title: string;
   description: string;
   image?: string;
@@ -15,7 +15,7 @@ type Article = {
     name: string;
     url?: string;
   };
-};
+}
 
 export function generateOrganizationSchema(org: Organization) {
   return {

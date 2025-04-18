@@ -1,8 +1,8 @@
-type Resource<T> = {
+interface IResource<T> {
   read: () => T;
-};
+}
 
-export function createSuspenseResource<T>(promise: Promise<T>): Resource<T> {
+export function createSuspenseResource<T>(promise: Promise<T>): IResource<T> {
   let status = "pending";
   let result: T | Error;
 

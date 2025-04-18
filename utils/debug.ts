@@ -1,6 +1,7 @@
-import { createBrowserSupabaseClient } from "@/services/supabase/client";
+/* eslint-disable */
+
+import { createBrowserSupabaseClient } from "@/core/supabase/client";
 import { Logger } from "@/lib/logger/Logger";
-import { CredentialResponse } from "google-one-tap";
 
 interface DebugUtils {
   supabase: {

@@ -1,5 +1,5 @@
-import { ImageResponse } from "next/og";
 import { siteMetadata } from "@/config/metadata";
+import { ImageResponse } from "next/og";
 
 export const runtime = "edge";
 
@@ -13,11 +13,11 @@ export async function GET(request: Request) {
     // Font loading
     const interBold = await fetch(
       new URL("../../../public/fonts/Inter-Bold.ttf", import.meta.url)
-    ).then((res) => res.arrayBuffer());
+    ).then(async (res) => res.arrayBuffer());
 
     const interRegular = await fetch(
       new URL("../../../public/fonts/Inter-Regular.ttf", import.meta.url)
-    ).then((res) => res.arrayBuffer());
+    ).then(async (res) => res.arrayBuffer());
 
     return new ImageResponse(
       (

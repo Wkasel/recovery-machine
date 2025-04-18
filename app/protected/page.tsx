@@ -1,4 +1,4 @@
-import { getUser } from "@/services/supabase/queries/auth";
+import { getUser } from "@/core/supabase/queries/auth";
 import { InfoIcon } from "lucide-react";
 import { redirect } from "next/navigation";
 

@@ -1,5 +1,9 @@
 import { QueryClient } from "@tanstack/react-query";
 
+/**
+ * Shared React Query client configuration.
+ * Note: Auth-related queries are in services/auth/hooks.ts
+ */
 export const queryClient = new QueryClient({
   defaultOptions: {
     queries: {

@@ -1,24 +1,41 @@
-import { createServerSupabaseClient } from "@/services/supabase/server";
-import { NextResponse } from "next/server";
+import { AuthError } from "@/core/errors/auth/AuthError";
+import { createServerSupabaseClient } from "@/core/supabase/server";
+import { Logger } from "@/lib/logger/Logger";
+import { NextRequest, NextResponse } from "next/server";
 
-export async function GET(request: Request) {
-  // The `/auth/callback` route is required for the server-side auth flow implemented
-  // by the SSR package. It exchanges an auth code for the user's session.
-  // https://supabase.com/docs/guides/auth/server-side/nextjs
-  const requestUrl = new URL(request.url);
-  const code = requestUrl.searchParams.get("code");
-  const origin = requestUrl.origin;
-  const redirectTo = requestUrl.searchParams.get("redirect_to")?.toString();
+type EmailOtpType = "signup" | "magiclink" | "recovery" | "invite" | "email" | "email-change";
 
-  if (code) {
+export async function GET(request: NextRequest): Promise<NextResponse> {
+  try {
+    const requestUrl = new URL(request.url);
+    const code = requestUrl.searchParams.get("code");
+    const next = requestUrl.searchParams.get("next") ?? "/protected";
+    const type = requestUrl.searchParams.get("type") as EmailOtpType;
+
+    if (!code) {
+      throw new AuthError("authCallbackFailed", "No code provided");
+    }
+
     const supabase = await createServerSupabaseClient();
-    await supabase.auth.exchangeCodeForSession(code);
-  }
 
-  if (redirectTo) {
-    return NextResponse.redirect(`${origin}${redirectTo}`);
-  }
+    if (type === "email") {
+      const { error } = await supabase.auth.verifyOtp({
+        token_hash: code,
+        type,
+      });
+      if (error) throw AuthError.fromSupabaseError(error);
+    } else {
+      const { error } = await supabase.auth.exchangeCodeForSession(code);
+      if (error) throw AuthError.fromSupabaseError(error);
+    }
 
-  // URL to redirect to after sign up process completes
-  return NextResponse.redirect(`${origin}/protected`);
+    return NextResponse.redirect(new URL(next, requestUrl.origin));
+  } catch (error) {
+    Logger.getInstance().error(
+      "Auth callback failed",
+      { component: "auth-callback" },
+      error instanceof AuthError ? error : new AuthError("authCallbackFailed", "An unexpected error occurred")
+    );
+    return NextResponse.redirect(new URL("/auth/error", request.url));
+  }
 }

@@ -1,7 +1,7 @@
 // lib/logger/formatters.ts
 // Log formatters will go here.
 
-import { LogFormatter, LogEntry } from "@/types/logger";
+import { LogEntry, LogFormatter } from "@/types/logger";
 
 export const jsonFormatter: LogFormatter = {
   format(entry: LogEntry) {

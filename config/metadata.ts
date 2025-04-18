@@ -1,4 +1,4 @@
-export type SiteMetadata = {
+export interface SiteMetadata {
   title: string;
   defaultTitle: string;
   titleTemplate: string;
@@ -16,7 +16,7 @@ export type SiteMetadata = {
     url: string;
     logo: string;
   };
-};
+}
 
 export const siteMetadata: SiteMetadata = {
   title: "27 Circles",

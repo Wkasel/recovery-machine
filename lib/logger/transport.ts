@@ -1,7 +1,7 @@
 // lib/logger/transport.ts
 // Log transport setup will go here.
 
-import { LogTransport, LogEntry } from "@/types/logger";
+import { LogEntry, LogTransport } from "@/types/logger";
 
 export const consoleTransport: LogTransport = {
   log(entry: LogEntry) {

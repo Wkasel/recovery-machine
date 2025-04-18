@@ -1,21 +1,14 @@
-import DeployButton from "@/components/deploy-button";
-import { EnvVarWarning } from "@/components/env-var-warning";
-import { ThemeSwitcher } from "@/components/theme-switcher";
-import { hasEnvVars } from "@/utils/supabase/check-env-vars";
 import { Geist } from "next/font/google";
-import Link from "next/link";
-import "./globals.css";
-import Script from "next/script";
 import AppProvider from "./providers";
 
 import { OrganizationJsonLd, WebsiteJsonLd } from "@/components/JsonLd";
-import { SkipToContent } from "@/components/SkipToContent";
-import { Analytics } from "@vercel/analytics/react";
-import { Header } from "@/components/nav/Header";
 import { Footer } from "@/components/nav/Footer";
+import { Header } from "@/components/nav/Header";
+import { Analytics } from "@vercel/analytics/react";
 
-import { globalmetadata } from "./metadata";
 import Debug from "./debug";
+import "./globals.css";
+import { globalmetadata } from "./metadata";
 
 export const metadata = globalmetadata;
 
@@ -29,8 +22,6 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const isDevelopment = process.env.NODE_ENV === "development";
-
   return (
     <html lang="en" className={geistSans.className} suppressHydrationWarning>
       <head>
@@ -39,7 +30,6 @@ export default function RootLayout({
         <WebsiteJsonLd />
       </head>
       <body className="bg-background text-foreground">
-        <SkipToContent />
         <AppProvider>
           <div className="min-h-screen flex flex-col">
             <Header />

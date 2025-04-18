@@ -1,30 +1,30 @@
 "use client";
 
-import React from "react";
-import { AppError } from "@/lib/errors";
 import { Button } from "@/components/ui/button";
+import { AppError } from "@/core/errors/base/AppError";
 import { Logger } from "@/lib/logger/Logger";
+import React from "react";
 
-interface Props {
+interface IProps {
   children: React.ReactNode;
 }
 
-interface State {
+interface IState {
   error: Error | null;
   errorInfo: React.ErrorInfo | null;
 }
 
-export class RootErrorBoundary extends React.Component<Props, State> {
-  constructor(props: Props) {
+export class RootErrorBoundary extends React.Component<IProps, IState> {
+  constructor(props: IProps) {
     super(props);
     this.state = { error: null, errorInfo: null };
   }
 
-  static getDerivedStateFromError(error: Error): State {
+  static getDerivedStateFromError(error: Error): IState {
     return { error, errorInfo: null };
   }
 
-  componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
+  componentDidCatch(error: Error, errorInfo: React.ErrorInfo): void {
     this.setState({
       error,
       errorInfo,
@@ -38,7 +38,7 @@ export class RootErrorBoundary extends React.Component<Props, State> {
     );
   }
 
-  render() {
+  render(): React.ReactNode {
     if (this.state.error) {
       const error = AppError.from(this.state.error);
 
@@ -72,3 +72,6 @@ export class RootErrorBoundary extends React.Component<Props, State> {
     return this.props.children;
   }
 }
+
+// Default export for barrel file
+export default RootErrorBoundary;

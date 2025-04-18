@@ -1,122 +1,91 @@
 "use client";
 
-import { createBrowserSupabaseClient } from "@/services/supabase/client";
-import { useState, useEffect } from "react";
-import { toast } from "sonner";
-import { Input } from "../ui/input";
+import { useState } from "react";
+import { usePhoneForm, useVerifyPhoneForm } from "@/core/forms/auth/phone-form";
 import { Button } from "../ui/button";
+import { Input } from "../ui/input";
 import { Label } from "../ui/label";
-import { Logger } from "@/lib/logger/Logger";
 
 export default function PhoneSignIn() {
-  const [phoneNumber, setPhoneNumber] = useState("");
-  const [otpCode, setOtpCode] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
   const [showOTPInput, setShowOTPInput] = useState(false);
-  const [supabase, setSupabase] = useState<any>(null);
 
-  useEffect(() => {
-    const client = createBrowserSupabaseClient();
-    setSupabase(client);
-  }, []);
+  const phoneForm = usePhoneForm({
+    onCodeSent: () => setShowOTPInput(true),
+  });
 
-  const handleSendOTP = async (e: React.FormEvent) => {
-    e.preventDefault();
-    try {
-      setIsLoading(true);
-      if (!supabase) throw new Error("Supabase client not ready");
-      const { error } = await supabase.auth.signInWithOtp({
-        phone: phoneNumber,
-      });
-      if (error) throw error;
-      setShowOTPInput(true);
-      toast.success("OTP sent to your phone number");
-    } catch (error) {
-      Logger.getInstance().error(
-        "Error sending OTP",
-        { component: "PhoneSignIn" },
-        error instanceof Error ? error : new Error(String(error))
-      );
-      toast.error("Failed to send OTP");
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const handleVerifyOTP = async (e: React.FormEvent) => {
-    e.preventDefault();
-    try {
-      setIsLoading(true);
-      if (!supabase) throw new Error("Supabase client not ready");
-      const { error } = await supabase.auth.verifyOtp({
-        phone: phoneNumber,
-        token: otpCode,
-        type: "sms",
-      });
-      if (error) throw error;
-      toast.success("Successfully signed in");
-      // Redirect will be handled by middleware
-    } catch (error) {
-      Logger.getInstance().error(
-        "Error verifying OTP",
-        { component: "PhoneSignIn" },
-        error instanceof Error ? error : new Error(String(error))
-      );
-      toast.error("Failed to verify OTP");
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  const verifyOtpForm = useVerifyPhoneForm();
 
   return (
-    <div className="w-full max-w-sm">
+    <div className="space-y-4">
       {!showOTPInput ? (
-        <form onSubmit={handleSendOTP} className="space-y-4">
+        <form action={phoneForm.handleAction} className="space-y-4">
           <div>
             <Label htmlFor="phone">Phone Number</Label>
             <Input
               id="phone"
               type="tel"
               placeholder="+1234567890"
-              value={phoneNumber}
-              onChange={(e) => setPhoneNumber(e.target.value)}
+              {...phoneForm.register("phone")}
               required
-              pattern="^\+[1-9]\d{1,14}$"
-              title="Phone number must be in international format (e.g., +1234567890)"
+              autoComplete="tel"
             />
+            {phoneForm.formState.errors.phone && (
+              <p className="text-sm text-destructive mt-1">
+                {phoneForm.formState.errors.phone.message}
+              </p>
+            )}
           </div>
-          <Button type="submit" className="w-full" disabled={isLoading}>
-            {isLoading ? "Sending..." : "Send OTP"}
+          <Button type="submit" className="w-full" disabled={phoneForm.formState.isSubmitting}>
+            {phoneForm.formState.isSubmitting ? "Sending..." : "Send Verification Code"}
           </Button>
+          <p className="text-xs text-muted-foreground text-center">
+            We'll send a verification code to this number
+          </p>
         </form>
       ) : (
-        <form onSubmit={handleVerifyOTP} className="space-y-4">
+        <form action={verifyOtpForm.handleAction} className="space-y-4">
+          <input
+            type="hidden"
+            {...verifyOtpForm.register("phone")}
+            value={phoneForm.getValues().phone}
+          />
           <div>
-            <Label htmlFor="otp">Enter OTP</Label>
+            <Label htmlFor="token">Verification Code</Label>
             <Input
-              id="otp"
+              id="token"
               type="text"
-              placeholder="Enter OTP"
-              value={otpCode}
-              onChange={(e) => setOtpCode(e.target.value)}
+              placeholder="Enter verification code"
+              {...verifyOtpForm.register("token")}
               required
-              pattern="[0-9]{6}"
-              maxLength={6}
+              pattern="[0-9]*"
+              inputMode="numeric"
+              autoComplete="one-time-code"
             />
+            {verifyOtpForm.formState.errors.token && (
+              <p className="text-sm text-destructive mt-1">
+                {verifyOtpForm.formState.errors.token.message}
+              </p>
+            )}
           </div>
           <div className="space-y-2">
-            <Button type="submit" className="w-full" disabled={isLoading}>
-              {isLoading ? "Verifying..." : "Verify OTP"}
+            <Button type="submit" className="w-full" disabled={verifyOtpForm.formState.isSubmitting}>
+              {verifyOtpForm.formState.isSubmitting ? "Verifying..." : "Verify Code"}
             </Button>
             <Button
               type="button"
               variant="outline"
               className="w-full"
-              onClick={() => setShowOTPInput(false)}
+              onClick={() => {
+                setShowOTPInput(false);
+                verifyOtpForm.reset();
+              }}
             >
-              Back to Phone Number
+              Send New Code
             </Button>
           </div>
+          <p className="text-xs text-muted-foreground text-center">
+            Didn't receive a code? Check your phone number and try again
+          </p>
         </form>
       )}
     </div>

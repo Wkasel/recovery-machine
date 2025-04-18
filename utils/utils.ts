@@ -1,5 +1,5 @@
+import { DEV_PORT } from "@/config/constants";
 import { redirect } from "next/navigation";
-import { DEV_PORT } from "@/lib/constants";
 import urlJoin from "url-join";
 
 /**
@@ -9,11 +9,11 @@ import urlJoin from "url-join";
  * @param {string} message - The message to be encoded and added as a query parameter.
  * @returns {never} This function doesn't return as it triggers a redirect.
  */
-export function encodedRedirect(type: "error" | "success", path: string, message: string) {
+export function encodedRedirect(type: "error" | "success", path: string, message: string): never {
   return redirect(`${path}?${type}=${encodeURIComponent(message)}`);
 }
 
-export const getURL = () => {
+export const getURL = (): string => {
   let url =
     process.env.NEXT_PUBLIC_SITE_URL ?? // Set this to your site URL in production env.
     process.env.NEXT_PUBLIC_VERCEL_URL ?? // Automatically set by Vercel.
@@ -25,7 +25,7 @@ export const getURL = () => {
   return url;
 };
 
-export const toSiteURL = (path: string) => {
+export const toSiteURL = (path: string): string => {
   const url = getURL();
   return urlJoin(url, path);
 };

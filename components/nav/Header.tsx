@@ -1,7 +1,5 @@
 "use client";
 
-import * as React from "react";
-import Link from "next/link";
 import { MainNav } from "@/components/nav/MainNav";
 import { Button } from "@/components/ui/button";
 import {
@@ -11,9 +9,11 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { User } from "lucide-react";
 import { navigationConfig } from "@/config/navigation";
-import { useUser, useSignOut } from "@/services/auth/hooks";
+import { useSignOut, useUser } from "@/core/services/auth/hooks";
+import { IUser } from "@/core/types";
+import { User } from "lucide-react";
+import Link from "next/link";
 
 interface HeaderProps {
   mainNavItems?: typeof navigationConfig.mainNav;
@@ -30,7 +30,7 @@ export function Header({
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-14 items-center">
-        <MainNav items={mainNavItems}>
+        <MainNav items={mainNavItems} user={user as IUser | null}>
           <div className="flex flex-1 items-center justify-end space-x-4">
             {user ? (
               <DropdownMenu>

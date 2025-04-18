@@ -1,6 +1,6 @@
-import { Analytics } from "@vercel/analytics/react";
-import { type Event } from "@/types/analytics";
 import { Logger } from "@/lib/logger/Logger";
+import { type Event } from "@/types/analytics";
+import { Analytics } from "@vercel/analytics/react";
 
 export class AnalyticsService {
   private static instance: AnalyticsService;
@@ -38,7 +38,7 @@ export class AnalyticsService {
       Logger.getInstance().error(
         "Failed to track analytics event",
         { component: "AnalyticsService", event },
-        error
+        error as Error
       );
     }
   }

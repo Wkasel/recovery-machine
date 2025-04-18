@@ -1,11 +1,10 @@
 "use client";
 
-import * as React from "react";
-import Link from "next/link";
 import { ThemeSwitcher } from "@/components/theme-switcher";
 import { siteMetadata } from "@/config/metadata";
 import { navigationConfig } from "@/config/navigation";
 import { FooterNavItem } from "@/types/nav";
+import Link from "next/link";
 
 interface FooterProps {
   items?: typeof navigationConfig.footerNav;

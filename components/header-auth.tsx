@@ -1,53 +1,37 @@
-import { signOutAction } from "@/app/actions";
-import { hasEnvVars } from "@/utils/supabase/check-env-vars";
+import { signOutAction } from "@/core/actions/server/auth/sign-out";
+import { getCurrentUser } from "@/core/actions/server/auth/user-profile";
+
+import { AuthError } from "@/core/errors/auth/AuthError";
+import type { IUser } from "@/core/types";
 import Link from "next/link";
-import { Badge } from "./ui/badge";
+import type { ReactElement } from "react";
 import { Button } from "./ui/button";
-import { createServerSupabaseClient } from "@/services/supabase/server";
 
-export default async function AuthButton() {
-  const supabase = await createServerSupabaseClient();
+interface ISuccessResult {
+  success: true;
+  data?: {
+    user: IUser | null;
+  };
+  message?: string;
+}
 
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+interface IErrorResult {
+  success: false;
+  error: string;
+}
 
-  if (!hasEnvVars) {
-    return (
-      <>
-        <div className="flex gap-4 items-center">
-          <div>
-            <Badge variant={"default"} className="font-normal pointer-events-none">
-              Please update .env.local file with anon key and url
-            </Badge>
-          </div>
-          <div className="flex gap-2">
-            <Button
-              asChild
-              size="sm"
-              variant={"outline"}
-              disabled
-              className="opacity-75 cursor-none pointer-events-none"
-            >
-              <Link href="/sign-in">Sign in</Link>
-            </Button>
-            <Button
-              asChild
-              size="sm"
-              variant={"default"}
-              disabled
-              className="opacity-75 cursor-none pointer-events-none"
-            >
-              <Link href="/sign-up">Sign up</Link>
-            </Button>
-          </div>
-        </div>
-      </>
-    );
+type ActionResult = ISuccessResult | IErrorResult;
+
+export default async function AuthButton(): Promise<ReactElement> {
+  const result = (await getCurrentUser()) as ActionResult;
+
+  if (!result.success) {
+    throw AuthError.unauthorized();
   }
-  return user ? (
+
+  return result.data?.user ? (
     <div className="flex items-center gap-4">
-      Hey, {user.email}!
+      Hey, {result.data.user.email}!
       <form action={signOutAction}>
         <Button type="submit" variant={"outline"}>
           Sign out

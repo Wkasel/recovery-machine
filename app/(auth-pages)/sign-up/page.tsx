@@ -1,41 +1,33 @@
-import Link from "next/link";
-import GoogleSignInButton from "@/components/auth/GoogleSignInButton";
-import MagicLink from "@/components/auth/MagicLink";
-import PhoneSignIn from "@/components/auth/PhoneSignIn";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Toaster } from "sonner";
+"use client";
 
-export default function Signup() {
+import { AuthProvider } from "@/components/auth";
+import Link from "next/link";
+
+export default function SignUpPage() {
   return (
-    <>
-      <Toaster position="top-right" />
-      <div className="flex-1 flex flex-col items-center justify-center min-w-80 max-w-md mx-auto p-4">
-        <div className="w-full">
-          <h1 className="text-2xl font-medium mb-2">Sign up</h1>
-          <p className="text-sm text-muted-foreground mb-8">
+    <AuthProvider
+      defaultMethod="oauth"
+      availableMethods={["oauth", "magic-link", "phone"]}
+      footerContent={
+        <div className="space-y-4 text-sm text-muted-foreground text-center">
+          <p>
             Already have an account?{" "}
-            <Link className="text-primary font-medium hover:underline" href="/sign-in">
+            <Link href="/sign-in" className="text-primary font-medium hover:underline">
               Sign in
             </Link>
           </p>
-          <Tabs defaultValue="google" className="w-full">
-            <TabsList className="grid w-full grid-cols-3 mb-8">
-              <TabsTrigger value="google">Google</TabsTrigger>
-              <TabsTrigger value="magic-link">Magic Link</TabsTrigger>
-              <TabsTrigger value="phone">Phone</TabsTrigger>
-            </TabsList>
-            <TabsContent value="google">
-              <GoogleSignInButton />
-            </TabsContent>
-            <TabsContent value="magic-link">
-              <MagicLink />
-            </TabsContent>
-            <TabsContent value="phone">
-              <PhoneSignIn />
-            </TabsContent>
-          </Tabs>
+          <div className="text-xs">
+            By signing up, you agree to our{" "}
+            <Link href="/terms" className="text-primary hover:underline">
+              Terms of Service
+            </Link>{" "}
+            and{" "}
+            <Link href="/privacy" className="text-primary hover:underline">
+              Privacy Policy
+            </Link>
+          </div>
         </div>
-      </div>
-    </>
+      }
+    />
   );
 }

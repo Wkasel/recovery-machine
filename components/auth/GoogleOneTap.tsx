@@ -1,12 +1,14 @@
 "use client";
 
-import Script from "next/script";
-import { createBrowserSupabaseClient } from "@/services/supabase/client";
+import { signInWithGoogleAction } from "@/core/actions/server/auth/google-auth";
+import { getCurrentUser } from "@/core/actions/server/auth/user-profile";
+import { Logger } from "@/lib/logger/Logger";
 import { CredentialResponse } from "google-one-tap";
 import { useRouter } from "next/navigation";
+import Script from "next/script";
+import type { ReactElement } from "react";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
-import { Logger } from "@/lib/logger/Logger";
 
 // Augment the window interface
 declare global {
@@ -27,20 +29,19 @@ declare global {
     };
     __env__?: {
       NEXT_PUBLIC_GOOGLE_CLIENT_ID?: string;
+      NEXT_PUBLIC_SUPABASE_URL?: string;
+      NEXT_PUBLIC_SUPABASE_ANON_KEY?: string;
       [key: string]: string | undefined;
     };
   }
 }
 
-const GoogleOneTap = () => {
-  const [supabase, setSupabase] = useState<any>(null);
+const GoogleOneTap = (): ReactElement | null => {
   const router = useRouter();
   const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
     setIsClient(true);
-    const client = createBrowserSupabaseClient();
-    setSupabase(client);
   }, []);
 
   // generate nonce to use for google id token sign-in
@@ -62,7 +63,7 @@ const GoogleOneTap = () => {
   };
 
   useEffect(() => {
-    if (!isClient || !supabase) return;
+    if (!isClient) return;
 
     const clientId = window.__env__?.NEXT_PUBLIC_GOOGLE_CLIENT_ID;
     if (!clientId) {
@@ -80,18 +81,18 @@ const GoogleOneTap = () => {
         const [nonce, hashedNonce] = await generateNonce();
 
         // check if there's already an existing session before initializing the one-tap UI
-        const { data, error } = await supabase.auth.getSession();
-        if (error) {
+        const result = await getCurrentUser();
+        if (!result.success) {
           Logger.getInstance().error(
             "Error getting session",
             { component: "GoogleOneTap" },
-            error instanceof Error ? error : new Error(String(error))
+            new Error(result.error)
           );
           toast.error("Error checking session status");
           return;
         }
 
-        if (data.session) {
+        if (result.data?.user) {
           router.push("/protected");
           return;
         }
@@ -100,19 +101,8 @@ const GoogleOneTap = () => {
           client_id: clientId,
           callback: async (response: CredentialResponse) => {
             try {
-              const { data, error } = await supabase.auth.signInWithIdToken({
-                provider: "google",
-                token: response.credential,
-                nonce,
-              });
-
-              if (error) throw error;
-
-              Logger.getInstance().info("Session data: " + JSON.stringify(data), {
-                component: "GoogleOneTap",
-              });
-              toast.success("Successfully logged in with Google");
-              router.push("/protected");
+              // The signInWithGoogleAction will handle the redirect
+              await signInWithGoogleAction();
             } catch (error) {
               Logger.getInstance().error(
                 "Error logging in with Google One Tap",
@@ -132,7 +122,7 @@ const GoogleOneTap = () => {
 
     initializeGoogleOneTap();
     return () => window.removeEventListener("load", initializeGoogleOneTap);
-  }, [isClient, router, supabase]);
+  }, [isClient, router]);
 
   if (!isClient) return null;
 

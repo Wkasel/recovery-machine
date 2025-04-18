@@ -1,4 +1,4 @@
-import { LogLevel, LogEntry, LogMetadata, LogTransport, LogFormatter } from "@/types/logger";
+import { LogEntry, LogFormatter, LogLevel, LogMetadata, LogTransport } from "@/types/logger";
 import { AppError } from "../errors/AppError";
 
 export class Logger {

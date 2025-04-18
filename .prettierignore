@@ -1,4 +1,50 @@
+# Build output
+.next/
+out/
+build/
+dist/
+
+# Dependencies
+node_modules/
+
+# Cache
+.cache/
+.eslintcache
+.vercel
+
+# Generated files
+*.generated.*
+*.min.*
+
+# CSS files in specific directories
 app/**/*.css
 lib/**/*.css
-services/**/*.css
+core/**/*.css
+components/**/*.css
+
+# Config files
+*.config.js
+*.config.ts
+*.config.mjs
+*.config.cjs
+
+# Package files
+package-lock.json
+yarn.lock
+bun.lock
+pnpm-lock.yaml
+
+# Environment files
+.env*
+!.env.example
+
+# Type declaration files
+*.d.ts
 types/**/*.ts
+
+# Other
+.git/
+.husky/
+.vscode/
+public/
+coverage/

@@ -1,2 +1,2 @@
-export * from "./RootErrorBoundary";
-export * from "./ModuleErrorBoundary";
+export { default as ModuleErrorBoundary } from "./ModuleErrorBoundary";
+export { default as RootErrorBoundary } from "./RootErrorBoundary";

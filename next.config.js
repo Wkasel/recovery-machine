@@ -1,5 +1,5 @@
-import { withSentryConfig } from "@sentry/nextjs";
 import createWithBundleAnalyzer from "@next/bundle-analyzer";
+import { withSentryConfig } from "@sentry/nextjs";
 
 /** @type {import('next').NextConfig} */
 const nextConfig = (phase) => {

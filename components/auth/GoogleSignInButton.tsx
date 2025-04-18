@@ -1,85 +1,28 @@
 "use client";
 
-import { createBrowserSupabaseClient } from "@/services/supabase/client";
-import Script from "next/script";
-import { useEffect, useState } from "react";
-import { CredentialResponse } from "google-one-tap";
-import { toast } from "sonner";
-import { Logger } from "@/lib/logger/Logger";
+import { Button } from "@/components/ui/button";
+import { useGoogleSignIn } from "@/core/forms/auth/oauth-form";
+import { useLoading } from "@/lib/ui/loading/context";
+import { FcGoogle } from "react-icons/fc";
 
 export default function GoogleSignInButton() {
-  const [supabase, setSupabase] = useState<any>(null);
-
-  useEffect(() => {
-    const client = createBrowserSupabaseClient();
-    setSupabase(client);
-  }, []);
-
-  async function handleSignInWithGoogle(response: CredentialResponse) {
-    try {
-      if (!supabase) throw new Error("Supabase client not ready");
-      const { data, error } = await supabase.auth.signInWithIdToken({
-        provider: "google",
-        token: response.credential,
-      });
-      if (error) throw error;
-      // Redirect will be handled by our middleware
-    } catch (error) {
-      Logger.getInstance().error(
-        "Error signing in with Google",
-        { component: "GoogleSignInButton" },
-        error instanceof Error ? error : new Error(String(error))
-      );
-      toast.error("Failed to sign in with Google");
-    }
-  }
-
-  useEffect(() => {
-    const initializeGoogleSignIn = () => {
-      const google = (window as any).google;
-      if (google?.accounts?.id) {
-        const clientId = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID;
-        if (!clientId) {
-          Logger.getInstance().error("Google client ID not found", {
-            component: "GoogleSignInButton",
-          });
-          toast.error("Google sign in is not configured");
-          return;
-        }
-        google.accounts.id.initialize({
-          client_id: clientId,
-          callback: handleSignInWithGoogle,
-          use_fedcm_for_prompt: true,
-        });
-        const buttonDiv = document.getElementById("google-signin-button");
-        if (buttonDiv) {
-          google.accounts.id.renderButton(buttonDiv, {
-            type: "standard",
-            theme: "outline",
-            size: "large",
-            text: "signin_with",
-            shape: "pill",
-          });
-        }
-      }
-    };
-    window.addEventListener("load", initializeGoogleSignIn);
-    return () => window.removeEventListener("load", initializeGoogleSignIn);
-  }, [supabase]);
+  const { setLoading, isLoading } = useLoading();
+  const handleGoogleSignIn = useGoogleSignIn({
+    onStart: () => setLoading("google-sign-in", true),
+    onError: () => setLoading("google-sign-in", false),
+  });
 
   return (
-    <>
-      <Script
-        src="https://accounts.google.com/gsi/client"
-        async
-        defer
-        onLoad={() => {
-          if (typeof window.google !== "undefined") {
-            window.dispatchEvent(new Event("load"));
-          }
-        }}
-      />
-      <div id="google-signin-button" className="w-full flex justify-center" />
-    </>
+    <form action={handleGoogleSignIn}>
+      <Button
+        type="submit"
+        className="w-full flex items-center justify-center gap-2"
+        variant="outline"
+        disabled={isLoading("google-sign-in")}
+      >
+        <FcGoogle className="h-5 w-5" />
+        <span>{isLoading("google-sign-in") ? "Signing in..." : "Continue with Google"}</span>
+      </Button>
+    </form>
   );
 }
