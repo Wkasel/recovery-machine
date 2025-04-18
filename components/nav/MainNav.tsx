@@ -19,7 +19,7 @@ import {
 } from "@/components/ui/navigation-menu";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { navigationConfig } from "@/config/navigation";
-import { useSignOut, useUser } from "@/core/services/auth/hooks";
+import { useSignOut, useUser } from "@/core/supabase/hooks";
 import type { IUser } from "@/core/types";
 import { cn } from "@/lib/utils";
 import { Menu } from "lucide-react";
@@ -100,7 +100,9 @@ export function MainNav({ items = navigationConfig.mainNav, children, user }: Ma
   const pathname = usePathname();
   const { data: userData, isLoading } = useUser();
 
-  const navItems = user
+  const effectiveUser = userData || user;
+
+  const navItems = effectiveUser
     ? [...publicNavItems.filter((item) => !item.href.includes("sign")), ...protectedNavItems]
     : publicNavItems;
 
@@ -108,16 +110,17 @@ export function MainNav({ items = navigationConfig.mainNav, children, user }: Ma
     <NavigationMenuList className="flex flex-col md:flex-row gap-4">
       {navItems.map((item) => (
         <NavigationMenuItem key={item.href}>
-          <Link href={item.href} passHref>
-            <NavigationMenuLink
+          <NavigationMenuLink asChild>
+            <Link
+              href={item.href}
               className={cn(
                 "block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground",
                 pathname === item.href && "bg-accent text-accent-foreground"
               )}
             >
               {item.label}
-            </NavigationMenuLink>
-          </Link>
+            </Link>
+          </NavigationMenuLink>
         </NavigationMenuItem>
       ))}
     </NavigationMenuList>
@@ -147,7 +150,7 @@ export function MainNav({ items = navigationConfig.mainNav, children, user }: Ma
       </div>
 
       <div className="flex items-center gap-4">
-        {!isLoading && user ? <UserNavComponent /> : null}
+        {!isLoading && effectiveUser ? <UserNavComponent /> : null}
       </div>
     </div>
   );

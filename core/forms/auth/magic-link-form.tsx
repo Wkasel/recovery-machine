@@ -1,12 +1,13 @@
 import { useZodForm } from "../hooks/use-zod-form";
 import { clientAuthSchemas } from "@/core/schemas/client/auth";
-import { sendMagicLinkAction } from "@/core/actions/server/auth/magic-link";
+import { sendMagicLink, verifyMagicLinkOtp } from "@/core/actions/server/auth/methods/magic-link";
 
 export interface UseMagicLinkFormOptions {
   onEmailSent?: () => void;
+  redirectTo?: string;
 }
 
-export function useMagicLinkForm({ onEmailSent }: UseMagicLinkFormOptions = {}) {
+export function useMagicLinkForm({ onEmailSent, redirectTo }: UseMagicLinkFormOptions = {}) {
   return useZodForm({
     schema: clientAuthSchemas.magicLink.send,
     formOptions: {
@@ -26,7 +27,10 @@ export function useMagicLinkForm({ onEmailSent }: UseMagicLinkFormOptions = {}) 
       showLoadingSkeleton: true,
       persistState: true, // In case user navigates away while waiting for email
     },
-    action: sendMagicLinkAction,
+    action: async (formData) => {
+      if (redirectTo) formData.append("callbackUrl", redirectTo);
+      return sendMagicLink(formData);
+    },
   });
 }
 
@@ -48,6 +52,6 @@ export function useVerifyMagicLinkForm() {
       loadingFields: 1,
       showLoadingSkeleton: true,
     },
-    action: sendMagicLinkAction,
+    action: verifyMagicLinkOtp,
   });
 }

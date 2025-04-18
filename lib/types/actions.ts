@@ -1,12 +1,12 @@
-import { UserProfile } from "@/core/supabase/queries/users";
+import { type IUserProfile } from "@/core/supabase/queries/users/server";
 
 /**
  * Action context passed to middleware and handlers
  */
 export interface ActionContext<T = unknown> {
   validatedData?: T;
-  user?: UserProfile;
-  profile?: UserProfile;
+  user?: IUserProfile;
+  profile?: IUserProfile;
 }
 
 /**
@@ -26,10 +26,12 @@ export type NextFunction<T> = (context: ActionContext<T>) => Promise<Response>;
 
 export type ActionMiddleware<T = unknown> = (
   context: ActionContext<T>,
-  next: NextFunction<T>
+  next: NextFunction<T>,
 ) => Promise<Response | void>;
 
-export type ActionHandler<T = unknown> = (context: ActionContext<T>) => Promise<Response>;
+export type ActionHandler<T = unknown> = (
+  context: ActionContext<T>,
+) => Promise<Response>;
 
 /**
  * Auth action specific types

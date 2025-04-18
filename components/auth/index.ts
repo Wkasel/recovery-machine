@@ -1,7 +1,10 @@
 // Core components
-export { AuthProvider } from "./AuthProvider";
-export type { AuthMethod } from "./AuthProvider";
-
+export {
+  type AuthMethod,
+  AuthMethodSelector,
+  AuthProvider,
+} from "@/core/forms/auth";
+export { AuthContextProvider, useAuth } from "./AuthContext";
 
 // UI Components
 export { default as GoogleOneTap } from "./GoogleOneTap";
@@ -9,35 +12,41 @@ export { default as GoogleSignInButton } from "./GoogleSignInButton";
 export { default as MagicLink } from "./MagicLink";
 export { default as PhoneSignIn } from "./PhoneSignIn";
 
+// Error boundary re-exports
+export {
+  ModuleErrorBoundary,
+  RootErrorBoundary,
+} from "@/components/error-boundary";
+
 // Re-export types from auth methods
 export type {
   AuthBaseProps,
   EmailPasswordAuthProps,
-  MagicLinkAuthProps,
-  OAuthAuthProps,
-  PhoneAuthProps,
   // Form value types
   EmailPasswordSignInValues,
   EmailPasswordSignUpValues,
+  MagicLinkAuthProps,
   MagicLinkValues,
-  PhoneSignUpValues,
+  OAuthAuthProps,
+  PhoneAuthProps,
   PhoneOtpValues,
+  PhoneSignUpValues,
 } from "./types";
 
 // Re-export form hooks
 export {
-  type UseMagicLinkFormOptions,
   useMagicLinkForm,
+  type UseMagicLinkFormOptions,
   useVerifyMagicLinkForm,
 } from "@/core/forms/auth/magic-link-form";
 
 export {
-  type UsePhoneFormOptions,
   usePhoneForm,
+  type UsePhoneFormOptions,
   useVerifyPhoneForm,
 } from "@/core/forms/auth/phone-form";
 
 export {
-  type UseOAuthFormOptions,
   useGoogleSignIn,
+  type UseOAuthFormOptions,
 } from "@/core/forms/auth/oauth-form";

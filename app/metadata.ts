@@ -1,38 +1,43 @@
-const defaultUrl = process.env.VERCEL_URL
-  ? `https://${process.env.VERCEL_URL}`
-  : "http://localhost:3000";
+import { Metadata } from "next";
 
-import { siteMetadata } from "@/config/metadata";
+// Make sure our metadata is valid
+// https://nextjs.org/docs/app/api-reference/functions/generate-metadata
 
-export const globalmetadata = {
-  metadataBase: new URL(defaultUrl),
+export const globalmetadata: Metadata = {
+  metadataBase: new URL(
+    process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000",
+  ),
   title: {
-    default: siteMetadata.defaultTitle,
-    template: siteMetadata.titleTemplate,
+    default: "27 Circles | Web3 Smart Locker",
+    template: "%s | 27 Circles",
   },
-  description: siteMetadata.description,
+  description:
+    "A smart locker system for the blockchain era. Store and protect your digital assets with cutting-edge technology.",
   openGraph: {
-    type: siteMetadata.type,
-    locale: siteMetadata.locale,
-    url: siteMetadata.siteUrl,
-    title: siteMetadata.defaultTitle,
-    description: siteMetadata.description,
-    siteName: siteMetadata.title,
+    type: "website",
+    locale: "en_US",
+    url: process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000",
+    title: "27 Circles | Web3 Smart Locker",
+    description:
+      "A smart locker system for the blockchain era. Store and protect your digital assets with cutting-edge technology.",
+    siteName: "27 Circles",
     images: [
       {
-        url: `${siteMetadata.siteUrl}/api/og`,
+        url: `${process.env.NEXT_PUBLIC_APP_URL}/og-image.jpg`,
         width: 1200,
         height: 630,
-        alt: siteMetadata.defaultTitle,
+        alt: "27 Circles",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: siteMetadata.defaultTitle,
-    description: siteMetadata.description,
-    creator: siteMetadata.twitterHandle,
-    images: [`${siteMetadata.siteUrl}/api/og`],
+    title: "27 Circles | Web3 Smart Locker",
+    description:
+      "A smart locker system for the blockchain era. Store and protect your digital assets with cutting-edge technology.",
+    creator: "@27circles",
+    site: "@27circles",
+    images: [`${process.env.NEXT_PUBLIC_APP_URL}/og-image.jpg`],
   },
   robots: {
     index: true,
@@ -46,11 +51,10 @@ export const globalmetadata = {
     },
   },
   alternates: {
-    canonical: siteMetadata.siteUrl,
+    canonical: process.env.NEXT_PUBLIC_APP_URL,
+    languages: {
+      "en-US": "/en-US",
+    },
   },
-  verification: {
-    // Add verification tokens here
-    // google: "your-google-verification-id",
-    // yandex: "your-yandex-verification-id",
-  },
+  verification: {},
 };

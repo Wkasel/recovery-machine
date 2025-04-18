@@ -3,13 +3,10 @@
  */
 
 // Auth queries
-export * from "./auth";
+export * from "./auth/index";
 
 // User queries
-export * from "./users";
-
-// Profile queries
-export * from "./profiles";
+export * from "./users/index";
 
 // Organization queries
-export * from "./organizations";
+export * from "./organizations/index";

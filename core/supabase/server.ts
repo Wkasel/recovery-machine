@@ -1,15 +1,12 @@
-import { AppError } from "@/core/errors/base/AppError";
+"use server";
+
 import { createServerClient } from "@supabase/ssr";
+import type { DbClient } from "./types";
 import { cookies } from "next/headers";
-import { DbClient } from "./types";
 
-export class SupabaseServerError extends AppError {
-  constructor(message: string, cause?: Error) {
-    super(message, "API_ERROR", "high", cause);
-  }
-}
-
+// Keep the original function name for backward compatibility
 export async function createServerSupabaseClient(): Promise<DbClient> {
+  const cookieStore = await cookies();
   if (!process.env.NEXT_PUBLIC_SUPABASE_URL) {
     throw new Error("Missing NEXT_PUBLIC_SUPABASE_URL");
   }
@@ -17,23 +14,31 @@ export async function createServerSupabaseClient(): Promise<DbClient> {
     throw new Error("Missing NEXT_PUBLIC_SUPABASE_ANON_KEY");
   }
 
-  const cookieStore = cookies();
-
   return createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
     {
       cookies: {
-        get(name: string) {
-          return cookieStore.get(name)?.value;
+        getAll() {
+          return cookieStore.getAll();
         },
-        set(name: string, value: string, options: any) {
-          cookieStore.set(name, value, options);
-        },
-        remove(name: string, options: any) {
-          cookieStore.delete(name, options);
+        setAll(cookiesToSet) {
+          try {
+            cookiesToSet.forEach(({ name, value, options }) =>
+              cookieStore.set(name, value, options)
+            );
+          } catch {
+            // The `setAll` method was called from a Server Component.
+            // This can be ignored if you have middleware refreshing
+            // user sessions.
+          }
         },
       },
-    }
+    },
   );
+}
+
+// Add createClient for new code following the Supabase docs pattern
+export async function createClient(): Promise<DbClient> {
+  return createServerSupabaseClient();
 }

@@ -3,7 +3,7 @@
  */
 
 // Services
-export * from "./services";
+export * from "./supabase";
 
 // Actions
 export * from "./actions";

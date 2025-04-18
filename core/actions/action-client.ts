@@ -1,7 +1,10 @@
 import { AuthError } from "@/core/errors/auth/AuthError";
 import { AppError } from "@/core/errors/base/AppError";
-import { getUser } from "@/core/supabase/queries/auth";
-import { getUserProfile, IUserProfile } from "@/core/supabase/queries/users";
+import { getUser } from "@/core/supabase/queries/auth/server";
+import {
+  getUserProfile,
+  type IUserProfile,
+} from "@/core/supabase/queries/users/server";
 import { Logger } from "@/lib/logger/Logger";
 import { createSafeActionClient } from "next-safe-action";
 
@@ -22,10 +25,12 @@ export type NextFunction<T> = (context: ActionContext<T>) => Promise<Response>;
 
 export type ActionMiddleware<T = unknown> = (
   context: ActionContext<T>,
-  next: NextFunction<T>
+  next: NextFunction<T>,
 ) => Promise<Response | void>;
 
-export type ActionHandler<T = unknown> = (context: ActionContext<T>) => Promise<Response>;
+export type ActionHandler<T = unknown> = (
+  context: ActionContext<T>,
+) => Promise<Response>;
 
 export function createAction<T = unknown>(
   handler: ActionHandler<T>,
@@ -33,7 +38,10 @@ export function createAction<T = unknown>(
 ) {
   return async (context: ActionContext<T> = {}): Promise<Response> => {
     const chain = middleware.reduceRight(
-      (next: NextFunction<T>, middleware: ActionMiddleware<T>): NextFunction<T> => {
+      (
+        next: NextFunction<T>,
+        middleware: ActionMiddleware<T>,
+      ): NextFunction<T> => {
         return async (ctx: ActionContext<T>) => {
           const result = await middleware(ctx, next);
           if (result instanceof Response) {
@@ -42,7 +50,7 @@ export function createAction<T = unknown>(
           return next(ctx);
         };
       },
-      handler
+      handler,
     );
     return chain(context);
   };
@@ -63,6 +71,7 @@ export const withAuth: ActionMiddleware = async (context, next) => {
 export const withAdmin: ActionMiddleware = async (context, next) => {
   const { user } = context;
 
+  // @ts-ignore
   if (!user?.isAdmin) {
     return new Response("Forbidden", { status: 403 });
   }
@@ -78,7 +87,7 @@ export const actionClient = createSafeActionClient({
       {
         component: "actionClient",
       },
-      AppError.from(error)
+      AppError.from(error),
     );
 
     // Return user-friendly message in production
@@ -116,7 +125,7 @@ export const authActionClient = actionClient.use(async ({ next, ctx }) => {
     Logger.getInstance().error(
       "Auth middleware failed",
       { component: "authActionClient" },
-      AppError.from(error)
+      AppError.from(error),
     );
     throw error;
   }
@@ -129,8 +138,11 @@ export const adminActionClient = authActionClient.use(async ({ next, ctx }) => {
       throw new AuthError("User not authenticated");
     }
 
+    // @ts-ignore
     if (!user.isAdmin) {
-      throw new AuthError("User is not an admin", undefined, { subType: "unauthorized" });
+      throw new AuthError("User is not an admin", undefined, {
+        subType: "unauthorized",
+      });
     }
 
     return await next({
@@ -143,7 +155,7 @@ export const adminActionClient = authActionClient.use(async ({ next, ctx }) => {
     Logger.getInstance().error(
       "Admin middleware failed",
       { component: "adminActionClient" },
-      AppError.from(error)
+      AppError.from(error),
     );
     throw error;
   }

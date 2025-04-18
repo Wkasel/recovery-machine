@@ -1,6 +1,6 @@
 import { useZodForm } from "../hooks/use-zod-form";
 import { clientAuthSchemas } from "@/core/schemas/client/auth";
-import { sendPhoneOtp, verifyPhoneOtp } from "@/core/actions/server/auth/phone-auth";
+import { sendPhoneOtp, verifyPhoneOtp } from "@/core/actions/server/auth/methods/phone";
 import { useRouter } from "next/navigation";
 
 export interface UsePhoneFormOptions {

@@ -1,9 +1,15 @@
 import { AuthError } from "@/core/errors/auth/AuthError";
-import { createServerSupabaseClient } from "@/core/supabase/server";
+import { createServerSupabaseClient } from "@/core/supabase/server-utils";
 import { Logger } from "@/lib/logger/Logger";
 import { NextRequest, NextResponse } from "next/server";
 
-type EmailOtpType = "signup" | "magiclink" | "recovery" | "invite" | "email" | "email-change";
+type EmailOtpType =
+  | "signup"
+  | "magiclink"
+  | "recovery"
+  | "invite"
+  | "email"
+  | "email-change";
 
 export async function GET(request: NextRequest): Promise<NextResponse> {
   try {
@@ -34,7 +40,9 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
     Logger.getInstance().error(
       "Auth callback failed",
       { component: "auth-callback" },
-      error instanceof AuthError ? error : new AuthError("authCallbackFailed", "An unexpected error occurred")
+      error instanceof AuthError
+        ? error
+        : new AuthError("authCallbackFailed", "An unexpected error occurred"),
     );
     return NextResponse.redirect(new URL("/auth/error", request.url));
   }

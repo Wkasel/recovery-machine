@@ -1,32 +1,48 @@
-import { NextResponse, type NextRequest } from "next/server";
+import { type NextRequest, NextResponse } from "next/server";
+import { updateSession } from "@/core/supabase/middleware";
 
-export function middleware(request: NextRequest) {
-  const response = NextResponse.next();
+export async function middleware(request: NextRequest) {
+  // Update the Supabase auth session
+  const authResponse = await updateSession(request);
 
-  // Security Headers
-  response.headers.set(
+  // Apply security headers to the response
+  authResponse.headers.set(
     "Content-Security-Policy",
-    "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://*.vercel-scripts.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:;"
+    "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://*.vercel-scripts.com https://*.supabase.co; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self' https://*.supabase.co wss://*.supabase.co;",
   );
-  response.headers.set("Strict-Transport-Security", "max-age=31536000; includeSubDomains");
-  response.headers.set("X-Frame-Options", "DENY");
-  response.headers.set("X-Content-Type-Options", "nosniff");
-  response.headers.set("Referrer-Policy", "strict-origin-when-cross-origin");
-  response.headers.set(
+  authResponse.headers.set(
+    "Strict-Transport-Security",
+    "max-age=31536000; includeSubDomains",
+  );
+  authResponse.headers.set("X-Frame-Options", "DENY");
+  authResponse.headers.set("X-Content-Type-Options", "nosniff");
+  authResponse.headers.set(
+    "Referrer-Policy",
+    "strict-origin-when-cross-origin",
+  );
+  authResponse.headers.set(
     "Permissions-Policy",
-    "camera=(), microphone=(), geolocation=(), interest-cohort=()"
+    "camera=(), microphone=(), geolocation=()",
   );
 
   // Cache Control - Adjust per route as needed
   if (request.nextUrl.pathname.startsWith("/api/")) {
-    response.headers.set("Cache-Control", "no-store");
-  } else if (request.nextUrl.pathname.match(/\.(js|css|png|jpg|jpeg|gif|ico|svg)$/)) {
-    response.headers.set("Cache-Control", "public, max-age=31536000, immutable");
+    authResponse.headers.set("Cache-Control", "no-store");
+  } else if (
+    request.nextUrl.pathname.match(/\.(js|css|png|jpg|jpeg|gif|ico|svg)$/)
+  ) {
+    authResponse.headers.set(
+      "Cache-Control",
+      "public, max-age=31536000, immutable",
+    );
   } else {
-    response.headers.set("Cache-Control", "public, max-age=3600, must-revalidate");
+    authResponse.headers.set(
+      "Cache-Control",
+      "public, max-age=3600, must-revalidate",
+    );
   }
 
-  return response;
+  return authResponse;
 }
 
 export const config = {

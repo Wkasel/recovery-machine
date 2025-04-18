@@ -1,17 +1,20 @@
 "use server";
 
 import { AppError } from "@/core/errors/base/AppError";
-import { IUserProfile } from "@/core/supabase/queries/users";
-import { createServerSupabaseClient } from "@/core/supabase/server";
+import { type IUserProfile } from "@/core/supabase/queries/users/server";
+import { createServerSupabaseClient } from "@/core/supabase/server-utils";
 import { ServerActionResult } from "@/core/types";
 import { Logger } from "@/lib/logger/Logger";
 
 export async function getUserProfileAction(
-  userId: string
+  userId: string,
 ): Promise<ServerActionResult<IUserProfile>> {
   try {
     const supabase = await createServerSupabaseClient();
-    const { data, error } = await supabase.from("profiles").select("*").eq("id", userId).single();
+    const { data, error } = await supabase.from("profiles").select("*").eq(
+      "id",
+      userId,
+    ).single();
 
     if (error) throw error;
     return {
@@ -22,7 +25,7 @@ export async function getUserProfileAction(
     Logger.getInstance().error(
       "Failed to get user profile",
       { component: "userActions", userId },
-      AppError.from(error)
+      AppError.from(error),
     );
     return {
       success: false,
@@ -33,7 +36,7 @@ export async function getUserProfileAction(
 
 export async function updateUserProfileAction(
   userId: string,
-  profile: Partial<IUserProfile>
+  profile: Partial<IUserProfile>,
 ): Promise<ServerActionResult<IUserProfile>> {
   try {
     const supabase = await createServerSupabaseClient();
@@ -54,7 +57,7 @@ export async function updateUserProfileAction(
     Logger.getInstance().error(
       "Failed to update user profile",
       { component: "userActions", userId },
-      AppError.from(error)
+      AppError.from(error),
     );
     return {
       success: false,

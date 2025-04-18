@@ -1,42 +1,28 @@
-import { signOutAction } from "@/core/actions/server/auth/sign-out";
-import { getCurrentUser } from "@/core/actions/server/auth/user-profile";
+"use client";
 
-import { AuthError } from "@/core/errors/auth/AuthError";
-import type { IUser } from "@/core/types";
+import { useSignOut, useUser } from "@/core/supabase/hooks";
 import Link from "next/link";
 import type { ReactElement } from "react";
 import { Button } from "./ui/button";
 
-interface ISuccessResult {
-  success: true;
-  data?: {
-    user: IUser | null;
-  };
-  message?: string;
-}
+export default function AuthButton(): ReactElement {
+  const { data: user, isLoading } = useUser();
+  const { mutate: signOut, status } = useSignOut();
 
-interface IErrorResult {
-  success: false;
-  error: string;
-}
-
-type ActionResult = ISuccessResult | IErrorResult;
-
-export default async function AuthButton(): Promise<ReactElement> {
-  const result = (await getCurrentUser()) as ActionResult;
-
-  if (!result.success) {
-    throw AuthError.unauthorized();
+  if (isLoading) {
+    return <div>Loading...</div>;
   }
 
-  return result.data?.user ? (
+  return user ? (
     <div className="flex items-center gap-4">
-      Hey, {result.data.user.email}!
-      <form action={signOutAction}>
-        <Button type="submit" variant={"outline"}>
-          Sign out
-        </Button>
-      </form>
+      Hey, {user.email}!
+      <Button
+        onClick={() => signOut()}
+        variant={"outline"}
+        disabled={status === "pending"}
+      >
+        {status === "pending" ? "Signing out..." : "Sign out"}
+      </Button>
     </div>
   ) : (
     <div className="flex gap-2">

@@ -1,3 +1,5 @@
+"use client";
+
 import Script from "next/script";
 
 export default function Debug() {
@@ -22,7 +24,6 @@ export default function Debug() {
         src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"
         strategy="beforeInteractive"
       />
-      {isDevelopment && <Script src="/debug-init.js" strategy="afterInteractive" />}
       {isDevelopment && (
         <Script
           src="https://cdn.jsdelivr.net/npm/@supabase/gotrue-js@2/dist/gotrue.min.js"

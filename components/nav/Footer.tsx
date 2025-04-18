@@ -87,7 +87,7 @@ export function Footer({ items = navigationConfig.footerNav }: FooterProps) {
               <div className="flex gap-4">
                 {items.social.map((item) => (
                   <Link
-                    key={resolveHref(item)}
+                    key={`${item.title}-${resolveHref(item)}`}
                     href={resolveHref(item)}
                     className="text-sm text-muted-foreground hover:text-foreground transition-colors"
                     target={item.external ? "_blank" : undefined}

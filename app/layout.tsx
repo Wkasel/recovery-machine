@@ -6,10 +6,9 @@ import { Footer } from "@/components/nav/Footer";
 import { Header } from "@/components/nav/Header";
 import { Analytics } from "@vercel/analytics/react";
 
-import Debug from "./debug";
-import "./globals.css";
 import { globalmetadata } from "./metadata";
 
+import "./globals.css";
 export const metadata = globalmetadata;
 
 const geistSans = Geist({
@@ -25,7 +24,6 @@ export default function RootLayout({
   return (
     <html lang="en" className={geistSans.className} suppressHydrationWarning>
       <head>
-        <Debug />
         <OrganizationJsonLd />
         <WebsiteJsonLd />
       </head>

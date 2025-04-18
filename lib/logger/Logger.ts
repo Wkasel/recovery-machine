@@ -1,5 +1,11 @@
-import { LogEntry, LogFormatter, LogLevel, LogMetadata, LogTransport } from "@/types/logger";
-import { AppError } from "../errors/AppError";
+import {
+  LogEntry,
+  LogFormatter,
+  LogLevel,
+  LogMetadata,
+  LogTransport,
+} from "@/types/logger";
+import { AppError } from "@/core/errors/base/AppError";
 
 export class Logger {
   private static instance: Logger;
@@ -37,7 +43,7 @@ export class Logger {
     level: LogLevel,
     message: string,
     metadata?: Partial<LogMetadata>,
-    error?: Error
+    error?: Error,
   ): LogEntry {
     const entry: LogEntry = {
       message,
@@ -50,10 +56,9 @@ export class Logger {
     };
 
     if (error) {
-      entry.error =
-        error instanceof AppError
-          ? error
-          : new AppError(error.message, "UNKNOWN_ERROR", "medium", error);
+      entry.error = error instanceof AppError
+        ? error
+        : new AppError(error.message, "APP_ERROR", "medium", error);
     }
 
     return entry;
@@ -63,7 +68,7 @@ export class Logger {
     level: LogLevel,
     message: string,
     metadata?: Partial<LogMetadata>,
-    error?: Error
+    error?: Error,
   ): void {
     const entry = this.createEntry(level, message, metadata, error);
     const formattedEntry = this.formatter.format(entry);
@@ -85,11 +90,19 @@ export class Logger {
     this.log("info", message, metadata);
   }
 
-  public warn(message: string, metadata?: Partial<LogMetadata>, error?: Error): void {
+  public warn(
+    message: string,
+    metadata?: Partial<LogMetadata>,
+    error?: Error,
+  ): void {
     this.log("warn", message, metadata, error);
   }
 
-  public error(message: string, metadata?: Partial<LogMetadata>, error?: Error): void {
+  public error(
+    message: string,
+    metadata?: Partial<LogMetadata>,
+    error?: Error,
+  ): void {
     this.log("error", message, metadata, error);
   }
 }

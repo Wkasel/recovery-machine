@@ -1,19 +1,16 @@
 /**
  * Auth-related server actions
+ * Organized by authentication method and common functionality
  */
 
-// Import and re-export specific auth actions as they're implemented
-// Example:
-// export * from "./sign-in";
-// export * from "./sign-out";
-// export * from "./sign-up";
+// Core auth functionality
+export * from "./core/callback";  // Combined callback handler for all auth methods
+export * from "./core/sign-out";  // Sign out functionality
 
-// Export all auth-related server actions
-export * from "./google-auth";
-export * from "./magic-link";
-export * from "./phone-auth";
-export * from "./sign-out";
+// Authentication methods
+export * from "./methods/magic-link";  // Magic link and OTP
+export * from "./methods/phone";      // Phone authentication
+export * from "./methods/oauth";      // All OAuth providers (Google, etc)
 
-// Export other auth actions as they're implemented
-// export * from "./sign-in";
-// export * from "./sign-up";
+// User management
+export * from "./user/profile";     // User profile management
