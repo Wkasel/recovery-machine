@@ -1,7 +1,7 @@
-import { redirect } from "next/navigation";
-import { createClient } from "@/core/supabase/server";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import ProfileForms from "@/core/forms/auth/profile-forms";
+import { createClient } from "@/core/supabase/server";
+import { redirect } from "next/navigation";
 
 export default async function ProfilePage() {
   // Create a Supabase client

@@ -11,6 +11,6 @@ export { clientUsers } from "./client";
 import { getUserProfile, updateUserProfile } from "./server";
 
 export const serverUsers = {
-    getUserProfile,
-    updateUserProfile,
+  getUserProfile,
+  updateUserProfile,
 };

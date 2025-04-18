@@ -26,12 +26,10 @@ export type NextFunction<T> = (context: ActionContext<T>) => Promise<Response>;
 
 export type ActionMiddleware<T = unknown> = (
   context: ActionContext<T>,
-  next: NextFunction<T>,
+  next: NextFunction<T>
 ) => Promise<Response | void>;
 
-export type ActionHandler<T = unknown> = (
-  context: ActionContext<T>,
-) => Promise<Response>;
+export type ActionHandler<T = unknown> = (context: ActionContext<T>) => Promise<Response>;
 
 /**
  * Auth action specific types

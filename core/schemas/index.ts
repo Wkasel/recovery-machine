@@ -29,9 +29,9 @@ export * as serverSchemas from "./server";
 // @ts-expect-error - these need to be implemented
 export * as sharedSchemas from "./shared";
 
-export * from "./shared/auth";
 export * from "./client/auth";
 export * from "./server/auth";
+export * from "./shared/auth";
 
 // Re-export commonly used schema groups
 export { clientAuthSchemas } from "./client/auth";

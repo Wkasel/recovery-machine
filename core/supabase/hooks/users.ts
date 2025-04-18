@@ -1,10 +1,10 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { userKeys } from "../keys/users";
-import { toast } from "sonner";
 import { AppError } from "@/core/errors";
 import { Logger } from "@/lib/logger/Logger";
-import type { IUserProfile } from "../queries/users/server";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { toast } from "sonner";
+import { userKeys } from "../keys/users";
 import { userQueries } from "../queries/users/base";
+import type { IUserProfile } from "../queries/users/server";
 
 /**
  * Hook to fetch a user's profile
@@ -24,16 +24,14 @@ export function useUpdateUserProfile() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async (
-      { userId, data }: { userId: string; data: Partial<IUserProfile> },
-    ) => {
+    mutationFn: async ({ userId, data }: { userId: string; data: Partial<IUserProfile> }) => {
       try {
         return await userQueries.updateUserProfile(userId, data);
       } catch (error) {
         Logger.getInstance().error(
           "Failed to update user profile",
           { component: "useUpdateUserProfile", userId },
-          AppError.from(error),
+          AppError.from(error)
         );
         throw AppError.from(error);
       }

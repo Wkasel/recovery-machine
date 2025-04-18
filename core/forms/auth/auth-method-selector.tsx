@@ -1,11 +1,11 @@
 "use client";
 
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import { Alert, AlertDescription } from "@/components/ui/alert";
-import { useState } from "react";
+import GoogleSignInButton from "@/components/auth/GoogleSignInButton";
 import MagicLink from "@/components/auth/MagicLink";
 import PhoneSignIn from "@/components/auth/PhoneSignIn";
-import GoogleSignInButton from "@/components/auth/GoogleSignInButton";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useState } from "react";
 
 export type AuthMethod = "oauth" | "magic-link" | "phone";
 
@@ -14,7 +14,7 @@ interface AuthMethodSelectorProps {
   availableMethods?: AuthMethod[];
   footerContent?: React.ReactNode;
   /** The page type affects messaging */
-  pageType?: 'sign-in' | 'sign-up';
+  pageType?: "sign-in" | "sign-up";
   /** Where to redirect after successful authentication */
   redirectTo?: string;
 }
@@ -29,7 +29,7 @@ export function AuthMethodSelector({
   defaultMethod = "oauth",
   availableMethods = ["oauth", "magic-link", "phone"],
   footerContent,
-  pageType = 'sign-in',
+  pageType = "sign-in",
   redirectTo = "/protected",
 }: AuthMethodSelectorProps) {
   const [error, setError] = useState<string | null>(null);
@@ -41,9 +41,9 @@ export function AuthMethodSelector({
     setError(errorMessage);
     // Scroll to the top to ensure error is visible
     setTimeout(() => {
-      const errorElement = document.querySelector('.alert-error');
+      const errorElement = document.querySelector(".alert-error");
       if (errorElement) {
-        errorElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        errorElement.scrollIntoView({ behavior: "smooth", block: "start" });
       }
     }, 100);
   };
@@ -67,7 +67,10 @@ export function AuthMethodSelector({
         className="w-full"
         onValueChange={(value) => handleMethodChange(value as AuthMethod)}
       >
-        <TabsList className="grid w-full" style={{ gridTemplateColumns: `repeat(${methods.length}, 1fr)` }}>
+        <TabsList
+          className="grid w-full"
+          style={{ gridTemplateColumns: `repeat(${methods.length}, 1fr)` }}
+        >
           {methods.map((method) => (
             <TabsTrigger key={method} value={method}>
               {methodLabels[method]}

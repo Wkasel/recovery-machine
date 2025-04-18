@@ -15,9 +15,7 @@ export async function updateSession(request: NextRequest) {
           return request.cookies.getAll();
         },
         setAll(cookiesToSet) {
-          cookiesToSet.forEach(({ name, value, options }) =>
-            request.cookies.set(name, value)
-          );
+          cookiesToSet.forEach(({ name, value, options }) => request.cookies.set(name, value));
           supabaseResponse = NextResponse.next({
             request,
           });
@@ -26,7 +24,7 @@ export async function updateSession(request: NextRequest) {
           );
         },
       },
-    },
+    }
   );
 
   // Do not run code between createServerClient and
@@ -40,7 +38,8 @@ export async function updateSession(request: NextRequest) {
   } = await supabase.auth.getUser();
 
   // Check if the current path is a public path
-  const isPublicPath = request.nextUrl.pathname === "/" ||
+  const isPublicPath =
+    request.nextUrl.pathname === "/" ||
     request.nextUrl.pathname.startsWith("/sign-in") ||
     request.nextUrl.pathname.startsWith("/sign-up") ||
     request.nextUrl.pathname.startsWith("/auth") ||

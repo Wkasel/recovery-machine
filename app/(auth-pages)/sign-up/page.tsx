@@ -1,7 +1,7 @@
 "use client";
 
-import { AuthMethodSelector } from "@/core/forms/auth";
 import { ModuleErrorBoundary } from "@/components/error-boundary";
+import { AuthMethodSelector } from "@/core/forms/auth";
 import Link from "next/link";
 
 export default function SignUpPage() {

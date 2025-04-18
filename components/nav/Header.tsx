@@ -75,9 +75,7 @@ export function Header({
                       {user.user_metadata?.full_name && (
                         <p className="font-medium">{user.user_metadata.full_name}</p>
                       )}
-                      {user.email && (
-                        <p className="text-sm text-muted-foreground">{user.email}</p>
-                      )}
+                      {user.email && <p className="text-sm text-muted-foreground">{user.email}</p>}
                     </div>
                   </div>
                   <DropdownMenuSeparator />

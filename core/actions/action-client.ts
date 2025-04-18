@@ -1,10 +1,7 @@
 import { AuthError } from "@/core/errors/auth/AuthError";
 import { AppError } from "@/core/errors/base/AppError";
 import { getUser } from "@/core/supabase/queries/auth/server";
-import {
-  getUserProfile,
-  type IUserProfile,
-} from "@/core/supabase/queries/users/server";
+import { getUserProfile, type IUserProfile } from "@/core/supabase/queries/users/server";
 import { Logger } from "@/lib/logger/Logger";
 import { createSafeActionClient } from "next-safe-action";
 
@@ -25,12 +22,10 @@ export type NextFunction<T> = (context: ActionContext<T>) => Promise<Response>;
 
 export type ActionMiddleware<T = unknown> = (
   context: ActionContext<T>,
-  next: NextFunction<T>,
+  next: NextFunction<T>
 ) => Promise<Response | void>;
 
-export type ActionHandler<T = unknown> = (
-  context: ActionContext<T>,
-) => Promise<Response>;
+export type ActionHandler<T = unknown> = (context: ActionContext<T>) => Promise<Response>;
 
 export function createAction<T = unknown>(
   handler: ActionHandler<T>,
@@ -38,10 +33,7 @@ export function createAction<T = unknown>(
 ) {
   return async (context: ActionContext<T> = {}): Promise<Response> => {
     const chain = middleware.reduceRight(
-      (
-        next: NextFunction<T>,
-        middleware: ActionMiddleware<T>,
-      ): NextFunction<T> => {
+      (next: NextFunction<T>, middleware: ActionMiddleware<T>): NextFunction<T> => {
         return async (ctx: ActionContext<T>) => {
           const result = await middleware(ctx, next);
           if (result instanceof Response) {
@@ -50,7 +42,7 @@ export function createAction<T = unknown>(
           return next(ctx);
         };
       },
-      handler,
+      handler
     );
     return chain(context);
   };
@@ -87,7 +79,7 @@ export const actionClient = createSafeActionClient({
       {
         component: "actionClient",
       },
-      AppError.from(error),
+      AppError.from(error)
     );
 
     // Return user-friendly message in production
@@ -125,7 +117,7 @@ export const authActionClient = actionClient.use(async ({ next, ctx }) => {
     Logger.getInstance().error(
       "Auth middleware failed",
       { component: "authActionClient" },
-      AppError.from(error),
+      AppError.from(error)
     );
     throw error;
   }
@@ -155,7 +147,7 @@ export const adminActionClient = authActionClient.use(async ({ next, ctx }) => {
     Logger.getInstance().error(
       "Admin middleware failed",
       { component: "adminActionClient" },
-      AppError.from(error),
+      AppError.from(error)
     );
     throw error;
   }

@@ -9,9 +9,7 @@ import { createAuthAction } from "../core/action-factory";
 /**
  * Send OTP to phone number
  */
-export async function sendPhoneOtp(
-  formData: FormData,
-): Promise<ServerActionResult> {
+export async function sendPhoneOtp(formData: FormData): Promise<ServerActionResult> {
   const action = await createAuthAction(
     "sendPhoneOtp",
     serverAuthSchemas.phone.sendOtp,
@@ -25,7 +23,7 @@ export async function sendPhoneOtp(
       if (error) throw AuthError.fromSupabaseError(error);
 
       return { message: "Verification code sent to your phone" };
-    },
+    }
   );
   return action(formData);
 }
@@ -33,9 +31,7 @@ export async function sendPhoneOtp(
 /**
  * Verify phone OTP
  */
-export async function verifyPhoneOtp(
-  formData: FormData,
-): Promise<ServerActionResult> {
+export async function verifyPhoneOtp(formData: FormData): Promise<ServerActionResult> {
   const action = await createAuthAction(
     "verifyPhoneOtp",
     serverAuthSchemas.phone.verifyOtp,
@@ -54,7 +50,7 @@ export async function verifyPhoneOtp(
         message: "Phone number verified successfully",
         data: { user: data.user },
       };
-    },
+    }
   );
   return action(formData);
 }
@@ -62,9 +58,7 @@ export async function verifyPhoneOtp(
 /**
  * Sign up with phone number and additional metadata
  */
-export async function signUpWithPhone(
-  formData: FormData,
-): Promise<ServerActionResult> {
+export async function signUpWithPhone(formData: FormData): Promise<ServerActionResult> {
   const action = await createAuthAction(
     "signUpWithPhone",
     serverAuthSchemas.phone.signUp,
@@ -83,10 +77,9 @@ export async function signUpWithPhone(
       if (error) throw AuthError.fromSupabaseError(error);
 
       return {
-        message:
-          "Verification code sent. Please verify your phone number to complete sign up.",
+        message: "Verification code sent. Please verify your phone number to complete sign up.",
       };
-    },
+    }
   );
   return action(formData);
 }

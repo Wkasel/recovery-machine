@@ -1,10 +1,10 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { organizationKeys } from "../keys/organizations";
-import { organizationQueries } from "../queries/organizations/base";
-import { toast } from "sonner";
 import { AppError } from "@/core/errors";
 import { Logger } from "@/lib/logger/Logger";
 import type { Organization } from "@/lib/types/supabase";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { toast } from "sonner";
+import { organizationKeys } from "../keys/organizations";
+import { organizationQueries } from "../queries/organizations/base";
 
 /**
  * Hook to fetch a single organization
@@ -35,16 +35,14 @@ export function useUpdateOrganization() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async (
-      { orgId, data }: { orgId: string; data: Partial<Organization> },
-    ) => {
+    mutationFn: async ({ orgId, data }: { orgId: string; data: Partial<Organization> }) => {
       try {
         return await organizationQueries.updateOrganization(orgId, data);
       } catch (error) {
         Logger.getInstance().error(
           "Failed to update organization",
           { component: "useUpdateOrganization", orgId },
-          AppError.from(error),
+          AppError.from(error)
         );
         throw AppError.from(error);
       }

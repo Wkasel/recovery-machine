@@ -29,7 +29,7 @@ const googleOneTapSchema = z.object({
  */
 export async function generateOAuthURL(
   provider: Provider,
-  redirectTo: string,
+  redirectTo: string
 ): Promise<ServerActionResult<string>> {
   try {
     const headersList = await headers();
@@ -56,9 +56,7 @@ export async function generateOAuthURL(
   } catch (error) {
     return {
       success: false,
-      error: error instanceof AuthError
-        ? error.toUserMessage()
-        : "Failed to generate OAuth URL",
+      error: error instanceof AuthError ? error.toUserMessage() : "Failed to generate OAuth URL",
     };
   }
 }
@@ -68,7 +66,7 @@ export async function generateOAuthURL(
  */
 export async function signInWithOAuth(
   provider: Provider,
-  redirectTo: string = "/protected",
+  redirectTo: string = "/protected"
 ): Promise<ServerActionResult> {
   try {
     const headersList = await headers();
@@ -98,9 +96,7 @@ export async function signInWithOAuth(
   } catch (error) {
     return {
       success: false,
-      error: error instanceof AuthError
-        ? error.toUserMessage()
-        : "Failed to sign in with OAuth",
+      error: error instanceof AuthError ? error.toUserMessage() : "Failed to sign in with OAuth",
     };
   }
 }
@@ -110,7 +106,7 @@ export async function signInWithOAuth(
  */
 export async function signUpWithOAuth(
   provider: Provider,
-  redirectTo: string = "/protected",
+  redirectTo: string = "/protected"
 ): Promise<ServerActionResult> {
   try {
     const headersList = await headers();
@@ -137,9 +133,7 @@ export async function signUpWithOAuth(
   } catch (error) {
     return {
       success: false,
-      error: error instanceof AuthError
-        ? error.toUserMessage()
-        : "Failed to sign up with OAuth",
+      error: error instanceof AuthError ? error.toUserMessage() : "Failed to sign up with OAuth",
     };
   }
 }
@@ -147,9 +141,7 @@ export async function signUpWithOAuth(
 /**
  * Sign in with Google One Tap
  */
-export async function signInWithGoogleOneTap(
-  formData: FormData,
-): Promise<ServerActionResult> {
+export async function signInWithGoogleOneTap(formData: FormData): Promise<ServerActionResult> {
   try {
     const { credential, nonce } = googleOneTapSchema.parse({
       credential: formData.get("credential"),
@@ -173,9 +165,7 @@ export async function signInWithGoogleOneTap(
   } catch (error) {
     return {
       success: false,
-      error: error instanceof AuthError
-        ? error.toUserMessage()
-        : "Failed to sign in",
+      error: error instanceof AuthError ? error.toUserMessage() : "Failed to sign in",
     };
   }
 }
@@ -185,7 +175,7 @@ export async function signInWithGoogleOneTap(
  */
 export async function linkOAuthProvider(
   provider: OAuthProvider,
-  options?: OAuthOptions,
+  options?: OAuthOptions
 ): Promise<void> {
   try {
     const supabase = await createServerSupabaseClient();
@@ -213,8 +203,6 @@ export async function linkOAuthProvider(
 
     redirect(data.url);
   } catch (error) {
-    throw error instanceof AuthError
-      ? error
-      : new AuthError("Failed to link OAuth provider");
+    throw error instanceof AuthError ? error : new AuthError("Failed to link OAuth provider");
   }
 }

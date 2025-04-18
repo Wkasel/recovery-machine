@@ -58,7 +58,7 @@ const GoogleOneTap = (): ReactElement | null => {
 
       // Check if there's already an existing session by calling the server getUser function
       try {
-        const response = await fetch('/api/auth/me');
+        const response = await fetch("/api/auth/me");
         const data = await response.json();
 
         if (data.user) {

@@ -21,7 +21,7 @@ interface CallbackData {
  * Handles code exchange and redirection
  */
 export async function handleAuthCallback(
-  formData: FormData,
+  formData: FormData
 ): Promise<ServerActionResult<CallbackData>> {
   try {
     const { code, next } = callbackSchema.parse({
@@ -47,9 +47,7 @@ export async function handleAuthCallback(
   } catch (error) {
     return {
       success: false,
-      error: error instanceof AuthError
-        ? error.toUserMessage()
-        : "Authentication failed",
+      error: error instanceof AuthError ? error.toUserMessage() : "Authentication failed",
     };
   }
 }
@@ -57,10 +55,7 @@ export async function handleAuthCallback(
 /**
  * Convenience wrapper that handles the callback and performs the redirect
  */
-export async function handleAuthCallbackWithRedirect(
-  code: string,
-  next?: string,
-): Promise<void> {
+export async function handleAuthCallbackWithRedirect(code: string, next?: string): Promise<void> {
   const formData = new FormData();
   formData.append("code", code);
   if (next) formData.append("next", next);

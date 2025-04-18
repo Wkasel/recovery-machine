@@ -2,9 +2,9 @@
 
 import { AppError } from "@/core/errors/base/AppError";
 import { Logger } from "@/lib/logger/Logger";
+import { Modal, ModalContextType } from "@/lib/ui/modals/types";
 import { createContext, ReactNode, useCallback, useContext, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
-import { Modal, ModalContextType } from "@/lib/ui/modals/types";
 
 // Create context with default values
 const ModalContext = createContext<ModalContextType | undefined>(undefined);

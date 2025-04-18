@@ -1,8 +1,8 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { FcGoogle } from "react-icons/fc";
 import { useState } from "react";
+import { FcGoogle } from "react-icons/fc";
 
 interface GoogleSignInButtonProps {
   onError?: (error: string) => void;
@@ -11,7 +11,7 @@ interface GoogleSignInButtonProps {
 
 export default function GoogleSignInButton({
   onError,
-  redirectTo = "/protected"
+  redirectTo = "/protected",
 }: GoogleSignInButtonProps) {
   const [isLoading, setIsLoading] = useState(false);
 
@@ -21,7 +21,7 @@ export default function GoogleSignInButton({
       // The URL will be used in the href attribute of the button
     } catch (error) {
       setIsLoading(false);
-      if (onError) onError(typeof error === 'string' ? error : 'Failed to sign in with Google');
+      if (onError) onError(typeof error === "string" ? error : "Failed to sign in with Google");
     }
   };
 

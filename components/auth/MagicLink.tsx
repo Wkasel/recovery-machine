@@ -1,27 +1,27 @@
 "use client";
 
+import { FormBuilder } from "@/components/form/FormBuilder";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { clientAuthSchemas } from "@/core/schemas/client/auth";
+import { CheckCircle } from "lucide-react";
 import { useState } from "react";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { FormBuilder } from "@/components/form/FormBuilder";
-import { clientAuthSchemas } from "@/core/schemas/client/auth";
-import { CheckCircle } from "lucide-react";
 
 interface MagicLinkProps {
   onError?: (error: string) => void;
-  pageType?: 'sign-in' | 'sign-up';
+  pageType?: "sign-in" | "sign-up";
 }
 
-export default function MagicLink({ onError, pageType = 'sign-in' }: MagicLinkProps) {
+export default function MagicLink({ onError, pageType = "sign-in" }: MagicLinkProps) {
   const [emailSent, setEmailSent] = useState(false);
   const [showOTPInput, setShowOTPInput] = useState(false);
   const [email, setEmail] = useState("");
   const [verificationSuccess, setVerificationSuccess] = useState(false);
 
-  const title = pageType === 'sign-in' ? 'Sign in' : 'Sign up';
+  const title = pageType === "sign-in" ? "Sign in" : "Sign up";
 
   // When a magic link email is sent successfully
   if (emailSent) {
@@ -35,14 +35,10 @@ export default function MagicLink({ onError, pageType = 'sign-in' }: MagicLinkPr
           </AlertDescription>
         </Alert>
         <p className="text-sm text-muted-foreground">
-          Click the link in the email to {pageType === 'sign-in' ? 'sign in' : 'sign up'}.
-          If you don't see it, check your spam folder.
+          Click the link in the email to {pageType === "sign-in" ? "sign in" : "sign up"}. If you
+          don't see it, check your spam folder.
         </p>
-        <Button
-          variant="outline"
-          onClick={() => setEmailSent(false)}
-          className="w-full"
-        >
+        <Button variant="outline" onClick={() => setEmailSent(false)} className="w-full">
           Use a different email
         </Button>
       </div>
@@ -85,7 +81,7 @@ export default function MagicLink({ onError, pageType = 'sign-in' }: MagicLinkPr
           loadingFields={1}
           toastMessages={{
             success: `Magic link sent to your email`,
-            error: "Failed to send magic link"
+            error: "Failed to send magic link",
           }}
           analyticsEventName="auth_success"
           onSuccess={(data) => {
@@ -121,7 +117,7 @@ export default function MagicLink({ onError, pageType = 'sign-in' }: MagicLinkPr
                 {form.isLoading ? `Sending...` : `Send Magic Link`}
               </Button>
               <p className="text-xs text-center text-muted-foreground">
-                We'll email you a magic link for a password-free {pageType.replace('-', ' ')}.
+                We'll email you a magic link for a password-free {pageType.replace("-", " ")}.
               </p>
             </div>
           )}
@@ -133,7 +129,9 @@ export default function MagicLink({ onError, pageType = 'sign-in' }: MagicLinkPr
           <FormBuilder
             schema={clientAuthSchemas.magicLink.send}
             action={async (formData) => {
-              const { sendMagicLink } = await import("@/core/actions/server/auth/methods/magic-link");
+              const { sendMagicLink } = await import(
+                "@/core/actions/server/auth/methods/magic-link"
+              );
               return sendMagicLink(formData);
             }}
             formId="otp-send"
@@ -143,7 +141,7 @@ export default function MagicLink({ onError, pageType = 'sign-in' }: MagicLinkPr
             loadingFields={1}
             toastMessages={{
               success: "OTP code sent to your email",
-              error: "Failed to send OTP code"
+              error: "Failed to send OTP code",
             }}
             analyticsEventName="auth_success"
             onSuccess={(data) => {
@@ -179,7 +177,7 @@ export default function MagicLink({ onError, pageType = 'sign-in' }: MagicLinkPr
                   {form.isLoading ? "Sending..." : "Send OTP Code"}
                 </Button>
                 <p className="text-xs text-center text-muted-foreground">
-                  We'll email you a one-time verification code for {pageType.replace('-', ' ')}.
+                  We'll email you a one-time verification code for {pageType.replace("-", " ")}.
                 </p>
               </div>
             )}
@@ -198,7 +196,9 @@ export default function MagicLink({ onError, pageType = 'sign-in' }: MagicLinkPr
               action={async (formData) => {
                 // Add the email to the form data
                 formData.append("email", email);
-                const { verifyMagicLinkOtp } = await import("@/core/actions/server/auth/methods/magic-link");
+                const { verifyMagicLinkOtp } = await import(
+                  "@/core/actions/server/auth/methods/magic-link"
+                );
                 return verifyMagicLinkOtp(formData);
               }}
               formId="otp-verify"
@@ -207,7 +207,7 @@ export default function MagicLink({ onError, pageType = 'sign-in' }: MagicLinkPr
               loadingFields={1}
               toastMessages={{
                 success: "Successfully verified email",
-                error: "Failed to verify code"
+                error: "Failed to verify code",
               }}
               analyticsEventName="auth_success"
               onSuccess={() => {
@@ -221,7 +221,9 @@ export default function MagicLink({ onError, pageType = 'sign-in' }: MagicLinkPr
               {(form) => (
                 <div className="space-y-4">
                   <div>
-                    <Label htmlFor="token" className="sr-only">Verification code</Label>
+                    <Label htmlFor="token" className="sr-only">
+                      Verification code
+                    </Label>
                     <Input
                       id="token"
                       type="text"

@@ -1,6 +1,6 @@
-import { useZodForm } from "../hooks/use-zod-form";
-import { clientAuthSchemas } from "@/core/schemas/client/auth";
 import { sendMagicLink, verifyMagicLinkOtp } from "@/core/actions/server/auth/methods/magic-link";
+import { clientAuthSchemas } from "@/core/schemas/client/auth";
+import { useZodForm } from "../hooks/use-zod-form";
 
 export interface UseMagicLinkFormOptions {
   onEmailSent?: () => void;
@@ -20,7 +20,7 @@ export function useMagicLinkForm({ onEmailSent, redirectTo }: UseMagicLinkFormOp
       analyticsEventName: "auth_success",
       toastMessages: {
         success: "Magic link sent to your email",
-        error: "Failed to send magic link"
+        error: "Failed to send magic link",
       },
       onSuccess: () => onEmailSent?.(),
       loadingFields: 1,
@@ -47,7 +47,7 @@ export function useVerifyMagicLinkForm() {
       analyticsEventName: "auth_success",
       toastMessages: {
         success: "Successfully verified",
-        error: "Failed to verify code"
+        error: "Failed to verify code",
       },
       loadingFields: 1,
       showLoadingSkeleton: true,

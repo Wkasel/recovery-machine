@@ -1,9 +1,8 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
+import { FormBuilder } from "@/components/form";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { FormBuilder } from "@/components/form";
 import { updateEmail, updatePassword } from "@/core/actions/server/auth/user/profile";
 import { clientAuthSchemas } from "@/core/schemas/client/auth";
 import { User } from "@supabase/supabase-js";
@@ -131,7 +130,8 @@ export function UpdatePasswordForm() {
             />
             {form.formState.errors.confirmPassword?.message && (
               <p className="text-sm text-destructive mt-1">
-                {form.formState.errors.confirmPassword.message?.toString() || "Passwords don't match"}
+                {form.formState.errors.confirmPassword.message?.toString() ||
+                  "Passwords don't match"}
               </p>
             )}
           </div>

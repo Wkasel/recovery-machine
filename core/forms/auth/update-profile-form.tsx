@@ -15,7 +15,9 @@ export interface UpdateProfileFormProps {
   defaultValues?: Partial<ProfileUpdateInput>;
 }
 
-export function UpdateProfileForm({ defaultValues = { full_name: "", avatar_url: "" } }: UpdateProfileFormProps) {
+export function UpdateProfileForm({
+  defaultValues = { full_name: "", avatar_url: "" },
+}: UpdateProfileFormProps) {
   const router = useRouter();
   const { setLoading, isLoading } = useLoading();
 

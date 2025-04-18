@@ -10,9 +10,7 @@ import { createAuthAction } from "../core/action-factory";
 /**
  * Send a magic link to the user's email
  */
-export async function sendMagicLink(
-  formData: FormData,
-): Promise<ServerActionResult> {
+export async function sendMagicLink(formData: FormData): Promise<ServerActionResult> {
   const action = await createAuthAction(
     "sendMagicLink",
     serverAuthSchemas.magicLink.send,
@@ -25,16 +23,14 @@ export async function sendMagicLink(
       const { error } = await supabase.auth.signInWithOtp({
         email,
         options: {
-          emailRedirectTo: `${origin}/auth/callback?redirect_to=${
-            callbackUrl || "/dashboard"
-          }`,
+          emailRedirectTo: `${origin}/auth/callback?redirect_to=${callbackUrl || "/dashboard"}`,
         },
       });
 
       if (error) throw AuthError.fromSupabaseError(error);
 
       return { message: "Magic link sent to your email" };
-    },
+    }
   );
   return action(formData);
 }
@@ -43,9 +39,7 @@ export async function sendMagicLink(
  * Verify a magic link OTP code
  * Used when automatic redirect doesn't work
  */
-export async function verifyMagicLinkOtp(
-  formData: FormData,
-): Promise<ServerActionResult> {
+export async function verifyMagicLinkOtp(formData: FormData): Promise<ServerActionResult> {
   const action = await createAuthAction(
     "verifyMagicLinkOtp",
     serverAuthSchemas.magicLink.verify,
@@ -64,7 +58,7 @@ export async function verifyMagicLinkOtp(
         message: "Successfully verified",
         data: { user: data.user },
       };
-    },
+    }
   );
   return action(formData);
 }

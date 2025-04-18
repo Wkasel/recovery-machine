@@ -21,9 +21,7 @@ export async function signOut(): Promise<ServerActionResult> {
   } catch (error) {
     return {
       success: false,
-      error: error instanceof AuthError
-        ? error.toUserMessage()
-        : "Failed to sign out",
+      error: error instanceof AuthError ? error.toUserMessage() : "Failed to sign out",
     };
   }
 }
@@ -31,9 +29,7 @@ export async function signOut(): Promise<ServerActionResult> {
 /**
  * Signs the user out and redirects to the sign-in page
  */
-export async function signOutWithRedirect(
-  redirectTo: string = "/sign-in",
-): Promise<void> {
+export async function signOutWithRedirect(redirectTo: string = "/sign-in"): Promise<void> {
   const result = await signOut();
   if (!result.success) {
     throw new AuthError(result.error || "Failed to sign out");

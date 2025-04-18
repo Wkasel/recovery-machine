@@ -1,8 +1,8 @@
 import { signInWithGoogleOneTap } from "@/core/actions/server/auth/methods/oauth";
-import { toast } from "sonner";
-import { Event } from "@/lib/types/analytics";
-import { Logger } from "@/lib/logger/Logger";
 import { AppError } from "@/core/errors/base/AppError";
+import { Logger } from "@/lib/logger/Logger";
+import { Event } from "@/lib/types/analytics";
+import { toast } from "sonner";
 
 export interface UseOAuthFormOptions {
   onStart?: () => void;
@@ -11,7 +11,11 @@ export interface UseOAuthFormOptions {
   redirectTo?: string;
 }
 
-export function useGoogleSignIn({ onStart, onError, redirectTo = "/protected" }: UseOAuthFormOptions = {}) {
+export function useGoogleSignIn({
+  onStart,
+  onError,
+  redirectTo = "/protected",
+}: UseOAuthFormOptions = {}) {
   return async () => {
     try {
       onStart?.();
@@ -30,7 +34,6 @@ export function useGoogleSignIn({ onStart, onError, redirectTo = "/protected" }:
       // This works better than Next.js redirect in client components
       window.location.href = `/api/auth/oauth?provider=google&redirectTo=${encodeURIComponent(redirectTo)}`;
       return; // Return early since we're redirecting
-
     } catch (error) {
       const message = error instanceof Error ? error.message : "Failed to sign in with Google";
 

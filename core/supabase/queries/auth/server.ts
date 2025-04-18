@@ -10,9 +10,7 @@ import { createServerSupabaseClient } from "../../server-utils";
 export async function getUserById(userId: string) {
   try {
     const supabase = await createServerSupabaseClient();
-    const { data, error } = await supabase.auth.admin.getUserById(
-      userId,
-    );
+    const { data, error } = await supabase.auth.admin.getUserById(userId);
 
     if (error) throw error;
     return data.user;
@@ -20,7 +18,7 @@ export async function getUserById(userId: string) {
     Logger.getInstance().error(
       "Failed to get user by ID",
       { component: "serverAuth.getUserById", userId },
-      AppError.from(error),
+      AppError.from(error)
     );
     throw AppError.from(error);
   }
@@ -44,7 +42,7 @@ export async function getUser() {
         Logger.getInstance().warn(
           "No user session found",
           { component: "serverAuth.getUser" },
-          error,
+          error
         );
       }
       return null;
@@ -55,7 +53,7 @@ export async function getUser() {
     Logger.getInstance().error(
       "Failed to get current user",
       { component: "serverAuth.getUser" },
-      AppError.from(error),
+      AppError.from(error)
     );
     // Return null instead of throwing for better error handling
     return null;
@@ -80,7 +78,7 @@ export async function getSession() {
         Logger.getInstance().warn(
           "No active session found",
           { component: "serverAuth.getSession" },
-          error,
+          error
         );
       }
       return null;
@@ -91,7 +89,7 @@ export async function getSession() {
     Logger.getInstance().error(
       "Failed to get session",
       { component: "serverAuth.getSession" },
-      AppError.from(error),
+      AppError.from(error)
     );
     // Return null instead of throwing for better error handling
     return null;

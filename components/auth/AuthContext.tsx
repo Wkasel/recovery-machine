@@ -1,11 +1,11 @@
 "use client";
 
-import { getUser } from "@/core/supabase/queries/auth/server";
-import { createContext, useContext, ReactNode, useEffect, useState } from "react";
 import { signOutWithRedirect } from "@/core/actions/server/auth/core/sign-out";
+import { getUser } from "@/core/supabase/queries/auth/server";
 import { IUser } from "@/core/types";
-import { useQueryClient } from "@tanstack/react-query";
 import type { User } from "@supabase/supabase-js";
+import { useQueryClient } from "@tanstack/react-query";
+import { createContext, ReactNode, useContext, useEffect, useState } from "react";
 
 interface AuthContextValue {
   user: IUser | null;
@@ -24,7 +24,7 @@ function convertUserToIUser(user: User | null): IUser | null {
   return {
     ...user,
     email: user.email || null,
-    user_metadata: user.user_metadata || {}
+    user_metadata: user.user_metadata || {},
   } as IUser;
 }
 

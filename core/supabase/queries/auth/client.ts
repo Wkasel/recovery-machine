@@ -27,7 +27,7 @@ export const clientAuth = {
       Logger.getInstance().error(
         "Failed to get current user",
         { component: "clientAuth.getUser" },
-        AppError.from(error),
+        AppError.from(error)
       );
       console.error("User fetch error:", error);
       // Return null instead of throwing to avoid cascading errors
@@ -56,7 +56,7 @@ export const clientAuth = {
       Logger.getInstance().error(
         "Failed to get session",
         { component: "clientAuth.getSession" },
-        AppError.from(error),
+        AppError.from(error)
       );
       console.error("Session fetch error:", error);
       // Return null instead of throwing
@@ -78,7 +78,7 @@ export const clientAuth = {
       Logger.getInstance().error(
         "Failed to sign out",
         { component: "clientAuth.signOut" },
-        AppError.from(error),
+        AppError.from(error)
       );
       throw AppError.from(error);
     }

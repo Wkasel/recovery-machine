@@ -1,20 +1,20 @@
 "use client";
 
+import { FormBuilder } from "@/components/form/FormBuilder";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { clientAuthSchemas } from "@/core/schemas/client/auth";
+import { CheckCircle } from "lucide-react";
 import { useState } from "react";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
-import { FormBuilder } from "@/components/form/FormBuilder";
-import { clientAuthSchemas } from "@/core/schemas/client/auth";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { CheckCircle } from "lucide-react";
 
 interface PhoneSignInProps {
   onError?: (error: string) => void;
-  pageType?: 'sign-in' | 'sign-up';
+  pageType?: "sign-in" | "sign-up";
 }
 
-export default function PhoneSignIn({ onError, pageType = 'sign-in' }: PhoneSignInProps) {
+export default function PhoneSignIn({ onError, pageType = "sign-in" }: PhoneSignInProps) {
   const [showOTPInput, setShowOTPInput] = useState(false);
   const [phoneNumber, setPhoneNumber] = useState("");
   const [verificationSuccess, setVerificationSuccess] = useState(false);
@@ -50,7 +50,7 @@ export default function PhoneSignIn({ onError, pageType = 'sign-in' }: PhoneSign
           loadingFields={1}
           toastMessages={{
             success: "Verification code sent to your phone",
-            error: "Failed to send code"
+            error: "Failed to send code",
           }}
           analyticsEventName="auth_success"
           onSuccess={(data) => {
@@ -86,7 +86,7 @@ export default function PhoneSignIn({ onError, pageType = 'sign-in' }: PhoneSign
                 {form.isLoading ? "Sending..." : "Send Verification Code"}
               </Button>
               <p className="text-xs text-muted-foreground text-center">
-                We'll send a verification code via SMS for a secure {pageType.replace('-', ' ')}.
+                We'll send a verification code via SMS for a secure {pageType.replace("-", " ")}.
               </p>
             </div>
           )}
@@ -114,7 +114,7 @@ export default function PhoneSignIn({ onError, pageType = 'sign-in' }: PhoneSign
             loadingFields={1}
             toastMessages={{
               success: "Phone number verified successfully",
-              error: "Failed to verify code"
+              error: "Failed to verify code",
             }}
             analyticsEventName="auth_success"
             onSuccess={() => {
@@ -128,7 +128,9 @@ export default function PhoneSignIn({ onError, pageType = 'sign-in' }: PhoneSign
             {(form) => (
               <div className="space-y-4">
                 <div>
-                  <Label htmlFor="token" className="sr-only">Verification code</Label>
+                  <Label htmlFor="token" className="sr-only">
+                    Verification code
+                  </Label>
                   <Input
                     id="token"
                     type="text"

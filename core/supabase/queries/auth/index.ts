@@ -9,7 +9,7 @@ export { getSession, getUser, getUserById };
 
 // For backward compatibility with existing code
 export const serverAuth = {
-    getUser,
-    getSession,
-    getUserById,
+  getUser,
+  getSession,
+  getUserById,
 };

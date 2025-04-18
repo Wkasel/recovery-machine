@@ -1,8 +1,7 @@
-
-import { InfoIcon } from "lucide-react";
-import { redirect } from "next/navigation";
 import { ModuleErrorBoundary } from "@/components/error-boundary";
 import { createClient } from "@/core/supabase/server";
+import { InfoIcon } from "lucide-react";
+import { redirect } from "next/navigation";
 
 export default async function ProtectedPage() {
   // Create a Supabase client

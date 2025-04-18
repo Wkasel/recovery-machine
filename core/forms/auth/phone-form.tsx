@@ -1,7 +1,7 @@
-import { useZodForm } from "../hooks/use-zod-form";
-import { clientAuthSchemas } from "@/core/schemas/client/auth";
 import { sendPhoneOtp, verifyPhoneOtp } from "@/core/actions/server/auth/methods/phone";
+import { clientAuthSchemas } from "@/core/schemas/client/auth";
 import { useRouter } from "next/navigation";
+import { useZodForm } from "../hooks/use-zod-form";
 
 export interface UsePhoneFormOptions {
   onCodeSent?: () => void;
@@ -21,7 +21,7 @@ export function usePhoneForm({ onCodeSent }: UsePhoneFormOptions = {}) {
       analyticsEventName: "auth_success",
       toastMessages: {
         success: "Verification code sent",
-        error: "Failed to send code"
+        error: "Failed to send code",
       },
       onSuccess: () => onCodeSent?.(),
       loadingFields: 1,
@@ -47,7 +47,7 @@ export function useVerifyPhoneForm({ redirectTo = "/protected" }: UsePhoneFormOp
       analyticsEventName: "auth_success",
       toastMessages: {
         success: "Successfully signed in",
-        error: "Failed to verify code"
+        error: "Failed to verify code",
       },
       onSuccess: () => router.push(redirectTo),
       loadingFields: 1,

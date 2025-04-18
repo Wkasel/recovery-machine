@@ -4,9 +4,7 @@ import { Metadata } from "next";
 // https://nextjs.org/docs/app/api-reference/functions/generate-metadata
 
 export const globalmetadata: Metadata = {
-  metadataBase: new URL(
-    process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000",
-  ),
+  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"),
   title: {
     default: "27 Circles | Web3 Smart Locker",
     template: "%s | 27 Circles",

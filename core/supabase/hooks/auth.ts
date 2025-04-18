@@ -7,7 +7,6 @@ import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { authKeys } from "../keys/auth";
 import { userKeys } from "../keys/users";
-import type { User } from "@supabase/supabase-js";
 
 /**
  * Hook to fetch the current user
@@ -57,7 +56,7 @@ export function useSignOut() {
         Logger.getInstance().error(
           "Failed to sign out",
           { component: "useSignOut" },
-          AppError.from(error),
+          AppError.from(error)
         );
         throw AppError.from(error);
       }
@@ -83,13 +82,7 @@ export function useUpdateAuthUser() {
   const { data: user } = useUser();
 
   return useMutation({
-    mutationFn: async ({
-      email,
-      password,
-    }: {
-      email?: string;
-      password?: string;
-    }) => {
+    mutationFn: async ({ email, password }: { email?: string; password?: string }) => {
       try {
         const supabase = createBrowserSupabaseClient();
         const { data, error } = await supabase.auth.updateUser({
@@ -102,7 +95,7 @@ export function useUpdateAuthUser() {
         Logger.getInstance().error(
           "Failed to update auth user",
           { component: "useUpdateAuthUser" },
-          AppError.from(error),
+          AppError.from(error)
         );
         throw AppError.from(error);
       }

@@ -8,6 +8,6 @@ export { clientOrganizations } from "./client";
 import { getOrganization, getUserOrganizations } from "./server";
 
 export const serverOrganizations = {
-    getOrganization,
-    getUserOrganizations,
+  getOrganization,
+  getUserOrganizations,
 };

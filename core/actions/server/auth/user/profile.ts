@@ -4,16 +4,14 @@ import { AuthError } from "@/core/errors/auth/AuthError";
 import { AppError } from "@/core/errors/base/AppError";
 import { serverAuthSchemas } from "@/core/schemas/server/auth";
 import { createServerSupabaseClient } from "@/core/supabase/server-utils";
-import { ServerActionResult } from "@/lib/types/actions";
 import { Logger } from "@/lib/logger/Logger";
+import { ServerActionResult } from "@/lib/types/actions";
 import { createAuthAction } from "../core/action-factory";
 
 /**
  * Update user profile data
  */
-export async function updateProfile(
-  formData: FormData,
-): Promise<ServerActionResult> {
+export async function updateProfile(formData: FormData): Promise<ServerActionResult> {
   const action = await createAuthAction(
     "updateProfile",
     serverAuthSchemas.profile.update,
@@ -21,7 +19,10 @@ export async function updateProfile(
       try {
         const supabase = await createServerSupabaseClient();
 
-        const { data: { user }, error } = await supabase.auth.updateUser({
+        const {
+          data: { user },
+          error,
+        } = await supabase.auth.updateUser({
           email,
           data: {
             full_name: fullName,
@@ -39,11 +40,11 @@ export async function updateProfile(
         Logger.getInstance().error(
           "Profile update failed",
           { component: "updateProfile" },
-          AppError.from(error),
+          AppError.from(error)
         );
         throw error;
       }
-    },
+    }
   );
   return action(formData);
 }
@@ -51,9 +52,7 @@ export async function updateProfile(
 /**
  * Update user email address
  */
-export async function updateEmail(
-  formData: FormData,
-): Promise<ServerActionResult> {
+export async function updateEmail(formData: FormData): Promise<ServerActionResult> {
   const action = await createAuthAction(
     "updateEmail",
     serverAuthSchemas.profile.updateEmail,
@@ -61,7 +60,10 @@ export async function updateEmail(
       try {
         const supabase = await createServerSupabaseClient();
 
-        const { data: { user }, error } = await supabase.auth.updateUser({
+        const {
+          data: { user },
+          error,
+        } = await supabase.auth.updateUser({
           email,
         });
 
@@ -75,11 +77,11 @@ export async function updateEmail(
         Logger.getInstance().error(
           "Email update failed",
           { component: "updateEmail" },
-          AppError.from(error),
+          AppError.from(error)
         );
         throw error;
       }
-    },
+    }
   );
   return action(formData);
 }
@@ -87,9 +89,7 @@ export async function updateEmail(
 /**
  * Update user password
  */
-export async function updatePassword(
-  formData: FormData,
-): Promise<ServerActionResult> {
+export async function updatePassword(formData: FormData): Promise<ServerActionResult> {
   const action = await createAuthAction(
     "updatePassword",
     serverAuthSchemas.profile.updatePassword,
@@ -97,7 +97,10 @@ export async function updatePassword(
       try {
         const supabase = await createServerSupabaseClient();
 
-        const { data: { user }, error } = await supabase.auth.updateUser({
+        const {
+          data: { user },
+          error,
+        } = await supabase.auth.updateUser({
           password: newPassword,
         });
 
@@ -111,11 +114,11 @@ export async function updatePassword(
         Logger.getInstance().error(
           "Password update failed",
           { component: "updatePassword" },
-          AppError.from(error),
+          AppError.from(error)
         );
         throw error;
       }
-    },
+    }
   );
   return action(formData);
 }

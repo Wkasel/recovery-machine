@@ -1,8 +1,8 @@
 "use server";
 
 import { createServerClient } from "@supabase/ssr";
-import type { DbClient } from "./types";
 import { cookies } from "next/headers";
+import type { DbClient } from "./types";
 
 // Keep the original function name for backward compatibility
 export async function createServerSupabaseClient(): Promise<DbClient> {
@@ -34,7 +34,7 @@ export async function createServerSupabaseClient(): Promise<DbClient> {
           }
         },
       },
-    },
+    }
   );
 }
 

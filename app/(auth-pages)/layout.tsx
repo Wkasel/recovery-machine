@@ -1,7 +1,7 @@
 "use client";
 
-import type { ReactNode } from "react";
 import { usePathname } from "next/navigation";
+import type { ReactNode } from "react";
 
 export default function AuthPagesLayout({ children }: { children: ReactNode }) {
   const pathname = usePathname();

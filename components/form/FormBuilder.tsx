@@ -1,12 +1,12 @@
 "use client";
 
-import { useZodForm } from "@/core/forms/hooks/use-zod-form";
-import { ZodSchema } from "zod";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { FormSkeleton } from "@/lib/ui/loading/skeletons";
-import React, { ReactNode } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { useZodForm } from "@/core/forms/hooks/use-zod-form";
 import type { EventName } from "@/lib/types/analytics";
+import { FormSkeleton } from "@/lib/ui/loading/skeletons";
+import { ReactNode } from "react";
+import { ZodSchema } from "zod";
 
 interface FormBuilderProps<T extends ZodSchema> {
   title?: string;
@@ -95,17 +95,10 @@ export function FormBuilder<T extends ZodSchema>({
 
       {showActions && (
         <div className="flex gap-2 justify-between mt-4">
-          <div>
-            {footerContent}
-          </div>
+          <div>{footerContent}</div>
           <div className="flex gap-2">
             {onCancel && (
-              <Button
-                type="button"
-                variant="outline"
-                onClick={onCancel}
-                disabled={form.isLoading}
-              >
+              <Button type="button" variant="outline" onClick={onCancel} disabled={form.isLoading}>
                 {cancelText}
               </Button>
             )}
@@ -127,9 +120,7 @@ export function FormBuilder<T extends ZodSchema>({
             {description && <CardDescription>{description}</CardDescription>}
           </CardHeader>
         )}
-        <CardContent>
-          {formContent}
-        </CardContent>
+        <CardContent>{formContent}</CardContent>
       </Card>
     );
   }
