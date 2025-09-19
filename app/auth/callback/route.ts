@@ -1,5 +1,5 @@
 import { AuthError } from "@/core/errors/auth/AuthError";
-import { createServerSupabaseClient } from "@/core/supabase/server-utils";
+import { createServerSupabaseClient } from "@/lib/supabase/server";
 import { Logger } from "@/lib/logger/Logger";
 import { NextRequest, NextResponse } from "next/server";
 

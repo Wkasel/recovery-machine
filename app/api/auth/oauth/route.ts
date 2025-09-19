@@ -1,4 +1,4 @@
-import { signInWithOAuth } from "@/core/actions/server/auth/methods/oauth";
+import { signInWithOAuth } from "@/core/actions/oauth";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(request: NextRequest) {

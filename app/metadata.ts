@@ -6,35 +6,35 @@ import { Metadata } from "next";
 export const globalmetadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"),
   title: {
-    default: "27 Circles | Web3 Smart Locker",
-    template: "%s | 27 Circles",
+    default: "The Recovery Machine | Mobile Wellness Services",
+    template: "%s | The Recovery Machine",
   },
   description:
-    "A smart locker system for the blockchain era. Store and protect your digital assets with cutting-edge technology.",
+    "Mobile cold plunge & infrared sauna delivered to your door. Weekly sessions for peak performance and recovery.",
   openGraph: {
     type: "website",
     locale: "en_US",
     url: process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000",
-    title: "27 Circles | Web3 Smart Locker",
+    title: "The Recovery Machine | Mobile Wellness Services",
     description:
-      "A smart locker system for the blockchain era. Store and protect your digital assets with cutting-edge technology.",
-    siteName: "27 Circles",
+      "Mobile cold plunge & infrared sauna delivered to your door. Weekly sessions for peak performance and recovery.",
+    siteName: "The Recovery Machine",
     images: [
       {
         url: `${process.env.NEXT_PUBLIC_APP_URL}/og-image.jpg`,
         width: 1200,
         height: 630,
-        alt: "27 Circles",
+        alt: "The Recovery Machine",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "27 Circles | Web3 Smart Locker",
+    title: "The Recovery Machine | Mobile Wellness Services",
     description:
-      "A smart locker system for the blockchain era. Store and protect your digital assets with cutting-edge technology.",
-    creator: "@27circles",
-    site: "@27circles",
+      "Mobile cold plunge & infrared sauna delivered to your door. Weekly sessions for peak performance and recovery.",
+    creator: "@therecoverymachine",
+    site: "@therecoverymachine",
     images: [`${process.env.NEXT_PUBLIC_APP_URL}/og-image.jpg`],
   },
   robots: {

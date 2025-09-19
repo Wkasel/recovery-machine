@@ -1,18 +1,5 @@
-/**
- * Core functionality exports
- */
-
-// Services
-export * from "./supabase";
-
-// Actions
+// Simplified core exports
 export * from "./actions";
-
-// Error handling
-export * from "./errors";
-
-// Form handling
-export * from "./forms";
-
-// Schemas
+export * from "./queries";
 export * from "./schemas";
+export * from "./forms";

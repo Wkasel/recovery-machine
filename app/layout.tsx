@@ -29,10 +29,10 @@ export default function RootLayout({
       </head>
       <body className="bg-background text-foreground">
         <AppProvider>
-          <div className="min-h-screen flex flex-col">
+          <div className="min-h-screen relative">
             <Header />
-            <main id="main-content" className="flex-1 w-full">
-              <div className="flex flex-col gap-20 max-w-5xl mx-auto p-5">{children}</div>
+            <main id="main-content" className="w-full">
+              {children}
             </main>
             <Footer />
           </div>

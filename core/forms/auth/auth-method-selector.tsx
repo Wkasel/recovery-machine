@@ -1,105 +1,126 @@
 "use client";
 
-import GoogleSignInButton from "@/components/auth/GoogleSignInButton";
-import MagicLink from "@/components/auth/MagicLink";
-import PhoneSignIn from "@/components/auth/PhoneSignIn";
-import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { signIn, signUp, sendMagicLink } from "@/core/actions/auth";
 import { useState } from "react";
 
-export type AuthMethod = "oauth" | "magic-link" | "phone";
+export type AuthMethod = "signin" | "signup" | "magic";
 
 interface AuthMethodSelectorProps {
-  defaultMethod?: AuthMethod;
-  availableMethods?: AuthMethod[];
-  footerContent?: React.ReactNode;
-  /** The page type affects messaging */
-  pageType?: "sign-in" | "sign-up";
-  /** Where to redirect after successful authentication */
-  redirectTo?: string;
+  method?: AuthMethod;
+  onMethodChange?: (method: AuthMethod) => void;
 }
 
-const methodLabels: Record<AuthMethod, string> = {
-  oauth: "Social Login",
-  "magic-link": "Magic Link",
-  phone: "Phone",
-};
-
-export function AuthMethodSelector({
-  defaultMethod = "oauth",
-  availableMethods = ["oauth", "magic-link", "phone"],
-  footerContent,
-  pageType = "sign-in",
-  redirectTo = "/protected",
+export function AuthMethodSelector({ 
+  method = "signin", 
+  onMethodChange 
 }: AuthMethodSelectorProps) {
-  const [error, setError] = useState<string | null>(null);
-  const [activeMethod, setActiveMethod] = useState<AuthMethod>(defaultMethod);
-  const methods = availableMethods.filter(Boolean);
+  const [isLoading, setIsLoading] = useState(false);
+  const [message, setMessage] = useState<string | null>(null);
 
-  // Create a unified error handler for child components to use
-  const handleError = (errorMessage: string) => {
-    setError(errorMessage);
-    // Scroll to the top to ensure error is visible
-    setTimeout(() => {
-      const errorElement = document.querySelector(".alert-error");
-      if (errorElement) {
-        errorElement.scrollIntoView({ behavior: "smooth", block: "start" });
+  const handleSubmit = async (formData: FormData) => {
+    setIsLoading(true);
+    setMessage(null);
+    
+    try {
+      if (method === "magic") {
+        const result = await sendMagicLink(formData);
+        setMessage(result.message);
+      } else if (method === "signup") {
+        await signUp(formData);
+      } else {
+        await signIn(formData);
       }
-    }, 100);
-  };
-
-  // Create a method change handler that clears errors
-  const handleMethodChange = (method: AuthMethod) => {
-    setError(null);
-    setActiveMethod(method);
+    } catch (error) {
+      setMessage(error instanceof Error ? error.message : "An error occurred");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
-    <div className="w-full">
-      {error && (
-        <Alert variant="destructive" className="mb-4 alert-error">
-          <AlertDescription>{error}</AlertDescription>
-        </Alert>
-      )}
-
-      <Tabs
-        defaultValue={defaultMethod}
-        className="w-full"
-        onValueChange={(value) => handleMethodChange(value as AuthMethod)}
-      >
-        <TabsList
-          className="grid w-full"
-          style={{ gridTemplateColumns: `repeat(${methods.length}, 1fr)` }}
-        >
-          {methods.map((method) => (
-            <TabsTrigger key={method} value={method}>
-              {methodLabels[method]}
-            </TabsTrigger>
-          ))}
-        </TabsList>
-
-        {/* Fixed height container based on the tallest form to prevent layout shifts */}
-        <div className="mt-6 min-h-[350px]">
-          <TabsContent value="oauth" className="m-0 h-full">
-            <div className="space-y-4">
-              <GoogleSignInButton onError={handleError} redirectTo={redirectTo} />
+    <Card className="w-full max-w-md">
+      <CardHeader>
+        <CardTitle>
+          {method === "signin" && "Sign In"}
+          {method === "signup" && "Sign Up"}
+          {method === "magic" && "Magic Link"}
+        </CardTitle>
+        <CardDescription>
+          {method === "signin" && "Welcome back to The Recovery Machine"}
+          {method === "signup" && "Join The Recovery Machine"}
+          {method === "magic" && "Get a magic link sent to your email"}
+        </CardDescription>
+      </CardHeader>
+      <CardContent>
+        <form action={handleSubmit} className="space-y-4">
+          <div className="space-y-2">
+            <Label htmlFor="email">Email</Label>
+            <Input
+              id="email"
+              name="email"
+              type="email"
+              placeholder="m@example.com"
+              required
+            />
+          </div>
+          
+          {method !== "magic" && (
+            <div className="space-y-2">
+              <Label htmlFor="password">Password</Label>
+              <Input
+                id="password"
+                name="password"
+                type="password"
+                required
+              />
             </div>
-          </TabsContent>
+          )}
 
-          <TabsContent value="magic-link" className="m-0 h-full">
-            <MagicLink onError={handleError} pageType={pageType} />
-          </TabsContent>
+          <Button type="submit" className="w-full" disabled={isLoading}>
+            {isLoading ? "Loading..." : 
+             method === "signin" ? "Sign In" :
+             method === "signup" ? "Sign Up" :
+             "Send Magic Link"}
+          </Button>
+        </form>
 
-          <TabsContent value="phone" className="m-0 h-full">
-            <PhoneSignIn onError={handleError} pageType={pageType} />
-          </TabsContent>
+        {message && (
+          <p className="mt-4 text-sm text-center text-muted-foreground">
+            {message}
+          </p>
+        )}
+
+        <div className="mt-4 flex justify-center space-x-2 text-sm">
+          {method !== "signin" && (
+            <Button 
+              variant="link" 
+              onClick={() => onMethodChange?.("signin")}
+            >
+              Sign In
+            </Button>
+          )}
+          {method !== "signup" && (
+            <Button 
+              variant="link" 
+              onClick={() => onMethodChange?.("signup")}
+            >
+              Sign Up
+            </Button>
+          )}
+          {method !== "magic" && (
+            <Button 
+              variant="link" 
+              onClick={() => onMethodChange?.("magic")}
+            >
+              Magic Link
+            </Button>
+          )}
         </div>
-      </Tabs>
-
-      {footerContent && <div className="mt-6">{footerContent}</div>}
-    </div>
+      </CardContent>
+    </Card>
   );
 }
-
-// For backward compatibility
-export { AuthMethodSelector as AuthProvider };

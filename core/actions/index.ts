@@ -1,12 +1,5 @@
-/**
- * Core actions exports
- */
-
-// Auth actions
+// Simple, domain-based action exports
 export * from "./auth";
-
-// User actions
+export * from "./booking";
 export * from "./user";
-
-// Form actions
-export * from "./forms";
+export * from "./oauth";
