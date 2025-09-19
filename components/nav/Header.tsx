@@ -45,15 +45,17 @@ export function Header({
   };
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-border/20 bg-background/80 backdrop-blur-md supports-[backdrop-filter]:bg-background/60">
+    <header className="sticky top-0 z-50 w-full border-b border-neutral-800 bg-black">
       <div className="container flex h-16 max-w-screen-2xl items-center">
-        {/* Logo and Brand */}
-        <div className="mr-6 flex items-center space-x-2">
-          <Link href="/" className="flex items-center space-x-2">
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
-              <Snowflake className="h-4 w-4" />
+        {/* Vercel Logo and Brand */}
+        <div className="mr-8 flex items-center space-x-3">
+          <Link href="/" className="flex items-center space-x-3">
+            <div className="flex h-8 w-8 items-center justify-center bg-white">
+              <Snowflake className="h-4 w-4 text-black" />
             </div>
-            <span className="hidden font-bold sm:inline-block">Recovery Machine</span>
+            <span className="hidden font-medium text-lg text-white font-mono sm:inline-block">
+              Recovery Machine
+            </span>
           </Link>
         </div>
 
@@ -65,36 +67,36 @@ export function Header({
           {user ? (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" className="relative h-9 w-9 rounded-full">
-                  <Avatar className="h-8 w-8">
+                <Button variant="ghost" className="relative h-8 w-8 bg-neutral-900 hover:bg-neutral-800">
+                  <Avatar className="h-6 w-6">
                     <AvatarImage
                       src={user.user_metadata?.avatar_url}
                       alt={user.user_metadata?.full_name || user.email || "User"}
                     />
-                    <AvatarFallback className="text-sm">
+                    <AvatarFallback className="text-xs bg-neutral-700 text-white">
                       {getUserInitials(user as IUser)}
                     </AvatarFallback>
                   </Avatar>
                   <span className="sr-only">Open user menu</span>
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-64">
+              <DropdownMenuContent align="end" className="w-64 bg-black border-neutral-800">
                 <div className="flex items-center justify-start gap-3 p-3">
-                  <Avatar className="h-10 w-10">
+                  <Avatar className="h-8 w-8">
                     <AvatarImage
                       src={user.user_metadata?.avatar_url}
                       alt={user.user_metadata?.full_name || user.email || "User"}
                     />
-                    <AvatarFallback className="text-sm">
+                    <AvatarFallback className="text-xs bg-neutral-700 text-white">
                       {getUserInitials(user as IUser)}
                     </AvatarFallback>
                   </Avatar>
                   <div className="flex flex-col space-y-1 leading-none">
                     {user.user_metadata?.full_name && (
-                      <p className="font-medium">{user.user_metadata.full_name}</p>
+                      <p className="font-medium text-white font-mono text-sm">{user.user_metadata.full_name}</p>
                     )}
                     {user.email && (
-                      <p className="text-sm text-muted-foreground truncate">{user.email}</p>
+                      <p className="text-xs text-neutral-400 truncate font-mono">{user.email}</p>
                     )}
                   </div>
                 </div>
@@ -108,7 +110,7 @@ export function Header({
                 ))}
                 <DropdownMenuSeparator />
                 <DropdownMenuItem
-                  className="cursor-pointer text-destructive focus:text-destructive"
+                  className="cursor-pointer text-red-400 focus:text-red-300 focus:bg-neutral-900 font-mono text-sm"
                   onSelect={(e) => {
                     e.preventDefault();
                     signOut();
@@ -119,11 +121,11 @@ export function Header({
               </DropdownMenuContent>
             </DropdownMenu>
           ) : (
-            <div className="flex items-center gap-2">
-              <Button asChild size="sm" variant="ghost" className="text-sm">
+            <div className="flex items-center gap-3">
+              <Button asChild variant="ghost" className="text-sm font-medium text-neutral-400 hover:text-white hover:bg-neutral-900 font-mono h-8 px-4">
                 <Link href="/sign-in">Sign in</Link>
               </Button>
-              <Button asChild size="sm" className="text-sm">
+              <Button asChild className="text-sm font-medium bg-white text-black hover:bg-neutral-200 font-mono h-8 px-4">
                 <Link href="/sign-up">Get Started</Link>
               </Button>
             </div>

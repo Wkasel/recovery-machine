@@ -23,9 +23,31 @@ export const OrganizationJsonLd = () => {
         url: siteMetadata.organization.url,
         logo: siteMetadata.organization.logo,
         sameAs: [
-          `https://twitter.com/${siteMetadata.twitterHandle}`,
-          // Add other social media URLs
+          `https://twitter.com/${siteMetadata.twitterHandle.replace("@", "")}`,
+          // Add other social media URLs when available
         ],
+        contactPoint: {
+          "@type": "ContactPoint",
+          contactType: "customer service",
+          availableLanguage: ["English", "Spanish"],
+          areaServed: "US-CA"
+        },
+        address: {
+          "@type": "PostalAddress",
+          addressLocality: "Los Angeles",
+          addressRegion: "CA",
+          addressCountry: "US"
+        },
+        // Add business-specific properties
+        foundingDate: "2024",
+        numberOfEmployees: "2-10",
+        knowsAbout: [
+          "Cold Plunge Therapy",
+          "Infrared Sauna",
+          "Recovery Therapy",
+          "Wellness Services",
+          "Mobile Spa Services"
+        ]
       }}
     </JsonLd>
   );
@@ -45,6 +67,14 @@ export const WebsiteJsonLd = () => {
           name: siteMetadata.organization.name,
           logo: siteMetadata.organization.logo,
         },
+        potentialAction: {
+          "@type": "SearchAction",
+          target: {
+            "@type": "EntryPoint",
+            urlTemplate: `${siteMetadata.siteUrl}/search?q={search_term_string}`
+          },
+          "query-input": "required name=search_term_string"
+        }
       }}
     </JsonLd>
   );
@@ -72,6 +102,11 @@ export const WebPageJsonLd = ({
           name: siteMetadata.organization.name,
           logo: siteMetadata.organization.logo,
         },
+        mainEntity: {
+          "@type": "LocalBusiness",
+          name: siteMetadata.organization.name,
+          description: siteMetadata.description
+        }
       }}
     </JsonLd>
   );
@@ -117,6 +152,52 @@ export const ArticleJsonLd = ({
             url: siteMetadata.organization.logo,
           },
         },
+        mainEntityOfPage: {
+          "@type": "WebPage",
+          "@id": url
+        }
+      }}
+    </JsonLd>
+  );
+};
+
+// FAQ Schema for wellness questions
+export const FAQJsonLd = ({ faqs }: { faqs: Array<{ question: string; answer: string }> }) => {
+  return (
+    <JsonLd>
+      {{
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        mainEntity: faqs.map(faq => ({
+          "@type": "Question",
+          name: faq.question,
+          acceptedAnswer: {
+            "@type": "Answer",
+            text: faq.answer
+          }
+        }))
+      }}
+    </JsonLd>
+  );
+};
+
+// Breadcrumb Schema
+export const BreadcrumbJsonLd = ({ 
+  breadcrumbs 
+}: { 
+  breadcrumbs: Array<{ name: string; url: string }> 
+}) => {
+  return (
+    <JsonLd>
+      {{
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        itemListElement: breadcrumbs.map((breadcrumb, index) => ({
+          "@type": "ListItem",
+          position: index + 1,
+          name: breadcrumb.name,
+          item: breadcrumb.url
+        }))
       }}
     </JsonLd>
   );

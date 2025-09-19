@@ -85,7 +85,7 @@ export function MainNav({ items = navigationConfig.mainNav, children, user }: Ma
                 <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
                   <Snowflake className="h-4 w-4" />
                 </div>
-                <span className="font-bold">Recovery Machine</span>
+                <span className="font-bold">The Recovery Machine</span>
               </Link>
               
               {navItems.map((item) => (

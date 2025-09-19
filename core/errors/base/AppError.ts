@@ -43,6 +43,13 @@ export class AppError extends Error {
       stack: this.stack,
     };
   }
+
+  static from(error: Error): AppError {
+    if (error instanceof AppError) {
+      return error;
+    }
+    return new AppError(error.message, 500, false);
+  }
 }
 
 // Common error types

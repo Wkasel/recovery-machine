@@ -26,7 +26,7 @@
       "@/config/*": ["./config/*"],
       "@/components/*": ["./components/*"],
       "@/types/*": ["./lib/types/*"],
-      "@/utils/*": ["./lib/utils/*"],
+      "@/utils/*": ["./lib/utils/*", "./utils/*"],
       "@/constants/*": ["./config/constants/*"]
     }
   },

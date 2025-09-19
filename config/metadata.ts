@@ -19,21 +19,21 @@ export interface SiteMetadata {
 }
 
 export const siteMetadata: SiteMetadata = {
-  title: "27 Circles",
-  defaultTitle: "27 Circles - Your Digital Transformation Partner",
-  titleTemplate: "%s | 27 Circles",
-  description: "Enterprise digital transformation and software development",
-  siteUrl: process.env.NEXT_PUBLIC_SITE_URL || "https://27circles.com",
+  title: "The Recovery Machine",
+  defaultTitle: "The Recovery Machine - Mobile Wellness & Recovery Services",
+  titleTemplate: "%s | The Recovery Machine",
+  description: "Mobile cold plunge & infrared sauna delivered to your door. Weekly wellness sessions for peak performance and recovery. Professional spa services at your location.",
+  siteUrl: process.env.NEXT_PUBLIC_SITE_URL || process.env.NEXT_PUBLIC_APP_URL || "https://therecoverymachine.com",
   locale: "en_US",
   type: "website",
-  twitterHandle: "@27circles",
+  twitterHandle: "@therecoverymachine",
   author: {
-    name: "27 Circles",
-    url: "https://27circles.com",
+    name: "The Recovery Machine",
+    url: process.env.NEXT_PUBLIC_SITE_URL || process.env.NEXT_PUBLIC_APP_URL || "https://therecoverymachine.com",
   },
   organization: {
-    name: "27 Circles",
-    url: "https://27circles.com",
-    logo: "https://27circles.com/logo.png",
+    name: "The Recovery Machine",
+    url: process.env.NEXT_PUBLIC_SITE_URL || process.env.NEXT_PUBLIC_APP_URL || "https://therecoverymachine.com",
+    logo: "https://therecoverymachine.com/logo.png",
   },
 };

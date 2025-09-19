@@ -1,0 +1,143 @@
+# Page snapshot
+
+```yaml
+- generic [active] [ref=e1]:
+  - region "Notifications alt+T"
+  - generic [ref=e2]:
+    - banner [ref=e3]:
+      - generic [ref=e4]:
+        - link "The Recovery Machine" [ref=e6] [cursor=pointer]:
+          - /url: /
+          - img [ref=e8] [cursor=pointer]
+          - generic [ref=e21] [cursor=pointer]: The Recovery Machine
+        - navigation "Main" [ref=e24]:
+          - list [ref=e26]:
+            - listitem [ref=e27]:
+              - link "Home" [ref=e28] [cursor=pointer]:
+                - /url: /
+            - listitem [ref=e29]:
+              - link "Book Session" [ref=e30] [cursor=pointer]:
+                - /url: /book
+            - listitem [ref=e31]:
+              - link "About" [ref=e32] [cursor=pointer]:
+                - /url: /about
+        - generic [ref=e34]:
+          - link "Sign in" [ref=e35] [cursor=pointer]:
+            - /url: /sign-in
+          - link "Get Started" [ref=e36] [cursor=pointer]:
+            - /url: /sign-up
+    - main [ref=e37]:
+      - main [ref=e39]:
+        - generic [ref=e40]:
+          - generic [ref=e41]:
+            - heading "Welcome back" [level=1] [ref=e42]
+            - paragraph [ref=e43]: Choose your preferred sign in method
+          - generic [ref=e45]:
+            - generic [ref=e46]:
+              - link "Recovery Machine" [ref=e47] [cursor=pointer]:
+                - /url: /
+                - img [ref=e49] [cursor=pointer]
+                - generic [ref=e62] [cursor=pointer]: Recovery Machine
+              - generic [ref=e63]:
+                - heading "Welcome back" [level=1] [ref=e64]
+                - paragraph [ref=e65]: Sign in to your account to continue your recovery journey
+            - generic [ref=e66]:
+              - generic [ref=e67]:
+                - heading "Sign in" [level=3] [ref=e68]
+                - paragraph [ref=e69]: Choose your preferred sign-in method
+              - generic [ref=e70]:
+                - generic [ref=e71]:
+                  - tablist [ref=e72]:
+                    - tab "Google" [selected] [ref=e73]
+                    - tab "Email" [ref=e74]
+                  - tabpanel "Google" [ref=e75]:
+                    - paragraph [ref=e77]: Sign in quickly and securely with your Google account
+                - generic [ref=e81]: Or
+                - generic [ref=e82]:
+                  - paragraph [ref=e83]:
+                    - text: Don't have an account?
+                    - link "Sign up" [ref=e84] [cursor=pointer]:
+                      - /url: /sign-up
+                  - generic [ref=e85]:
+                    - text: By continuing, you agree to our
+                    - link "Terms of Service" [ref=e86] [cursor=pointer]:
+                      - /url: /terms
+                    - text: and
+                    - link "Privacy Policy" [ref=e87] [cursor=pointer]:
+                      - /url: /privacy
+    - contentinfo [ref=e88]:
+      - generic [ref=e89]:
+        - generic [ref=e90]:
+          - generic [ref=e91]:
+            - link "The Recovery Machine" [ref=e92] [cursor=pointer]:
+              - /url: /
+              - generic [ref=e93] [cursor=pointer]: The Recovery Machine
+            - paragraph [ref=e94]: Mobile cold plunge & infrared sauna delivered to your door. Weekly wellness sessions for peak performance and recovery. Professional spa services at your location.
+          - generic [ref=e95]:
+            - generic [ref=e96]:
+              - heading "Product" [level=3] [ref=e97]
+              - list [ref=e98]:
+                - listitem [ref=e99]:
+                  - link "Features" [ref=e100] [cursor=pointer]:
+                    - /url: /features
+                - listitem [ref=e101]:
+                  - link "Pricing" [ref=e102] [cursor=pointer]:
+                    - /url: /pricing
+                - listitem [ref=e103]:
+                  - link "Documentation" [ref=e104] [cursor=pointer]:
+                    - /url: /docs
+            - generic [ref=e105]:
+              - heading "Company" [level=3] [ref=e106]
+              - list [ref=e107]:
+                - listitem [ref=e108]:
+                  - link "About" [ref=e109] [cursor=pointer]:
+                    - /url: /about
+                - listitem [ref=e110]:
+                  - link "Blog" [ref=e111] [cursor=pointer]:
+                    - /url: /blog
+                - listitem [ref=e112]:
+                  - link "Contact" [ref=e113] [cursor=pointer]:
+                    - /url: /contact
+            - generic [ref=e114]:
+              - heading "Legal" [level=3] [ref=e115]
+              - list [ref=e116]:
+                - listitem [ref=e117]:
+                  - link "Privacy" [ref=e118] [cursor=pointer]:
+                    - /url: /privacy
+                - listitem [ref=e119]:
+                  - link "Terms" [ref=e120] [cursor=pointer]:
+                    - /url: /terms
+                - listitem [ref=e121]:
+                  - link "Cookie Policy" [ref=e122] [cursor=pointer]:
+                    - /url: /cookies
+        - generic [ref=e124]:
+          - generic [ref=e126]: © 2025 The Recovery Machine. All rights reserved.
+          - generic [ref=e127]:
+            - generic [ref=e128]:
+              - link "Twitter" [ref=e129] [cursor=pointer]:
+                - /url: https://twitter.com/@therecoverymachine
+              - link "GitHub" [ref=e130] [cursor=pointer]:
+                - /url: http://localhost:3000
+              - link "Website" [ref=e131] [cursor=pointer]:
+                - /url: http://localhost:3000
+            - button [ref=e132]:
+              - img [ref=e133]
+  - generic [ref=e135]:
+    - img [ref=e137]
+    - button "Open Tanstack query devtools" [ref=e185] [cursor=pointer]:
+      - img [ref=e186] [cursor=pointer]
+  - generic [ref=e238] [cursor=pointer]:
+    - button "Open Next.js Dev Tools" [ref=e239] [cursor=pointer]:
+      - img [ref=e240] [cursor=pointer]
+    - generic [ref=e243] [cursor=pointer]:
+      - button "Open issues overlay" [ref=e244] [cursor=pointer]:
+        - generic [ref=e245] [cursor=pointer]:
+          - generic [ref=e246] [cursor=pointer]: "1"
+          - generic [ref=e247] [cursor=pointer]: "2"
+        - generic [ref=e248] [cursor=pointer]:
+          - text: Issue
+          - generic [ref=e249] [cursor=pointer]: s
+      - button "Collapse issues badge" [ref=e250] [cursor=pointer]:
+        - img [ref=e251] [cursor=pointer]
+  - alert [ref=e253]
+```

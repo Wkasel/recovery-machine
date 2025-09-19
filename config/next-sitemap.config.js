@@ -1,17 +1,20 @@
 /** @type {import('next-sitemap').IConfig} */
 const config = {
-  siteUrl: process.env.SITE_URL || "https://27circles.com",
+  siteUrl: process.env.SITE_URL || process.env.NEXT_PUBLIC_APP_URL || "https://therecoverymachine.com",
   generateRobotsTxt: true,
   generateIndexSitemap: true,
   sitemapSize: 7000,
-  changefreq: "daily",
-  priority: 0.7,
+  changefreq: "weekly",
+  priority: 0.8,
   exclude: [
     "/api/*",
     "/auth/*",
     "/server-sitemap.xml", // Exclude server-side sitemap
     "/_next/*",
     "/static/*",
+    "/protected/*",
+    "/debug",
+    "/error",
   ],
   robotsTxtOptions: {
     policies: [
@@ -23,7 +26,7 @@ const config = {
     ],
     additionalSitemaps: [
       // Add any additional dynamic sitemaps here
-      `${process.env.SITE_URL || "https://27circles.com"}/server-sitemap.xml`,
+      `${process.env.SITE_URL || process.env.NEXT_PUBLIC_APP_URL || "https://therecoverymachine.com"}/server-sitemap.xml`,
     ],
   },
   // Transform function to customize each URL entry

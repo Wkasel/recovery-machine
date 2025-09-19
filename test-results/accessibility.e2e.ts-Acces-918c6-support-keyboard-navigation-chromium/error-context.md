@@ -1,0 +1,400 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e1]:
+  - region "Notifications alt+T"
+  - generic [ref=e2]:
+    - banner [ref=e3]:
+      - generic [ref=e4]:
+        - link "The Recovery Machine" [ref=e6] [cursor=pointer]:
+          - /url: /
+          - img [ref=e8] [cursor=pointer]
+          - generic [ref=e21] [cursor=pointer]: The Recovery Machine
+        - navigation "Main" [ref=e24]:
+          - list [ref=e26]:
+            - listitem [ref=e27]:
+              - link "Home" [ref=e28] [cursor=pointer]:
+                - /url: /
+            - listitem [ref=e29]:
+              - link "Book Session" [ref=e30] [cursor=pointer]:
+                - /url: /book
+            - listitem [ref=e31]:
+              - link "About" [ref=e32] [cursor=pointer]:
+                - /url: /about
+        - generic [ref=e34]:
+          - link "Sign in" [active] [ref=e35] [cursor=pointer]:
+            - /url: /sign-in
+          - link "Get Started" [ref=e36] [cursor=pointer]:
+            - /url: /sign-up
+    - main [ref=e37]:
+      - generic [ref=e38]:
+        - generic [ref=e42]:
+          - heading "Recovery When You Need It" [level=1] [ref=e43]:
+            - generic [ref=e44]: Recovery When
+            - generic [ref=e45]: You Need It
+          - paragraph [ref=e46]:
+            - text: Mobile cold plunge & infrared sauna delivered to your door.
+            - text: Weekly sessions for peak performance.
+          - generic [ref=e47]:
+            - link "Book Now" [ref=e48] [cursor=pointer]:
+              - /url: /book
+            - button "Learn More" [ref=e49]:
+              - text: Learn More
+              - img [ref=e50]
+          - generic [ref=e52]:
+            - generic [ref=e53]:
+              - img [ref=e54]
+              - generic [ref=e56]: Secure Payments via Bolt
+            - generic [ref=e57]:
+              - img [ref=e58]
+              - generic [ref=e60]: 30-Day Flexibility
+            - generic [ref=e61]:
+              - img [ref=e62]
+              - generic [ref=e64]: 4.8/5 Rating
+        - button "Scroll to How It Works section" [ref=e66]:
+          - img [ref=e67]
+      - generic [ref=e70]:
+        - generic [ref=e71]:
+          - heading "How It Works" [level=2] [ref=e72]
+          - paragraph [ref=e73]: Recovery made simple. Our mobile service brings professional-grade recovery tools directly to you.
+        - generic [ref=e74]:
+          - generic [ref=e75]:
+            - generic [ref=e76]:
+              - img [ref=e78]
+              - generic [ref=e81]: "1"
+              - heading "Sign Up" [level=3] [ref=e82]
+            - paragraph [ref=e84]: Create your account and choose your membership plan. Setup takes less than 5 minutes.
+          - generic [ref=e85]:
+            - generic [ref=e86]:
+              - img [ref=e88]
+              - generic [ref=e91]: "2"
+              - heading "We Come to You" [level=3] [ref=e92]
+            - paragraph [ref=e94]: Our mobile unit arrives at your location with professional cold plunge and infrared sauna.
+          - generic [ref=e95]:
+            - generic [ref=e96]:
+              - img [ref=e98]
+              - generic [ref=e101]: "3"
+              - heading "Recover" [level=3] [ref=e102]
+            - paragraph [ref=e104]: Enjoy your 45-minute session with guided recovery protocols for optimal results.
+          - generic [ref=e105]:
+            - generic [ref=e106]:
+              - img [ref=e108]
+              - generic [ref=e113]: "4"
+              - heading "Repeat Weekly" [level=3] [ref=e114]
+            - paragraph [ref=e116]: Consistent weekly sessions delivered to maintain peak performance and recovery.
+        - generic [ref=e118]:
+          - generic [ref=e119]:
+            - img [ref=e120]
+            - text: No setup required
+          - generic [ref=e123]:
+            - img [ref=e124]
+            - text: Professional equipment
+          - generic [ref=e127]:
+            - img [ref=e128]
+            - text: Expert guidance
+      - generic [ref=e132]:
+        - generic [ref=e133]:
+          - heading "Trusted by High Performers" [level=2] [ref=e134]
+          - generic [ref=e135]:
+            - generic [ref=e136]:
+              - img [ref=e139]
+              - generic [ref=e144]: 500+
+              - generic [ref=e145]: Active Members
+            - generic [ref=e146]:
+              - img [ref=e149]
+              - generic [ref=e151]: 4.8/5
+              - generic [ref=e152]: Average Rating
+            - generic [ref=e153]:
+              - img [ref=e156]
+              - generic [ref=e159]: 95%
+              - generic [ref=e160]: Member Satisfaction
+        - generic [ref=e161]:
+          - heading "What Our Members Say" [level=3] [ref=e162]
+          - generic [ref=e163]:
+            - generic [ref=e165]:
+              - generic [ref=e166]:
+                - img [ref=e167]
+                - img [ref=e169]
+                - img [ref=e171]
+                - img [ref=e173]
+                - img [ref=e175]
+              - blockquote [ref=e177]: "\"Transformed my recovery routine – feel unstoppable after every session!\""
+              - generic [ref=e178]:
+                - generic [ref=e180]: SC
+                - generic [ref=e181]:
+                  - generic [ref=e182]: Sarah Chen
+                  - generic [ref=e183]: Marathon Runner
+            - generic [ref=e185]:
+              - generic [ref=e186]:
+                - img [ref=e187]
+                - img [ref=e189]
+                - img [ref=e191]
+                - img [ref=e193]
+                - img [ref=e195]
+              - blockquote [ref=e197]: "\"The convenience of having professional equipment at home is game-changing.\""
+              - generic [ref=e198]:
+                - generic [ref=e200]: MR
+                - generic [ref=e201]:
+                  - generic [ref=e202]: Marcus Rodriguez
+                  - generic [ref=e203]: CrossFit Athlete
+            - generic [ref=e205]:
+              - generic [ref=e206]:
+                - img [ref=e207]
+                - img [ref=e209]
+                - img [ref=e211]
+                - img [ref=e213]
+                - img [ref=e215]
+              - blockquote [ref=e217]: "\"My patients see incredible results. The contrast therapy is scientifically proven.\""
+              - generic [ref=e218]:
+                - generic [ref=e220]: DEW
+                - generic [ref=e221]:
+                  - generic [ref=e222]: Dr. Emily Watson
+                  - generic [ref=e223]: Physical Therapist
+        - generic [ref=e224]:
+          - heading "See Real Recoveries in Action" [level=3] [ref=e225]
+          - paragraph [ref=e226]:
+            - text: Follow
+            - generic [ref=e227]: "@therecoverymachine"
+            - text: for daily inspiration
+          - generic [ref=e231]:
+            - img [ref=e232]
+            - paragraph [ref=e234]: Instagram Feed Loading...
+            - paragraph [ref=e235]: Powered by Behold.so
+          - link "Follow on Instagram" [ref=e236] [cursor=pointer]:
+            - /url: https://instagram.com/therecoverymachine
+            - img [ref=e237] [cursor=pointer]
+            - text: Follow on Instagram
+      - generic [ref=e241]:
+        - generic [ref=e242]:
+          - heading "Simple, Transparent Pricing" [level=2] [ref=e243]
+          - paragraph [ref=e244]: Professional recovery at a fraction of the cost. No hidden fees, no long-term contracts, maximum flexibility.
+        - generic [ref=e245]:
+          - generic [ref=e246]:
+            - img [ref=e249]
+            - heading "Save 75% vs. Single Bookings" [level=3] [ref=e252]
+            - paragraph [ref=e253]: Just $100 per session with membership vs. $400 individual pricing
+          - generic [ref=e254]:
+            - img [ref=e257]
+            - heading "Ultimate Flexibility" [level=3] [ref=e259]
+            - paragraph [ref=e260]: Monthly auto-renew with 30-day cancellation notice
+          - generic [ref=e261]:
+            - img [ref=e264]
+            - heading "Family-Friendly" [level=3] [ref=e269]
+            - paragraph [ref=e270]: Add family members for just $75 per session
+        - generic [ref=e272]:
+          - generic [ref=e274]:
+            - img [ref=e275]
+            - text: Most Popular
+          - generic [ref=e277]:
+            - heading "Weekly Recovery Membership" [level=3] [ref=e278]
+            - paragraph [ref=e279]: Perfect for consistent performance
+            - generic [ref=e280]:
+              - generic [ref=e281]:
+                - generic [ref=e282]: $400
+                - generic [ref=e283]: per month
+              - generic [ref=e284]:
+                - generic [ref=e285]: $1,600 value
+                - generic [ref=e286]: Save 75%
+            - paragraph [ref=e287]: 4 home visits (1 per week), 30 minutes per person
+          - generic [ref=e288]:
+            - list [ref=e289]:
+              - listitem [ref=e290]:
+                - img [ref=e291]
+                - generic [ref=e293]: 4 mobile sessions per month (1 per week)
+              - listitem [ref=e294]:
+                - img [ref=e295]
+                - generic [ref=e297]: 30-minute sessions (cold plunge + IR sauna)
+              - listitem [ref=e298]:
+                - img [ref=e299]
+                - generic [ref=e301]: Professional setup and guidance
+              - listitem [ref=e302]:
+                - img [ref=e303]
+                - generic [ref=e305]: Flexible scheduling
+              - listitem [ref=e306]:
+                - img [ref=e307]
+                - generic [ref=e309]: Cancel with 30 days' notice
+              - listitem [ref=e310]:
+                - img [ref=e311]
+                - generic [ref=e313]: Doorstep delivery and pickup
+            - link "Subscribe Now" [ref=e314] [cursor=pointer]:
+              - /url: /book
+              - text: Subscribe Now
+              - img [ref=e315] [cursor=pointer]
+            - paragraph [ref=e317]: No long-term commitment • Cancel anytime with 30 days notice
+        - generic [ref=e318]:
+          - generic [ref=e319]:
+            - generic [ref=e320]:
+              - heading "One-Time Setup Fee" [level=3] [ref=e321]
+              - generic [ref=e322]: $250 – $500
+              - paragraph [ref=e323]: Varies by distance and customization requirements
+            - generic [ref=e324]:
+              - paragraph [ref=e325]: Onboarding, setup, travel calibration, and supplies
+              - list [ref=e326]:
+                - listitem [ref=e327]:
+                  - img [ref=e328]
+                  - generic [ref=e330]: Professional equipment installation
+                - listitem [ref=e331]:
+                  - img [ref=e332]
+                  - generic [ref=e334]: Safety calibration and testing
+                - listitem [ref=e335]:
+                  - img [ref=e336]
+                  - generic [ref=e338]: Initial consultation and training
+                - listitem [ref=e339]:
+                  - img [ref=e340]
+                  - generic [ref=e342]: Custom setup for your space
+                - listitem [ref=e343]:
+                  - img [ref=e344]
+                  - generic [ref=e346]: Equipment maintenance kit
+                - listitem [ref=e347]:
+                  - img [ref=e348]
+                  - generic [ref=e350]: 24/7 support setup
+          - generic [ref=e351]:
+            - heading "Optional Add-Ons" [level=3] [ref=e353]
+            - generic [ref=e355]:
+              - generic [ref=e356]:
+                - generic [ref=e357]:
+                  - heading "Extra Visit" [level=4] [ref=e358]
+                  - generic [ref=e359]:
+                    - text: $150
+                    - generic [ref=e360]: per session
+                - paragraph [ref=e361]: Additional recovery session beyond your monthly plan
+              - generic [ref=e362]:
+                - generic [ref=e363]:
+                  - heading "Additional Family Member" [level=4] [ref=e364]
+                  - generic [ref=e365]:
+                    - text: $75
+                    - generic [ref=e366]: per session
+                - paragraph [ref=e367]: Add family members to your existing sessions
+              - generic [ref=e368]:
+                - generic [ref=e369]:
+                  - heading "Branded Towels & Electrolytes" [level=4] [ref=e370]
+                  - generic [ref=e371]: Complimentary
+                - paragraph [ref=e372]: Premium recovery accessories included with membership
+        - generic [ref=e373]:
+          - heading "How It Works" [level=3] [ref=e374]
+          - generic [ref=e375]:
+            - generic [ref=e376]:
+              - generic [ref=e377]: "1"
+              - paragraph [ref=e378]: Monthly auto-renew
+            - generic [ref=e379]:
+              - generic [ref=e380]: "2"
+              - paragraph [ref=e381]: Cancel with 30 days' notice
+            - generic [ref=e382]:
+              - generic [ref=e383]: "3"
+              - paragraph [ref=e384]: Flexible scheduling
+            - generic [ref=e385]:
+              - generic [ref=e386]: "4"
+              - paragraph [ref=e387]: Doorstep delivery
+        - generic [ref=e388]:
+          - link "Get Started Today" [ref=e389] [cursor=pointer]:
+            - /url: /book
+            - text: Get Started Today
+            - img [ref=e390] [cursor=pointer]
+          - paragraph [ref=e392]: Join 500+ members who've transformed their recovery routine
+      - generic [ref=e401]:
+        - generic [ref=e402]:
+          - generic [ref=e403]:
+            - img [ref=e404]
+            - text: Limited Time Offer
+          - heading "Get Recovery Tips & Exclusive Offers" [level=2] [ref=e408]
+          - paragraph [ref=e409]: Join our community of high performers and unlock expert recovery strategies
+          - generic [ref=e410]:
+            - img [ref=e411]
+            - generic [ref=e413]: Unlock 10% off your first month
+        - generic [ref=e415]:
+          - textbox "Enter your email address" [ref=e417]
+          - button "Get 10% Off" [disabled]:
+            - text: Get 10% Off
+            - img
+        - generic [ref=e418]:
+          - generic [ref=e419]:
+            - img [ref=e421]
+            - heading "Expert Tips" [level=4] [ref=e424]
+            - paragraph [ref=e425]: Weekly recovery protocols from professionals
+          - generic [ref=e426]:
+            - img [ref=e428]
+            - heading "Exclusive Offers" [level=4] [ref=e432]
+            - paragraph [ref=e433]: Member-only discounts and early access
+          - generic [ref=e434]:
+            - img [ref=e436]
+            - heading "Success Stories" [level=4] [ref=e438]
+            - paragraph [ref=e439]: Real results from our community
+        - generic [ref=e440]:
+          - paragraph [ref=e441]: 🔒 Your email is safe with us. Unsubscribe anytime. No spam, ever.
+          - paragraph [ref=e442]: Join 2,500+ subscribers who trust Recovery Machine
+    - contentinfo [ref=e443]:
+      - generic [ref=e444]:
+        - generic [ref=e445]:
+          - generic [ref=e446]:
+            - link "The Recovery Machine" [ref=e447] [cursor=pointer]:
+              - /url: /
+              - generic [ref=e448] [cursor=pointer]: The Recovery Machine
+            - paragraph [ref=e449]: Mobile cold plunge & infrared sauna delivered to your door. Weekly wellness sessions for peak performance and recovery. Professional spa services at your location.
+          - generic [ref=e450]:
+            - generic [ref=e451]:
+              - heading "Product" [level=3] [ref=e452]
+              - list [ref=e453]:
+                - listitem [ref=e454]:
+                  - link "Features" [ref=e455] [cursor=pointer]:
+                    - /url: /features
+                - listitem [ref=e456]:
+                  - link "Pricing" [ref=e457] [cursor=pointer]:
+                    - /url: /pricing
+                - listitem [ref=e458]:
+                  - link "Documentation" [ref=e459] [cursor=pointer]:
+                    - /url: /docs
+            - generic [ref=e460]:
+              - heading "Company" [level=3] [ref=e461]
+              - list [ref=e462]:
+                - listitem [ref=e463]:
+                  - link "About" [ref=e464] [cursor=pointer]:
+                    - /url: /about
+                - listitem [ref=e465]:
+                  - link "Blog" [ref=e466] [cursor=pointer]:
+                    - /url: /blog
+                - listitem [ref=e467]:
+                  - link "Contact" [ref=e468] [cursor=pointer]:
+                    - /url: /contact
+            - generic [ref=e469]:
+              - heading "Legal" [level=3] [ref=e470]
+              - list [ref=e471]:
+                - listitem [ref=e472]:
+                  - link "Privacy" [ref=e473] [cursor=pointer]:
+                    - /url: /privacy
+                - listitem [ref=e474]:
+                  - link "Terms" [ref=e475] [cursor=pointer]:
+                    - /url: /terms
+                - listitem [ref=e476]:
+                  - link "Cookie Policy" [ref=e477] [cursor=pointer]:
+                    - /url: /cookies
+        - generic [ref=e479]:
+          - generic [ref=e481]: © 2025 The Recovery Machine. All rights reserved.
+          - generic [ref=e482]:
+            - generic [ref=e483]:
+              - link "Twitter" [ref=e484] [cursor=pointer]:
+                - /url: https://twitter.com/@therecoverymachine
+              - link "GitHub" [ref=e485] [cursor=pointer]:
+                - /url: http://localhost:3000
+              - link "Website" [ref=e486] [cursor=pointer]:
+                - /url: http://localhost:3000
+            - button [ref=e487]:
+              - img [ref=e488]
+  - generic [ref=e490]:
+    - img [ref=e492]
+    - button "Open Tanstack query devtools" [ref=e540] [cursor=pointer]:
+      - img [ref=e541] [cursor=pointer]
+  - generic [ref=e593] [cursor=pointer]:
+    - button "Open Next.js Dev Tools" [ref=e594] [cursor=pointer]:
+      - img [ref=e595] [cursor=pointer]
+    - generic [ref=e598] [cursor=pointer]:
+      - button "Open issues overlay" [ref=e599] [cursor=pointer]:
+        - generic [ref=e600] [cursor=pointer]:
+          - generic [ref=e601] [cursor=pointer]: "1"
+          - generic [ref=e602] [cursor=pointer]: "2"
+        - generic [ref=e603] [cursor=pointer]:
+          - text: Issue
+          - generic [ref=e604] [cursor=pointer]: s
+      - button "Collapse issues badge" [ref=e605] [cursor=pointer]:
+        - img [ref=e606] [cursor=pointer]
+  - alert [ref=e608]
+```

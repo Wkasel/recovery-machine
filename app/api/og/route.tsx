@@ -10,15 +10,6 @@ export async function GET(request: Request) {
     const type = searchParams.get("type") ?? "default";
     const description = searchParams.get("description") ?? siteMetadata.description;
 
-    // Font loading
-    const interBold = await fetch(
-      new URL("../../../public/fonts/Inter-Bold.ttf", import.meta.url)
-    ).then(async (res) => res.arrayBuffer());
-
-    const interRegular = await fetch(
-      new URL("../../../public/fonts/Inter-Regular.ttf", import.meta.url)
-    ).then(async (res) => res.arrayBuffer());
-
     return new ImageResponse(
       (
         <div
@@ -29,36 +20,19 @@ export async function GET(request: Request) {
             flexDirection: "column",
             alignItems: "center",
             justifyContent: "center",
-            backgroundColor: "white",
+            backgroundColor: "#0f172a",
+            backgroundImage: "linear-gradient(45deg, #0f172a 0%, #1e293b 100%)",
             padding: "40px 60px",
           }}
         >
-          {/* Logo */}
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              marginBottom: 24,
-            }}
-          >
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src={siteMetadata.organization.logo}
-              alt={siteMetadata.organization.name}
-              width={80}
-              height={80}
-            />
-          </div>
-
           {/* Title */}
           <div
             style={{
               display: "flex",
               fontSize: 60,
-              fontFamily: "Inter Bold",
+              fontWeight: 700,
               letterSpacing: "-0.05em",
-              color: "black",
+              color: "white",
               lineHeight: 1.2,
               whiteSpace: "pre-wrap",
               textAlign: "center",
@@ -74,8 +48,8 @@ export async function GET(request: Request) {
               style={{
                 display: "flex",
                 fontSize: 28,
-                fontFamily: "Inter Regular",
-                color: "gray",
+                fontWeight: 400,
+                color: "#94a3b8",
                 lineHeight: 1.4,
                 whiteSpace: "pre-wrap",
                 textAlign: "center",
@@ -89,20 +63,6 @@ export async function GET(request: Request) {
       {
         width: 1200,
         height: 630,
-        fonts: [
-          {
-            name: "Inter Bold",
-            data: interBold,
-            style: "normal",
-            weight: 700,
-          },
-          {
-            name: "Inter Regular",
-            data: interRegular,
-            style: "normal",
-            weight: 400,
-          },
-        ],
       }
     );
   } catch (e) {

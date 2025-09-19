@@ -1,0 +1,468 @@
+'use client'
+
+import { useState } from 'react'
+import { ServiceType, services, Address, SetupFeeCalculation } from '@/lib/types/booking'
+import { BookingService } from '@/lib/services/booking-service'
+import { cn } from '@/lib/utils'
+import { 
+  CreditCard, 
+  Lock, 
+  Calendar, 
+  MapPin, 
+  Clock, 
+  Users, 
+  DollarSign,
+  Check,
+  AlertCircle,
+  Loader2
+} from 'lucide-react'
+import { Button } from '@/components/ui/button'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { Alert, AlertDescription } from '@/components/ui/alert'
+import { Badge } from '@/components/ui/badge'
+import { Checkbox } from '@/components/ui/checkbox'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+
+interface PaymentStepProps {
+  serviceType: ServiceType
+  dateTime: string
+  address: Address
+  setupFee: SetupFeeCalculation
+  addOns: { extraVisits: number; familyMembers: number; extendedTime: number }
+  specialInstructions?: string
+  onPayment: () => void
+  onBack: () => void
+}
+
+export function PaymentStep({
+  serviceType,
+  dateTime,
+  address,
+  setupFee,
+  addOns,
+  specialInstructions,
+  onPayment,
+  onBack
+}: PaymentStepProps) {
+  const [isProcessingPayment, setIsProcessingPayment] = useState(false)
+  const [termsAccepted, setTermsAccepted] = useState(false)
+  const [promoCode, setPromoCode] = useState('')
+  const [promoDiscount, setPromoDiscount] = useState(0)
+  const [paymentMethod, setPaymentMethod] = useState<'card' | 'subscription'>('card')
+
+  const selectedService = services.find(s => s.id === serviceType)
+  
+  const calculateAddOnCost = () => {
+    const familyMemberCost = addOns.familyMembers * 2500 // $25 per family member
+    const extendedTimeCost = addOns.extendedTime * 200 // $2 per minute
+    const extraVisitCost = addOns.extraVisits * (selectedService?.basePrice || 0) * 0.8 // 20% discount
+    
+    return familyMemberCost + extendedTimeCost + extraVisitCost
+  }
+
+  const calculateSubtotal = () => {
+    return (selectedService?.basePrice || 0) + calculateAddOnCost()
+  }
+
+  const calculateTotal = () => {
+    const subtotal = calculateSubtotal()
+    const setupFeeAmount = setupFee.totalSetupFee
+    const discount = promoDiscount
+    
+    return Math.max(0, subtotal + setupFeeAmount - discount)
+  }
+
+  const formatPrice = (priceInCents: number) => {
+    return `$${(priceInCents / 100).toFixed(2)}`
+  }
+
+  const formatDateTime = (dateTimeStr: string) => {
+    const date = new Date(dateTimeStr)
+    return {
+      date: date.toLocaleDateString('en-US', {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+      }),
+      time: date.toLocaleTimeString('en-US', {
+        hour: 'numeric',
+        minute: '2-digit',
+        hour12: true
+      })
+    }
+  }
+
+  const formatAddress = (addr: Address) => {
+    return `${addr.street}, ${addr.city}, ${addr.state} ${addr.zipCode}`
+  }
+
+  const handlePromoCodeApply = () => {
+    // Mock promo code validation
+    const validPromoCodes: Record<string, number> = {
+      'FIRST20': 2000, // $20 off
+      'RECOVERY10': 1000, // $10 off
+      'NEWUSER': 1500 // $15 off
+    }
+
+    const discount = validPromoCodes[promoCode.toUpperCase()] || 0
+    setPromoDiscount(discount)
+  }
+
+  const handlePayment = async () => {
+    setIsProcessingPayment(true)
+    
+    // Simulate payment processing
+    try {
+      await new Promise(resolve => setTimeout(resolve, 2000))
+      
+      // In a real implementation, you would:
+      // 1. Process payment with Stripe/Bolt
+      // 2. Create booking in database
+      // 3. Send confirmation email
+      // 4. Redirect to confirmation page
+      
+      onPayment()
+    } catch (error) {
+      console.error('Payment failed:', error)
+    } finally {
+      setIsProcessingPayment(false)
+    }
+  }
+
+  const { date, time } = formatDateTime(dateTime)
+
+  return (
+    <div className="space-y-6">
+      <div className="text-center">
+        <h2 className="text-2xl font-bold text-gray-900 mb-2">
+          Complete Your Booking
+        </h2>
+        <p className="text-gray-600">
+          Review your details and complete payment
+        </p>
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {/* Booking Summary */}
+        <div className="space-y-4">
+          <Card>
+            <CardHeader>
+              <CardTitle>Booking Summary</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              {/* Service */}
+              <div className="flex items-start space-x-3">
+                <Check className="w-5 h-5 text-green-600 mt-0.5" />
+                <div>
+                  <p className="font-medium">{selectedService?.name}</p>
+                  <p className="text-sm text-gray-600">
+                    {selectedService?.duration + (addOns.extendedTime || 0)} minutes
+                  </p>
+                </div>
+              </div>
+
+              {/* Date & Time */}
+              <div className="flex items-start space-x-3">
+                <Calendar className="w-5 h-5 text-blue-600 mt-0.5" />
+                <div>
+                  <p className="font-medium">{date}</p>
+                  <p className="text-sm text-gray-600">{time}</p>
+                </div>
+              </div>
+
+              {/* Location */}
+              <div className="flex items-start space-x-3">
+                <MapPin className="w-5 h-5 text-red-600 mt-0.5" />
+                <div>
+                  <p className="font-medium">Delivery Address</p>
+                  <p className="text-sm text-gray-600">{formatAddress(address)}</p>
+                </div>
+              </div>
+
+              {/* Add-ons */}
+              {(addOns.familyMembers > 0 || addOns.extendedTime > 0 || addOns.extraVisits > 0) && (
+                <div className="flex items-start space-x-3">
+                  <Users className="w-5 h-5 text-purple-600 mt-0.5" />
+                  <div>
+                    <p className="font-medium">Add-ons</p>
+                    <div className="text-sm text-gray-600 space-y-1">
+                      {addOns.familyMembers > 0 && (
+                        <p>Family members: {addOns.familyMembers}</p>
+                      )}
+                      {addOns.extendedTime > 0 && (
+                        <p>Extended time: +{addOns.extendedTime} minutes</p>
+                      )}
+                      {addOns.extraVisits > 0 && (
+                        <p>Extra visits: {addOns.extraVisits}</p>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Special Instructions */}
+              {specialInstructions && (
+                <div className="border-t pt-4">
+                  <p className="font-medium mb-2">Special Instructions</p>
+                  <p className="text-sm text-gray-600">{specialInstructions}</p>
+                </div>
+              )}
+            </CardContent>
+          </Card>
+
+          {/* Payment method selection */}
+          <Card>
+            <CardHeader>
+              <CardTitle>Payment Options</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="grid grid-cols-1 gap-3">
+                <div
+                  className={cn(
+                    'border-2 rounded-lg p-4 cursor-pointer transition-all',
+                    paymentMethod === 'card'
+                      ? 'border-blue-500 bg-blue-50'
+                      : 'border-gray-200 hover:border-gray-300'
+                  )}
+                  onClick={() => setPaymentMethod('card')}
+                >
+                  <div className="flex items-center space-x-3">
+                    <div className={cn(
+                      'w-4 h-4 rounded-full border-2',
+                      paymentMethod === 'card'
+                        ? 'border-blue-500 bg-blue-500'
+                        : 'border-gray-300'
+                    )}>
+                      {paymentMethod === 'card' && (
+                        <div className="w-2 h-2 bg-white rounded-full mx-auto mt-0.5" />
+                      )}
+                    </div>
+                    <CreditCard className="w-5 h-5 text-gray-600" />
+                    <div>
+                      <p className="font-medium">Pay per session</p>
+                      <p className="text-sm text-gray-600">One-time payment</p>
+                    </div>
+                  </div>
+                </div>
+
+                <div
+                  className={cn(
+                    'border-2 rounded-lg p-4 cursor-pointer transition-all',
+                    paymentMethod === 'subscription'
+                      ? 'border-blue-500 bg-blue-50'
+                      : 'border-gray-200 hover:border-gray-300'
+                  )}
+                  onClick={() => setPaymentMethod('subscription')}
+                >
+                  <div className="flex items-center space-x-3">
+                    <div className={cn(
+                      'w-4 h-4 rounded-full border-2',
+                      paymentMethod === 'subscription'
+                        ? 'border-blue-500 bg-blue-500'
+                        : 'border-gray-300'
+                    )}>
+                      {paymentMethod === 'subscription' && (
+                        <div className="w-2 h-2 bg-white rounded-full mx-auto mt-0.5" />
+                      )}
+                    </div>
+                    <Badge className="bg-green-100 text-green-800">Save 20%</Badge>
+                    <div>
+                      <p className="font-medium">Monthly membership</p>
+                      <p className="text-sm text-gray-600">4 sessions per month</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Payment Details */}
+        <div className="space-y-4">
+          {/* Pricing breakdown */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center space-x-2">
+                <DollarSign className="w-5 h-5" />
+                <span>Pricing Breakdown</span>
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-3">
+              <div className="flex justify-between">
+                <span>{selectedService?.name}</span>
+                <span>{formatPrice(selectedService?.basePrice || 0)}</span>
+              </div>
+
+              {addOns.familyMembers > 0 && (
+                <div className="flex justify-between text-sm">
+                  <span>Family members ({addOns.familyMembers})</span>
+                  <span>{formatPrice(addOns.familyMembers * 2500)}</span>
+                </div>
+              )}
+
+              {addOns.extendedTime > 0 && (
+                <div className="flex justify-between text-sm">
+                  <span>Extended time (+{addOns.extendedTime} min)</span>
+                  <span>{formatPrice(addOns.extendedTime * 200)}</span>
+                </div>
+              )}
+
+              {addOns.extraVisits > 0 && (
+                <div className="flex justify-between text-sm">
+                  <span>Extra visits ({addOns.extraVisits})</span>
+                  <span>{formatPrice(addOns.extraVisits * (selectedService?.basePrice || 0) * 0.8)}</span>
+                </div>
+              )}
+
+              <div className="border-t pt-3">
+                <div className="flex justify-between">
+                  <span>Subtotal</span>
+                  <span>{formatPrice(calculateSubtotal())}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span>Setup fee</span>
+                  <span>{formatPrice(setupFee.totalSetupFee)}</span>
+                </div>
+                {promoDiscount > 0 && (
+                  <div className="flex justify-between text-green-600">
+                    <span>Promo discount</span>
+                    <span>-{formatPrice(promoDiscount)}</span>
+                  </div>
+                )}
+              </div>
+
+              <div className="border-t pt-3">
+                <div className="flex justify-between text-lg font-semibold">
+                  <span>Total</span>
+                  <span>{formatPrice(calculateTotal())}</span>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Promo code */}
+          <Card>
+            <CardContent className="pt-6">
+              <div className="flex space-x-2">
+                <Input
+                  placeholder="Promo code"
+                  value={promoCode}
+                  onChange={(e) => setPromoCode(e.target.value)}
+                  className="flex-1"
+                />
+                <Button
+                  variant="outline"
+                  onClick={handlePromoCodeApply}
+                  disabled={!promoCode}
+                >
+                  Apply
+                </Button>
+              </div>
+              {promoDiscount > 0 && (
+                <p className="text-sm text-green-600 mt-2">
+                  Promo code applied! You saved {formatPrice(promoDiscount)}
+                </p>
+              )}
+            </CardContent>
+          </Card>
+
+          {/* Payment form */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center space-x-2">
+                <Lock className="w-5 h-5" />
+                <span>Secure Payment</span>
+              </CardTitle>
+              <CardDescription>
+                Your payment information is encrypted and secure
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              {/* Mock payment form */}
+              <div className="bg-gray-50 p-4 rounded-lg text-center">
+                <CreditCard className="w-12 h-12 text-gray-400 mx-auto mb-2" />
+                <p className="text-sm text-gray-600 mb-2">
+                  Secure payment processing powered by Bolt
+                </p>
+                <div className="flex justify-center space-x-2">
+                  <Badge variant="secondary">Visa</Badge>
+                  <Badge variant="secondary">Mastercard</Badge>
+                  <Badge variant="secondary">Amex</Badge>
+                  <Badge variant="secondary">Apple Pay</Badge>
+                </div>
+              </div>
+
+              {/* Terms and conditions */}
+              <div className="flex items-start space-x-2">
+                <Checkbox
+                  id="terms"
+                  checked={termsAccepted}
+                  onCheckedChange={(checked) => setTermsAccepted(checked as boolean)}
+                />
+                <div className="grid gap-1.5 leading-none">
+                  <Label
+                    htmlFor="terms"
+                    className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                  >
+                    I accept the terms and conditions
+                  </Label>
+                  <p className="text-xs text-muted-foreground">
+                    By booking, you agree to our{' '}
+                    <a href="#" className="text-blue-600 hover:underline">
+                      Terms of Service
+                    </a>{' '}
+                    and{' '}
+                    <a href="#" className="text-blue-600 hover:underline">
+                      Privacy Policy
+                    </a>
+                  </p>
+                </div>
+              </div>
+
+              {/* Cancellation policy */}
+              <Alert>
+                <AlertCircle className="h-4 w-4" />
+                <AlertDescription>
+                  <strong>Cancellation Policy:</strong> Free cancellation up to 24 hours before your appointment. 
+                  Setup fees are non-refundable after equipment delivery.
+                </AlertDescription>
+              </Alert>
+            </CardContent>
+          </Card>
+        </div>
+      </div>
+
+      {/* Navigation buttons */}
+      <div className="flex justify-between pt-6">
+        <Button
+          variant="outline"
+          onClick={onBack}
+          size="lg"
+          disabled={isProcessingPayment}
+        >
+          Back to Calendar
+        </Button>
+        
+        <Button
+          onClick={handlePayment}
+          disabled={!termsAccepted || isProcessingPayment}
+          size="lg"
+          className="px-8"
+        >
+          {isProcessingPayment ? (
+            <>
+              <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+              Processing Payment...
+            </>
+          ) : (
+            <>
+              Complete Booking - {formatPrice(calculateTotal())}
+            </>
+          )}
+        </Button>
+      </div>
+    </div>
+  )
+}
