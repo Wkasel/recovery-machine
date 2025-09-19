@@ -47,7 +47,19 @@ export async function updateSession(request: NextRequest) {
     request.nextUrl.pathname.startsWith("/api/auth") ||
     request.nextUrl.pathname.startsWith("/_next") ||
     request.nextUrl.pathname.includes("/terms") ||
-    request.nextUrl.pathname.includes("/privacy");
+    request.nextUrl.pathname.includes("/privacy") ||
+    request.nextUrl.pathname.startsWith("/book") ||
+    request.nextUrl.pathname.startsWith("/pricing") ||
+    request.nextUrl.pathname.startsWith("/how-it-works") ||
+    request.nextUrl.pathname.startsWith("/contact") ||
+    request.nextUrl.pathname.startsWith("/about") ||
+    // Static assets
+    request.nextUrl.pathname.match(/\.(js|css|png|jpg|jpeg|gif|ico|svg|webp|mp4)$/) ||
+    // API routes that should be public
+    request.nextUrl.pathname.startsWith("/api/og") ||
+    request.nextUrl.pathname.startsWith("/api/sitemap") ||
+    request.nextUrl.pathname.startsWith("/sitemap") ||
+    request.nextUrl.pathname.startsWith("/robots");
 
   if (!user && !isPublicPath) {
     // No user and not a public path, redirect to sign-in

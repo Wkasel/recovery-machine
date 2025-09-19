@@ -4,12 +4,13 @@ import { createServerSupabaseClient } from '@/lib/supabase/server';
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { userId: string } }
+  { params }: { params: Promise<{ userId: string }> }
 ) {
   try {
     await requireAdminAccess('operator');
     const supabase = createServerSupabaseClient();
-    const userId = params.userId;
+    const resolvedParams = await params;
+    const userId = resolvedParams.userId;
 
     const { data: transactions, error } = await supabase
       .from('credit_transactions')

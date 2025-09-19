@@ -4,12 +4,14 @@ import { createServerSupabaseClient } from '@/lib/supabase/server';
 
 export async function POST(
   request: NextRequest,
-  { params }: { params: { userId: string } }
+  { params }: { params: Promise<{ userId: string }> }
 ) {
   try {
     const { admin } = await requireAdminAccess('admin'); // Require admin level for credit adjustments
+    const resolvedParams = await params;
+    const userId = resolvedParams.userId;
     const supabase = createServerSupabaseClient();
-    const userId = params.userId;
+    // userId already defined above
 
     const { amount, reason } = await request.json();
 

@@ -4,12 +4,13 @@ import { createServerSupabaseClient } from '@/lib/supabase/server';
 
 export async function PATCH(
   request: NextRequest,
-  { params }: { params: { bookingId: string } }
+  { params }: { params: Promise<{ bookingId: string }> }
 ) {
   try {
     const { admin } = await requireAdminAccess('operator');
     const supabase = createServerSupabaseClient();
-    const bookingId = params.bookingId;
+    const resolvedParams = await params;
+    const bookingId = resolvedParams.bookingId;
 
     const { status, notes } = await request.json();
 

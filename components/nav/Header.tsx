@@ -46,7 +46,7 @@ export function Header({
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-neutral-800 bg-black">
-      <div className="container flex h-16 max-w-screen-2xl items-center">
+      <div className="container flex h-16 max-w-screen-2xl items-center px-4 sm:px-6 lg:px-8">
         {/* Vercel Logo and Brand */}
         <div className="mr-8 flex items-center space-x-3">
           <Link href="/" className="flex items-center space-x-3">

@@ -1,7 +1,7 @@
-import { createClient } from '@/utils/supabase/server';
+import { createServerSupabaseClient } from '@/lib/supabase/server';
 
 export async function checkAdminAccess(minimumRole: 'operator' | 'admin' | 'super_admin' = 'admin') {
-  const supabase = createBrowserSupabaseClient();
+  const supabase = createServerSupabaseClient();
   
   const { data: { user }, error: authError } = await supabase.auth.getUser();
   

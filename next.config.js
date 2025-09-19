@@ -1,15 +1,11 @@
 import createWithBundleAnalyzer from "@next/bundle-analyzer";
-import { withSentryConfig } from "@sentry/nextjs";
+// Sentry import temporarily removed to fix build warnings
 
 /** @type {import('next').NextConfig} */
 const nextConfig = (phase) => {
   const config = {
     reactStrictMode: true,
-    sentry: {
-      hideSourceMaps: process.env.NODE_ENV === "production",
-    },
     // Performance optimizations
-    swcMinify: true,
     experimental: {
       optimizePackageImports: [
         '@radix-ui/react-accordion',
@@ -17,12 +13,13 @@ const nextConfig = (phase) => {
         '@radix-ui/react-dropdown-menu',
         'lucide-react',
       ],
-      turbo: {
-        rules: {
-          '*.svg': {
-            loaders: ['@svgr/webpack'],
-            as: '*.js',
-          },
+    },
+    // Turbopack configuration (moved from experimental.turbo)
+    turbopack: {
+      rules: {
+        '*.svg': {
+          loaders: ['@svgr/webpack'],
+          as: '*.js',
         },
       },
     },
@@ -182,15 +179,10 @@ const nextConfig = (phase) => {
     openAnalyzer: process.env.ANALYZE === "true" && process.env.OPEN_ANALYZER === "true",
   });
 
-  // Sentry webpack plugin options
-  const sentryWebpackPluginOptions = {
-    silent: true, // Suppresses all logs
-    // For all available options, see:
-    // https://github.com/getsentry/sentry-webpack-plugin#options
-  };
+  // Sentry configuration temporarily removed to fix build warnings
 
-  // Make sure adding Sentry options is the last code to run before exporting
-  return withSentryConfig(withBundleAnalyzer(config), sentryWebpackPluginOptions);
+  // Return config without Sentry wrapper for now
+  return withBundleAnalyzer(config);
 };
 
 export default nextConfig;

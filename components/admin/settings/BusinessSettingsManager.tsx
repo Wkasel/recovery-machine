@@ -11,7 +11,7 @@ import { PricingSettings } from './PricingSettings';
 import { NotificationSettings } from './NotificationSettings';
 import { IntegrationSettings } from './IntegrationSettings';
 import { SystemSettings } from './SystemSettings';
-import { createClient } from '@/utils/supabase/client';
+import { createBrowserSupabaseClient } from '@/utils/supabase/client';
 
 interface BusinessSetting {
   key: string;
@@ -31,7 +31,7 @@ export function BusinessSettingsManager() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [saveStatus, setSaveStatus] = useState<'idle' | 'saving' | 'success' | 'error'>('idle');
-  const supabase = createClient();
+  const supabase = createBrowserSupabaseClient();
 
   useEffect(() => {
     loadSettings();
