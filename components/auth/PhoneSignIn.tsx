@@ -40,8 +40,8 @@ export default function PhoneSignIn({ onError, pageType = "sign-in" }: PhoneSign
         <FormBuilder
           schema={clientAuthSchemas.phone.sendOtp}
           action={async (formData) => {
-            const { sendPhoneOtp } = await import("@/core/actions/server/auth/methods/phone");
-            return sendPhoneOtp(formData);
+            const { sendMagicLink } = await import("@/core/actions/auth");
+            return sendMagicLink(formData);
           }}
           formId="phone-send-otp"
           useCard={false}
@@ -105,8 +105,8 @@ export default function PhoneSignIn({ onError, pageType = "sign-in" }: PhoneSign
             action={async (formData) => {
               // Add the phone to the form data
               formData.append("phone", phoneNumber);
-              const { verifyPhoneOtp } = await import("@/core/actions/server/auth/methods/phone");
-              return verifyPhoneOtp(formData);
+              const { signIn } = await import("@/core/actions/auth");
+              return signIn(formData);
             }}
             formId="phone-verify-otp"
             useCard={false}

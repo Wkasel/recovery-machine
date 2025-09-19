@@ -86,3 +86,27 @@ export async function signOut() {
   
   redirect("/");
 }
+
+export async function signOutWithRedirect() {
+  const supabase = await createServerSupabaseClient();
+  
+  const { error } = await supabase.auth.signOut();
+  
+  if (error) {
+    throw new Error(error.message);
+  }
+  
+  redirect("/");
+}
+
+export async function getUser() {
+  const supabase = await createServerSupabaseClient();
+  
+  const { data: { user }, error } = await supabase.auth.getUser();
+  
+  if (error) {
+    return null;
+  }
+  
+  return user;
+}

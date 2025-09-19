@@ -10,8 +10,8 @@ import {
   DropdownMenuShortcut,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { useSignOut } from "@/core/supabase/hooks";
-import type { IUser } from "@/core/types";
+import { useSignOut } from "@/lib/supabase/hooks";
+import type { IUser } from "@/lib/types/auth";
 
 interface UserNavProps {
   user: IUser;

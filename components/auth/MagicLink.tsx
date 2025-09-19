@@ -69,9 +69,9 @@ export default function MagicLink({ onError, pageType = "sign-in" }: MagicLinkPr
 
       <TabsContent value="magic-link">
         <FormBuilder
-          schema={clientAuthSchemas.magicLink.send}
+          schema={clientAuthSchemas.email.magicLink}
           action={async (formData) => {
-            const { sendMagicLink } = await import("@/core/actions/server/auth/methods/magic-link");
+            const { sendMagicLink } = await import("@/core/actions/auth");
             return sendMagicLink(formData);
           }}
           formId="magic-link-send"
@@ -127,11 +127,9 @@ export default function MagicLink({ onError, pageType = "sign-in" }: MagicLinkPr
       <TabsContent value="otp">
         {!showOTPInput ? (
           <FormBuilder
-            schema={clientAuthSchemas.magicLink.send}
+            schema={clientAuthSchemas.email.magicLink}
             action={async (formData) => {
-              const { sendMagicLink } = await import(
-                "@/core/actions/server/auth/methods/magic-link"
-              );
+              const { sendMagicLink } = await import("@/core/actions/auth");
               return sendMagicLink(formData);
             }}
             formId="otp-send"
@@ -192,14 +190,12 @@ export default function MagicLink({ onError, pageType = "sign-in" }: MagicLinkPr
             </Alert>
 
             <FormBuilder
-              schema={clientAuthSchemas.magicLink.verify}
+              schema={clientAuthSchemas.email.magicLink}
               action={async (formData) => {
                 // Add the email to the form data
                 formData.append("email", email);
-                const { verifyMagicLinkOtp } = await import(
-                  "@/core/actions/server/auth/methods/magic-link"
-                );
-                return verifyMagicLinkOtp(formData);
+                const { signIn } = await import("@/core/actions/auth");
+                return signIn(formData);
               }}
               formId="otp-verify"
               useCard={false}

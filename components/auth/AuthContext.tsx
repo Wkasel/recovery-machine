@@ -1,8 +1,7 @@
 "use client";
 
-import { signOutWithRedirect } from "@/core/actions/server/auth/core/sign-out";
-import { getUser } from "@/core/supabase/queries/auth/server";
-import { IUser } from "@/core/types";
+import { signOutWithRedirect, getUser } from "@/core/actions/auth";
+import { IUser } from "@/lib/types/auth";
 import type { User } from "@supabase/supabase-js";
 import { useQueryClient } from "@tanstack/react-query";
 import { createContext, ReactNode, useContext, useEffect, useState } from "react";

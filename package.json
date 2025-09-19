@@ -51,7 +51,7 @@
     "@supabase/sentry-js-integration": "^0.3.0",
     "@supabase/ssr": "latest",
     "@supabase/supabase-js": "latest",
-    "@tailwindcss/postcss": "^4.0.0",
+    "@tailwindcss/postcss": "^4.1.13",
     "@tanstack/react-query": "^5.74.3",
     "@tanstack/react-query-devtools": "^5.74.3",
     "@types/google-one-tap": "^1.2.6",
@@ -107,7 +107,7 @@
     "postcss": "8.4.49",
     "prettier-plugin-organize-imports": "^4.1.0",
     "tailwind-merge": "^2.5.2",
-    "tailwindcss": "^4.0.0",
+    "tailwindcss": "^4.1.13",
     "tailwindcss-animate": "^1.0.7",
     "typescript": "5.7.2"
   }

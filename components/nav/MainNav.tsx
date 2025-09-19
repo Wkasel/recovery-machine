@@ -1,16 +1,6 @@
 "use client";
 
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuGroup,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import {
   NavigationMenu,
   NavigationMenuItem,
@@ -19,10 +9,9 @@ import {
 } from "@/components/ui/navigation-menu";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { navigationConfig } from "@/config/navigation";
-import { useSignOut, useUser } from "@/core/supabase/hooks";
-import type { IUser } from "@/core/types";
+import type { IUser } from "@/lib/types/auth";
 import { cn } from "@/lib/utils";
-import { Menu } from "lucide-react";
+import { Menu, Snowflake } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import * as React from "react";
@@ -34,87 +23,33 @@ interface MainNavProps {
   user: IUser | null;
 }
 
-const publicNavItems = [
-  { href: "/", label: "Home" },
-  { href: "/sign-in", label: "Sign In" },
-  { href: "/sign-up", label: "Sign Up" },
-];
-
-const protectedNavItems = [
-  { href: "/protected", label: "Protected" },
-  { href: "/protected/profile", label: "Profile" },
-  { href: "/protected/settings", label: "Settings" },
-];
-
-function UserNavComponent() {
-  const { data: user, isLoading } = useUser();
-  const signOutMutation = useSignOut();
-
-  if (isLoading || !user) return null;
-
-  const avatarUrl = user.user_metadata?.avatar_url;
-  const fullName = user.user_metadata?.full_name || user.email;
-  const initials = fullName ? fullName.charAt(0).toUpperCase() : "U";
-
-  return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button variant="ghost" className="relative h-8 w-8 rounded-full">
-          <Avatar className="h-8 w-8">
-            <AvatarImage src={avatarUrl || undefined} alt={fullName || "User"} />
-            <AvatarFallback>{initials}</AvatarFallback>
-          </Avatar>
-        </Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent className="w-56" align="end" forceMount>
-        <DropdownMenuLabel className="font-normal">
-          <div className="flex flex-col space-y-1">
-            <p className="text-sm font-medium leading-none">{fullName}</p>
-            <p className="text-xs leading-none text-muted-foreground">{user.email}</p>
-          </div>
-        </DropdownMenuLabel>
-        <DropdownMenuSeparator />
-        <DropdownMenuGroup>
-          <DropdownMenuItem asChild>
-            <Link href="/dashboard">Dashboard</Link>
-          </DropdownMenuItem>
-          <DropdownMenuItem asChild>
-            <Link href="/settings">Settings</Link>
-          </DropdownMenuItem>
-        </DropdownMenuGroup>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem
-          className="cursor-pointer"
-          disabled={signOutMutation.isPending}
-          onClick={() => signOutMutation.mutate()}
-        >
-          {signOutMutation.isPending ? "Signing out..." : "Sign out"}
-        </DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
-  );
-}
 
 export function MainNav({ items = navigationConfig.mainNav, children, user }: MainNavProps) {
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
-  const { data: userData, isLoading } = useUser();
 
-  const effectiveUser = userData || user;
-
-  const navItems = effectiveUser
-    ? [...publicNavItems.filter((item) => !item.href.includes("sign")), ...protectedNavItems]
-    : publicNavItems;
+  // Simplified nav items for Recovery Machine
+  const navItems = user 
+    ? [
+        { href: "/", label: "Home" },
+        { href: "/book", label: "Book Session" },
+        { href: "/protected", label: "Dashboard" },
+      ]
+    : [
+        { href: "/", label: "Home" },
+        { href: "/book", label: "Book Session" },
+        { href: "/about", label: "About" },
+      ];
 
   const NavContent = () => (
-    <NavigationMenuList className="flex flex-col md:flex-row gap-4">
+    <NavigationMenuList className="flex flex-col md:flex-row gap-1">
       {navItems.map((item) => (
         <NavigationMenuItem key={item.href}>
           <NavigationMenuLink asChild>
             <Link
               href={item.href}
               className={cn(
-                "block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground",
+                "group inline-flex h-9 w-max items-center justify-center rounded-md px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50",
                 pathname === item.href && "bg-accent text-accent-foreground"
               )}
             >
@@ -127,30 +62,67 @@ export function MainNav({ items = navigationConfig.mainNav, children, user }: Ma
   );
 
   return (
-    <div className="flex items-center justify-between">
+    <div className="flex items-center">
+      {/* Desktop Navigation */}
       <div className="hidden md:flex">
         <NavigationMenu>
           <NavContent />
         </NavigationMenu>
       </div>
 
+      {/* Mobile Navigation */}
       <div className="flex md:hidden">
         <Sheet open={open} onOpenChange={setOpen}>
           <SheetTrigger asChild>
-            <Button variant="ghost" size="icon">
-              <Menu className="h-6 w-6" />
+            <Button variant="ghost" size="icon" className="h-9 w-9">
+              <Menu className="h-5 w-5" />
+              <span className="sr-only">Toggle menu</span>
             </Button>
           </SheetTrigger>
-          <SheetContent side="left" className="w-[240px] sm:w-[280px]">
-            <NavigationMenu>
-              <NavContent />
-            </NavigationMenu>
+          <SheetContent side="left" className="w-[300px] sm:w-[400px]">
+            <div className="flex flex-col space-y-3 mt-6">
+              <Link href="/" className="flex items-center space-x-2 mb-6" onClick={() => setOpen(false)}>
+                <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
+                  <Snowflake className="h-4 w-4" />
+                </div>
+                <span className="font-bold">Recovery Machine</span>
+              </Link>
+              
+              {navItems.map((item) => (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  onClick={() => setOpen(false)}
+                  className={cn(
+                    "block px-3 py-2 rounded-md text-base font-medium transition-colors hover:bg-accent hover:text-accent-foreground",
+                    pathname === item.href && "bg-accent text-accent-foreground"
+                  )}
+                >
+                  {item.label}
+                </Link>
+              ))}
+              
+              {!user && (
+                <div className="pt-4 mt-4 border-t space-y-2">
+                  <Link
+                    href="/sign-in"
+                    onClick={() => setOpen(false)}
+                    className="block px-3 py-2 rounded-md text-base font-medium transition-colors hover:bg-accent hover:text-accent-foreground"
+                  >
+                    Sign in
+                  </Link>
+                  <Link
+                    href="/sign-up"
+                    onClick={() => setOpen(false)}
+                    className="block px-3 py-2 rounded-md text-base font-medium bg-primary text-primary-foreground hover:bg-primary/90"
+                  >
+                    Get Started
+                  </Link>
+                </div>
+              )}
+            </div>
           </SheetContent>
         </Sheet>
-      </div>
-
-      <div className="flex items-center gap-4">
-        {!isLoading && effectiveUser ? <UserNavComponent /> : null}
       </div>
     </div>
   );

@@ -1,6 +1,6 @@
 "use client";
 
-import { useSignOut, useUser } from "@/core/supabase/hooks";
+import { useSignOut, useUser } from "@/lib/supabase/hooks";
 import Link from "next/link";
 import type { ReactElement } from "react";
 import { Button } from "./ui/button";
