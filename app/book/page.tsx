@@ -1,23 +1,23 @@
-'use client'
+"use client";
 
-import { useState, useEffect } from 'react'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
-import Link from 'next/link'
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import Link from "next/link";
+import { useEffect, useState } from "react";
 
-export default function BookingPage() {
-  const [mounted, setMounted] = useState(false)
+export default function BookingPage(): React.ReactElement {
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    setMounted(true)
-  }, [])
+    setMounted(true);
+  }, []);
 
   if (!mounted) {
     return (
       <div className="min-h-screen bg-black flex items-center justify-center">
         <div className="animate-spin h-8 w-8 border-2 border-white border-t-transparent rounded-full"></div>
       </div>
-    )
+    );
   }
 
   return (
@@ -34,21 +34,17 @@ export default function BookingPage() {
           </CardHeader>
           <CardContent className="space-y-6">
             <div className="text-center">
-              <h3 className="text-lg font-semibold text-white mb-2">
-                Coming Soon
-              </h3>
+              <h3 className="text-lg font-semibold text-white mb-2">Coming Soon</h3>
               <p className="text-neutral-400 mb-6">
-                Our booking system is being updated to provide you with the best experience.
-                Please contact us directly to schedule your session.
+                Our booking system is being updated to provide you with the best experience. Please
+                contact us directly to schedule your session.
               </p>
-              
+
               <div className="space-y-4">
                 <Button asChild className="w-full bg-white text-black hover:bg-neutral-200">
-                  <Link href="/contact">
-                    Contact Us to Book
-                  </Link>
+                  <Link href="/contact">Contact Us to Book</Link>
                 </Button>
-                
+
                 <div className="text-sm text-neutral-500">
                   <p>📞 Call: (555) 123-4567</p>
                   <p>📧 Email: book@therecoverymachine.com</p>
@@ -59,5 +55,5 @@ export default function BookingPage() {
         </Card>
       </div>
     </div>
-  )
+  );
 }
