@@ -1,98 +1,250 @@
-# The Recovery Machine Implementation Plan
+# 🎯 Recovery Machine Implementation Plan
 
-Based on the PRD analysis, here's a structured approach to building out the application:
+## Current State Analysis
+✅ **Foundation Complete:**
+- Next.js 15.3.0 + TypeScript + Tailwind v4
+- Supabase auth & database integration
+- Google sign-in working
+- Professional navbar with Recovery Machine branding
+- Clean auth pages (sign-in/sign-up)
+- Development server running smoothly
 
-## Phase 1: Foundation & Core Setup (Week 1)
-**Goal: Establish the technical foundation**
+## Database Schema Implementation
 
-### 1.1 Database Schema Setup
-- [ ] Create Supabase tables per PRD schema:
-  - `users` (id, email, phone, address, referral_code, credits)
-  - `orders` (id, user_id, bolt_checkout_id, amount, status, setup_fee_applied)
-  - `bookings` (id, user_id, order_id, date_time, duration, add_ons, status)
-  - `referrals` (id, referrer_id, invitee_email, status, reward_credits)
-  - `reviews` (id, user_id, booking_id, rating, comment, google_synced)
-  - `admins` (id, email, role)
+### Phase 1: Core Tables Setup
+```sql
+-- Already have: users (from Supabase Auth)
+-- Need to add these tables:
 
-### 1.2 Authentication Enhancement
-- [ ] Keep existing auth system (already solid)
-- [ ] Add user profile fields (phone, address, referral_code, credits)
-- [ ] Add role-based access control for admin panel
+-- Users Extension (add referral_code, credits)
+ALTER TABLE users ADD COLUMN referral_code VARCHAR(10) UNIQUE;
+ALTER TABLE users ADD COLUMN credits INTEGER DEFAULT 0;
+ALTER TABLE users ADD COLUMN phone VARCHAR(20);
+ALTER TABLE users ADD COLUMN address JSONB;
 
-### 1.3 Bolt Payment Integration
-- [ ] Set up Bolt SDK
-- [ ] Create payment components
-- [ ] Handle subscription and one-time payments
-- [ ] Webhook handling for payment status
+-- Orders table
+CREATE TABLE orders (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id UUID REFERENCES auth.users(id),
+  bolt_checkout_id VARCHAR(255),
+  amount INTEGER, -- in cents
+  setup_fee_applied INTEGER DEFAULT 0,
+  status VARCHAR(20) DEFAULT 'pending', -- pending/paid/refunded
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);
 
-### 1.4 Basic Navigation
-- [ ] Create navigation component with Recovery Machine branding
-- [ ] Set up routing: `/` (home), `/book`, `/profile`, `/admin`
-- [ ] Implement mobile-responsive hamburger menu
+-- Bookings table  
+CREATE TABLE bookings (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id UUID REFERENCES auth.users(id),
+  order_id UUID REFERENCES orders(id),
+  date_time TIMESTAMPTZ NOT NULL,
+  duration INTEGER DEFAULT 30, -- minutes
+  add_ons JSONB DEFAULT '{}', -- {extra_visits: 2, family: true}
+  status VARCHAR(20) DEFAULT 'scheduled', -- scheduled/cancelled/completed
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);
 
-## Phase 2: Home Page & Landing Experience (Week 2)
-**Goal: Complete the conversion-focused landing page**
+-- Referrals table
+CREATE TABLE referrals (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  referrer_id UUID REFERENCES auth.users(id),
+  invitee_email VARCHAR(255) NOT NULL,
+  invitee_id UUID REFERENCES auth.users(id), -- null until they sign up
+  status VARCHAR(20) DEFAULT 'pending', -- pending/accepted/expired
+  reward_credits INTEGER DEFAULT 50,
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);
 
-### 2.1 Hero Section Enhancement
-- [x] Basic hero with Recovery Machine branding ✅
-- [ ] Add background video support (autoplay, muted, loop)
-- [ ] Implement scroll-triggered animations
-- [ ] Add "Learn More" scroll-to functionality
+-- Reviews table
+CREATE TABLE reviews (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id UUID REFERENCES auth.users(id),
+  booking_id UUID REFERENCES bookings(id),
+  rating INTEGER CHECK (rating >= 1 AND rating <= 5),
+  comment TEXT,
+  google_synced BOOLEAN DEFAULT false,
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);
 
-### 2.2 How It Works Section
+-- Admins table (simple role-based access)
+CREATE TABLE admins (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  email VARCHAR(255) UNIQUE NOT NULL,
+  role VARCHAR(20) DEFAULT 'admin', -- super/admin
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);
+```
+
+## Implementation Phases
+
+### 🏗️ Phase 1: Foundation & Home Page (Week 1)
+**Priority: HIGH** | **Estimated: 3-4 days**
+
+#### 1.1 Database Setup
+- [ ] Create Supabase migration files for all tables
+- [ ] Set up Row Level Security (RLS) policies
+- [ ] Create database types for TypeScript
+- [ ] Test database connections and queries
+
+#### 1.2 Home Page Hero Section
+- [ ] Create hero component with video background support
+- [ ] Add "Recovery When You Need It" headline
+- [ ] Implement dual CTA buttons (Book Now / Learn More)
+- [ ] Add trust badges and security indicators
+- [ ] Mobile-responsive design with proper breakpoints
+
+#### 1.3 Navigation Updates
+- [ ] Update navbar with PRD navigation (Home, How It Works, Pricing, Book Now)
+- [ ] Add scroll-to-section functionality
+- [ ] Implement sticky behavior with background changes on scroll
+
+**Files to create/modify:**
+```
+/app/page.tsx (homepage)
+/components/sections/Hero.tsx
+/components/sections/Navigation.tsx
+/supabase/migrations/001_initial_schema.sql
+/lib/types/database.ts
+```
+
+### 📖 Phase 2: Content Sections (Week 1-2)
+**Priority: HIGH** | **Estimated: 4-5 days**
+
+#### 2.1 How It Works Section
 - [ ] Create 4-step timeline component
 - [ ] Add icons for each step (Calendar, Van, Plunge/Sauna, Repeat)
-- [ ] Mobile-responsive layout (horizontal → stacked)
-- [ ] Animation on scroll
+- [ ] Implement responsive layout (horizontal desktop, stacked mobile)
+- [ ] Add "Start Recovering" CTA
 
-### 2.3 Social Proof Section
-- [ ] Testimonials carousel with Swiper.js
-- [ ] Instagram integration (Basic Display API)
-- [ ] Star ratings display
-- [ ] "Join 500+ Members" counter
+#### 2.2 Social Proof Section  
+- [ ] Create testimonials carousel component (Swiper.js)
+- [ ] Design testimonial cards with photos and ratings
+- [ ] Add Instagram integration setup (Basic Display API)
+- [ ] Create Instagram photo grid component
+- [ ] Add aggregate stats ("Join 500+ Members", "4.8/5 rating")
 
-### 2.4 Pricing Section
+#### 2.3 Pricing Section
 - [ ] Create pricing table component
-- [ ] Display membership plans, setup fees, add-ons
-- [ ] Highlight value propositions
-- [ ] CTA buttons linking to booking flow
+- [ ] Display membership plans with clear value props
+- [ ] Add setup fee calculator based on location
+- [ ] Implement "Subscribe Now" CTA with plan pre-filling
+- [ ] Mobile-responsive pricing cards
 
-### 2.5 Email Collection
-- [ ] Newsletter signup form
-- [ ] Integration with Resend for email handling
-- [ ] Exit-intent popup on mobile
-- [ ] Double opt-in flow
+**Files to create:**
+```
+/components/sections/HowItWorks.tsx
+/components/sections/SocialProof.tsx
+/components/sections/Pricing.tsx
+/components/ui/Testimonials.tsx
+/lib/instagram.ts
+/components/ui/PricingCard.tsx
+```
 
-## Phase 3: Booking Flow & User Dashboard (Week 3)
-**Goal: Core booking functionality and user management**
+### 📅 Phase 3: Booking System (Week 2-3)
+**Priority: CRITICAL** | **Estimated: 5-6 days**
 
-### 3.1 Booking Page (`/book`)
-- [ ] Multi-step booking form with progress indicator
-- [ ] Plan selection (Membership/One-time/Add-ons)
-- [ ] Address input with Google Maps integration for distance calculation
-- [ ] Calendar component (FullCalendar.js) with real-time availability
-- [ ] Bolt checkout integration (embedded iframe)
-- [ ] Confirmation page with email trigger
+#### 3.1 Booking Flow Setup
+- [ ] Create `/book` page with stepper component
+- [ ] Implement 4-step process: Plan Selection → Address/Schedule → Calendar → Payment
+- [ ] Add form validation with Zod schemas
+- [ ] Create progress indicator component
 
-### 3.2 User Dashboard (`/profile`)
-- [ ] Dashboard overview with quick actions
-- [ ] Bookings management (view, edit, cancel with 30-day notice)
-- [ ] Order history with Bolt receipt links
-- [ ] Credits balance display
-- [ ] Profile management
+#### 3.2 Plan & Add-ons Selection
+- [ ] Build plan selection component (Weekly Membership, One-time)
+- [ ] Add add-ons selection (Extra visits, Family members)
+- [ ] Implement dynamic pricing calculation
+- [ ] Add setup fee calculator with distance API
 
-### 3.3 Referral System
+#### 3.3 Calendar Integration  
+- [ ] Install and configure FullCalendar.js
+- [ ] Create availability management system
+- [ ] Implement real-time slot updates via Supabase Realtime
+- [ ] Add booking conflict prevention
+- [ ] Mobile-friendly calendar interface
+
+#### 3.4 Address & Setup Fee
+- [ ] Integrate Google Maps API for address validation
+- [ ] Implement distance calculation for setup fees
+- [ ] Create address form with autocomplete
+- [ ] Add delivery area validation
+
+**Files to create:**
+```
+/app/book/page.tsx
+/components/booking/BookingWizard.tsx
+/components/booking/PlanSelection.tsx
+/components/booking/AddressForm.tsx
+/components/booking/Calendar.tsx
+/lib/maps.ts
+/lib/calendar.ts
+/core/schemas/booking.ts
+```
+
+### 💳 Phase 4: Payment Integration (Week 3)
+**Priority: CRITICAL** | **Estimated: 3-4 days**
+
+#### 4.1 Bolt Integration
+- [ ] Set up Bolt merchant account and API keys
+- [ ] Create Bolt checkout component
+- [ ] Implement subscription handling for recurring payments
+- [ ] Add one-time payment support for setup fees
+- [ ] Handle payment success/failure states
+
+#### 4.2 Order Management
+- [ ] Create order creation logic
+- [ ] Implement payment webhook handling
+- [ ] Add order status updates
+- [ ] Create confirmation emails (Resend integration)
+- [ ] Add receipt generation
+
+**Files to create:**
+```
+/components/payment/BoltCheckout.tsx
+/lib/bolt.ts
+/core/actions/orders.ts
+/app/api/webhooks/bolt/route.ts
+/core/email/templates.tsx
+```
+
+### 👤 Phase 5: User Dashboard (Week 3-4)
+**Priority: HIGH** | **Estimated: 4-5 days**
+
+#### 5.1 Dashboard Layout
+- [ ] Create protected `/profile` route with auth middleware
+- [ ] Build tabbed dashboard layout
+- [ ] Add overview section with quick actions
+- [ ] Display credits balance and referral stats
+
+#### 5.2 Bookings Management
+- [ ] Create bookings list with edit/cancel functionality
+- [ ] Add 30-day cancellation policy enforcement  
+- [ ] Implement rescheduling interface
+- [ ] Add booking history view
+
+#### 5.3 Referral System
 - [ ] Generate unique referral codes
-- [ ] Shareable referral links
+- [ ] Create shareable referral links
 - [ ] Track referral status and rewards
-- [ ] Auto-apply $50 credits on successful referrals
-- [ ] Referral dashboard section
+- [ ] Implement credit application system
+- [ ] Add social sharing buttons
 
-### 3.4 Reviews System
-- [ ] Post-session review prompts
-- [ ] Review submission form
-- [ ] Review display in user dashboard
-- [ ] Google My Business API integration (if available)
+#### 5.4 Reviews System
+- [ ] Create post-session review prompts
+- [ ] Build review submission form
+- [ ] Display user's review history
+- [ ] Add Google Reviews integration (optional)
+
+**Files to create:**
+```
+/app/(protected)/profile/page.tsx
+/components/dashboard/Overview.tsx
+/components/dashboard/BookingsTab.tsx
+/components/dashboard/ReferralsTab.tsx
+/components/dashboard/ReviewsTab.tsx
+/core/actions/referrals.ts
+/core/actions/reviews.ts
+```
 
 ## Phase 4: Admin Panel & Advanced Features (Week 4)
 **Goal: Backend management and polish**
