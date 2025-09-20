@@ -1,4 +1,27 @@
 import Link from "next/link";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "About Recovery Machine - Mobile Wellness & Recovery Services",
+  description: "Learn about Recovery Machine's mission to bring professional cold plunge and infrared sauna therapy directly to your location. Commercial-grade equipment with certified specialists.",
+  keywords: "mobile recovery, cold plunge therapy, infrared sauna, wellness services, professional recovery, Los Angeles wellness",
+  openGraph: {
+    title: "About Recovery Machine - Professional Mobile Recovery",
+    description: "Professional-grade cold plunge and infrared sauna therapy delivered to your doorstep with certified recovery specialists.",
+    type: "website",
+    images: [{
+      url: "/api/og?title=About%20Recovery%20Machine&description=Professional%20Mobile%20Recovery",
+      width: 1200,
+      height: 630,
+      alt: "About Recovery Machine - Mobile Wellness Services"
+    }]
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "About Recovery Machine - Professional Mobile Recovery",
+    description: "Professional-grade cold plunge and infrared sauna therapy delivered to your doorstep."
+  }
+};
 
 export default function AboutPage() {
   return (

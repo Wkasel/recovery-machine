@@ -1,5 +1,28 @@
 import Link from "next/link";
 import { CheckCircle, Clock, Users, Shield, Snowflake, Flame } from "lucide-react";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Features & Benefits - Professional Recovery Therapy",
+  description: "Discover the features and benefits of Recovery Machine's mobile cold plunge and infrared sauna services. Professional equipment, certified specialists, and complete service.",
+  keywords: "cold plunge features, infrared sauna benefits, mobile wellness, professional recovery therapy, certified specialists",
+  openGraph: {
+    title: "Recovery Machine Features - Professional Mobile Recovery",
+    description: "Professional recovery therapy delivered with commercial-grade equipment and expert guidance. Cold plunge and infrared sauna at your location.",
+    type: "website",
+    images: [{
+      url: "/api/og?title=Recovery%20Machine%20Features&description=Professional%20Mobile%20Recovery",
+      width: 1200,
+      height: 630,
+      alt: "Recovery Machine Features - Mobile Wellness Services"
+    }]
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Recovery Machine Features - Professional Mobile Recovery",
+    description: "Professional recovery therapy delivered with commercial-grade equipment and expert guidance."
+  }
+};
 
 export default function FeaturesPage() {
   const features = [

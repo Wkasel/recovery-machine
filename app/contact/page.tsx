@@ -1,5 +1,28 @@
 import Link from "next/link";
 import { Mail, Phone, MapPin, Clock } from "lucide-react";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Contact Recovery Machine - Mobile Wellness Services",
+  description: "Contact Recovery Machine for mobile cold plunge and infrared sauna services in Los Angeles. Professional recovery specialists available 7 days a week.",
+  keywords: "contact recovery machine, mobile wellness Los Angeles, cold plunge booking, infrared sauna appointment, recovery specialists",
+  openGraph: {
+    title: "Contact Recovery Machine - Mobile Wellness Services",
+    description: "Get in touch with our recovery specialists. Mobile cold plunge and infrared sauna services in Greater Los Angeles Area.",
+    type: "website",
+    images: [{
+      url: "/api/og?title=Contact%20Recovery%20Machine&description=Mobile%20Wellness%20Services",
+      width: 1200,
+      height: 630,
+      alt: "Contact Recovery Machine - Mobile Wellness Services"
+    }]
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Contact Recovery Machine - Mobile Wellness Services",
+    description: "Get in touch with our recovery specialists. Mobile wellness services in Greater Los Angeles Area."
+  }
+};
 
 export default function ContactPage() {
   return (
