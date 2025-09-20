@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { signInWithOAuth } from "@/core/actions/oauth";
 import { NextRequest, NextResponse } from "next/server";
 

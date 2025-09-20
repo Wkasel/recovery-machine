@@ -1,26 +1,32 @@
-import Link from "next/link";
 import { Metadata } from "next";
+import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "About Recovery Machine - Mobile Wellness & Recovery Services",
-  description: "Learn about Recovery Machine's mission to bring professional cold plunge and infrared sauna therapy directly to your location. Commercial-grade equipment with certified specialists.",
-  keywords: "mobile recovery, cold plunge therapy, infrared sauna, wellness services, professional recovery, Los Angeles wellness",
+  description:
+    "Learn about Recovery Machine's mission to bring professional cold plunge and infrared sauna therapy directly to your location. Commercial-grade equipment with certified specialists.",
+  keywords:
+    "mobile recovery, cold plunge therapy, infrared sauna, wellness services, professional recovery, Los Angeles wellness",
   openGraph: {
     title: "About Recovery Machine - Professional Mobile Recovery",
-    description: "Professional-grade cold plunge and infrared sauna therapy delivered to your doorstep with certified recovery specialists.",
+    description:
+      "Professional-grade cold plunge and infrared sauna therapy delivered to your doorstep with certified recovery specialists.",
     type: "website",
-    images: [{
-      url: "/api/og?title=About%20Recovery%20Machine&description=Professional%20Mobile%20Recovery",
-      width: 1200,
-      height: 630,
-      alt: "About Recovery Machine - Mobile Wellness Services"
-    }]
+    images: [
+      {
+        url: "/api/og?title=About%20Recovery%20Machine&description=Professional%20Mobile%20Recovery",
+        width: 1200,
+        height: 630,
+        alt: "About Recovery Machine - Mobile Wellness Services",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
     title: "About Recovery Machine - Professional Mobile Recovery",
-    description: "Professional-grade cold plunge and infrared sauna therapy delivered to your doorstep."
-  }
+    description:
+      "Professional-grade cold plunge and infrared sauna therapy delivered to your doorstep.",
+  },
 };
 
 export default function AboutPage() {
@@ -32,24 +38,28 @@ export default function AboutPage() {
             ← Back to Home
           </Link>
           <h1 className="text-4xl font-bold mb-4">About Recovery Machine</h1>
-          <p className="text-xl text-neutral-400">Professional recovery delivered to your doorstep</p>
+          <p className="text-xl text-neutral-400">
+            Professional recovery delivered to your doorstep
+          </p>
         </div>
 
         <div className="space-y-8">
           <section>
             <h2 className="text-2xl font-bold mb-4">Our Mission</h2>
             <p className="text-neutral-300 leading-relaxed">
-              Recovery Machine brings professional-grade cold plunge and infrared sauna therapy directly to your location. 
-              We believe that optimal recovery shouldn't require expensive memberships or travel time.
+              Recovery Machine brings professional-grade cold plunge and infrared sauna therapy
+              directly to your location. We believe that optimal recovery shouldn't require
+              expensive memberships or travel time.
             </p>
           </section>
 
           <section>
             <h2 className="text-2xl font-bold mb-4">Professional Equipment</h2>
             <p className="text-neutral-300 leading-relaxed">
-              Our mobile units feature commercial-grade equipment including precision temperature-controlled cold plunge 
-              tanks and full-spectrum infrared saunas. Each session is guided by certified recovery specialists who ensure 
-              safe and effective protocols.
+              Our mobile units feature commercial-grade equipment including precision
+              temperature-controlled cold plunge tanks and full-spectrum infrared saunas. Each
+              session is guided by certified recovery specialists who ensure safe and effective
+              protocols.
             </p>
           </section>
 
@@ -68,12 +78,12 @@ export default function AboutPage() {
           <section>
             <h2 className="text-2xl font-bold mb-4">Get Started Today</h2>
             <p className="text-neutral-300 leading-relaxed mb-6">
-              Join hundreds of athletes, professionals, and wellness enthusiasts who have made Recovery Machine 
-              part of their routine. Experience the benefits of consistent cold plunge and infrared sauna therapy 
-              without leaving your home.
+              Join hundreds of athletes, professionals, and wellness enthusiasts who have made
+              Recovery Machine part of their routine. Experience the benefits of consistent cold
+              plunge and infrared sauna therapy without leaving your home.
             </p>
-            <Link 
-              href="/book" 
+            <Link
+              href="/book"
               className="inline-block bg-neutral-900 border border-neutral-800 text-white px-8 py-3 hover:bg-neutral-800 transition-colors"
             >
               Book Your First Session

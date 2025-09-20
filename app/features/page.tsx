@@ -1,27 +1,33 @@
-import Link from "next/link";
-import { CheckCircle, Clock, Users, Shield, Snowflake, Flame } from "lucide-react";
+import { CheckCircle, Clock, Flame, Shield, Snowflake, Users } from "lucide-react";
 import { Metadata } from "next";
+import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "Features & Benefits - Professional Recovery Therapy",
-  description: "Discover the features and benefits of Recovery Machine's mobile cold plunge and infrared sauna services. Professional equipment, certified specialists, and complete service.",
-  keywords: "cold plunge features, infrared sauna benefits, mobile wellness, professional recovery therapy, certified specialists",
+  description:
+    "Discover the features and benefits of Recovery Machine's mobile cold plunge and infrared sauna services. Professional equipment, certified specialists, and complete service.",
+  keywords:
+    "cold plunge features, infrared sauna benefits, mobile wellness, professional recovery therapy, certified specialists",
   openGraph: {
     title: "Recovery Machine Features - Professional Mobile Recovery",
-    description: "Professional recovery therapy delivered with commercial-grade equipment and expert guidance. Cold plunge and infrared sauna at your location.",
+    description:
+      "Professional recovery therapy delivered with commercial-grade equipment and expert guidance. Cold plunge and infrared sauna at your location.",
     type: "website",
-    images: [{
-      url: "/api/og?title=Recovery%20Machine%20Features&description=Professional%20Mobile%20Recovery",
-      width: 1200,
-      height: 630,
-      alt: "Recovery Machine Features - Mobile Wellness Services"
-    }]
+    images: [
+      {
+        url: "/api/og?title=Recovery%20Machine%20Features&description=Professional%20Mobile%20Recovery",
+        width: 1200,
+        height: 630,
+        alt: "Recovery Machine Features - Mobile Wellness Services",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
     title: "Recovery Machine Features - Professional Mobile Recovery",
-    description: "Professional recovery therapy delivered with commercial-grade equipment and expert guidance."
-  }
+    description:
+      "Professional recovery therapy delivered with commercial-grade equipment and expert guidance.",
+  },
 };
 
 export default function FeaturesPage() {
@@ -29,33 +35,39 @@ export default function FeaturesPage() {
     {
       icon: Snowflake,
       title: "Professional Cold Plunge",
-      description: "Precision temperature control (38-55°F) with commercial-grade filtration system for optimal cold exposure therapy."
+      description:
+        "Precision temperature control (38-55°F) with commercial-grade filtration system for optimal cold exposure therapy.",
     },
     {
       icon: Flame,
       title: "Full-Spectrum Infrared Sauna",
-      description: "Near, mid, and far-infrared wavelengths for deep tissue healing, detoxification, and enhanced recovery."
+      description:
+        "Near, mid, and far-infrared wavelengths for deep tissue healing, detoxification, and enhanced recovery.",
     },
     {
       icon: Users,
       title: "Certified Specialists",
-      description: "Every session guided by trained recovery professionals who ensure safety and maximize therapeutic benefits."
+      description:
+        "Every session guided by trained recovery professionals who ensure safety and maximize therapeutic benefits.",
     },
     {
       icon: Clock,
       title: "Flexible Scheduling",
-      description: "Book sessions that fit your schedule. Morning, afternoon, or evening - we adapt to your lifestyle."
+      description:
+        "Book sessions that fit your schedule. Morning, afternoon, or evening - we adapt to your lifestyle.",
     },
     {
       icon: Shield,
       title: "Safety First",
-      description: "Comprehensive health screening, professional oversight, and full insurance coverage for peace of mind."
+      description:
+        "Comprehensive health screening, professional oversight, and full insurance coverage for peace of mind.",
     },
     {
       icon: CheckCircle,
       title: "Complete Service",
-      description: "Setup, guidance, premium accessories, and cleanup all included. You just show up and recover."
-    }
+      description:
+        "Setup, guidance, premium accessories, and cleanup all included. You just show up and recover.",
+    },
   ];
 
   return (
@@ -67,7 +79,8 @@ export default function FeaturesPage() {
           </Link>
           <h1 className="text-4xl font-bold mb-4">Features & Benefits</h1>
           <p className="text-xl text-neutral-400 max-w-2xl mx-auto">
-            Professional recovery therapy delivered with commercial-grade equipment and expert guidance
+            Professional recovery therapy delivered with commercial-grade equipment and expert
+            guidance
           </p>
         </div>
 
@@ -89,10 +102,11 @@ export default function FeaturesPage() {
         <div className="bg-black border border-neutral-800 p-12 text-center">
           <h2 className="text-3xl font-bold mb-6">Ready to Experience Professional Recovery?</h2>
           <p className="text-neutral-400 mb-8 max-w-2xl mx-auto">
-            Join hundreds of professionals, athletes, and wellness enthusiasts who have transformed their recovery routine with Recovery Machine.
+            Join hundreds of professionals, athletes, and wellness enthusiasts who have transformed
+            their recovery routine with Recovery Machine.
           </p>
-          <Link 
-            href="/book" 
+          <Link
+            href="/book"
             className="inline-block bg-neutral-900 border border-neutral-800 text-white px-12 py-4 text-lg font-semibold hover:bg-neutral-800 transition-colors"
           >
             Book Your First Session

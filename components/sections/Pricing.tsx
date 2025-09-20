@@ -1,10 +1,10 @@
 "use client";
 
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
+import { ArrowRight, Calendar, Check, Clock, Star, Users } from "lucide-react";
 import Link from "next/link";
-import { Check, Star, ArrowRight, Clock, Users, Calendar } from "lucide-react";
 
 const plans = [
   {
@@ -21,12 +21,12 @@ const plans = [
       "Professional setup and guidance",
       "Flexible scheduling",
       "Cancel with 30 days' notice",
-      "Doorstep delivery and pickup"
+      "Doorstep delivery and pickup",
     ],
     popular: true,
     cta: "Subscribe Now",
-    ctaVariant: "default" as const
-  }
+    ctaVariant: "default" as const,
+  },
 ];
 
 const setupFee = {
@@ -40,8 +40,8 @@ const setupFee = {
     "Initial consultation and training",
     "Custom setup for your space",
     "Equipment maintenance kit",
-    "24/7 support setup"
-  ]
+    "24/7 support setup",
+  ],
 };
 
 const addOns = [
@@ -49,38 +49,38 @@ const addOns = [
     name: "Extra Visit",
     price: "$150",
     unit: "per session",
-    description: "Additional recovery session beyond your monthly plan"
+    description: "Additional recovery session beyond your monthly plan",
   },
   {
     name: "Additional Family Member",
     price: "$75",
     unit: "per session",
-    description: "Add family members to your existing sessions"
+    description: "Add family members to your existing sessions",
   },
   {
     name: "Branded Towels & Electrolytes",
     price: "Complimentary",
     unit: "",
-    description: "Premium recovery accessories included with membership"
-  }
+    description: "Premium recovery accessories included with membership",
+  },
 ];
 
 const benefits = [
   {
     icon: Clock,
     title: "Save 75% vs. Single Bookings",
-    description: "Just $100 per session with membership vs. $400 individual pricing"
+    description: "Just $100 per session with membership vs. $400 individual pricing",
   },
   {
     icon: Calendar,
     title: "Ultimate Flexibility",
-    description: "Monthly auto-renew with 30-day cancellation notice"
+    description: "Monthly auto-renew with 30-day cancellation notice",
   },
   {
     icon: Users,
     title: "Family-Friendly",
-    description: "Add family members for just $75 per session"
-  }
+    description: "Add family members for just $75 per session",
+  },
 ];
 
 export function Pricing() {
@@ -93,8 +93,8 @@ export function Pricing() {
             Simple, Transparent Pricing
           </h2>
           <p className="text-lg sm:text-xl text-neutral-400 max-w-3xl mx-auto leading-relaxed">
-            Professional recovery at a fraction of the cost. No hidden fees, 
-            no long-term contracts, maximum flexibility.
+            Professional recovery at a fraction of the cost. No hidden fees, no long-term contracts,
+            maximum flexibility.
           </p>
         </div>
 
@@ -128,29 +128,32 @@ export function Pricing() {
                   </Badge>
                 </div>
               )}
-              
+
               <CardHeader className="text-center pb-8 pt-12">
-                <CardTitle className="text-2xl font-bold text-white mb-2">
-                  {plan.name}
-                </CardTitle>
+                <CardTitle className="text-2xl font-bold text-white mb-2">{plan.name}</CardTitle>
                 <p className="text-neutral-400 mb-6">{plan.subtitle}</p>
-                
+
                 <div className="mb-6">
                   <div className="flex items-center justify-center mb-2">
                     <span className="text-5xl font-bold text-white">{plan.price}</span>
                     <span className="text-neutral-400 ml-2">{plan.period}</span>
                   </div>
                   <div className="flex items-center justify-center gap-4 text-sm">
-                    <span className="text-neutral-500 line-through">{plan.originalValue} value</span>
-                    <Badge variant="secondary" className="bg-neutral-900 text-white border border-neutral-800">
+                    <span className="text-neutral-500 line-through">
+                      {plan.originalValue} value
+                    </span>
+                    <Badge
+                      variant="secondary"
+                      className="bg-neutral-900 text-white border border-neutral-800"
+                    >
                       Save {plan.savings}
                     </Badge>
                   </div>
                 </div>
-                
+
                 <p className="text-neutral-400 mb-8">{plan.description}</p>
               </CardHeader>
-              
+
               <CardContent className="px-8 pb-8">
                 <ul className="space-y-4 mb-8">
                   {plan.features.map((feature, featureIndex) => (
@@ -160,10 +163,10 @@ export function Pricing() {
                     </li>
                   ))}
                 </ul>
-                
-                <Button 
-                  asChild 
-                  size="lg" 
+
+                <Button
+                  asChild
+                  size="lg"
                   className="w-full bg-neutral-900 border border-neutral-800 text-white hover:bg-neutral-800 text-lg font-semibold h-14"
                 >
                   <Link href="/book" className="inline-flex items-center justify-center">
@@ -171,7 +174,7 @@ export function Pricing() {
                     <ArrowRight className="ml-2 h-5 w-5" />
                   </Link>
                 </Button>
-                
+
                 <p className="text-center text-sm text-neutral-500 mt-4">
                   No long-term commitment • Cancel anytime with 30 days notice
                 </p>
@@ -185,9 +188,7 @@ export function Pricing() {
           {/* Setup Fee */}
           <Card className="bg-black border border-neutral-800">
             <CardHeader>
-              <CardTitle className="text-xl font-bold text-white mb-2">
-                {setupFee.name}
-              </CardTitle>
+              <CardTitle className="text-xl font-bold text-white mb-2">{setupFee.name}</CardTitle>
               <div className="text-2xl font-bold text-white mb-2">{setupFee.priceRange}</div>
               <p className="text-neutral-400 text-sm">{setupFee.note}</p>
             </CardHeader>
@@ -207,19 +208,24 @@ export function Pricing() {
           {/* Add-ons */}
           <Card className="bg-black border border-neutral-800">
             <CardHeader>
-              <CardTitle className="text-xl font-bold text-white mb-4">
-                Optional Add-Ons
-              </CardTitle>
+              <CardTitle className="text-xl font-bold text-white mb-4">Optional Add-Ons</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="space-y-6">
                 {addOns.map((addon, index) => (
-                  <div key={index} className="border-b border-neutral-800 last:border-b-0 pb-4 last:pb-0">
+                  <div
+                    key={index}
+                    className="border-b border-neutral-800 last:border-b-0 pb-4 last:pb-0"
+                  >
                     <div className="flex justify-between items-start mb-2">
                       <h4 className="font-semibold text-white">{addon.name}</h4>
                       <span className="font-bold text-white">
                         {addon.price}
-                        {addon.unit && <span className="text-sm font-normal text-neutral-400 ml-1">{addon.unit}</span>}
+                        {addon.unit && (
+                          <span className="text-sm font-normal text-neutral-400 ml-1">
+                            {addon.unit}
+                          </span>
+                        )}
                       </span>
                     </div>
                     <p className="text-neutral-400 text-sm">{addon.description}</p>
@@ -235,19 +241,27 @@ export function Pricing() {
           <h3 className="text-2xl font-bold text-white text-center mb-8">How It Works</h3>
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6 text-center">
             <div>
-              <div className="w-12 h-12 bg-white text-black flex items-center justify-center text-lg font-bold mx-auto mb-4">1</div>
+              <div className="w-12 h-12 bg-white text-black flex items-center justify-center text-lg font-bold mx-auto mb-4">
+                1
+              </div>
               <p className="text-neutral-300 font-medium">Monthly auto-renew</p>
             </div>
             <div>
-              <div className="w-12 h-12 bg-white text-black flex items-center justify-center text-lg font-bold mx-auto mb-4">2</div>
+              <div className="w-12 h-12 bg-white text-black flex items-center justify-center text-lg font-bold mx-auto mb-4">
+                2
+              </div>
               <p className="text-neutral-300 font-medium">Cancel with 30 days' notice</p>
             </div>
             <div>
-              <div className="w-12 h-12 bg-white text-black flex items-center justify-center text-lg font-bold mx-auto mb-4">3</div>
+              <div className="w-12 h-12 bg-white text-black flex items-center justify-center text-lg font-bold mx-auto mb-4">
+                3
+              </div>
               <p className="text-neutral-300 font-medium">Flexible scheduling</p>
             </div>
             <div>
-              <div className="w-12 h-12 bg-white text-black flex items-center justify-center text-lg font-bold mx-auto mb-4">4</div>
+              <div className="w-12 h-12 bg-white text-black flex items-center justify-center text-lg font-bold mx-auto mb-4">
+                4
+              </div>
               <p className="text-neutral-300 font-medium">Doorstep delivery</p>
             </div>
           </div>
@@ -255,7 +269,11 @@ export function Pricing() {
 
         {/* Final CTA */}
         <div className="text-center mt-16">
-          <Button asChild size="lg" className="bg-neutral-900 border border-neutral-800 text-white hover:bg-neutral-800 px-12 py-4 text-lg font-semibold">
+          <Button
+            asChild
+            size="lg"
+            className="bg-neutral-900 border border-neutral-800 text-white hover:bg-neutral-800 px-12 py-4 text-lg font-semibold"
+          >
             <Link href="/book" className="inline-flex items-center">
               Get Started Today
               <ArrowRight className="ml-2 h-5 w-5" />

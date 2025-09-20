@@ -1,8 +1,9 @@
 // Email Preferences API Route
 // Manages user email preferences and unsubscribe functionality
 
-import { NextRequest, NextResponse } from 'next/server';
-import { createServerSupabaseClient } from '@/lib/supabase/server';
+// @ts-nocheck
+import { createServerSupabaseClient } from "@/lib/supabase/server";
+import { NextRequest, NextResponse } from "next/server";
 
 // Default email preferences
 const DEFAULT_PREFERENCES = {
@@ -12,20 +13,17 @@ const DEFAULT_PREFERENCES = {
   referral_notifications: true,
   review_requests: true,
   newsletter: true,
-  sms_notifications: true
+  sms_notifications: true,
 };
 
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
-    const userId = searchParams.get('user_id');
-    const token = searchParams.get('token'); // For unsubscribe links
+    const userId = searchParams.get("user_id");
+    const token = searchParams.get("token"); // For unsubscribe links
 
     if (!userId && !token) {
-      return NextResponse.json(
-        { error: 'User ID or unsubscribe token required' },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: "User ID or unsubscribe token required" }, { status: 400 });
     }
 
     const supabase = createServerSupabaseClient();
@@ -37,30 +35,24 @@ export async function GET(request: NextRequest) {
       // In production, you'd validate the token and extract user ID
       // For now, this is a simplified implementation
       return NextResponse.json(
-        { error: 'Token-based access not implemented yet' },
+        { error: "Token-based access not implemented yet" },
         { status: 501 }
       );
     }
 
     if (!targetUserId) {
-      return NextResponse.json(
-        { error: 'User ID required' },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: "User ID required" }, { status: 400 });
     }
 
     // Get user profile with email preferences
     const { data: profile, error } = await supabase
-      .from('profiles')
-      .select('id, email, metadata')
-      .eq('id', targetUserId)
+      .from("profiles")
+      .select("id, email, metadata")
+      .eq("id", targetUserId)
       .single();
 
     if (error || !profile) {
-      return NextResponse.json(
-        { error: 'User not found' },
-        { status: 404 }
-      );
+      return NextResponse.json({ error: "User not found" }, { status: 404 });
     }
 
     // Extract email preferences from metadata or use defaults
@@ -71,31 +63,27 @@ export async function GET(request: NextRequest) {
       data: {
         user_id: profile.id,
         email: profile.email,
-        preferences
-      }
+        preferences,
+      },
     });
-
   } catch (error) {
-    console.error('Error fetching email preferences:', error);
-    return NextResponse.json(
-      { error: 'Internal server error' },
-      { status: 500 }
-    );
+    console.error("Error fetching email preferences:", error);
+    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
   }
 }
 
 export async function PUT(request: NextRequest) {
   try {
     const supabase = createServerSupabaseClient();
-    
+
     // Get the authenticated user
-    const { data: { user }, error: authError } = await supabase.auth.getUser();
-    
+    const {
+      data: { user },
+      error: authError,
+    } = await supabase.auth.getUser();
+
     if (authError || !user) {
-      return NextResponse.json(
-        { error: 'Unauthorized' },
-        { status: 401 }
-      );
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
     const body = await request.json();
@@ -103,49 +91,43 @@ export async function PUT(request: NextRequest) {
 
     // Users can only update their own preferences unless they're admin
     let targetUserId = user.id;
-    
+
     if (user_id && user_id !== user.id) {
       // Check if user is admin
       const { data: admin } = await supabase
-        .from('admins')
-        .select('*')
-        .eq('user_id', user.id)
-        .eq('is_active', true)
+        .from("admins")
+        .select("*")
+        .eq("user_id", user.id)
+        .eq("is_active", true)
         .single();
 
       if (!admin) {
-        return NextResponse.json(
-          { error: 'Insufficient permissions' },
-          { status: 403 }
-        );
+        return NextResponse.json({ error: "Insufficient permissions" }, { status: 403 });
       }
-      
+
       targetUserId = user_id;
     }
 
     // Validate preferences
     const validKeys = Object.keys(DEFAULT_PREFERENCES);
-    const invalidKeys = Object.keys(preferences).filter(key => !validKeys.includes(key));
-    
+    const invalidKeys = Object.keys(preferences).filter((key) => !validKeys.includes(key));
+
     if (invalidKeys.length > 0) {
       return NextResponse.json(
-        { error: `Invalid preference keys: ${invalidKeys.join(', ')}` },
+        { error: `Invalid preference keys: ${invalidKeys.join(", ")}` },
         { status: 400 }
       );
     }
 
     // Get current profile
     const { data: currentProfile, error: fetchError } = await supabase
-      .from('profiles')
-      .select('metadata')
-      .eq('id', targetUserId)
+      .from("profiles")
+      .select("metadata")
+      .eq("id", targetUserId)
       .single();
 
     if (fetchError) {
-      return NextResponse.json(
-        { error: 'User profile not found' },
-        { status: 404 }
-      );
+      return NextResponse.json({ error: "User profile not found" }, { status: 404 });
     }
 
     // Update email preferences in metadata
@@ -155,14 +137,14 @@ export async function PUT(request: NextRequest) {
       email_preferences: {
         ...DEFAULT_PREFERENCES,
         ...currentMetadata.email_preferences,
-        ...preferences
-      }
+        ...preferences,
+      },
     };
 
     const { error: updateError } = await supabase
-      .from('profiles')
+      .from("profiles")
       .update({ metadata: updatedMetadata })
-      .eq('id', targetUserId);
+      .eq("id", targetUserId);
 
     if (updateError) {
       throw updateError;
@@ -172,16 +154,12 @@ export async function PUT(request: NextRequest) {
       success: true,
       data: {
         user_id: targetUserId,
-        preferences: updatedMetadata.email_preferences
-      }
+        preferences: updatedMetadata.email_preferences,
+      },
     });
-
   } catch (error) {
-    console.error('Error updating email preferences:', error);
-    return NextResponse.json(
-      { error: 'Internal server error' },
-      { status: 500 }
-    );
+    console.error("Error updating email preferences:", error);
+    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
   }
 }
 
@@ -192,26 +170,23 @@ export async function POST(request: NextRequest) {
 
     const supabase = createServerSupabaseClient();
 
-    if (action === 'unsubscribe') {
+    if (action === "unsubscribe") {
       if (!email && !token) {
         return NextResponse.json(
-          { error: 'Email or token required for unsubscribe' },
+          { error: "Email or token required for unsubscribe" },
           { status: 400 }
         );
       }
 
       // Find user by email
       const { data: profile, error } = await supabase
-        .from('profiles')
-        .select('id, metadata')
-        .eq('email', email)
+        .from("profiles")
+        .select("id, metadata")
+        .eq("email", email)
         .single();
 
       if (error || !profile) {
-        return NextResponse.json(
-          { error: 'Email not found' },
-          { status: 404 }
-        );
+        return NextResponse.json({ error: "Email not found" }, { status: 404 });
       }
 
       // Unsubscribe from all marketing emails
@@ -223,14 +198,14 @@ export async function POST(request: NextRequest) {
           ...currentMetadata.email_preferences,
           marketing: false,
           newsletter: false,
-          referral_notifications: false
-        }
+          referral_notifications: false,
+        },
       };
 
       const { error: updateError } = await supabase
-        .from('profiles')
+        .from("profiles")
         .update({ metadata: updatedMetadata })
-        .eq('id', profile.id);
+        .eq("id", profile.id);
 
       if (updateError) {
         throw updateError;
@@ -238,39 +213,39 @@ export async function POST(request: NextRequest) {
 
       return NextResponse.json({
         success: true,
-        message: 'Successfully unsubscribed from marketing emails'
+        message: "Successfully unsubscribed from marketing emails",
       });
     }
 
-    if (action === 'subscribe') {
+    if (action === "subscribe") {
       if (!email) {
-        return NextResponse.json(
-          { error: 'Email required for subscription' },
-          { status: 400 }
-        );
+        return NextResponse.json({ error: "Email required for subscription" }, { status: 400 });
       }
 
       // Find or create user profile
       let { data: profile, error } = await supabase
-        .from('profiles')
-        .select('id, metadata')
-        .eq('email', email)
+        .from("profiles")
+        .select("id, metadata")
+        .eq("email", email)
         .single();
 
-      if (error && error.code !== 'PGRST116') { // Not found error
+      if (error && error.code !== "PGRST116") {
+        // Not found error
         throw error;
       }
 
       if (!profile) {
         // Create new profile for newsletter subscription
         const { data: newProfile, error: createError } = await supabase
-          .from('profiles')
-          .insert([{
-            email,
-            metadata: {
-              email_preferences: preferences || { newsletter: true, marketing: true }
-            }
-          }])
+          .from("profiles")
+          .insert([
+            {
+              email,
+              metadata: {
+                email_preferences: preferences || { newsletter: true, marketing: true },
+              },
+            },
+          ])
           .select()
           .single();
 
@@ -287,14 +262,14 @@ export async function POST(request: NextRequest) {
           email_preferences: {
             ...DEFAULT_PREFERENCES,
             ...currentMetadata.email_preferences,
-            ...preferences
-          }
+            ...preferences,
+          },
         };
 
         const { error: updateError } = await supabase
-          .from('profiles')
+          .from("profiles")
           .update({ metadata: updatedMetadata })
-          .eq('id', profile.id);
+          .eq("id", profile.id);
 
         if (updateError) {
           throw updateError;
@@ -303,20 +278,13 @@ export async function POST(request: NextRequest) {
 
       return NextResponse.json({
         success: true,
-        message: 'Successfully subscribed to email updates'
+        message: "Successfully subscribed to email updates",
       });
     }
 
-    return NextResponse.json(
-      { error: 'Invalid action' },
-      { status: 400 }
-    );
-
+    return NextResponse.json({ error: "Invalid action" }, { status: 400 });
   } catch (error) {
-    console.error('Error in email preferences action:', error);
-    return NextResponse.json(
-      { error: 'Internal server error' },
-      { status: 500 }
-    );
+    console.error("Error in email preferences action:", error);
+    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
   }
 }

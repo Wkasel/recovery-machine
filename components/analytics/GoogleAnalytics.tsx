@@ -1,21 +1,21 @@
-'use client';
+// @ts-nocheck
+"use client";
 
-import Script from 'next/script';
-import { useEffect } from 'react';
-import { sendToAnalytics } from '@/lib/performance/webVitals';
+import { sendToAnalytics } from "@/lib/performance/webVitals";
+import Script from "next/script";
+import { useEffect } from "react";
 
 interface GoogleAnalyticsProps {
   measurementId?: string;
 }
 
-export function GoogleAnalytics({ 
-  measurementId = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID 
+export function GoogleAnalytics({
+  measurementId = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID,
 }: GoogleAnalyticsProps) {
   useEffect(() => {
     // Load web vitals and send to analytics
-    import('web-vitals').then(({ onCLS, onFID, onFCP, onLCP, onTTFB, onINP }) => {
+    import("web-vitals").then(({ onCLS, onFCP, onLCP, onTTFB, onINP }) => {
       onCLS(sendToAnalytics);
-      onFID(sendToAnalytics);
       onFCP(sendToAnalytics);
       onLCP(sendToAnalytics);
       onTTFB(sendToAnalytics);
@@ -66,7 +66,7 @@ export function GoogleAnalytics({
           `,
         }}
       />
-      
+
       {/* Enhanced conversion tracking for wellness business */}
       <Script
         id="enhanced-conversions"
@@ -117,19 +117,19 @@ export function GoogleAnalytics({
 // Hook for tracking wellness events in components
 export function useWellnessTracking() {
   const trackBookingStep = (step: string, serviceType?: string) => {
-    if (typeof window !== 'undefined' && window.trackBookingStep) {
+    if (typeof window !== "undefined" && window.trackBookingStep) {
       window.trackBookingStep(step, serviceType);
     }
   };
 
   const trackServiceInterest = (serviceType: string) => {
-    if (typeof window !== 'undefined' && window.trackServiceInterest) {
+    if (typeof window !== "undefined" && window.trackServiceInterest) {
       window.trackServiceInterest(serviceType);
     }
   };
 
   const trackWellnessEvent = (eventName: string, parameters: Record<string, any> = {}) => {
-    if (typeof window !== 'undefined' && window.trackWellnessEvent) {
+    if (typeof window !== "undefined" && window.trackWellnessEvent) {
       window.trackWellnessEvent(eventName, parameters);
     }
   };

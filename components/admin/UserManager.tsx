@@ -1,18 +1,8 @@
-'use client';
+"use client";
 
-import { useState, useEffect } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Badge } from '@/components/ui/badge';
-import { 
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@/components/ui/table';
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
 import {
   Dialog,
   DialogContent,
@@ -20,29 +10,38 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from '@/components/ui/dialog';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
-import { 
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
-import { 
-  Search, 
-  Filter, 
-  Download, 
-  RefreshCw, 
-  Eye,
-  Edit,
+} from "@/components/ui/select";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { Textarea } from "@/components/ui/textarea";
+import { useToast } from "@/hooks/use-toast";
+import {
   CreditCard,
-  Users,
-  Plus,
+  Download,
+  Edit,
+  Eye,
   Minus,
-} from 'lucide-react';
-import { useToast } from '@/hooks/use-toast';
+  Plus,
+  RefreshCw,
+  Search,
+  Users,
+} from "lucide-react";
+import { useEffect, useState } from "react";
 
 interface User {
   id: string;
@@ -69,13 +68,13 @@ interface CreditTransaction {
 export function UserManager() {
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState("");
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
   const [creditTransactions, setCreditTransactions] = useState<CreditTransaction[]>([]);
   const [creditDialogOpen, setCreditDialogOpen] = useState(false);
-  const [creditAmount, setCreditAmount] = useState('');
-  const [creditReason, setCreditReason] = useState('');
-  const [creditType, setCreditType] = useState<'add' | 'subtract'>('add');
+  const [creditAmount, setCreditAmount] = useState("");
+  const [creditReason, setCreditReason] = useState("");
+  const [creditType, setCreditType] = useState<"add" | "subtract">("add");
   const { toast } = useToast();
 
   useEffect(() => {
@@ -85,18 +84,18 @@ export function UserManager() {
   const loadUsers = async () => {
     try {
       setLoading(true);
-      const response = await fetch('/api/admin/users');
-      
+      const response = await fetch("/api/admin/users");
+
       if (response.ok) {
         const data = await response.json();
         setUsers(data.users || []);
       }
     } catch (error) {
-      console.error('Failed to load users:', error);
+      console.error("Failed to load users:", error);
       toast({
-        title: 'Error',
-        description: 'Failed to load users',
-        variant: 'destructive',
+        title: "Error",
+        description: "Failed to load users",
+        variant: "destructive",
       });
     } finally {
       setLoading(false);
@@ -106,17 +105,17 @@ export function UserManager() {
   const loadUserTransactions = async (userId: string) => {
     try {
       const response = await fetch(`/api/admin/users/${userId}/transactions`);
-      
+
       if (response.ok) {
         const data = await response.json();
         setCreditTransactions(data.transactions || []);
       }
     } catch (error) {
-      console.error('Failed to load transactions:', error);
+      console.error("Failed to load transactions:", error);
       toast({
-        title: 'Error',
-        description: 'Failed to load credit transactions',
-        variant: 'destructive',
+        title: "Error",
+        description: "Failed to load credit transactions",
+        variant: "destructive",
       });
     }
   };
@@ -126,12 +125,12 @@ export function UserManager() {
 
     try {
       const amount = parseInt(creditAmount);
-      const finalAmount = creditType === 'subtract' ? -amount : amount;
+      const finalAmount = creditType === "subtract" ? -amount : amount;
 
       const response = await fetch(`/api/admin/users/${selectedUser.id}/credits`, {
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({
           amount: finalAmount,
@@ -140,87 +139,86 @@ export function UserManager() {
       });
 
       if (!response.ok) {
-        throw new Error('Failed to adjust credits');
+        throw new Error("Failed to adjust credits");
       }
 
       toast({
-        title: 'Success',
-        description: `Credits ${creditType === 'add' ? 'added' : 'subtracted'} successfully`,
+        title: "Success",
+        description: `Credits ${creditType === "add" ? "added" : "subtracted"} successfully`,
       });
 
       // Reset form and reload data
-      setCreditAmount('');
-      setCreditReason('');
+      setCreditAmount("");
+      setCreditReason("");
       setCreditDialogOpen(false);
       loadUsers();
       if (selectedUser) {
         loadUserTransactions(selectedUser.id);
       }
-
     } catch (error) {
-      console.error('Credit adjustment error:', error);
+      console.error("Credit adjustment error:", error);
       toast({
-        title: 'Error',
-        description: 'Failed to adjust credits',
-        variant: 'destructive',
+        title: "Error",
+        description: "Failed to adjust credits",
+        variant: "destructive",
       });
     }
   };
 
   const exportUsers = async () => {
     try {
-      const response = await fetch('/api/admin/users/export');
-      
+      const response = await fetch("/api/admin/users/export");
+
       if (!response.ok) {
-        throw new Error('Failed to export users');
+        throw new Error("Failed to export users");
       }
 
       const blob = await response.blob();
       const url = window.URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.style.display = 'none';
+      const a = document.createElement("a");
+      a.style.display = "none";
       a.href = url;
-      a.download = `users-export-${new Date().toISOString().split('T')[0]}.csv`;
+      a.download = `users-export-${new Date().toISOString().split("T")[0]}.csv`;
       document.body.appendChild(a);
       a.click();
       window.URL.revokeObjectURL(url);
 
       toast({
-        title: 'Success',
-        description: 'Users exported successfully',
+        title: "Success",
+        description: "Users exported successfully",
       });
-
     } catch (error) {
-      console.error('Export error:', error);
+      console.error("Export error:", error);
       toast({
-        title: 'Error',
-        description: 'Failed to export users',
-        variant: 'destructive',
+        title: "Error",
+        description: "Failed to export users",
+        variant: "destructive",
       });
     }
   };
 
   const formatCurrency = (cents: number) => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD',
+    return new Intl.NumberFormat("en-US", {
+      style: "currency",
+      currency: "USD",
     }).format(cents / 100);
   };
 
   const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric',
+    return new Date(dateString).toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
     });
   };
 
   // Filter users based on search
-  const filteredUsers = users.filter(user => 
-    !searchTerm || 
-    user.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    user.phone?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    user.referral_code?.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredUsers = users.filter(
+    (user) =>
+      !searchTerm ||
+      user.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      user.phone?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      user.referral_code?.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   if (loading) {
@@ -264,7 +262,7 @@ export function UserManager() {
               <RefreshCw className="h-4 w-4 mr-2" />
               Refresh
             </Button>
-            
+
             <Button onClick={exportUsers} variant="outline" size="sm">
               <Download className="h-4 w-4 mr-2" />
               Export
@@ -303,7 +301,7 @@ export function UserManager() {
             <div className="ml-4">
               <p className="text-sm font-medium text-gray-500">Active Users</p>
               <p className="text-2xl font-bold">
-                {users.filter(user => (user.booking_count || 0) > 0).length}
+                {users.filter((user) => (user.booking_count || 0) > 0).length}
               </p>
             </div>
           </div>
@@ -329,38 +327,38 @@ export function UserManager() {
                 <TableCell>
                   <div>
                     <div className="font-medium">{user.email}</div>
-                    <div className="text-sm text-gray-500">
-                      Code: {user.referral_code}
-                    </div>
+                    <div className="text-sm text-gray-500">Code: {user.referral_code}</div>
                   </div>
                 </TableCell>
-                
+
                 <TableCell>
                   <div className="text-sm">
-                    <div>{user.phone || 'No phone'}</div>
+                    <div>{user.phone || "No phone"}</div>
                     <div className="text-gray-500">
-                      {user.address?.city ? `${user.address.city}, ${user.address.state}` : 'No address'}
+                      {user.address?.city
+                        ? `${user.address.city}, ${user.address.state}`
+                        : "No address"}
                     </div>
                   </div>
                 </TableCell>
-                
+
                 <TableCell>
                   <Badge variant="outline" className="bg-green-50">
                     {user.credits} credits
                   </Badge>
                 </TableCell>
-                
+
                 <TableCell>
                   <div className="text-sm">
                     <div>{user.booking_count || 0} bookings</div>
                     <div className="text-gray-500">
-                      {user.total_spent ? formatCurrency(user.total_spent) : '$0'} spent
+                      {user.total_spent ? formatCurrency(user.total_spent) : "$0"} spent
                     </div>
                   </div>
                 </TableCell>
-                
+
                 <TableCell>{formatDate(user.created_at)}</TableCell>
-                
+
                 <TableCell>
                   <div className="flex gap-2">
                     <Dialog>
@@ -379,11 +377,9 @@ export function UserManager() {
                       <DialogContent className="max-w-4xl">
                         <DialogHeader>
                           <DialogTitle>User Details: {selectedUser?.email}</DialogTitle>
-                          <DialogDescription>
-                            View and manage user information
-                          </DialogDescription>
+                          <DialogDescription>View and manage user information</DialogDescription>
                         </DialogHeader>
-                        
+
                         {selectedUser && (
                           <div className="space-y-6">
                             {/* User Info */}
@@ -394,7 +390,7 @@ export function UserManager() {
                               </div>
                               <div>
                                 <Label className="text-sm font-medium">Phone</Label>
-                                <p className="text-sm">{selectedUser.phone || 'Not provided'}</p>
+                                <p className="text-sm">{selectedUser.phone || "Not provided"}</p>
                               </div>
                               <div>
                                 <Label className="text-sm font-medium">Credits</Label>
@@ -424,21 +420,28 @@ export function UserManager() {
                                         Add or subtract credits for this user
                                       </DialogDescription>
                                     </DialogHeader>
-                                    
+
                                     <div className="space-y-4">
                                       <div>
                                         <Label>Action</Label>
-                                        <Select value={creditType} onValueChange={(value: 'add' | 'subtract') => setCreditType(value)}>
+                                        <Select
+                                          value={creditType}
+                                          onValueChange={(value: "add" | "subtract") =>
+                                            setCreditType(value)
+                                          }
+                                        >
                                           <SelectTrigger>
                                             <SelectValue />
                                           </SelectTrigger>
                                           <SelectContent>
                                             <SelectItem value="add">Add Credits</SelectItem>
-                                            <SelectItem value="subtract">Subtract Credits</SelectItem>
+                                            <SelectItem value="subtract">
+                                              Subtract Credits
+                                            </SelectItem>
                                           </SelectContent>
                                         </Select>
                                       </div>
-                                      
+
                                       <div>
                                         <Label>Amount</Label>
                                         <Input
@@ -448,7 +451,7 @@ export function UserManager() {
                                           placeholder="Enter amount"
                                         />
                                       </div>
-                                      
+
                                       <div>
                                         <Label>Reason</Label>
                                         <Textarea
@@ -457,13 +460,20 @@ export function UserManager() {
                                           placeholder="Reason for adjustment"
                                         />
                                       </div>
-                                      
+
                                       <div className="flex gap-2">
                                         <Button onClick={adjustCredits} className="flex-1">
-                                          {creditType === 'add' ? <Plus className="h-4 w-4 mr-2" /> : <Minus className="h-4 w-4 mr-2" />}
-                                          {creditType === 'add' ? 'Add' : 'Subtract'} Credits
+                                          {creditType === "add" ? (
+                                            <Plus className="h-4 w-4 mr-2" />
+                                          ) : (
+                                            <Minus className="h-4 w-4 mr-2" />
+                                          )}
+                                          {creditType === "add" ? "Add" : "Subtract"} Credits
                                         </Button>
-                                        <Button variant="outline" onClick={() => setCreditDialogOpen(false)}>
+                                        <Button
+                                          variant="outline"
+                                          onClick={() => setCreditDialogOpen(false)}
+                                        >
                                           Cancel
                                         </Button>
                                       </div>
@@ -487,18 +497,29 @@ export function UserManager() {
                                     {creditTransactions.map((transaction) => (
                                       <TableRow key={transaction.id}>
                                         <TableCell>
-                                          <span className={transaction.amount >= 0 ? 'text-green-600' : 'text-red-600'}>
-                                            {transaction.amount >= 0 ? '+' : ''}{transaction.amount}
+                                          <span
+                                            className={
+                                              transaction.amount >= 0
+                                                ? "text-green-600"
+                                                : "text-red-600"
+                                            }
+                                          >
+                                            {transaction.amount >= 0 ? "+" : ""}
+                                            {transaction.amount}
                                           </span>
                                         </TableCell>
                                         <TableCell>{transaction.transaction_type}</TableCell>
-                                        <TableCell className="text-sm">{transaction.description}</TableCell>
-                                        <TableCell className="text-sm">{formatDate(transaction.created_at)}</TableCell>
+                                        <TableCell className="text-sm">
+                                          {transaction.description}
+                                        </TableCell>
+                                        <TableCell className="text-sm">
+                                          {formatDate(transaction.created_at)}
+                                        </TableCell>
                                       </TableRow>
                                     ))}
                                   </TableBody>
                                 </Table>
-                                
+
                                 {creditTransactions.length === 0 && (
                                   <div className="text-center py-4 text-gray-500">
                                     No credit transactions found
@@ -518,9 +539,7 @@ export function UserManager() {
         </Table>
 
         {filteredUsers.length === 0 && (
-          <div className="text-center py-8 text-gray-500">
-            No users found matching your search
-          </div>
+          <div className="text-center py-8 text-gray-500">No users found matching your search</div>
         )}
       </Card>
     </div>

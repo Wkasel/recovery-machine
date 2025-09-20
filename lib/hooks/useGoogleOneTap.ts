@@ -33,7 +33,9 @@ export function useGoogleOneTap({ onSuccess, onError, clientId }: GoogleOneTapOp
         });
       } catch (error) {
         if (onError) {
-          onError(error instanceof Error ? error : new Error("Google One Tap initialization failed"));
+          onError(
+            error instanceof Error ? error : new Error("Google One Tap initialization failed")
+          );
         }
       }
     }

@@ -1,89 +1,93 @@
-'use client'
+"use client";
 
-import { useState, useEffect } from 'react'
-import { User } from '@supabase/supabase-js'
-import { createClient } from '@/lib/supabase/client'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
-import { Badge } from '@/components/ui/badge'
-import { Input } from '@/components/ui/input'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { 
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import {
   Dialog,
   DialogContent,
   DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from '@/components/ui/dialog'
-import { 
-  Calendar, 
-  Clock, 
-  MapPin, 
-  Download, 
-  Eye,
-  Filter,
-  Search,
-  Receipt,
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { User } from "@supabase/supabase-js";
+import {
+  Calendar,
+  Clock,
   DollarSign,
+  Download,
+  Eye,
   History as HistoryIcon,
-  Star
-} from 'lucide-react'
-import { toast } from 'sonner'
+  MapPin,
+  Search,
+  Star,
+} from "lucide-react";
+import { useEffect, useState } from "react";
+import { toast } from "sonner";
 
 interface BookingHistoryItem {
-  id: string
-  date_time: string
-  duration: number
-  add_ons: any
-  status: string
-  location_address: any
-  special_instructions: string
-  created_at: string
-  updated_at: string
+  id: string;
+  date_time: string;
+  duration: number;
+  add_ons: any;
+  status: string;
+  location_address: any;
+  special_instructions: string;
+  created_at: string;
+  updated_at: string;
   order?: {
-    id: string
-    amount: number
-    setup_fee_applied: number
-    status: string
-    bolt_checkout_id: string
-    metadata: any
-  }
+    id: string;
+    amount: number;
+    setup_fee_applied: number;
+    status: string;
+    bolt_checkout_id: string;
+    metadata: any;
+  };
   review?: {
-    id: string
-    rating: number
-    comment: string
-    created_at: string
-  }
+    id: string;
+    rating: number;
+    comment: string;
+    created_at: string;
+  };
 }
 
 interface HistoryTabProps {
-  user: User
+  user: User;
 }
 
 export function HistoryTab({ user }: HistoryTabProps) {
-  const supabase = createBrowserSupabaseClient()
-  const [history, setHistory] = useState<BookingHistoryItem[]>([])
-  const [filteredHistory, setFilteredHistory] = useState<BookingHistoryItem[]>([])
-  const [isLoading, setIsLoading] = useState(true)
-  const [searchTerm, setSearchTerm] = useState('')
-  const [statusFilter, setStatusFilter] = useState('all')
-  const [selectedBooking, setSelectedBooking] = useState<BookingHistoryItem | null>(null)
-  const [receiptDialogOpen, setReceiptDialogOpen] = useState(false)
+  const supabase = createBrowserSupabaseClient();
+  const [history, setHistory] = useState<BookingHistoryItem[]>([]);
+  const [filteredHistory, setFilteredHistory] = useState<BookingHistoryItem[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [statusFilter, setStatusFilter] = useState("all");
+  const [selectedBooking, setSelectedBooking] = useState<BookingHistoryItem | null>(null);
+  const [receiptDialogOpen, setReceiptDialogOpen] = useState(false);
 
   useEffect(() => {
-    loadBookingHistory()
-  }, [user.id])
+    loadBookingHistory();
+  }, [user.id]);
 
   useEffect(() => {
-    filterHistory()
-  }, [history, searchTerm, statusFilter])
+    filterHistory();
+  }, [history, searchTerm, statusFilter]);
 
   const loadBookingHistory = async () => {
     try {
       const { data: bookings, error: bookingsError } = await supabase
-        .from('bookings')
-        .select(`
+        .from("bookings")
+        .select(
+          `
           *,
           orders!left (
             id,
@@ -99,98 +103,96 @@ export function HistoryTab({ user }: HistoryTabProps) {
             comment,
             created_at
           )
-        `)
-        .eq('user_id', user.id)
-        .order('date_time', { ascending: false })
+        `
+        )
+        .eq("user_id", user.id)
+        .order("date_time", { ascending: false });
 
-      if (bookingsError) throw bookingsError
+      if (bookingsError) throw bookingsError;
 
-      setHistory(bookings || [])
+      setHistory(bookings || []);
     } catch (error) {
-      console.error('Error loading booking history:', error)
-      toast.error('Failed to load booking history')
+      console.error("Error loading booking history:", error);
+      toast.error("Failed to load booking history");
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
-  }
+  };
 
   const filterHistory = () => {
-    let filtered = history
+    let filtered = history;
 
     // Filter by search term
     if (searchTerm) {
-      filtered = filtered.filter(booking =>
-        getServiceName(booking.add_ons).toLowerCase().includes(searchTerm.toLowerCase()) ||
-        booking.location_address?.city?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        booking.special_instructions?.toLowerCase().includes(searchTerm.toLowerCase())
-      )
+      filtered = filtered.filter(
+        (booking) =>
+          getServiceName(booking.add_ons).toLowerCase().includes(searchTerm.toLowerCase()) ||
+          booking.location_address?.city?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          booking.special_instructions?.toLowerCase().includes(searchTerm.toLowerCase())
+      );
     }
 
     // Filter by status
-    if (statusFilter !== 'all') {
-      filtered = filtered.filter(booking => booking.status === statusFilter)
+    if (statusFilter !== "all") {
+      filtered = filtered.filter((booking) => booking.status === statusFilter);
     }
 
-    setFilteredHistory(filtered)
-  }
+    setFilteredHistory(filtered);
+  };
 
   const getServiceName = (addOns: any) => {
-    if (addOns?.serviceType === 'cold_plunge') return 'Cold Plunge'
-    if (addOns?.serviceType === 'infrared_sauna') return 'Infrared Sauna'
-    if (addOns?.serviceType === 'combo_package') return 'Ultimate Recovery Combo'
-    return 'Recovery Session'
-  }
+    if (addOns?.serviceType === "cold_plunge") return "Cold Plunge";
+    if (addOns?.serviceType === "infrared_sauna") return "Infrared Sauna";
+    if (addOns?.serviceType === "combo_package") return "Ultimate Recovery Combo";
+    return "Recovery Session";
+  };
 
   const getStatusBadge = (status: string) => {
     const statusConfig = {
-      scheduled: { label: 'Scheduled', variant: 'secondary' as const },
-      confirmed: { label: 'Confirmed', variant: 'default' as const },
-      in_progress: { label: 'In Progress', variant: 'default' as const },
-      completed: { label: 'Completed', variant: 'secondary' as const },
-      cancelled: { label: 'Cancelled', variant: 'destructive' as const },
-      no_show: { label: 'No Show', variant: 'destructive' as const }
-    }
+      scheduled: { label: "Scheduled", variant: "secondary" as const },
+      confirmed: { label: "Confirmed", variant: "default" as const },
+      in_progress: { label: "In Progress", variant: "default" as const },
+      completed: { label: "Completed", variant: "secondary" as const },
+      cancelled: { label: "Cancelled", variant: "destructive" as const },
+      no_show: { label: "No Show", variant: "destructive" as const },
+    };
 
-    const config = statusConfig[status as keyof typeof statusConfig] || statusConfig.scheduled
+    const config = statusConfig[status as keyof typeof statusConfig] || statusConfig.scheduled;
 
-    return (
-      <Badge variant={config.variant}>
-        {config.label}
-      </Badge>
-    )
-  }
+    return <Badge variant={config.variant}>{config.label}</Badge>;
+  };
 
   const formatDateTime = (dateTime: string) => {
-    const date = new Date(dateTime)
+    const date = new Date(dateTime);
     return {
-      date: date.toLocaleDateString('en-US', {
-        year: 'numeric',
-        month: 'short',
-        day: 'numeric'
+      date: date.toLocaleDateString("en-US", {
+        year: "numeric",
+        month: "short",
+        day: "numeric",
       }),
-      time: date.toLocaleTimeString('en-US', {
-        hour: '2-digit',
-        minute: '2-digit'
-      })
-    }
-  }
+      time: date.toLocaleTimeString("en-US", {
+        hour: "2-digit",
+        minute: "2-digit",
+      }),
+    };
+  };
 
   const formatCurrency = (cents: number) => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD'
-    }).format(cents / 100)
-  }
+    return new Intl.NumberFormat("en-US", {
+      style: "currency",
+      currency: "USD",
+    }).format(cents / 100);
+  };
 
   const getTotalPaid = (booking: BookingHistoryItem) => {
-    if (!booking.order) return 0
-    return booking.order.amount + booking.order.setup_fee_applied
-  }
+    if (!booking.order) return 0;
+    return booking.order.amount + booking.order.setup_fee_applied;
+  };
 
   const downloadReceipt = async (booking: BookingHistoryItem) => {
     if (!booking.order) {
-      toast.error('No payment information available')
-      return
+      toast.error("No payment information available");
+      return;
     }
 
     try {
@@ -205,8 +207,8 @@ export function HistoryTab({ user }: HistoryTabProps) {
         amount: formatCurrency(booking.order.amount),
         setup_fee: formatCurrency(booking.order.setup_fee_applied),
         total: formatCurrency(getTotalPaid(booking)),
-        address: booking.location_address
-      }
+        address: booking.location_address,
+      };
 
       // Create and download a simple text receipt
       const receiptText = `
@@ -228,29 +230,29 @@ Total Paid: ${receiptData.total}
 Address: ${receiptData.address?.street}, ${receiptData.address?.city}, ${receiptData.address?.state} ${receiptData.address?.zipCode}
 
 Thank you for choosing Recovery Machine!
-      `.trim()
+      `.trim();
 
-      const blob = new Blob([receiptText], { type: 'text/plain' })
-      const url = URL.createObjectURL(blob)
-      const a = document.createElement('a')
-      a.href = url
-      a.download = `recovery-machine-receipt-${booking.id}.txt`
-      document.body.appendChild(a)
-      a.click()
-      document.body.removeChild(a)
-      URL.revokeObjectURL(url)
+      const blob = new Blob([receiptText], { type: "text/plain" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `recovery-machine-receipt-${booking.id}.txt`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
 
-      toast.success('Receipt downloaded successfully')
+      toast.success("Receipt downloaded successfully");
     } catch (error) {
-      console.error('Error downloading receipt:', error)
-      toast.error('Failed to download receipt')
+      console.error("Error downloading receipt:", error);
+      toast.error("Failed to download receipt");
     }
-  }
+  };
 
   const showReceiptDetails = (booking: BookingHistoryItem) => {
-    setSelectedBooking(booking)
-    setReceiptDialogOpen(true)
-  }
+    setSelectedBooking(booking);
+    setReceiptDialogOpen(true);
+  };
 
   if (isLoading) {
     return (
@@ -266,7 +268,7 @@ Thank you for choosing Recovery Machine!
           ))}
         </div>
       </div>
-    )
+    );
   }
 
   return (
@@ -311,8 +313,8 @@ Thank you for choosing Recovery Machine!
       <div className="space-y-4">
         {filteredHistory.length > 0 ? (
           filteredHistory.map((booking) => {
-            const dateTime = formatDateTime(booking.date_time)
-            const totalPaid = getTotalPaid(booking)
+            const dateTime = formatDateTime(booking.date_time);
+            const totalPaid = getTotalPaid(booking);
 
             return (
               <Card key={booking.id}>
@@ -325,11 +327,13 @@ Thank you for choosing Recovery Machine!
                         </h4>
                         {getStatusBadge(booking.status)}
                       </div>
-                      
+
                       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm text-gray-600">
                         <div className="flex items-center space-x-2">
                           <Calendar className="w-4 h-4" />
-                          <span>{dateTime.date} at {dateTime.time}</span>
+                          <span>
+                            {dateTime.date} at {dateTime.time}
+                          </span>
                         </div>
                         <div className="flex items-center space-x-2">
                           <Clock className="w-4 h-4" />
@@ -338,7 +342,9 @@ Thank you for choosing Recovery Machine!
                         {booking.location_address?.city && (
                           <div className="flex items-center space-x-2">
                             <MapPin className="w-4 h-4" />
-                            <span>{booking.location_address.city}, {booking.location_address.state}</span>
+                            <span>
+                              {booking.location_address.city}, {booking.location_address.state}
+                            </span>
                           </div>
                         )}
                       </div>
@@ -355,9 +361,7 @@ Thank you for choosing Recovery Machine!
                       {booking.review && (
                         <div className="flex items-center space-x-2 text-sm">
                           <Star className="w-4 h-4 text-yellow-500" />
-                          <span>
-                            You rated this session {booking.review.rating} stars
-                          </span>
+                          <span>You rated this session {booking.review.rating} stars</span>
                         </div>
                       )}
 
@@ -382,7 +386,7 @@ Thank you for choosing Recovery Machine!
                           <Button
                             variant="outline"
                             size="sm"
-                            onClick={() => downloadReceipt(booking)}
+                            onClick={async () => downloadReceipt(booking)}
                           >
                             <Download className="w-4 h-4 mr-2" />
                             Download
@@ -393,20 +397,21 @@ Thank you for choosing Recovery Machine!
                   </div>
                 </CardContent>
               </Card>
-            )
+            );
           })
         ) : (
           <Card>
             <CardContent className="p-8 text-center">
               <HistoryIcon className="h-12 w-12 mx-auto mb-4 text-gray-300" />
               <h3 className="text-lg font-medium text-gray-900 mb-2">
-                {searchTerm || statusFilter !== 'all' ? 'No matching bookings' : 'No booking history'}
+                {searchTerm || statusFilter !== "all"
+                  ? "No matching bookings"
+                  : "No booking history"}
               </h3>
               <p className="text-gray-600">
-                {searchTerm || statusFilter !== 'all' 
-                  ? 'Try adjusting your search or filter criteria' 
-                  : 'Your completed sessions will appear here'
-                }
+                {searchTerm || statusFilter !== "all"
+                  ? "Try adjusting your search or filter criteria"
+                  : "Your completed sessions will appear here"}
               </p>
             </CardContent>
           </Card>
@@ -418,11 +423,9 @@ Thank you for choosing Recovery Machine!
         <DialogContent className="max-w-md">
           <DialogHeader>
             <DialogTitle>Receipt Details</DialogTitle>
-            <DialogDescription>
-              Payment information for your recovery session
-            </DialogDescription>
+            <DialogDescription>Payment information for your recovery session</DialogDescription>
           </DialogHeader>
-          
+
           {selectedBooking && (
             <div className="space-y-4">
               <div className="border rounded-lg p-4 bg-gray-50">
@@ -448,7 +451,7 @@ Thank you for choosing Recovery Machine!
                     <span>Duration:</span>
                     <span>{selectedBooking.duration} minutes</span>
                   </div>
-                  
+
                   {selectedBooking.order && (
                     <>
                       <hr className="my-3" />
@@ -473,9 +476,7 @@ Thank you for choosing Recovery Machine!
                   <hr className="my-3" />
                   <div className="text-xs text-gray-500">
                     <p>Booking ID: {selectedBooking.id}</p>
-                    {selectedBooking.order && (
-                      <p>Order ID: {selectedBooking.order.id}</p>
-                    )}
+                    {selectedBooking.order && <p>Order ID: {selectedBooking.order.id}</p>}
                   </div>
                 </div>
               </div>
@@ -485,7 +486,7 @@ Thank you for choosing Recovery Machine!
           <DialogFooter>
             <Button
               variant="outline"
-              onClick={() => selectedBooking && downloadReceipt(selectedBooking)}
+              onClick={async () => selectedBooking && downloadReceipt(selectedBooking)}
             >
               <Download className="w-4 h-4 mr-2" />
               Download Receipt
@@ -494,5 +495,5 @@ Thank you for choosing Recovery Machine!
         </DialogContent>
       </Dialog>
     </div>
-  )
+  );
 }

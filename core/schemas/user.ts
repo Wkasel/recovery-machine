@@ -2,7 +2,10 @@ import { z } from "zod";
 
 export const updateProfileSchema = z.object({
   full_name: z.string().min(1, "Name is required").optional(),
-  phone: z.string().regex(/^\+?[\d\s\-\(\)]+$/, "Please enter a valid phone number").optional(),
+  phone: z
+    .string()
+    .regex(/^\+?[\d\s\-\(\)]+$/, "Please enter a valid phone number")
+    .optional(),
   address: z.string().min(5, "Please enter a complete address").optional(),
 });
 

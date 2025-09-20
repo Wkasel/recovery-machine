@@ -1,7 +1,7 @@
-'use client';
+"use client";
 
-import Image from 'next/image';
-import { useState } from 'react';
+import Image from "next/image";
+import { useState } from "react";
 
 interface OptimizedImageProps {
   src: string;
@@ -13,9 +13,9 @@ interface OptimizedImageProps {
   sizes?: string;
   fill?: boolean;
   quality?: number;
-  placeholder?: 'blur' | 'empty';
+  placeholder?: "blur" | "empty";
   blurDataURL?: string;
-  loading?: 'lazy' | 'eager';
+  loading?: "lazy" | "eager";
   onLoadingComplete?: () => void;
 }
 
@@ -24,14 +24,14 @@ export function OptimizedImage({
   alt,
   width,
   height,
-  className = '',
+  className = "",
   priority = false,
-  sizes = '(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw',
+  sizes = "(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw",
   fill = false,
   quality = 85,
-  placeholder = 'empty',
+  placeholder = "empty",
   blurDataURL,
-  loading = 'lazy',
+  loading = "lazy",
   onLoadingComplete,
 }: OptimizedImageProps) {
   const [isLoading, setIsLoading] = useState(true);
@@ -55,25 +55,20 @@ export function OptimizedImage({
         Loading...
       </text>
     </svg>`
-  ).toString('base64')}`;
+  ).toString("base64")}`;
 
   if (hasError) {
     return (
-      <div 
+      <div
         className={`flex items-center justify-center bg-gray-100 text-gray-500 ${className}`}
         style={{ width: width, height: height }}
       >
-        <svg 
-          className="w-8 h-8" 
-          fill="none" 
-          stroke="currentColor" 
-          viewBox="0 0 24 24"
-        >
-          <path 
-            strokeLinecap="round" 
-            strokeLinejoin="round" 
-            strokeWidth={2} 
-            d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" 
+        <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
           />
         </svg>
       </div>
@@ -86,13 +81,13 @@ export function OptimizedImage({
     quality,
     onLoad: handleLoadingComplete,
     onError: handleError,
-    className: `${className} ${isLoading ? 'opacity-0' : 'opacity-100'} transition-opacity duration-300`,
+    className: `${className} ${isLoading ? "opacity-0" : "opacity-100"} transition-opacity duration-300`,
     ...(fill ? { fill: true } : { width, height }),
     ...(sizes && !fill && { sizes }),
     ...(priority && { priority: true }),
     ...(loading && !priority && { loading }),
-    ...(placeholder === 'blur' && {
-      placeholder: 'blur',
+    ...(placeholder === "blur" && {
+      placeholder: "blur",
       blurDataURL: blurDataURL || defaultBlurDataURL,
     }),
   };
@@ -101,7 +96,7 @@ export function OptimizedImage({
     <div className="relative">
       <Image {...imageProps} />
       {isLoading && (
-        <div 
+        <div
           className="absolute inset-0 bg-gray-100 animate-pulse flex items-center justify-center"
           style={{ width: width, height: height }}
         >
@@ -113,7 +108,7 @@ export function OptimizedImage({
 }
 
 // Predefined image components for common wellness images
-export function HeroImage({ className = '', ...props }: Omit<OptimizedImageProps, 'src' | 'alt'>) {
+export function HeroImage({ className = "", ...props }: Omit<OptimizedImageProps, "src" | "alt">) {
   return (
     <OptimizedImage
       src="/images/hero-recovery-machine.jpg"
@@ -127,7 +122,10 @@ export function HeroImage({ className = '', ...props }: Omit<OptimizedImageProps
   );
 }
 
-export function ColdPlungeImage({ className = '', ...props }: Omit<OptimizedImageProps, 'src' | 'alt'>) {
+export function ColdPlungeImage({
+  className = "",
+  ...props
+}: Omit<OptimizedImageProps, "src" | "alt">) {
   return (
     <OptimizedImage
       src="/images/cold-plunge-mobile.jpg"
@@ -140,7 +138,10 @@ export function ColdPlungeImage({ className = '', ...props }: Omit<OptimizedImag
   );
 }
 
-export function InfraredSaunaImage({ className = '', ...props }: Omit<OptimizedImageProps, 'src' | 'alt'>) {
+export function InfraredSaunaImage({
+  className = "",
+  ...props
+}: Omit<OptimizedImageProps, "src" | "alt">) {
   return (
     <OptimizedImage
       src="/images/infrared-sauna-mobile.jpg"
@@ -153,7 +154,10 @@ export function InfraredSaunaImage({ className = '', ...props }: Omit<OptimizedI
   );
 }
 
-export function LogoImage({ className = '', ...props }: Omit<OptimizedImageProps, 'src' | 'alt' | 'width' | 'height'>) {
+export function LogoImage({
+  className = "",
+  ...props
+}: Omit<OptimizedImageProps, "src" | "alt" | "width" | "height">) {
   return (
     <OptimizedImage
       src="/logo.png"

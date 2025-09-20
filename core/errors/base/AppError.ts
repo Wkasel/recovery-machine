@@ -16,7 +16,7 @@ export class AppError extends Error {
     context?: ErrorContext
   ) {
     super(message);
-    
+
     this.name = this.constructor.name;
     this.statusCode = statusCode;
     this.isOperational = isOperational;

@@ -1,12 +1,12 @@
 "use client";
 
-import { signUp, sendMagicLink } from "@/core/actions/auth";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Alert, AlertDescription } from "@/components/ui/alert";
-import { CheckCircle, Mail, Lock, UserPlus } from "lucide-react";
+import { sendMagicLink, signUp } from "@/core/actions/auth";
+import { CheckCircle, Mail, UserPlus } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 
@@ -32,7 +32,7 @@ export default function SignUpPage(): React.ReactElement {
       setError("Please enter your email first");
       return;
     }
-    
+
     setIsLoading(true);
     setError("");
     try {
@@ -55,12 +55,12 @@ export default function SignUpPage(): React.ReactElement {
               <Alert className="bg-green-950/50 border-green-900/50">
                 <CheckCircle className="h-4 w-4 text-green-400" />
                 <AlertDescription className="text-green-100">
-                  Magic link sent to <span className="font-medium">{email}</span>. 
-                  Check your email and click the link to create your account.
+                  Magic link sent to <span className="font-medium">{email}</span>. Check your email
+                  and click the link to create your account.
                 </AlertDescription>
               </Alert>
-              <Button 
-                variant="outline" 
+              <Button
+                variant="outline"
                 onClick={() => setMagicLinkSent(false)}
                 className="w-full bg-transparent border-neutral-700 text-white hover:bg-neutral-800"
               >
@@ -91,7 +91,9 @@ export default function SignUpPage(): React.ReactElement {
 
           <form action={handlePasswordSignUp} className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="email" className="text-white">Email</Label>
+              <Label htmlFor="email" className="text-white">
+                Email
+              </Label>
               <Input
                 id="email"
                 name="email"
@@ -104,9 +106,11 @@ export default function SignUpPage(): React.ReactElement {
                 disabled={isLoading}
               />
             </div>
-            
+
             <div className="space-y-2">
-              <Label htmlFor="password" className="text-white">Password</Label>
+              <Label htmlFor="password" className="text-white">
+                Password
+              </Label>
               <Input
                 id="password"
                 name="password"
@@ -120,15 +124,15 @@ export default function SignUpPage(): React.ReactElement {
             </div>
 
             <div className="space-y-3">
-              <Button 
-                type="submit" 
+              <Button
+                type="submit"
                 className="w-full bg-white text-black hover:bg-neutral-200"
                 disabled={isLoading}
               >
                 <UserPlus className="mr-2 h-4 w-4" />
                 {isLoading ? "Creating account..." : "Create Account with Password"}
               </Button>
-              
+
               <div className="relative">
                 <div className="absolute inset-0 flex items-center">
                   <span className="w-full border-t border-neutral-700" />
@@ -137,8 +141,8 @@ export default function SignUpPage(): React.ReactElement {
                   <span className="bg-neutral-900 px-2 text-neutral-400">Or</span>
                 </div>
               </div>
-              
-              <Button 
+
+              <Button
                 type="button"
                 variant="outline"
                 onClick={handleMagicLink}
@@ -158,7 +162,7 @@ export default function SignUpPage(): React.ReactElement {
                 Sign in
               </Link>
             </p>
-            
+
             <div className="text-xs text-neutral-500">
               By signing up, you agree to our{" "}
               <Link href="/terms" className="text-white hover:underline">

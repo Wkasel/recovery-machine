@@ -1,9 +1,9 @@
 "use client";
 
+import { Snowflake } from "lucide-react";
+import Link from "next/link";
 import { usePathname } from "next/navigation";
 import type { ReactNode } from "react";
-import Link from "next/link";
-import { Snowflake } from "lucide-react";
 
 export default function AuthPagesLayout({ children }: { children: ReactNode }) {
   const pathname = usePathname();
@@ -27,10 +27,9 @@ export default function AuthPagesLayout({ children }: { children: ReactNode }) {
                 {isSignUp ? "Join Recovery Machine" : "Welcome back"}
               </h1>
               <p className="text-sm text-neutral-400">
-                {isSignUp 
+                {isSignUp
                   ? "Start your recovery journey with cold plunge and infrared sauna sessions"
-                  : "Sign in to your account to continue your recovery journey"
-                }
+                  : "Sign in to your account to continue your recovery journey"}
               </p>
             </div>
           </div>

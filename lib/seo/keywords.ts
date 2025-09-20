@@ -2,13 +2,13 @@
 export const wellnessKeywords = {
   primary: [
     "mobile cold plunge",
-    "infrared sauna delivery", 
+    "infrared sauna delivery",
     "recovery therapy",
     "wellness services",
     "mobile spa",
     "cold therapy",
     "heat therapy",
-    "recovery machine"
+    "recovery machine",
   ],
   secondary: [
     "cold plunge therapy",
@@ -20,7 +20,7 @@ export const wellnessKeywords = {
     "wellness coaching",
     "athletic recovery",
     "performance recovery",
-    "mobile recovery"
+    "mobile recovery",
   ],
   longTail: [
     "mobile cold plunge rental Los Angeles",
@@ -32,21 +32,21 @@ export const wellnessKeywords = {
     "infrared sauna mobile service",
     "cold therapy for athletes",
     "mobile spa services Los Angeles",
-    "recovery equipment rental"
+    "recovery equipment rental",
   ],
   local: [
     "cold plunge Los Angeles",
-    "infrared sauna Beverly Hills", 
+    "infrared sauna Beverly Hills",
     "mobile spa Santa Monica",
     "recovery services West Hollywood",
     "wellness therapy Venice Beach",
     "cold therapy Manhattan Beach",
     "sauna services Malibu",
-    "mobile recovery LA County"
+    "mobile recovery LA County",
   ],
   conditions: [
     "muscle recovery",
-    "inflammation reduction", 
+    "inflammation reduction",
     "stress relief",
     "improved circulation",
     "detoxification",
@@ -54,7 +54,7 @@ export const wellnessKeywords = {
     "performance enhancement",
     "sleep improvement",
     "immune support",
-    "mental clarity"
+    "mental clarity",
   ],
   industries: [
     "athlete recovery",
@@ -64,38 +64,29 @@ export const wellnessKeywords = {
     "wellness center",
     "health optimization",
     "biohacking",
-    "preventive care"
-  ]
+    "preventive care",
+  ],
 };
 
 export const getKeywordsForPage = (pageType: string): string[] => {
   switch (pageType) {
-    case 'home':
+    case "home":
       return [
         ...wellnessKeywords.primary,
         ...wellnessKeywords.secondary.slice(0, 5),
-        ...wellnessKeywords.local.slice(0, 3)
+        ...wellnessKeywords.local.slice(0, 3),
       ];
-    case 'services':
-      return [
-        ...wellnessKeywords.secondary,
-        ...wellnessKeywords.conditions.slice(0, 5)
-      ];
-    case 'booking':
-      return [
-        ...wellnessKeywords.longTail.slice(0, 5),
-        ...wellnessKeywords.local
-      ];
-    case 'about':
-      return [
-        ...wellnessKeywords.industries,
-        ...wellnessKeywords.primary.slice(0, 3)
-      ];
+    case "services":
+      return [...wellnessKeywords.secondary, ...wellnessKeywords.conditions.slice(0, 5)];
+    case "booking":
+      return [...wellnessKeywords.longTail.slice(0, 5), ...wellnessKeywords.local];
+    case "about":
+      return [...wellnessKeywords.industries, ...wellnessKeywords.primary.slice(0, 3)];
     default:
       return wellnessKeywords.primary;
   }
 };
 
 export const generateMetaKeywords = (pageType: string): string => {
-  return getKeywordsForPage(pageType).join(', ');
+  return getKeywordsForPage(pageType).join(", ");
 };

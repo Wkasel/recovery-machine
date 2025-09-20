@@ -1,11 +1,11 @@
-'use client';
+"use client";
 
-import { useState, useEffect } from 'react';
-import { Card, CardContent } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Star, ExternalLink, MessageSquare, ThumbsUp } from 'lucide-react';
-import Link from 'next/link';
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { ExternalLink, MessageSquare, Star, ThumbsUp } from "lucide-react";
+import Link from "next/link";
+import { useEffect, useState } from "react";
 
 interface GoogleReview {
   id: string;
@@ -31,50 +31,50 @@ interface GoogleReviewsWidgetProps {
 // Mock reviews for fallback
 const mockReviews: GoogleReview[] = [
   {
-    id: '1',
-    author_name: 'Sarah Chen',
+    id: "1",
+    author_name: "Sarah Chen",
     rating: 5,
-    relative_time_description: '2 weeks ago',
-    text: 'Incredible service! The mobile recovery setup was professional and the results were immediate. The cold plunge and sauna combo is a game-changer for my training recovery.',
+    relative_time_description: "2 weeks ago",
+    text: "Incredible service! The mobile recovery setup was professional and the results were immediate. The cold plunge and sauna combo is a game-changer for my training recovery.",
     time: Date.now() - 14 * 24 * 60 * 60 * 1000,
-    language: 'en'
+    language: "en",
   },
   {
-    id: '2',
-    author_name: 'Marcus Rodriguez',
+    id: "2",
+    author_name: "Marcus Rodriguez",
     rating: 5,
-    relative_time_description: '1 month ago',
-    text: 'Best investment for my fitness routine. Having professional recovery equipment delivered to my home saves time and the results speak for themselves. Highly recommend!',
+    relative_time_description: "1 month ago",
+    text: "Best investment for my fitness routine. Having professional recovery equipment delivered to my home saves time and the results speak for themselves. Highly recommend!",
     time: Date.now() - 30 * 24 * 60 * 60 * 1000,
-    language: 'en'
+    language: "en",
   },
   {
-    id: '3',
-    author_name: 'Dr. Emily Watson',
+    id: "3",
+    author_name: "Dr. Emily Watson",
     rating: 5,
-    relative_time_description: '3 weeks ago',
-    text: 'As a physical therapist, I can confidently say this service provides real therapeutic benefits. The contrast therapy protocols are scientifically sound and effective.',
+    relative_time_description: "3 weeks ago",
+    text: "As a physical therapist, I can confidently say this service provides real therapeutic benefits. The contrast therapy protocols are scientifically sound and effective.",
     time: Date.now() - 21 * 24 * 60 * 60 * 1000,
-    language: 'en'
+    language: "en",
   },
   {
-    id: '4',
-    author_name: 'Alex Thompson',
+    id: "4",
+    author_name: "Alex Thompson",
     rating: 5,
-    relative_time_description: '1 week ago',
-    text: 'Perfect for busy professionals. The convenience of having recovery therapy at home without compromising on quality is exactly what I needed.',
+    relative_time_description: "1 week ago",
+    text: "Perfect for busy professionals. The convenience of having recovery therapy at home without compromising on quality is exactly what I needed.",
     time: Date.now() - 7 * 24 * 60 * 60 * 1000,
-    language: 'en'
-  }
+    language: "en",
+  },
 ];
 
 export function GoogleReviewsWidget({
   placeId,
   apiKey,
   maxReviews = 4,
-  className = '',
+  className = "",
   showRating = true,
-  showPhotos = true
+  showPhotos = true,
 }: GoogleReviewsWidgetProps) {
   const [reviews, setReviews] = useState<GoogleReview[]>([]);
   const [loading, setLoading] = useState(true);
@@ -86,10 +86,10 @@ export function GoogleReviewsWidget({
     const fetchGoogleReviews = async () => {
       try {
         setLoading(true);
-        
+
         // Check if Google Places API is configured
         if (!placeId || !apiKey) {
-          console.log('Google Places API not configured, using mock data');
+          console.log("Google Places API not configured, using mock data");
           setReviews(mockReviews.slice(0, maxReviews));
           setLoading(false);
           return;
@@ -101,11 +101,11 @@ export function GoogleReviewsWidget({
         );
 
         if (!response.ok) {
-          throw new Error('Failed to fetch Google reviews');
+          throw new Error("Failed to fetch Google reviews");
         }
 
         const data = await response.json();
-        
+
         if (data.reviews) {
           setReviews(data.reviews);
           setAverageRating(data.rating || 4.8);
@@ -115,8 +115,8 @@ export function GoogleReviewsWidget({
           setReviews(mockReviews.slice(0, maxReviews));
         }
       } catch (err) {
-        console.error('Error fetching Google reviews:', err);
-        setError(err instanceof Error ? err.message : 'Failed to load reviews');
+        console.error("Error fetching Google reviews:", err);
+        setError(err instanceof Error ? err.message : "Failed to load reviews");
         setReviews(mockReviews.slice(0, maxReviews));
       } finally {
         setLoading(false);
@@ -130,16 +130,14 @@ export function GoogleReviewsWidget({
     return Array.from({ length: 5 }, (_, i) => (
       <Star
         key={i}
-        className={`h-4 w-4 ${
-          i < rating ? 'text-yellow-400 fill-current' : 'text-gray-300'
-        }`}
+        className={`h-4 w-4 ${i < rating ? "text-yellow-400 fill-current" : "text-gray-300"}`}
       />
     ));
   };
 
   const truncateText = (text: string, maxLength: number = 150) => {
     if (text.length <= maxLength) return text;
-    return text.substring(0, maxLength).trim() + '...';
+    return text.substring(0, maxLength).trim() + "...";
   };
 
   if (loading) {
@@ -171,21 +169,13 @@ export function GoogleReviewsWidget({
     <div className={className}>
       {/* Header */}
       <div className="text-center mb-8">
-        <h3 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-4">
-          What Our Clients Say
-        </h3>
-        
+        <h3 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-4">What Our Clients Say</h3>
+
         {showRating && (
           <div className="flex items-center justify-center gap-2 mb-4">
-            <div className="flex">
-              {renderStars(Math.round(averageRating))}
-            </div>
-            <span className="text-lg font-semibold text-gray-900">
-              {averageRating.toFixed(1)}
-            </span>
-            <span className="text-gray-600">
-              ({totalReviews} reviews)
-            </span>
+            <div className="flex">{renderStars(Math.round(averageRating))}</div>
+            <span className="text-lg font-semibold text-gray-900">{averageRating.toFixed(1)}</span>
+            <span className="text-gray-600">({totalReviews} reviews)</span>
           </div>
         )}
 
@@ -202,12 +192,8 @@ export function GoogleReviewsWidget({
             <CardContent className="p-6">
               {/* Rating */}
               <div className="flex items-center mb-3">
-                <div className="flex mr-2">
-                  {renderStars(review.rating)}
-                </div>
-                <span className="text-sm text-gray-600">
-                  {review.relative_time_description}
-                </span>
+                <div className="flex mr-2">{renderStars(review.rating)}</div>
+                <span className="text-sm text-gray-600">{review.relative_time_description}</span>
               </div>
 
               {/* Review Text */}
@@ -233,13 +219,11 @@ export function GoogleReviewsWidget({
                     </div>
                   )}
                   <div>
-                    <div className="font-semibold text-gray-900 text-sm">
-                      {review.author_name}
-                    </div>
+                    <div className="font-semibold text-gray-900 text-sm">{review.author_name}</div>
                     <div className="text-xs text-gray-600">Google User</div>
                   </div>
                 </div>
-                
+
                 <ThumbsUp className="h-4 w-4 text-green-600" />
               </div>
             </CardContent>
@@ -250,8 +234,8 @@ export function GoogleReviewsWidget({
       {/* Call to Action */}
       <div className="text-center">
         <Button asChild variant="outline" size="lg">
-          <Link 
-            href="https://search.google.com/local/writereview?placeid=YOUR_PLACE_ID" 
+          <Link
+            href="https://search.google.com/local/writereview?placeid=YOUR_PLACE_ID"
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center"
@@ -261,10 +245,8 @@ export function GoogleReviewsWidget({
             <ExternalLink className="h-4 w-4 ml-2" />
           </Link>
         </Button>
-        
-        <p className="text-sm text-gray-600 mt-2">
-          Share your recovery experience with others
-        </p>
+
+        <p className="text-sm text-gray-600 mt-2">Share your recovery experience with others</p>
       </div>
 
       {error && (
@@ -281,7 +263,7 @@ export function GoogleReviewsWidget({
 // Compact version for smaller spaces
 export function GoogleReviewsCompact({
   maxReviews = 2,
-  className = ''
+  className = "",
 }: {
   maxReviews?: number;
   className?: string;

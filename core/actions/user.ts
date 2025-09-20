@@ -17,21 +17,21 @@ export async function updateProfile(formData: FormData) {
   });
 
   const supabase = await createServerSupabaseClient();
-  
-  const { data: { user }, error: userError } = await supabase.auth.getUser();
-  
+
+  const {
+    data: { user },
+    error: userError,
+  } = await supabase.auth.getUser();
+
   if (userError || !user) {
     throw new Error("Not authenticated");
   }
 
-  const { error } = await supabase
-    .from("users")
-    .update(data)
-    .eq("id", user.id);
-  
+  const { error } = await supabase.from("profiles").update(data).eq("id", user.id);
+
   if (error) {
     throw new Error(error.message);
   }
-  
+
   return { success: true, message: "Profile updated successfully!" };
 }

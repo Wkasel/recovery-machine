@@ -1,14 +1,8 @@
 // Email Service - Resend Integration with Template Management
 // Comprehensive email system for Recovery Machine with automated workflows
 
-import { Resend } from 'resend';
-import type { 
-  Profile, 
-  Booking, 
-  Referral, 
-  Review,
-  ApiResponse 
-} from '@/lib/types/supabase';
+import type { ApiResponse, Booking, Profile, Referral, Review } from "@/lib/types/supabase";
+import { Resend } from "resend";
 
 // ===========================================================================
 // CONFIGURATION & TYPES
@@ -33,7 +27,7 @@ export interface EmailTemplate {
   html: string;
   text?: string;
   variables: string[];
-  category: 'transactional' | 'marketing' | 'notification';
+  category: "transactional" | "marketing" | "notification";
   active: boolean;
 }
 
@@ -65,11 +59,11 @@ interface EmailContext {
 const EMAIL_TEMPLATES = {
   // Welcome Series
   WELCOME_NEW_USER: {
-    id: 'welcome-new-user',
-    name: 'Welcome New User',
-    subject: 'Welcome to Recovery Machine! 🎉',
-    category: 'transactional' as const,
-    variables: ['firstName', 'referralCode'],
+    id: "welcome-new-user",
+    name: "Welcome New User",
+    subject: "Welcome to Recovery Machine! 🎉",
+    category: "transactional" as const,
+    variables: ["firstName", "referralCode"],
     html: `
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
         <h1 style="color: #1f2937;">Welcome to Recovery Machine, {{firstName}}!</h1>
@@ -89,16 +83,16 @@ const EMAIL_TEMPLATES = {
         
         <p>Best regards,<br>The Recovery Machine Team</p>
       </div>
-    `
+    `,
   },
 
   // Booking Confirmations
   BOOKING_CONFIRMATION: {
-    id: 'booking-confirmation',
-    name: 'Booking Confirmation',
-    subject: 'Your Recovery Session is Confirmed! 🗓️',
-    category: 'transactional' as const,
-    variables: ['firstName', 'bookingDate', 'bookingTime', 'address', 'duration', 'addOns'],
+    id: "booking-confirmation",
+    name: "Booking Confirmation",
+    subject: "Your Recovery Session is Confirmed! 🗓️",
+    category: "transactional" as const,
+    variables: ["firstName", "bookingDate", "bookingTime", "address", "duration", "addOns"],
     html: `
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
         <h1 style="color: #1f2937;">Session Confirmed, {{firstName}}!</h1>
@@ -130,16 +124,16 @@ const EMAIL_TEMPLATES = {
         
         <p>Best regards,<br>The Recovery Machine Team</p>
       </div>
-    `
+    `,
   },
 
   // Booking Reminders
   BOOKING_REMINDER_24H: {
-    id: 'booking-reminder-24h',
-    name: '24 Hour Booking Reminder',
-    subject: 'Your Recovery Session is Tomorrow! 🔔',
-    category: 'notification' as const,
-    variables: ['firstName', 'bookingDate', 'bookingTime', 'address'],
+    id: "booking-reminder-24h",
+    name: "24 Hour Booking Reminder",
+    subject: "Your Recovery Session is Tomorrow! 🔔",
+    category: "notification" as const,
+    variables: ["firstName", "bookingDate", "bookingTime", "address"],
     html: `
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
         <h1 style="color: #1f2937;">Tomorrow's Session Reminder</h1>
@@ -171,16 +165,16 @@ const EMAIL_TEMPLATES = {
         
         <p>See you tomorrow!<br>The Recovery Machine Team</p>
       </div>
-    `
+    `,
   },
 
   // Referral Invitations
   REFERRAL_INVITATION: {
-    id: 'referral-invitation',
-    name: 'Referral Invitation',
-    subject: '{{referrerName}} wants to share Recovery Machine with you! 💪',
-    category: 'marketing' as const,
-    variables: ['referrerName', 'referrerCode', 'inviteeEmail'],
+    id: "referral-invitation",
+    name: "Referral Invitation",
+    subject: "{{referrerName}} wants to share Recovery Machine with you! 💪",
+    category: "marketing" as const,
+    variables: ["referrerName", "referrerCode", "inviteeEmail"],
     html: `
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
         <h1 style="color: #1f2937;">{{referrerName}} thinks you'd love Recovery Machine!</h1>
@@ -219,16 +213,16 @@ const EMAIL_TEMPLATES = {
         <hr style="margin: 30px 0; border: none; border-top: 1px solid #e5e7eb;">
         <p style="font-size: 12px; color: #6b7280;">This invitation was sent to {{inviteeEmail}} by {{referrerName}}. If you don't want to receive these emails, you can <a href="{{unsubscribeUrl}}">unsubscribe</a>.</p>
       </div>
-    `
+    `,
   },
 
   // Review Requests
   REVIEW_REQUEST: {
-    id: 'review-request',
-    name: 'Review Request',
-    subject: 'How was your Recovery Machine session? ⭐',
-    category: 'notification' as const,
-    variables: ['firstName', 'bookingDate', 'therapistName'],
+    id: "review-request",
+    name: "Review Request",
+    subject: "How was your Recovery Machine session? ⭐",
+    category: "notification" as const,
+    variables: ["firstName", "bookingDate", "therapistName"],
     html: `
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
         <h1 style="color: #1f2937;">How was your session, {{firstName}}?</h1>
@@ -254,16 +248,16 @@ const EMAIL_TEMPLATES = {
         
         <p>Best regards,<br>The Recovery Machine Team</p>
       </div>
-    `
+    `,
   },
 
   // Newsletter Template
   NEWSLETTER: {
-    id: 'newsletter',
-    name: 'Newsletter',
-    subject: 'Recovery Tips & Updates from Recovery Machine 📰',
-    category: 'marketing' as const,
-    variables: ['firstName', 'content', 'featuredTip'],
+    id: "newsletter",
+    name: "Newsletter",
+    subject: "Recovery Tips & Updates from Recovery Machine 📰",
+    category: "marketing" as const,
+    variables: ["firstName", "content", "featuredTip"],
     html: `
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
         <h1 style="color: #1f2937;">Recovery Machine Newsletter</h1>
@@ -292,8 +286,8 @@ const EMAIL_TEMPLATES = {
         <hr style="margin: 30px 0; border: none; border-top: 1px solid #e5e7eb;">
         <p style="font-size: 12px; color: #6b7280;">You're receiving this because you subscribed to Recovery Machine updates. <a href="{{unsubscribeUrl}}">Unsubscribe</a> | <a href="{{preferencesUrl}}">Update Preferences</a></p>
       </div>
-    `
-  }
+    `,
+  },
 };
 
 // ===========================================================================
@@ -328,44 +322,44 @@ export async function sendEmail(
       ...context.referral,
       ...context.review,
       ...context.customData,
-      siteUrl: process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000',
+      siteUrl: process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000",
       unsubscribeUrl: `${process.env.NEXT_PUBLIC_APP_URL}/unsubscribe`,
-      preferencesUrl: `${process.env.NEXT_PUBLIC_APP_URL}/preferences`
+      preferencesUrl: `${process.env.NEXT_PUBLIC_APP_URL}/preferences`,
     };
 
     // Simple template replacement (in production, use a proper template engine)
     Object.entries(variables).forEach(([key, value]) => {
-      const regex = new RegExp(`{{${key}}}`, 'g');
-      subject = subject.replace(regex, String(value || ''));
-      html = html.replace(regex, String(value || ''));
+      const regex = new RegExp(`{{${key}}}`, "g");
+      subject = subject.replace(regex, String(value || ""));
+      html = html.replace(regex, String(value || ""));
     });
 
     const emailData = {
-      from: options?.from || process.env.FROM_EMAIL || 'noreply@recoverymachine.com',
+      from: options?.from || process.env.FROM_EMAIL || "noreply@recoverymachine.com",
       to: Array.isArray(to) ? to : [to],
       subject,
       html,
       replyTo: options?.replyTo,
       tags: options?.tags || [template.category, templateId],
-      headers: options?.headers
+      headers: options?.headers,
     };
 
     const result = await resend.emails.send(emailData);
 
     // Log email send for analytics
-    await logEmailSent(templateId, to, result.data?.id || '');
+    await logEmailSent(templateId, to, result.data?.id || "");
 
     return {
-      data: { id: result.data?.id || '' },
+      data: { id: result.data?.id || "" },
       error: null,
-      success: true
+      success: true,
     };
   } catch (error) {
-    console.error('Error sending email:', error);
+    console.error("Error sending email:", error);
     return {
       data: null,
-      error: error instanceof Error ? error.message : 'Failed to send email',
-      success: false
+      error: error instanceof Error ? error.message : "Failed to send email",
+      success: false,
     };
   }
 }
@@ -377,15 +371,15 @@ export async function sendEmail(
 export async function sendWelcomeEmail(profile: Profile): Promise<ApiResponse<{ id: string }>> {
   return sendEmail(
     profile.email,
-    'WELCOME_NEW_USER',
+    "WELCOME_NEW_USER",
     {
       user: {
         firstName: extractFirstName(profile.email),
-        referralCode: profile.referral_code
-      }
+        referralCode: profile.referral_code,
+      },
     },
     {
-      tags: ['welcome', 'onboarding']
+      tags: ["welcome", "onboarding"],
     }
   );
 }
@@ -394,35 +388,37 @@ export async function sendBookingConfirmation(
   booking: Booking,
   profile: Profile
 ): Promise<ApiResponse<{ id: string }>> {
-  const addOnsText = booking.add_ons && typeof booking.add_ons === 'object' 
-    ? Object.entries(booking.add_ons)
-        .filter(([, value]) => value)
-        .map(([key]) => key.replace('_', ' '))
-        .join(', ')
-    : '';
+  const addOnsText =
+    booking.add_ons && typeof booking.add_ons === "object"
+      ? Object.entries(booking.add_ons)
+          .filter(([, value]) => value)
+          .map(([key]) => key.replace("_", " "))
+          .join(", ")
+      : "";
 
   return sendEmail(
     profile.email,
-    'BOOKING_CONFIRMATION',
+    "BOOKING_CONFIRMATION",
     {
       user: {
-        firstName: extractFirstName(profile.email)
+        firstName: extractFirstName(profile.email),
       },
       booking: {
         bookingDate: new Date(booking.date_time).toLocaleDateString(),
         bookingTime: new Date(booking.date_time).toLocaleTimeString(),
         duration: booking.duration,
-        address: typeof booking.location_address === 'object' 
-          ? JSON.stringify(booking.location_address) 
-          : booking.location_address,
-        addOns: addOnsText
+        address:
+          typeof booking.location_address === "object"
+            ? JSON.stringify(booking.location_address)
+            : booking.location_address,
+        addOns: addOnsText,
       },
       customData: {
-        bookingId: booking.id
-      }
+        bookingId: booking.id,
+      },
     },
     {
-      tags: ['booking', 'confirmation']
+      tags: ["booking", "confirmation"],
     }
   );
 }
@@ -432,25 +428,26 @@ export async function sendBookingReminder(
   profile: Profile,
   hoursBeforeBooking: number = 24
 ): Promise<ApiResponse<{ id: string }>> {
-  const templateId = hoursBeforeBooking === 24 ? 'BOOKING_REMINDER_24H' : 'BOOKING_REMINDER_24H';
-  
+  const templateId = hoursBeforeBooking === 24 ? "BOOKING_REMINDER_24H" : "BOOKING_REMINDER_24H";
+
   return sendEmail(
     profile.email,
     templateId,
     {
       user: {
-        firstName: extractFirstName(profile.email)
+        firstName: extractFirstName(profile.email),
       },
       booking: {
         bookingDate: new Date(booking.date_time).toLocaleDateString(),
         bookingTime: new Date(booking.date_time).toLocaleTimeString(),
-        address: typeof booking.location_address === 'object' 
-          ? JSON.stringify(booking.location_address) 
-          : booking.location_address
-      }
+        address:
+          typeof booking.location_address === "object"
+            ? JSON.stringify(booking.location_address)
+            : booking.location_address,
+      },
     },
     {
-      tags: ['booking', 'reminder', `${hoursBeforeBooking}h`]
+      tags: ["booking", "reminder", `${hoursBeforeBooking}h`],
     }
   );
 }
@@ -461,16 +458,16 @@ export async function sendReferralInvitation(
 ): Promise<ApiResponse<{ id: string }>> {
   return sendEmail(
     referral.invitee_email,
-    'REFERRAL_INVITATION',
+    "REFERRAL_INVITATION",
     {
       referral: {
         referrerName: extractFirstName(referrerProfile.email),
         referrerCode: referrerProfile.referral_code,
-        inviteeEmail: referral.invitee_email
-      }
+        inviteeEmail: referral.invitee_email,
+      },
     },
     {
-      tags: ['referral', 'invitation']
+      tags: ["referral", "invitation"],
     }
   );
 }
@@ -482,21 +479,21 @@ export async function sendReviewRequest(
 ): Promise<ApiResponse<{ id: string }>> {
   return sendEmail(
     profile.email,
-    'REVIEW_REQUEST',
+    "REVIEW_REQUEST",
     {
       user: {
-        firstName: extractFirstName(profile.email)
+        firstName: extractFirstName(profile.email),
       },
       booking: {
         bookingDate: new Date(booking.date_time).toLocaleDateString(),
-        therapistName
+        therapistName,
       },
       customData: {
-        bookingId: booking.id
-      }
+        bookingId: booking.id,
+      },
     },
     {
-      tags: ['review', 'request']
+      tags: ["review", "request"],
     }
   );
 }
@@ -508,34 +505,34 @@ export async function sendNewsletter(
   subject?: string
 ): Promise<ApiResponse<{ ids: string[] }>> {
   const results = await Promise.all(
-    emails.map(email =>
+    emails.map(async (email) =>
       sendEmail(
         email,
-        'NEWSLETTER',
+        "NEWSLETTER",
         {
           user: {
-            firstName: extractFirstName(email)
+            firstName: extractFirstName(email),
           },
           customData: {
             content,
-            featuredTip
-          }
+            featuredTip,
+          },
         },
         {
-          tags: ['newsletter', 'marketing']
+          tags: ["newsletter", "marketing"],
         }
       )
     )
   );
 
   const successfulIds = results
-    .filter(result => result.success)
-    .map(result => result.data?.id || '');
+    .filter((result) => result.success)
+    .map((result) => result.data?.id || "");
 
   return {
     data: { ids: successfulIds },
     error: null,
-    success: successfulIds.length > 0
+    success: successfulIds.length > 0,
   };
 }
 
@@ -550,14 +547,14 @@ export async function logEmailSent(
 ): Promise<void> {
   try {
     // In a real implementation, you'd log this to your database
-    console.log('Email sent:', {
+    console.log("Email sent:", {
       templateId,
       recipients: Array.isArray(recipients) ? recipients : [recipients],
       emailId,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     });
   } catch (error) {
-    console.error('Error logging email send:', error);
+    console.error("Error logging email send:", error);
   }
 }
 
@@ -570,7 +567,7 @@ export async function getEmailAnalytics(
     // This is a mock response
     const mockAnalytics: EmailAnalytics[] = [
       {
-        template_id: 'WELCOME_NEW_USER',
+        template_id: "WELCOME_NEW_USER",
         sent_count: 150,
         delivered_count: 148,
         opened_count: 95,
@@ -579,23 +576,23 @@ export async function getEmailAnalytics(
         unsubscribed_count: 1,
         delivery_rate: 98.7,
         open_rate: 64.2,
-        click_rate: 12.6
-      }
+        click_rate: 12.6,
+      },
     ];
 
     return {
-      data: mockAnalytics.filter(analytics => 
-        !templateId || analytics.template_id === templateId
+      data: mockAnalytics.filter(
+        (analytics) => !templateId || analytics.template_id === templateId
       ),
       error: null,
-      success: true
+      success: true,
     };
   } catch (error) {
-    console.error('Error fetching email analytics:', error);
+    console.error("Error fetching email analytics:", error);
     return {
       data: null,
-      error: error instanceof Error ? error.message : 'Failed to fetch analytics',
-      success: false
+      error: error instanceof Error ? error.message : "Failed to fetch analytics",
+      success: false,
     };
   }
 }
@@ -605,40 +602,40 @@ export async function getEmailAnalytics(
 // ===========================================================================
 
 function extractFirstName(email: string): string {
-  const localPart = email.split('@')[0];
-  return localPart.split('.')[0].charAt(0).toUpperCase() + localPart.split('.')[0].slice(1);
+  const localPart = email.split("@")[0];
+  return localPart.split(".")[0].charAt(0).toUpperCase() + localPart.split(".")[0].slice(1);
 }
 
 export function validateEmailTemplate(template: Partial<EmailTemplate>): string[] {
   const errors: string[] = [];
-  
-  if (!template.name) errors.push('Template name is required');
-  if (!template.subject) errors.push('Template subject is required');
-  if (!template.html) errors.push('Template HTML is required');
-  if (!template.category) errors.push('Template category is required');
-  
+
+  if (!template.name) errors.push("Template name is required");
+  if (!template.subject) errors.push("Template subject is required");
+  if (!template.html) errors.push("Template HTML is required");
+  if (!template.category) errors.push("Template category is required");
+
   return errors;
 }
 
 export async function testEmailDelivery(
   email: string,
-  templateId: keyof typeof EMAIL_TEMPLATES = 'WELCOME_NEW_USER'
+  templateId: keyof typeof EMAIL_TEMPLATES = "WELCOME_NEW_USER"
 ): Promise<ApiResponse<{ id: string }>> {
   return sendEmail(
     email,
     templateId,
     {
       user: {
-        firstName: 'Test',
-        referralCode: 'TEST123'
+        firstName: "Test",
+        referralCode: "TEST123",
       },
       customData: {
         bookingDate: new Date().toLocaleDateString(),
-        bookingTime: new Date().toLocaleTimeString()
-      }
+        bookingTime: new Date().toLocaleTimeString(),
+      },
     },
     {
-      tags: ['test', 'delivery-test']
+      tags: ["test", "delivery-test"],
     }
   );
 }

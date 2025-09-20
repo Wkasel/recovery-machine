@@ -1,6 +1,6 @@
-import '@testing-library/jest-dom';
-import 'jest-axe/extend-expect';
-import { TextEncoder, TextDecoder } from 'util';
+import "@testing-library/jest-dom";
+import "jest-axe/extend-expect";
+import { TextDecoder, TextEncoder } from "util";
 
 // Polyfills for jsdom
 global.TextEncoder = TextEncoder;
@@ -23,9 +23,9 @@ global.ResizeObserver = class ResizeObserver {
 };
 
 // Mock matchMedia
-Object.defineProperty(window, 'matchMedia', {
+Object.defineProperty(window, "matchMedia", {
   writable: true,
-  value: jest.fn().mockImplementation(query => ({
+  value: jest.fn().mockImplementation((query) => ({
     matches: false,
     media: query,
     onchange: null,
@@ -38,15 +38,15 @@ Object.defineProperty(window, 'matchMedia', {
 });
 
 // Mock window.scrollTo
-Object.defineProperty(window, 'scrollTo', {
+Object.defineProperty(window, "scrollTo", {
   writable: true,
   value: jest.fn(),
 });
 
 // Mock crypto.randomUUID
-Object.defineProperty(global, 'crypto', {
+Object.defineProperty(global, "crypto", {
   value: {
-    randomUUID: jest.fn(() => 'mock-uuid'),
+    randomUUID: jest.fn(() => "mock-uuid"),
     getRandomValues: jest.fn((arr) => {
       for (let i = 0; i < arr.length; i++) {
         arr[i] = Math.floor(Math.random() * 256);
@@ -57,7 +57,7 @@ Object.defineProperty(global, 'crypto', {
 });
 
 // Mock Next.js router
-jest.mock('next/navigation', () => ({
+jest.mock("next/navigation", () => ({
   useRouter: () => ({
     push: jest.fn(),
     replace: jest.fn(),
@@ -72,11 +72,11 @@ jest.mock('next/navigation', () => ({
     has: jest.fn(),
     toString: jest.fn(),
   }),
-  usePathname: () => '/',
+  usePathname: () => "/",
 }));
 
 // Mock Supabase client
-jest.mock('@/lib/supabase', () => ({
+jest.mock("@/lib/supabase", () => ({
   createClient: jest.fn(() => ({
     auth: {
       getUser: jest.fn(),
@@ -96,17 +96,17 @@ jest.mock('@/lib/supabase', () => ({
 }));
 
 // Mock environment variables
-process.env.NEXT_PUBLIC_SUPABASE_URL = 'https://test.supabase.co';
-process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY = 'test-anon-key';
-process.env.NEXT_PUBLIC_BOLT_PUBLISHABLE_KEY = 'test-bolt-key';
+process.env.NEXT_PUBLIC_SUPABASE_URL = "https://test.supabase.co";
+process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY = "test-anon-key";
+process.env.NEXT_PUBLIC_BOLT_PUBLISHABLE_KEY = "test-bolt-key";
 
 // Silence console errors in tests unless they're expected
 const originalError = console.error;
 beforeAll(() => {
   console.error = (...args: any[]) => {
     if (
-      typeof args[0] === 'string' &&
-      args[0].includes('Warning: ReactDOM.render is no longer supported')
+      typeof args[0] === "string" &&
+      args[0].includes("Warning: ReactDOM.render is no longer supported")
     ) {
       return;
     }
@@ -135,7 +135,7 @@ declare global {
 // Add custom Jest matchers
 expect.extend({
   toBeAccessible: async function (received: HTMLElement) {
-    const { axe, toHaveNoViolations } = await import('jest-axe');
+    const { axe, toHaveNoViolations } = await import("jest-axe");
     const results = await axe(received);
     return toHaveNoViolations.call(this, results);
   },

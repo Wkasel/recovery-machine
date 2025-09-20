@@ -1,37 +1,39 @@
-'use client'
+"use client";
 
-import { useState, useEffect, useRef } from 'react'
-import FullCalendar from '@fullcalendar/react'
-import dayGridPlugin from '@fullcalendar/daygrid'
-import timeGridPlugin from '@fullcalendar/timegrid'
-import interactionPlugin from '@fullcalendar/interaction'
-import { BookingService } from '@/lib/services/booking-service'
-import { AvailabilitySlot, ServiceType, services } from '@/lib/types/booking'
-import { cn } from '@/lib/utils'
-import { Calendar, Clock, Users, Plus, Minus, AlertCircle } from 'lucide-react'
-import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Badge } from '@/components/ui/badge'
-import { Alert, AlertDescription } from '@/components/ui/alert'
-import { Label } from '@/components/ui/label'
-import { Textarea } from '@/components/ui/textarea'
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { BookingService } from "@/lib/services/booking-service";
+import { AvailabilitySlot, ServiceType, services } from "@/lib/types/booking";
+import { cn } from "@/lib/utils";
+import dayGridPlugin from "@fullcalendar/daygrid";
+import interactionPlugin from "@fullcalendar/interaction";
+import FullCalendar from "@fullcalendar/react";
+import timeGridPlugin from "@fullcalendar/timegrid";
+import { AlertCircle, Calendar, Clock, Minus, Plus } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
 
 interface BookingCalendarProps {
-  serviceType: ServiceType
-  selectedDateTime?: string
-  onDateTimeSelect: (dateTime: string) => void
-  onAddOnsChange: (addOns: { extraVisits: number; familyMembers: number; extendedTime: number }) => void
-  onSpecialInstructionsChange: (instructions: string) => void
-  addOns?: { extraVisits: number; familyMembers: number; extendedTime: number }
-  specialInstructions?: string
-  onNext: () => void
-  onBack: () => void
+  serviceType: ServiceType;
+  selectedDateTime?: string;
+  onDateTimeSelect: (dateTime: string) => void;
+  onAddOnsChange: (addOns: {
+    extraVisits: number;
+    familyMembers: number;
+    extendedTime: number;
+  }) => void;
+  onSpecialInstructionsChange: (instructions: string) => void;
+  addOns?: { extraVisits: number; familyMembers: number; extendedTime: number };
+  specialInstructions?: string;
+  onNext: () => void;
+  onBack: () => void;
 }
 
 interface TimeSlot {
-  time: string
-  available: boolean
-  selected: boolean
+  time: string;
+  available: boolean;
+  selected: boolean;
 }
 
 export function BookingCalendar({
@@ -41,129 +43,127 @@ export function BookingCalendar({
   onAddOnsChange,
   onSpecialInstructionsChange,
   addOns = { extraVisits: 0, familyMembers: 0, extendedTime: 0 },
-  specialInstructions = '',
+  specialInstructions = "",
   onNext,
-  onBack
+  onBack,
 }: BookingCalendarProps) {
-  const [selectedDate, setSelectedDate] = useState<string>('')
-  const [selectedTime, setSelectedTime] = useState<string>('')
-  const [availableSlots, setAvailableSlots] = useState<AvailabilitySlot[]>([])
-  const [isLoading, setIsLoading] = useState(false)
-  const [calendarView, setCalendarView] = useState<'month' | 'week'>('month')
-  const calendarRef = useRef<FullCalendar>(null)
+  const [selectedDate, setSelectedDate] = useState<string>("");
+  const [selectedTime, setSelectedTime] = useState<string>("");
+  const [availableSlots, setAvailableSlots] = useState<AvailabilitySlot[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [calendarView, setCalendarView] = useState<"month" | "week">("month");
+  const calendarRef = useRef<FullCalendar>(null);
 
-  const selectedService = services.find(s => s.id === serviceType)
-  const sessionDuration = selectedService?.duration || 30
+  const selectedService = services.find((s) => s.id === serviceType);
+  const sessionDuration = selectedService?.duration || 30;
 
   // Parse existing selection
   useEffect(() => {
     if (selectedDateTime) {
-      const date = new Date(selectedDateTime)
-      setSelectedDate(date.toISOString().split('T')[0])
-      setSelectedTime(date.toTimeString().slice(0, 5))
+      const date = new Date(selectedDateTime);
+      setSelectedDate(date.toISOString().split("T")[0]);
+      setSelectedTime(date.toTimeString().slice(0, 5));
     }
-  }, [selectedDateTime])
+  }, [selectedDateTime]);
 
   // Load available slots when date changes
   useEffect(() => {
     if (selectedDate) {
-      loadAvailableSlots(selectedDate)
+      loadAvailableSlots(selectedDate);
     }
-  }, [selectedDate])
+  }, [selectedDate]);
 
   const loadAvailableSlots = async (date: string) => {
-    setIsLoading(true)
+    setIsLoading(true);
     try {
-      const slots = await BookingService.getAvailableSlots(date)
-      setAvailableSlots(slots)
+      const slots = await BookingService.getAvailableSlots(date);
+      setAvailableSlots(slots);
     } catch (error) {
-      console.error('Error loading slots:', error)
-      setAvailableSlots([])
+      console.error("Error loading slots:", error);
+      setAvailableSlots([]);
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
-  }
+  };
 
   const handleDateSelect = (selectInfo: any) => {
-    const selectedDateStr = selectInfo.startStr.split('T')[0]
-    setSelectedDate(selectedDateStr)
-    setSelectedTime('')
-  }
+    const selectedDateStr = selectInfo.startStr.split("T")[0];
+    setSelectedDate(selectedDateStr);
+    setSelectedTime("");
+  };
 
   const handleTimeSelect = (time: string) => {
-    setSelectedTime(time)
-    const dateTime = `${selectedDate}T${time}:00`
-    onDateTimeSelect(dateTime)
-  }
+    setSelectedTime(time);
+    const dateTime = `${selectedDate}T${time}:00`;
+    onDateTimeSelect(dateTime);
+  };
 
   const generateTimeSlots = (): TimeSlot[] => {
-    if (!selectedDate) return []
+    if (!selectedDate) return [];
 
-    const slots: TimeSlot[] = []
-    const date = new Date(selectedDate)
-    const today = new Date()
-    const isToday = date.toDateString() === today.toDateString()
-    const currentHour = today.getHours()
+    const slots: TimeSlot[] = [];
+    const date = new Date(selectedDate);
+    const today = new Date();
+    const isToday = date.toDateString() === today.toDateString();
+    const currentHour = today.getHours();
 
     // Generate slots from 8 AM to 8 PM
     for (let hour = 8; hour <= 20; hour++) {
       for (let minute = 0; minute < 60; minute += 30) {
-        const timeStr = `${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`
-        
+        const timeStr = `${hour.toString().padStart(2, "0")}:${minute.toString().padStart(2, "0")}`;
+
         // Skip past times for today
-        if (isToday && hour <= currentHour) continue
+        if (isToday && hour <= currentHour) continue;
 
         // Check if this time slot is available based on database slots
-        const isAvailable = availableSlots.some(slot => {
-          const slotStart = slot.start_time.slice(0, 5)
-          const slotEnd = slot.end_time.slice(0, 5)
-          return timeStr >= slotStart && timeStr < slotEnd
-        })
+        const isAvailable = availableSlots.some((slot) => {
+          const slotStart = slot.start_time.slice(0, 5);
+          const slotEnd = slot.end_time.slice(0, 5);
+          return timeStr >= slotStart && timeStr < slotEnd;
+        });
 
         slots.push({
           time: timeStr,
           available: isAvailable,
-          selected: timeStr === selectedTime
-        })
+          selected: timeStr === selectedTime,
+        });
       }
     }
 
-    return slots
-  }
+    return slots;
+  };
 
-  const timeSlots = generateTimeSlots()
+  const timeSlots = generateTimeSlots();
 
   const formatTime = (time: string) => {
-    const [hour, minute] = time.split(':').map(Number)
-    const period = hour >= 12 ? 'PM' : 'AM'
-    const displayHour = hour === 0 ? 12 : hour > 12 ? hour - 12 : hour
-    return `${displayHour}:${minute.toString().padStart(2, '0')} ${period}`
-  }
+    const [hour, minute] = time.split(":").map(Number);
+    const period = hour >= 12 ? "PM" : "AM";
+    const displayHour = hour === 0 ? 12 : hour > 12 ? hour - 12 : hour;
+    return `${displayHour}:${minute.toString().padStart(2, "0")} ${period}`;
+  };
 
   const calculateTotalDuration = () => {
-    return sessionDuration + addOns.extendedTime
-  }
+    return sessionDuration + addOns.extendedTime;
+  };
 
   const calculateAddOnCost = () => {
-    const familyMemberCost = addOns.familyMembers * 2500 // $25 per family member
-    const extendedTimeCost = addOns.extendedTime * 200 // $2 per minute
-    const extraVisitCost = addOns.extraVisits * (selectedService?.basePrice || 0) * 0.8 // 20% discount for extra visits
-    
-    return familyMemberCost + extendedTimeCost + extraVisitCost
-  }
+    const familyMemberCost = addOns.familyMembers * 2500; // $25 per family member
+    const extendedTimeCost = addOns.extendedTime * 200; // $2 per minute
+    const extraVisitCost = addOns.extraVisits * (selectedService?.basePrice || 0) * 0.8; // 20% discount for extra visits
+
+    return familyMemberCost + extendedTimeCost + extraVisitCost;
+  };
 
   const formatPrice = (priceInCents: number) => {
-    return `$${(priceInCents / 100).toFixed(2)}`
-  }
+    return `$${(priceInCents / 100).toFixed(2)}`;
+  };
 
-  const isNextEnabled = selectedDate && selectedTime
+  const isNextEnabled = selectedDate && selectedTime;
 
   return (
     <div className="space-y-6">
       <div className="text-center">
-        <h2 className="text-2xl font-bold text-gray-900 mb-2">
-          Choose Your Appointment Time
-        </h2>
+        <h2 className="text-2xl font-bold text-gray-900 mb-2">Choose Your Appointment Time</h2>
         <p className="text-gray-600">
           Select a date and time that works best for your {selectedService?.name} session
         </p>
@@ -181,16 +181,16 @@ export function BookingCalendar({
                 </CardTitle>
                 <div className="flex space-x-2">
                   <Button
-                    variant={calendarView === 'month' ? 'default' : 'outline'}
+                    variant={calendarView === "month" ? "default" : "outline"}
                     size="sm"
-                    onClick={() => setCalendarView('month')}
+                    onClick={() => setCalendarView("month")}
                   >
                     Month
                   </Button>
                   <Button
-                    variant={calendarView === 'week' ? 'default' : 'outline'}
+                    variant={calendarView === "week" ? "default" : "outline"}
                     size="sm"
-                    onClick={() => setCalendarView('week')}
+                    onClick={() => setCalendarView("week")}
                   >
                     Week
                   </Button>
@@ -201,11 +201,11 @@ export function BookingCalendar({
               <FullCalendar
                 ref={calendarRef}
                 plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
-                initialView={calendarView === 'month' ? 'dayGridMonth' : 'timeGridWeek'}
+                initialView={calendarView === "month" ? "dayGridMonth" : "timeGridWeek"}
                 headerToolbar={{
-                  left: 'prev,next today',
-                  center: 'title',
-                  right: ''
+                  left: "prev,next today",
+                  center: "title",
+                  right: "",
                 }}
                 selectable={true}
                 selectMirror={true}
@@ -213,23 +213,23 @@ export function BookingCalendar({
                 weekends={true}
                 select={handleDateSelect}
                 validRange={{
-                  start: new Date().toISOString().split('T')[0] // No past dates
+                  start: new Date().toISOString().split("T")[0], // No past dates
                 }}
                 height="auto"
                 selectConstraint={{
-                  start: '08:00',
-                  end: '20:00'
+                  start: "08:00",
+                  end: "20:00",
                 }}
                 businessHours={{
                   daysOfWeek: [1, 2, 3, 4, 5, 6, 0], // Monday - Sunday
-                  startTime: '08:00',
-                  endTime: '20:00'
+                  startTime: "08:00",
+                  endTime: "20:00",
                 }}
                 dayCellClassNames={(arg) => {
                   if (arg.dateStr === selectedDate) {
-                    return 'bg-blue-50 border-blue-300'
+                    return "bg-blue-50 border-blue-300";
                   }
-                  return ''
+                  return "";
                 }}
               />
             </CardContent>
@@ -244,11 +244,11 @@ export function BookingCalendar({
                   <span>Available Times</span>
                 </CardTitle>
                 <CardDescription>
-                  {new Date(selectedDate).toLocaleDateString('en-US', { 
-                    weekday: 'long', 
-                    year: 'numeric', 
-                    month: 'long', 
-                    day: 'numeric' 
+                  {new Date(selectedDate).toLocaleDateString("en-US", {
+                    weekday: "long",
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric",
                   })}
                 </CardDescription>
               </CardHeader>
@@ -263,14 +263,14 @@ export function BookingCalendar({
                     {timeSlots.map((slot) => (
                       <Button
                         key={slot.time}
-                        variant={slot.selected ? 'default' : 'outline'}
+                        variant={slot.selected ? "default" : "outline"}
                         size="sm"
                         disabled={!slot.available}
                         onClick={() => handleTimeSelect(slot.time)}
                         className={cn(
-                          'h-12',
-                          slot.selected && 'ring-2 ring-blue-500',
-                          !slot.available && 'opacity-50 cursor-not-allowed'
+                          "h-12",
+                          slot.selected && "ring-2 ring-blue-500",
+                          !slot.available && "opacity-50 cursor-not-allowed"
                         )}
                       >
                         {formatTime(slot.time)}
@@ -299,20 +299,19 @@ export function BookingCalendar({
             <CardContent className="space-y-4">
               <div>
                 <p className="font-medium">{selectedService?.name}</p>
-                <p className="text-sm text-gray-600">
-                  {calculateTotalDuration()} minutes
-                </p>
+                <p className="text-sm text-gray-600">{calculateTotalDuration()} minutes</p>
               </div>
 
               {selectedDate && selectedTime && (
                 <div>
                   <p className="text-sm text-gray-600">Date & Time</p>
                   <p className="font-medium">
-                    {new Date(`${selectedDate}T${selectedTime}`).toLocaleDateString('en-US', {
-                      weekday: 'short',
-                      month: 'short',
-                      day: 'numeric'
-                    })} at {formatTime(selectedTime)}
+                    {new Date(`${selectedDate}T${selectedTime}`).toLocaleDateString("en-US", {
+                      weekday: "short",
+                      month: "short",
+                      day: "numeric",
+                    })}{" "}
+                    at {formatTime(selectedTime)}
                   </p>
                 </div>
               )}
@@ -330,7 +329,9 @@ export function BookingCalendar({
                 )}
                 <div className="flex justify-between font-semibold border-t pt-2 mt-2">
                   <span>Total:</span>
-                  <span>{formatPrice((selectedService?.basePrice || 0) + calculateAddOnCost())}</span>
+                  <span>
+                    {formatPrice((selectedService?.basePrice || 0) + calculateAddOnCost())}
+                  </span>
                 </div>
               </div>
             </CardContent>
@@ -343,9 +344,7 @@ export function BookingCalendar({
                 <Plus className="w-5 h-5" />
                 <span>Add-ons</span>
               </CardTitle>
-              <CardDescription>
-                Customize your experience
-              </CardDescription>
+              <CardDescription>Customize your experience</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               {/* Family members */}
@@ -359,10 +358,12 @@ export function BookingCalendar({
                     <Button
                       variant="outline"
                       size="sm"
-                      onClick={() => onAddOnsChange({
-                        ...addOns,
-                        familyMembers: Math.max(0, addOns.familyMembers - 1)
-                      })}
+                      onClick={() =>
+                        onAddOnsChange({
+                          ...addOns,
+                          familyMembers: Math.max(0, addOns.familyMembers - 1),
+                        })
+                      }
                       disabled={addOns.familyMembers === 0}
                     >
                       <Minus className="w-4 h-4" />
@@ -371,10 +372,12 @@ export function BookingCalendar({
                     <Button
                       variant="outline"
                       size="sm"
-                      onClick={() => onAddOnsChange({
-                        ...addOns,
-                        familyMembers: Math.min(4, addOns.familyMembers + 1)
-                      })}
+                      onClick={() =>
+                        onAddOnsChange({
+                          ...addOns,
+                          familyMembers: Math.min(4, addOns.familyMembers + 1),
+                        })
+                      }
                       disabled={addOns.familyMembers === 4}
                     >
                       <Plus className="w-4 h-4" />
@@ -394,24 +397,26 @@ export function BookingCalendar({
                     <Button
                       variant="outline"
                       size="sm"
-                      onClick={() => onAddOnsChange({
-                        ...addOns,
-                        extendedTime: Math.max(0, addOns.extendedTime - 15)
-                      })}
+                      onClick={() =>
+                        onAddOnsChange({
+                          ...addOns,
+                          extendedTime: Math.max(0, addOns.extendedTime - 15),
+                        })
+                      }
                       disabled={addOns.extendedTime === 0}
                     >
                       <Minus className="w-4 h-4" />
                     </Button>
-                    <span className="w-12 text-center text-sm">
-                      +{addOns.extendedTime}min
-                    </span>
+                    <span className="w-12 text-center text-sm">+{addOns.extendedTime}min</span>
                     <Button
                       variant="outline"
                       size="sm"
-                      onClick={() => onAddOnsChange({
-                        ...addOns,
-                        extendedTime: Math.min(30, addOns.extendedTime + 15)
-                      })}
+                      onClick={() =>
+                        onAddOnsChange({
+                          ...addOns,
+                          extendedTime: Math.min(30, addOns.extendedTime + 15),
+                        })
+                      }
                       disabled={addOns.extendedTime === 30}
                     >
                       <Plus className="w-4 h-4" />
@@ -431,10 +436,12 @@ export function BookingCalendar({
                     <Button
                       variant="outline"
                       size="sm"
-                      onClick={() => onAddOnsChange({
-                        ...addOns,
-                        extraVisits: Math.max(0, addOns.extraVisits - 1)
-                      })}
+                      onClick={() =>
+                        onAddOnsChange({
+                          ...addOns,
+                          extraVisits: Math.max(0, addOns.extraVisits - 1),
+                        })
+                      }
                       disabled={addOns.extraVisits === 0}
                     >
                       <Minus className="w-4 h-4" />
@@ -443,10 +450,12 @@ export function BookingCalendar({
                     <Button
                       variant="outline"
                       size="sm"
-                      onClick={() => onAddOnsChange({
-                        ...addOns,
-                        extraVisits: Math.min(5, addOns.extraVisits + 1)
-                      })}
+                      onClick={() =>
+                        onAddOnsChange({
+                          ...addOns,
+                          extraVisits: Math.min(5, addOns.extraVisits + 1),
+                        })
+                      }
                       disabled={addOns.extraVisits === 5}
                     >
                       <Plus className="w-4 h-4" />
@@ -476,23 +485,14 @@ export function BookingCalendar({
 
       {/* Navigation buttons */}
       <div className="flex justify-between pt-6">
-        <Button
-          variant="outline"
-          onClick={onBack}
-          size="lg"
-        >
+        <Button variant="outline" onClick={onBack} size="lg">
           Back to Address
         </Button>
-        
-        <Button
-          onClick={onNext}
-          disabled={!isNextEnabled}
-          size="lg"
-          className="px-8"
-        >
+
+        <Button onClick={onNext} disabled={!isNextEnabled} size="lg" className="px-8">
           Continue to Payment
         </Button>
       </div>
     </div>
-  )
+  );
 }

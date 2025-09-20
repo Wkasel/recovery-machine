@@ -1,14 +1,21 @@
-import { Suspense } from 'react';
-import { redirect } from 'next/navigation';
-import { checkAdminAccess } from '@/utils/admin/auth';
-import { BusinessSettingsManager } from '@/components/admin/settings/BusinessSettingsManager';
-import { Skeleton } from '@/components/ui/skeleton';
+import { BusinessSettingsManager } from "@/components/admin/settings/BusinessSettingsManager";
+import { Skeleton } from "@/components/ui/skeleton";
+import { checkAdminAccess } from "@/utils/admin/auth";
+import { userServerQueries } from "@/core/queries/user";
+import { redirect } from "next/navigation";
+import { Suspense } from "react";
 
 export default async function AdminSettingsPage() {
-  const { isAdmin, admin } = await checkAdminAccess('super_admin');
+  const user = await userServerQueries.getCurrentUser();
+  
+  if (!user) {
+    redirect("/admin");
+  }
 
-  if (!isAdmin || admin?.role !== 'super_admin') {
-    redirect('/admin');
+  const adminResult = await checkAdminAccess(user.email);
+  
+  if (!adminResult || adminResult.role !== "super_admin") {
+    redirect("/admin");
   }
 
   return (

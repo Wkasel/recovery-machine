@@ -1,15 +1,17 @@
 import { z } from "zod";
 
 // Phone authentication schemas
-const phoneNumber = z.string()
+const phoneNumber = z
+  .string()
   .min(10, "Phone number must be at least 10 digits")
   .regex(/^\+?[\d\s\-\(\)]+$/, "Please enter a valid phone number");
 
-const otpToken = z.string()
+const otpToken = z
+  .string()
   .length(6, "Verification code must be 6 digits")
   .regex(/^\d{6}$/, "Verification code must contain only numbers");
 
-// Email authentication schemas  
+// Email authentication schemas
 const email = z.string().email("Please enter a valid email address");
 const password = z.string().min(8, "Password must be at least 8 characters");
 
@@ -23,21 +25,23 @@ export const clientAuthSchemas = {
       token: otpToken,
     }),
   },
-  
+
   // Email authentication
   email: {
     signIn: z.object({
       email,
       password: z.string().min(1, "Password is required"),
     }),
-    signUp: z.object({
-      email,
-      password,
-      confirmPassword: z.string(),
-    }).refine((data) => data.password === data.confirmPassword, {
-      message: "Passwords don't match",
-      path: ["confirmPassword"],
-    }),
+    signUp: z
+      .object({
+        email,
+        password,
+        confirmPassword: z.string(),
+      })
+      .refine((data) => data.password === data.confirmPassword, {
+        message: "Passwords don't match",
+        path: ["confirmPassword"],
+      }),
     magicLink: z.object({
       email,
     }),

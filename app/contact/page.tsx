@@ -1,27 +1,33 @@
-import Link from "next/link";
-import { Mail, Phone, MapPin, Clock } from "lucide-react";
+import { Clock, Mail, MapPin, Phone } from "lucide-react";
 import { Metadata } from "next";
+import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "Contact Recovery Machine - Mobile Wellness Services",
-  description: "Contact Recovery Machine for mobile cold plunge and infrared sauna services in Los Angeles. Professional recovery specialists available 7 days a week.",
-  keywords: "contact recovery machine, mobile wellness Los Angeles, cold plunge booking, infrared sauna appointment, recovery specialists",
+  description:
+    "Contact Recovery Machine for mobile cold plunge and infrared sauna services in Los Angeles. Professional recovery specialists available 7 days a week.",
+  keywords:
+    "contact recovery machine, mobile wellness Los Angeles, cold plunge booking, infrared sauna appointment, recovery specialists",
   openGraph: {
     title: "Contact Recovery Machine - Mobile Wellness Services",
-    description: "Get in touch with our recovery specialists. Mobile cold plunge and infrared sauna services in Greater Los Angeles Area.",
+    description:
+      "Get in touch with our recovery specialists. Mobile cold plunge and infrared sauna services in Greater Los Angeles Area.",
     type: "website",
-    images: [{
-      url: "/api/og?title=Contact%20Recovery%20Machine&description=Mobile%20Wellness%20Services",
-      width: 1200,
-      height: 630,
-      alt: "Contact Recovery Machine - Mobile Wellness Services"
-    }]
+    images: [
+      {
+        url: "/api/og?title=Contact%20Recovery%20Machine&description=Mobile%20Wellness%20Services",
+        width: 1200,
+        height: 630,
+        alt: "Contact Recovery Machine - Mobile Wellness Services",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
     title: "Contact Recovery Machine - Mobile Wellness Services",
-    description: "Get in touch with our recovery specialists. Mobile wellness services in Greater Los Angeles Area."
-  }
+    description:
+      "Get in touch with our recovery specialists. Mobile wellness services in Greater Los Angeles Area.",
+  },
 };
 
 export default function ContactPage() {
@@ -88,8 +94,8 @@ export default function ContactPage() {
               <p className="text-neutral-300 mb-4">
                 Ready to experience professional recovery at home? Book your first session today.
               </p>
-              <Link 
-                href="/book" 
+              <Link
+                href="/book"
                 className="inline-block bg-neutral-900 border border-neutral-800 text-white px-6 py-3 hover:bg-neutral-800 transition-colors"
               >
                 Book Session
@@ -111,23 +117,24 @@ export default function ContactPage() {
                 <div>
                   <h4 className="font-semibold mb-2">What's included in a session?</h4>
                   <p className="text-neutral-400 text-sm">
-                    Each 45-minute session includes cold plunge and infrared sauna with professional guidance, 
-                    setup, cleanup, and premium accessories.
+                    Each 45-minute session includes cold plunge and infrared sauna with professional
+                    guidance, setup, cleanup, and premium accessories.
                   </p>
                 </div>
 
                 <div>
                   <h4 className="font-semibold mb-2">Can I cancel my membership?</h4>
                   <p className="text-neutral-400 text-sm">
-                    Yes, you can cancel anytime with 30 days' notice. No long-term contracts required.
+                    Yes, you can cancel anytime with 30 days' notice. No long-term contracts
+                    required.
                   </p>
                 </div>
 
                 <div>
                   <h4 className="font-semibold mb-2">Is it safe?</h4>
                   <p className="text-neutral-400 text-sm">
-                    All sessions are supervised by certified recovery specialists. We screen for contraindications 
-                    and maintain comprehensive insurance coverage.
+                    All sessions are supervised by certified recovery specialists. We screen for
+                    contraindications and maintain comprehensive insurance coverage.
                   </p>
                 </div>
               </div>

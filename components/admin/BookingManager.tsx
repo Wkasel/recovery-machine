@@ -1,18 +1,8 @@
-'use client';
+"use client";
 
-import { useState, useEffect } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Badge } from '@/components/ui/badge';
-import { 
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@/components/ui/table';
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Dialog,
   DialogContent,
@@ -20,32 +10,38 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from '@/components/ui/dialog';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
-import { 
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { 
-  Search, 
-  Filter, 
-  Download, 
-  RefreshCw, 
-  Eye,
-  Edit,
-  Calendar,
-  Clock,
-  MapPin,
-  CheckCircle,
-  XCircle,
+} from "@/components/ui/select";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useToast } from "@/hooks/use-toast";
+import {
   AlertTriangle,
-} from 'lucide-react';
-import { useToast } from '@/hooks/use-toast';
+  Calendar,
+  CheckCircle,
+  Clock,
+  Download,
+  Eye,
+  RefreshCw,
+  Search,
+  XCircle,
+} from "lucide-react";
+import { useEffect, useState } from "react";
 
 interface Booking {
   id: string;
@@ -54,7 +50,7 @@ interface Booking {
   date_time: string;
   duration: number;
   add_ons: any;
-  status: 'scheduled' | 'confirmed' | 'in_progress' | 'completed' | 'cancelled' | 'no_show';
+  status: "scheduled" | "confirmed" | "in_progress" | "completed" | "cancelled" | "no_show";
   location_address: any;
   special_instructions?: string;
   created_at: string;
@@ -75,12 +71,12 @@ interface CalendarEvent {
 export function BookingManager() {
   const [bookings, setBookings] = useState<Booking[]>([]);
   const [loading, setLoading] = useState(true);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [statusFilter, setStatusFilter] = useState<string>('all');
+  const [searchTerm, setSearchTerm] = useState("");
+  const [statusFilter, setStatusFilter] = useState<string>("all");
   const [selectedBooking, setSelectedBooking] = useState<Booking | null>(null);
   const [editDialogOpen, setEditDialogOpen] = useState(false);
   const [calendarEvents, setCalendarEvents] = useState<CalendarEvent[]>([]);
-  const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split('T')[0]);
+  const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split("T")[0]);
   const { toast } = useToast();
 
   useEffect(() => {
@@ -96,18 +92,18 @@ export function BookingManager() {
   const loadBookings = async () => {
     try {
       setLoading(true);
-      const response = await fetch('/api/admin/bookings');
-      
+      const response = await fetch("/api/admin/bookings");
+
       if (response.ok) {
         const data = await response.json();
         setBookings(data.bookings || []);
       }
     } catch (error) {
-      console.error('Failed to load bookings:', error);
+      console.error("Failed to load bookings:", error);
       toast({
-        title: 'Error',
-        description: 'Failed to load bookings',
-        variant: 'destructive',
+        title: "Error",
+        description: "Failed to load bookings",
+        variant: "destructive",
       });
     } finally {
       setLoading(false);
@@ -116,28 +112,28 @@ export function BookingManager() {
 
   const generateCalendarEvents = () => {
     const events = bookings
-      .filter(booking => {
-        const bookingDate = new Date(booking.date_time).toISOString().split('T')[0];
+      .filter((booking) => {
+        const bookingDate = new Date(booking.date_time).toISOString().split("T")[0];
         return bookingDate === selectedDate;
       })
-      .map(booking => ({
+      .map((booking) => ({
         id: booking.id,
-        title: `${booking.user_email || 'Unknown'} - ${booking.status}`,
+        title: `${booking.user_email || "Unknown"} - ${booking.status}`,
         start: new Date(booking.date_time),
         end: new Date(new Date(booking.date_time).getTime() + booking.duration * 60000),
         status: booking.status,
-        user: booking.user_email || 'Unknown',
+        user: booking.user_email || "Unknown",
       }));
-    
+
     setCalendarEvents(events);
   };
 
   const updateBookingStatus = async (bookingId: string, newStatus: string, notes?: string) => {
     try {
       const response = await fetch(`/api/admin/bookings/${bookingId}`, {
-        method: 'PATCH',
+        method: "PATCH",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({
           status: newStatus,
@@ -146,85 +142,83 @@ export function BookingManager() {
       });
 
       if (!response.ok) {
-        throw new Error('Failed to update booking');
+        throw new Error("Failed to update booking");
       }
 
       toast({
-        title: 'Success',
-        description: 'Booking updated successfully',
+        title: "Success",
+        description: "Booking updated successfully",
       });
 
       loadBookings();
       setEditDialogOpen(false);
-
     } catch (error) {
-      console.error('Booking update error:', error);
+      console.error("Booking update error:", error);
       toast({
-        title: 'Error',
-        description: 'Failed to update booking',
-        variant: 'destructive',
+        title: "Error",
+        description: "Failed to update booking",
+        variant: "destructive",
       });
     }
   };
 
   const exportBookings = async () => {
     try {
-      const response = await fetch('/api/admin/bookings/export');
-      
+      const response = await fetch("/api/admin/bookings/export");
+
       if (!response.ok) {
-        throw new Error('Failed to export bookings');
+        throw new Error("Failed to export bookings");
       }
 
       const blob = await response.blob();
       const url = window.URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.style.display = 'none';
+      const a = document.createElement("a");
+      a.style.display = "none";
       a.href = url;
-      a.download = `bookings-export-${new Date().toISOString().split('T')[0]}.csv`;
+      a.download = `bookings-export-${new Date().toISOString().split("T")[0]}.csv`;
       document.body.appendChild(a);
       a.click();
       window.URL.revokeObjectURL(url);
 
       toast({
-        title: 'Success',
-        description: 'Bookings exported successfully',
+        title: "Success",
+        description: "Bookings exported successfully",
       });
-
     } catch (error) {
-      console.error('Export error:', error);
+      console.error("Export error:", error);
       toast({
-        title: 'Error',
-        description: 'Failed to export bookings',
-        variant: 'destructive',
+        title: "Error",
+        description: "Failed to export bookings",
+        variant: "destructive",
       });
     }
   };
 
   const formatDateTime = (dateString: string) => {
-    return new Date(dateString).toLocaleString('en-US', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit',
+    return new Date(dateString).toLocaleString("en-US", {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
     });
   };
 
   const formatTime = (dateString: string) => {
-    return new Date(dateString).toLocaleTimeString('en-US', {
-      hour: '2-digit',
-      minute: '2-digit',
+    return new Date(dateString).toLocaleTimeString("en-US", {
+      hour: "2-digit",
+      minute: "2-digit",
     });
   };
 
   const getStatusBadge = (status: string) => {
     const colors = {
-      scheduled: 'bg-yellow-100 text-yellow-800',
-      confirmed: 'bg-blue-100 text-blue-800',
-      in_progress: 'bg-purple-100 text-purple-800',
-      completed: 'bg-green-100 text-green-800',
-      cancelled: 'bg-red-100 text-red-800',
-      no_show: 'bg-gray-100 text-gray-800',
+      scheduled: "bg-yellow-100 text-yellow-800",
+      confirmed: "bg-blue-100 text-blue-800",
+      in_progress: "bg-purple-100 text-purple-800",
+      completed: "bg-green-100 text-green-800",
+      cancelled: "bg-red-100 text-red-800",
+      no_show: "bg-gray-100 text-gray-800",
     };
 
     const icons = {
@@ -237,19 +231,22 @@ export function BookingManager() {
     };
 
     return (
-      <Badge className={`${colors[status as keyof typeof colors] || colors.scheduled} flex items-center gap-1`}>
+      <Badge
+        className={`${colors[status as keyof typeof colors] || colors.scheduled} flex items-center gap-1`}
+      >
         {icons[status as keyof typeof icons]}
-        {status.replace('_', ' ')}
+        {status.replace("_", " ")}
       </Badge>
     );
   };
 
-  const filteredBookings = bookings.filter(booking => {
-    const matchesSearch = !searchTerm || 
+  const filteredBookings = bookings.filter((booking) => {
+    const matchesSearch =
+      !searchTerm ||
       booking.user_email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
       booking.id.toLowerCase().includes(searchTerm.toLowerCase());
-    
-    const matchesStatus = statusFilter === 'all' || booking.status === statusFilter;
+
+    const matchesStatus = statusFilter === "all" || booking.status === statusFilter;
 
     return matchesSearch && matchesStatus;
   });
@@ -319,7 +316,7 @@ export function BookingManager() {
                   <RefreshCw className="h-4 w-4 mr-2" />
                   Refresh
                 </Button>
-                
+
                 <Button onClick={exportBookings} variant="outline" size="sm">
                   <Download className="h-4 w-4 mr-2" />
                   Export
@@ -346,7 +343,7 @@ export function BookingManager() {
                 <div className="ml-4">
                   <p className="text-sm font-medium text-gray-500">Confirmed</p>
                   <p className="text-2xl font-bold">
-                    {bookings.filter(b => b.status === 'confirmed').length}
+                    {bookings.filter((b) => b.status === "confirmed").length}
                   </p>
                 </div>
               </div>
@@ -358,7 +355,7 @@ export function BookingManager() {
                 <div className="ml-4">
                   <p className="text-sm font-medium text-gray-500">Pending</p>
                   <p className="text-2xl font-bold">
-                    {bookings.filter(b => b.status === 'scheduled').length}
+                    {bookings.filter((b) => b.status === "scheduled").length}
                   </p>
                 </div>
               </div>
@@ -370,7 +367,7 @@ export function BookingManager() {
                 <div className="ml-4">
                   <p className="text-sm font-medium text-gray-500">Completed</p>
                   <p className="text-2xl font-bold">
-                    {bookings.filter(b => b.status === 'completed').length}
+                    {bookings.filter((b) => b.status === "completed").length}
                   </p>
                 </div>
               </div>
@@ -395,41 +392,31 @@ export function BookingManager() {
                   <TableRow key={booking.id}>
                     <TableCell>
                       <div>
-                        <div className="font-medium">
-                          {booking.user_email || 'Unknown'}
-                        </div>
+                        <div className="font-medium">{booking.user_email || "Unknown"}</div>
                         {booking.user_phone && (
-                          <div className="text-sm text-gray-500">
-                            {booking.user_phone}
-                          </div>
+                          <div className="text-sm text-gray-500">{booking.user_phone}</div>
                         )}
                       </div>
                     </TableCell>
-                    
+
                     <TableCell>
-                      <div className="text-sm">
-                        {formatDateTime(booking.date_time)}
-                      </div>
+                      <div className="text-sm">{formatDateTime(booking.date_time)}</div>
                     </TableCell>
-                    
+
                     <TableCell>
                       <span className="text-sm">{booking.duration} min</span>
                     </TableCell>
-                    
-                    <TableCell>
-                      {getStatusBadge(booking.status)}
-                    </TableCell>
-                    
+
+                    <TableCell>{getStatusBadge(booking.status)}</TableCell>
+
                     <TableCell>
                       <div className="text-sm">
-                        {booking.location_address?.city ? (
-                          `${booking.location_address.city}, ${booking.location_address.state}`
-                        ) : (
-                          'Not specified'
-                        )}
+                        {booking.location_address?.city
+                          ? `${booking.location_address.city}, ${booking.location_address.state}`
+                          : "Not specified"}
                       </div>
                     </TableCell>
-                    
+
                     <TableCell>
                       <div className="flex gap-2">
                         <Dialog>
@@ -449,7 +436,7 @@ export function BookingManager() {
                                 View and manage booking information
                               </DialogDescription>
                             </DialogHeader>
-                            
+
                             {selectedBooking && (
                               <div className="space-y-4">
                                 <div className="grid grid-cols-2 gap-4">
@@ -459,11 +446,13 @@ export function BookingManager() {
                                   </div>
                                   <div>
                                     <Label className="text-sm font-medium">Phone</Label>
-                                    <p className="text-sm">{selectedBooking.user_phone || 'N/A'}</p>
+                                    <p className="text-sm">{selectedBooking.user_phone || "N/A"}</p>
                                   </div>
                                   <div>
                                     <Label className="text-sm font-medium">Date & Time</Label>
-                                    <p className="text-sm">{formatDateTime(selectedBooking.date_time)}</p>
+                                    <p className="text-sm">
+                                      {formatDateTime(selectedBooking.date_time)}
+                                    </p>
                                   </div>
                                   <div>
                                     <Label className="text-sm font-medium">Duration</Label>
@@ -471,19 +460,20 @@ export function BookingManager() {
                                   </div>
                                   <div>
                                     <Label className="text-sm font-medium">Status</Label>
-                                    <div className="mt-1">{getStatusBadge(selectedBooking.status)}</div>
+                                    <div className="mt-1">
+                                      {getStatusBadge(selectedBooking.status)}
+                                    </div>
                                   </div>
                                   <div>
                                     <Label className="text-sm font-medium">Add-ons</Label>
                                     <p className="text-sm">
-                                      {Object.keys(selectedBooking.add_ons || {}).length > 0 
+                                      {Object.keys(selectedBooking.add_ons || {}).length > 0
                                         ? JSON.stringify(selectedBooking.add_ons, null, 2)
-                                        : 'None'
-                                      }
+                                        : "None"}
                                     </p>
                                   </div>
                                 </div>
-                                
+
                                 {selectedBooking.location_address && (
                                   <div>
                                     <Label className="text-sm font-medium">Location</Label>
@@ -493,7 +483,9 @@ export function BookingManager() {
                                       )}
                                       {selectedBooking.location_address.city && (
                                         <div>
-                                          {selectedBooking.location_address.city}, {selectedBooking.location_address.state} {selectedBooking.location_address.zip}
+                                          {selectedBooking.location_address.city},{" "}
+                                          {selectedBooking.location_address.state}{" "}
+                                          {selectedBooking.location_address.zip}
                                         </div>
                                       )}
                                     </div>
@@ -502,7 +494,9 @@ export function BookingManager() {
 
                                 {selectedBooking.special_instructions && (
                                   <div>
-                                    <Label className="text-sm font-medium">Special Instructions</Label>
+                                    <Label className="text-sm font-medium">
+                                      Special Instructions
+                                    </Label>
                                     <p className="text-sm bg-gray-50 p-2 rounded">
                                       {selectedBooking.special_instructions}
                                     </p>
@@ -515,32 +509,40 @@ export function BookingManager() {
                                     <Button
                                       size="sm"
                                       variant="outline"
-                                      onClick={() => updateBookingStatus(selectedBooking.id, 'confirmed')}
-                                      disabled={selectedBooking.status === 'confirmed'}
+                                      onClick={async () =>
+                                        updateBookingStatus(selectedBooking.id, "confirmed")
+                                      }
+                                      disabled={selectedBooking.status === "confirmed"}
                                     >
                                       Confirm
                                     </Button>
                                     <Button
                                       size="sm"
                                       variant="outline"
-                                      onClick={() => updateBookingStatus(selectedBooking.id, 'in_progress')}
-                                      disabled={selectedBooking.status === 'in_progress'}
+                                      onClick={async () =>
+                                        updateBookingStatus(selectedBooking.id, "in_progress")
+                                      }
+                                      disabled={selectedBooking.status === "in_progress"}
                                     >
                                       Start
                                     </Button>
                                     <Button
                                       size="sm"
                                       variant="outline"
-                                      onClick={() => updateBookingStatus(selectedBooking.id, 'completed')}
-                                      disabled={selectedBooking.status === 'completed'}
+                                      onClick={async () =>
+                                        updateBookingStatus(selectedBooking.id, "completed")
+                                      }
+                                      disabled={selectedBooking.status === "completed"}
                                     >
                                       Complete
                                     </Button>
                                     <Button
                                       size="sm"
                                       variant="destructive"
-                                      onClick={() => updateBookingStatus(selectedBooking.id, 'cancelled')}
-                                      disabled={selectedBooking.status === 'cancelled'}
+                                      onClick={async () =>
+                                        updateBookingStatus(selectedBooking.id, "cancelled")
+                                      }
+                                      disabled={selectedBooking.status === "cancelled"}
                                     >
                                       Cancel
                                     </Button>
@@ -582,9 +584,7 @@ export function BookingManager() {
           <Card>
             <CardHeader>
               <CardTitle>Schedule for {new Date(selectedDate).toLocaleDateString()}</CardTitle>
-              <CardDescription>
-                {calendarEvents.length} bookings scheduled
-              </CardDescription>
+              <CardDescription>{calendarEvents.length} bookings scheduled</CardDescription>
             </CardHeader>
             <CardContent>
               {calendarEvents.length > 0 ? (
@@ -598,7 +598,8 @@ export function BookingManager() {
                       >
                         <div className="flex items-center gap-3">
                           <div className="text-sm font-medium">
-                            {formatTime(event.start.toISOString())} - {formatTime(event.end.toISOString())}
+                            {formatTime(event.start.toISOString())} -{" "}
+                            {formatTime(event.end.toISOString())}
                           </div>
                           <div className="text-sm">{event.user}</div>
                           {getStatusBadge(event.status)}
@@ -607,7 +608,7 @@ export function BookingManager() {
                           variant="outline"
                           size="sm"
                           onClick={() => {
-                            const booking = bookings.find(b => b.id === event.id);
+                            const booking = bookings.find((b) => b.id === event.id);
                             if (booking) setSelectedBooking(booking);
                           }}
                         >

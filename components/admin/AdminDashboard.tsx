@@ -1,31 +1,29 @@
-'use client';
+"use client";
 
-import { useState, useEffect } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { 
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
   Table,
   TableBody,
   TableCell,
   TableHead,
   TableHeader,
   TableRow,
-} from '@/components/ui/table';
+} from "@/components/ui/table";
+import { useToast } from "@/hooks/use-toast";
 import {
-  DollarSign,
-  Users,
+  ArrowDownRight,
+  ArrowUpRight,
   Calendar,
-  TrendingUp,
+  Clock,
+  DollarSign,
+  RefreshCw,
   Star,
   UserPlus,
-  RefreshCw,
-  ArrowUpRight,
-  ArrowDownRight,
-  Clock,
-  CheckCircle,
-} from 'lucide-react';
-import { useToast } from '@/hooks/use-toast';
+  Users,
+} from "lucide-react";
+import { useEffect, useState } from "react";
 
 interface DashboardStats {
   revenue: {
@@ -60,7 +58,7 @@ interface DashboardStats {
 
 interface RecentActivity {
   id: string;
-  type: 'booking' | 'payment' | 'review' | 'referral';
+  type: "booking" | "payment" | "review" | "referral";
   description: string;
   user_email: string;
   amount?: number;
@@ -80,10 +78,10 @@ export function AdminDashboard() {
   const loadDashboardData = async () => {
     try {
       setLoading(true);
-      
+
       const [statsResponse, activityResponse] = await Promise.all([
-        fetch('/api/admin/dashboard/stats'),
-        fetch('/api/admin/dashboard/activity'),
+        fetch("/api/admin/dashboard/stats"),
+        fetch("/api/admin/dashboard/activity"),
       ]);
 
       if (statsResponse.ok) {
@@ -95,13 +93,12 @@ export function AdminDashboard() {
         const activityData = await activityResponse.json();
         setRecentActivity(activityData.activities || []);
       }
-
     } catch (error) {
-      console.error('Failed to load dashboard data:', error);
+      console.error("Failed to load dashboard data:", error);
       toast({
-        title: 'Error',
-        description: 'Failed to load dashboard data',
-        variant: 'destructive',
+        title: "Error",
+        description: "Failed to load dashboard data",
+        variant: "destructive",
       });
     } finally {
       setLoading(false);
@@ -109,30 +106,30 @@ export function AdminDashboard() {
   };
 
   const formatCurrency = (cents: number) => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD',
+    return new Intl.NumberFormat("en-US", {
+      style: "currency",
+      currency: "USD",
     }).format(cents / 100);
   };
 
   const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('en-US', {
-      month: 'short',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit',
+    return new Date(dateString).toLocaleDateString("en-US", {
+      month: "short",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
     });
   };
 
   const getActivityIcon = (type: string) => {
     switch (type) {
-      case 'booking':
+      case "booking":
         return <Calendar className="h-4 w-4 text-blue-600" />;
-      case 'payment':
+      case "payment":
         return <DollarSign className="h-4 w-4 text-green-600" />;
-      case 'review':
+      case "review":
         return <Star className="h-4 w-4 text-yellow-600" />;
-      case 'referral':
+      case "referral":
         return <UserPlus className="h-4 w-4 text-purple-600" />;
       default:
         return <Clock className="h-4 w-4 text-gray-600" />;
@@ -142,12 +139,8 @@ export function AdminDashboard() {
   const getGrowthIndicator = (growth: number) => {
     const isPositive = growth >= 0;
     return (
-      <div className={`flex items-center gap-1 ${isPositive ? 'text-green-600' : 'text-red-600'}`}>
-        {isPositive ? (
-          <ArrowUpRight className="h-4 w-4" />
-        ) : (
-          <ArrowDownRight className="h-4 w-4" />
-        )}
+      <div className={`flex items-center gap-1 ${isPositive ? "text-green-600" : "text-red-600"}`}>
+        {isPositive ? <ArrowUpRight className="h-4 w-4" /> : <ArrowDownRight className="h-4 w-4" />}
         <span className="text-sm font-medium">{Math.abs(growth)}%</span>
       </div>
     );
@@ -172,7 +165,7 @@ export function AdminDashboard() {
           <h1 className="text-3xl font-bold text-gray-900">Dashboard</h1>
           <p className="text-gray-600">Welcome to your business overview</p>
         </div>
-        
+
         <Button onClick={loadDashboardData} variant="outline">
           <RefreshCw className="h-4 w-4 mr-2" />
           Refresh
@@ -241,9 +234,7 @@ export function AdminDashboard() {
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">{stats.reviews.average.toFixed(1)}</div>
-              <p className="text-xs text-muted-foreground">
-                From {stats.reviews.total} reviews
-              </p>
+              <p className="text-xs text-muted-foreground">From {stats.reviews.total} reviews</p>
             </CardContent>
           </Card>
         </div>
@@ -353,9 +344,7 @@ export function AdminDashboard() {
                       </div>
                     </TableCell>
                     <TableCell className="text-sm">{activity.user_email}</TableCell>
-                    <TableCell>
-                      {activity.amount ? formatCurrency(activity.amount) : '-'}
-                    </TableCell>
+                    <TableCell>{activity.amount ? formatCurrency(activity.amount) : "-"}</TableCell>
                     <TableCell className="text-sm text-gray-500">
                       {formatDate(activity.created_at)}
                     </TableCell>
@@ -364,9 +353,7 @@ export function AdminDashboard() {
               </TableBody>
             </Table>
           ) : (
-            <div className="text-center py-8 text-gray-500">
-              No recent activity found
-            </div>
+            <div className="text-center py-8 text-gray-500">No recent activity found</div>
           )}
         </CardContent>
       </Card>

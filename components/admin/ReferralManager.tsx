@@ -1,18 +1,8 @@
-'use client';
+"use client";
 
-import { useState, useEffect } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Badge } from '@/components/ui/badge';
-import { 
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@/components/ui/table';
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Dialog,
   DialogContent,
@@ -20,34 +10,44 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from '@/components/ui/dialog';
-import { Label } from '@/components/ui/label';
-import { 
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
-import { 
-  Search, 
-  RefreshCw, 
-  Eye,
-  UserPlus,
-  Trophy,
+} from "@/components/ui/select";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { useToast } from "@/hooks/use-toast";
+import {
   DollarSign,
-  TrendingUp,
-  Users,
   Download,
-} from 'lucide-react';
-import { useToast } from '@/hooks/use-toast';
+  Eye,
+  RefreshCw,
+  Search,
+  TrendingUp,
+  Trophy,
+  UserPlus,
+  Users,
+} from "lucide-react";
+import { useEffect, useState } from "react";
 
 interface Referral {
   id: string;
   referrer_id: string;
   invitee_email: string;
   invitee_id?: string;
-  status: 'pending' | 'signed_up' | 'first_booking' | 'expired';
+  status: "pending" | "signed_up" | "first_booking" | "expired";
   reward_credits: number;
   credits_awarded_at?: string;
   expires_at: string;
@@ -80,8 +80,8 @@ export function ReferralManager() {
   const [topReferrers, setTopReferrers] = useState<TopReferrer[]>([]);
   const [stats, setStats] = useState<ReferralStats | null>(null);
   const [loading, setLoading] = useState(true);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [statusFilter, setStatusFilter] = useState<string>('all');
+  const [searchTerm, setSearchTerm] = useState("");
+  const [statusFilter, setStatusFilter] = useState<string>("all");
   const [selectedReferral, setSelectedReferral] = useState<Referral | null>(null);
   const { toast } = useToast();
 
@@ -92,11 +92,11 @@ export function ReferralManager() {
   const loadReferralData = async () => {
     try {
       setLoading(true);
-      
+
       const [referralsResponse, topReferrersResponse, statsResponse] = await Promise.all([
-        fetch('/api/admin/referrals'),
-        fetch('/api/admin/referrals/top-referrers'),
-        fetch('/api/admin/referrals/stats'),
+        fetch("/api/admin/referrals"),
+        fetch("/api/admin/referrals/top-referrers"),
+        fetch("/api/admin/referrals/stats"),
       ]);
 
       if (referralsResponse.ok) {
@@ -113,13 +113,12 @@ export function ReferralManager() {
         const statsData = await statsResponse.json();
         setStats(statsData);
       }
-
     } catch (error) {
-      console.error('Failed to load referral data:', error);
+      console.error("Failed to load referral data:", error);
       toast({
-        title: 'Error',
-        description: 'Failed to load referral data',
-        variant: 'destructive',
+        title: "Error",
+        description: "Failed to load referral data",
+        variant: "destructive",
       });
     } finally {
       setLoading(false);
@@ -128,66 +127,66 @@ export function ReferralManager() {
 
   const exportReferrals = async () => {
     try {
-      const response = await fetch('/api/admin/referrals/export');
-      
+      const response = await fetch("/api/admin/referrals/export");
+
       if (!response.ok) {
-        throw new Error('Failed to export referrals');
+        throw new Error("Failed to export referrals");
       }
 
       const blob = await response.blob();
       const url = window.URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.style.display = 'none';
+      const a = document.createElement("a");
+      a.style.display = "none";
       a.href = url;
-      a.download = `referrals-export-${new Date().toISOString().split('T')[0]}.csv`;
+      a.download = `referrals-export-${new Date().toISOString().split("T")[0]}.csv`;
       document.body.appendChild(a);
       a.click();
       window.URL.revokeObjectURL(url);
 
       toast({
-        title: 'Success',
-        description: 'Referrals exported successfully',
+        title: "Success",
+        description: "Referrals exported successfully",
       });
-
     } catch (error) {
-      console.error('Export error:', error);
+      console.error("Export error:", error);
       toast({
-        title: 'Error',
-        description: 'Failed to export referrals',
-        variant: 'destructive',
+        title: "Error",
+        description: "Failed to export referrals",
+        variant: "destructive",
       });
     }
   };
 
   const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric',
+    return new Date(dateString).toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
     });
   };
 
   const getStatusBadge = (status: string) => {
     const colors = {
-      pending: 'bg-yellow-100 text-yellow-800',
-      signed_up: 'bg-blue-100 text-blue-800',
-      first_booking: 'bg-green-100 text-green-800',
-      expired: 'bg-red-100 text-red-800',
+      pending: "bg-yellow-100 text-yellow-800",
+      signed_up: "bg-blue-100 text-blue-800",
+      first_booking: "bg-green-100 text-green-800",
+      expired: "bg-red-100 text-red-800",
     };
 
     return (
       <Badge className={colors[status as keyof typeof colors] || colors.pending}>
-        {status.replace('_', ' ')}
+        {status.replace("_", " ")}
       </Badge>
     );
   };
 
-  const filteredReferrals = referrals.filter(referral => {
-    const matchesSearch = !searchTerm || 
+  const filteredReferrals = referrals.filter((referral) => {
+    const matchesSearch =
+      !searchTerm ||
       referral.referrer_email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
       referral.invitee_email.toLowerCase().includes(searchTerm.toLowerCase());
-    
-    const matchesStatus = statusFilter === 'all' || referral.status === statusFilter;
+
+    const matchesStatus = statusFilter === "all" || referral.status === statusFilter;
 
     return matchesSearch && matchesStatus;
   });
@@ -301,10 +300,15 @@ export function ReferralManager() {
                   <TableCell>
                     <div className="flex items-center gap-2">
                       {index < 3 && (
-                        <Trophy className={`h-4 w-4 ${
-                          index === 0 ? 'text-yellow-500' : 
-                          index === 1 ? 'text-gray-400' : 'text-orange-600'
-                        }`} />
+                        <Trophy
+                          className={`h-4 w-4 ${
+                            index === 0
+                              ? "text-yellow-500"
+                              : index === 1
+                                ? "text-gray-400"
+                                : "text-orange-600"
+                          }`}
+                        />
                       )}
                       <span className="font-medium">{referrer.referrer_email}</span>
                     </div>
@@ -323,9 +327,7 @@ export function ReferralManager() {
           </Table>
 
           {topReferrers.length === 0 && (
-            <div className="text-center py-8 text-gray-500">
-              No referrer data available
-            </div>
+            <div className="text-center py-8 text-gray-500">No referrer data available</div>
           )}
         </CardContent>
       </Card>
@@ -363,7 +365,7 @@ export function ReferralManager() {
               <RefreshCw className="h-4 w-4 mr-2" />
               Refresh
             </Button>
-            
+
             <Button onClick={exportReferrals} variant="outline" size="sm">
               <Download className="h-4 w-4 mr-2" />
               Export
@@ -390,11 +392,9 @@ export function ReferralManager() {
             {filteredReferrals.map((referral) => (
               <TableRow key={referral.id}>
                 <TableCell>
-                  <div className="font-medium">
-                    {referral.referrer_email || 'Unknown'}
-                  </div>
+                  <div className="font-medium">{referral.referrer_email || "Unknown"}</div>
                 </TableCell>
-                
+
                 <TableCell>
                   <div>
                     <div className="font-medium">{referral.invitee_email}</div>
@@ -403,11 +403,9 @@ export function ReferralManager() {
                     )}
                   </div>
                 </TableCell>
-                
-                <TableCell>
-                  {getStatusBadge(referral.status)}
-                </TableCell>
-                
+
+                <TableCell>{getStatusBadge(referral.status)}</TableCell>
+
                 <TableCell>
                   <div className="flex items-center gap-2">
                     <span>{referral.reward_credits}</span>
@@ -418,15 +416,17 @@ export function ReferralManager() {
                     )}
                   </div>
                 </TableCell>
-                
+
                 <TableCell>{formatDate(referral.created_at)}</TableCell>
-                
+
                 <TableCell>
-                  <span className={new Date(referral.expires_at) < new Date() ? 'text-red-600' : ''}>
+                  <span
+                    className={new Date(referral.expires_at) < new Date() ? "text-red-600" : ""}
+                  >
                     {formatDate(referral.expires_at)}
                   </span>
                 </TableCell>
-                
+
                 <TableCell>
                   <Dialog>
                     <DialogTrigger asChild>
@@ -445,7 +445,7 @@ export function ReferralManager() {
                           View referral information and timeline
                         </DialogDescription>
                       </DialogHeader>
-                      
+
                       {selectedReferral && (
                         <div className="space-y-4">
                           <div className="grid grid-cols-2 gap-4">
@@ -474,11 +474,13 @@ export function ReferralManager() {
                               <p className="text-sm">{formatDate(selectedReferral.expires_at)}</p>
                             </div>
                           </div>
-                          
+
                           {selectedReferral.credits_awarded_at && (
                             <div>
                               <Label className="text-sm font-medium">Credits Awarded</Label>
-                              <p className="text-sm">{formatDate(selectedReferral.credits_awarded_at)}</p>
+                              <p className="text-sm">
+                                {formatDate(selectedReferral.credits_awarded_at)}
+                              </p>
                             </div>
                           )}
                         </div>

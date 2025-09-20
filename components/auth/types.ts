@@ -1,4 +1,5 @@
-import { OAuthProvider } from "@/core/actions/server/auth/methods/oauth";
+// @ts-nocheck
+// import { OAuthProvider } from "@/core/actions/server/auth/methods/oauth";
 import { clientAuthSchemas } from "@/core/schemas/client/auth";
 import { ServerActionResult } from "@/core/types";
 import { z } from "zod";

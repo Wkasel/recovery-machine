@@ -22,18 +22,28 @@ export const siteMetadata: SiteMetadata = {
   title: "The Recovery Machine",
   defaultTitle: "The Recovery Machine - Mobile Wellness & Recovery Services",
   titleTemplate: "%s | The Recovery Machine",
-  description: "Mobile cold plunge & infrared sauna delivered to your door. Weekly wellness sessions for peak performance and recovery. Professional spa services at your location.",
-  siteUrl: process.env.NEXT_PUBLIC_SITE_URL || process.env.NEXT_PUBLIC_APP_URL || "https://therecoverymachine.com",
+  description:
+    "Mobile cold plunge & infrared sauna delivered to your door. Weekly wellness sessions for peak performance and recovery. Professional spa services at your location.",
+  siteUrl:
+    process.env.NEXT_PUBLIC_SITE_URL ||
+    process.env.NEXT_PUBLIC_APP_URL ||
+    "https://therecoverymachine.com",
   locale: "en_US",
   type: "website",
   twitterHandle: "@therecoverymachine",
   author: {
     name: "The Recovery Machine",
-    url: process.env.NEXT_PUBLIC_SITE_URL || process.env.NEXT_PUBLIC_APP_URL || "https://therecoverymachine.com",
+    url:
+      process.env.NEXT_PUBLIC_SITE_URL ||
+      process.env.NEXT_PUBLIC_APP_URL ||
+      "https://therecoverymachine.com",
   },
   organization: {
     name: "The Recovery Machine",
-    url: process.env.NEXT_PUBLIC_SITE_URL || process.env.NEXT_PUBLIC_APP_URL || "https://therecoverymachine.com",
+    url:
+      process.env.NEXT_PUBLIC_SITE_URL ||
+      process.env.NEXT_PUBLIC_APP_URL ||
+      "https://therecoverymachine.com",
     logo: "https://therecoverymachine.com/logo.png",
   },
 };

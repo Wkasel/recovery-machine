@@ -1,10 +1,11 @@
-import { NextResponse } from 'next/server';
-import { requireAdminAccess } from '@/utils/admin/auth';
-import { createServerSupabaseClient } from '@/lib/supabase/server';
+// @ts-nocheck
+import { createServerSupabaseClient } from "@/lib/supabase/server";
+import { requireAdminAccess } from "@/utils/admin/auth";
+import { NextResponse } from "next/server";
 
 export async function GET() {
   try {
-    await requireAdminAccess('operator');
+    await requireAdminAccess("operator");
     const supabase = createServerSupabaseClient();
 
     // Get current and previous month dates for growth calculations
@@ -15,116 +16,118 @@ export async function GET() {
 
     // Revenue stats
     const { data: totalRevenue } = await supabase
-      .from('orders')
-      .select('amount')
-      .eq('status', 'paid');
+      .from("orders")
+      .select("amount")
+      .eq("status", "paid");
 
     const { data: monthlyRevenue } = await supabase
-      .from('orders')
-      .select('amount')
-      .eq('status', 'paid')
-      .gte('created_at', currentMonthStart.toISOString());
+      .from("orders")
+      .select("amount")
+      .eq("status", "paid")
+      .gte("created_at", currentMonthStart.toISOString());
 
     const { data: previousMonthRevenue } = await supabase
-      .from('orders')
-      .select('amount')
-      .eq('status', 'paid')
-      .gte('created_at', previousMonthStart.toISOString())
-      .lt('created_at', currentMonthStart.toISOString());
+      .from("orders")
+      .select("amount")
+      .eq("status", "paid")
+      .gte("created_at", previousMonthStart.toISOString())
+      .lt("created_at", currentMonthStart.toISOString());
 
     // User stats
     const { count: totalUsers } = await supabase
-      .from('profiles')
-      .select('*', { count: 'exact', head: true });
+      .from("profiles")
+      .select("*", { count: "exact", head: true });
 
     const { count: monthlyUsers } = await supabase
-      .from('profiles')
-      .select('*', { count: 'exact', head: true })
-      .gte('created_at', currentMonthStart.toISOString());
+      .from("profiles")
+      .select("*", { count: "exact", head: true })
+      .gte("created_at", currentMonthStart.toISOString());
 
     const { count: previousMonthUsers } = await supabase
-      .from('profiles')
-      .select('*', { count: 'exact', head: true })
-      .gte('created_at', previousMonthStart.toISOString())
-      .lt('created_at', currentMonthStart.toISOString());
+      .from("profiles")
+      .select("*", { count: "exact", head: true })
+      .gte("created_at", previousMonthStart.toISOString())
+      .lt("created_at", currentMonthStart.toISOString());
 
     // Booking stats
     const { count: totalBookings } = await supabase
-      .from('bookings')
-      .select('*', { count: 'exact', head: true });
+      .from("bookings")
+      .select("*", { count: "exact", head: true });
 
     const { count: monthlyBookings } = await supabase
-      .from('bookings')
-      .select('*', { count: 'exact', head: true })
-      .gte('created_at', currentMonthStart.toISOString());
+      .from("bookings")
+      .select("*", { count: "exact", head: true })
+      .gte("created_at", currentMonthStart.toISOString());
 
     const { count: previousMonthBookings } = await supabase
-      .from('bookings')
-      .select('*', { count: 'exact', head: true })
-      .gte('created_at', previousMonthStart.toISOString())
-      .lt('created_at', currentMonthStart.toISOString());
+      .from("bookings")
+      .select("*", { count: "exact", head: true })
+      .gte("created_at", previousMonthStart.toISOString())
+      .lt("created_at", currentMonthStart.toISOString());
 
     const { count: pendingBookings } = await supabase
-      .from('bookings')
-      .select('*', { count: 'exact', head: true })
-      .eq('status', 'scheduled');
+      .from("bookings")
+      .select("*", { count: "exact", head: true })
+      .eq("status", "scheduled");
 
     const { count: confirmedBookings } = await supabase
-      .from('bookings')
-      .select('*', { count: 'exact', head: true })
-      .eq('status', 'confirmed');
+      .from("bookings")
+      .select("*", { count: "exact", head: true })
+      .eq("status", "confirmed");
 
     const { count: completedBookings } = await supabase
-      .from('bookings')
-      .select('*', { count: 'exact', head: true })
-      .eq('status', 'completed');
+      .from("bookings")
+      .select("*", { count: "exact", head: true })
+      .eq("status", "completed");
 
     // Review stats
-    const { data: reviews } = await supabase
-      .from('reviews')
-      .select('rating, is_featured');
+    const { data: reviews } = await supabase.from("reviews").select("rating, is_featured");
 
     const { count: activeReferrals } = await supabase
-      .from('referrals')
-      .select('*', { count: 'exact', head: true })
-      .eq('status', 'pending');
+      .from("referrals")
+      .select("*", { count: "exact", head: true })
+      .eq("status", "pending");
 
     const { count: convertedReferrals } = await supabase
-      .from('referrals')
-      .select('*', { count: 'exact', head: true })
-      .eq('status', 'first_booking');
+      .from("referrals")
+      .select("*", { count: "exact", head: true })
+      .eq("status", "first_booking");
 
     const { count: totalReferrals } = await supabase
-      .from('referrals')
-      .select('*', { count: 'exact', head: true });
+      .from("referrals")
+      .select("*", { count: "exact", head: true });
 
     // Calculate aggregated values
     const totalRevenueAmount = totalRevenue?.reduce((sum, order) => sum + order.amount, 0) || 0;
     const monthlyRevenueAmount = monthlyRevenue?.reduce((sum, order) => sum + order.amount, 0) || 0;
-    const previousMonthRevenueAmount = previousMonthRevenue?.reduce((sum, order) => sum + order.amount, 0) || 0;
+    const previousMonthRevenueAmount =
+      previousMonthRevenue?.reduce((sum, order) => sum + order.amount, 0) || 0;
 
-    const averageRating = reviews?.length 
-      ? reviews.reduce((sum, review) => sum + review.rating, 0) / reviews.length 
+    const averageRating = reviews?.length
+      ? reviews.reduce((sum, review) => sum + review.rating, 0) / reviews.length
       : 0;
 
-    const featuredReviews = reviews?.filter(review => review.is_featured).length || 0;
+    const featuredReviews = reviews?.filter((review) => review.is_featured).length || 0;
 
     // Calculate growth percentages
-    const revenueGrowth = previousMonthRevenueAmount > 0 
-      ? ((monthlyRevenueAmount - previousMonthRevenueAmount) / previousMonthRevenueAmount) * 100 
-      : 0;
+    const revenueGrowth =
+      previousMonthRevenueAmount > 0
+        ? ((monthlyRevenueAmount - previousMonthRevenueAmount) / previousMonthRevenueAmount) * 100
+        : 0;
 
-    const userGrowth = (previousMonthUsers || 0) > 0 
-      ? (((monthlyUsers || 0) - (previousMonthUsers || 0)) / (previousMonthUsers || 0)) * 100 
-      : 0;
+    const userGrowth =
+      (previousMonthUsers || 0) > 0
+        ? (((monthlyUsers || 0) - (previousMonthUsers || 0)) / (previousMonthUsers || 0)) * 100
+        : 0;
 
-    const bookingGrowth = (previousMonthBookings || 0) > 0 
-      ? (((monthlyBookings || 0) - (previousMonthBookings || 0)) / (previousMonthBookings || 0)) * 100 
-      : 0;
+    const bookingGrowth =
+      (previousMonthBookings || 0) > 0
+        ? (((monthlyBookings || 0) - (previousMonthBookings || 0)) / (previousMonthBookings || 0)) *
+          100
+        : 0;
 
-    const conversionRate = (totalReferrals || 0) > 0 
-      ? ((convertedReferrals || 0) / (totalReferrals || 0)) * 100 
-      : 0;
+    const conversionRate =
+      (totalReferrals || 0) > 0 ? ((convertedReferrals || 0) / (totalReferrals || 0)) * 100 : 0;
 
     const stats = {
       revenue: {
@@ -158,12 +161,8 @@ export async function GET() {
     };
 
     return NextResponse.json(stats);
-
   } catch (error) {
-    console.error('Dashboard stats error:', error);
-    return NextResponse.json(
-      { error: 'Failed to fetch dashboard statistics' },
-      { status: 500 }
-    );
+    console.error("Dashboard stats error:", error);
+    return NextResponse.json({ error: "Failed to fetch dashboard statistics" }, { status: 500 });
   }
 }

@@ -1,7 +1,7 @@
-'use client';
+"use client";
 
-import { useEffect, useRef } from 'react';
-import { Instagram } from 'lucide-react';
+import { Instagram } from "lucide-react";
+import { useEffect, useRef } from "react";
 
 interface BeholdInstagramWidgetProps {
   widgetId?: string;
@@ -9,10 +9,10 @@ interface BeholdInstagramWidgetProps {
   fallback?: boolean;
 }
 
-export function BeholdInstagramWidget({ 
-  widgetId = 'your-widget-id', 
-  className = '',
-  fallback = true 
+export function BeholdInstagramWidget({
+  widgetId = "your-widget-id",
+  className = "",
+  fallback = true,
 }: BeholdInstagramWidgetProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const scriptLoadedRef = useRef(false);
@@ -28,18 +28,18 @@ export function BeholdInstagramWidget({
         return;
       }
 
-      const script = document.createElement('script');
-      script.src = 'https://w.behold.so/widget.js';
-      script.type = 'module';
+      const script = document.createElement("script");
+      script.src = "https://w.behold.so/widget.js";
+      script.type = "module";
       script.async = true;
-      
+
       script.onload = () => {
         scriptLoadedRef.current = true;
         initializeWidget();
       };
 
       script.onerror = () => {
-        console.warn('Failed to load Behold.so script, showing fallback');
+        console.warn("Failed to load Behold.so script, showing fallback");
         showFallback();
       };
 
@@ -51,10 +51,10 @@ export function BeholdInstagramWidget({
         try {
           (window as any).BeholdWidget.render({
             widgetId: widgetId,
-            container: containerRef.current
+            container: containerRef.current,
           });
         } catch (error) {
-          console.warn('Failed to initialize Behold widget:', error);
+          console.warn("Failed to initialize Behold widget:", error);
           if (fallback) showFallback();
         }
       }
@@ -97,7 +97,7 @@ export function BeholdInstagramWidget({
 
   return (
     <div className={className}>
-      <div 
+      <div
         ref={containerRef}
         id={`behold-container-${widgetId}`}
         className="min-h-[400px] rounded-lg overflow-hidden"
@@ -116,21 +116,21 @@ export function BeholdInstagramWidget({
 }
 
 // Fallback component for when Behold.so isn't available
-export function InstagramFallback({ className = '' }: { className?: string }) {
+export function InstagramFallback({ className = "" }: { className?: string }) {
   const mockPosts = [
-    { id: 1, gradient: 'from-blue-400 to-purple-500', caption: 'Cold plunge recovery ❄️' },
-    { id: 2, gradient: 'from-red-400 to-orange-500', caption: 'Infrared sauna session 🔥' },
-    { id: 3, gradient: 'from-green-400 to-blue-500', caption: 'Mobile setup complete 🚐' },
-    { id: 4, gradient: 'from-purple-400 to-pink-500', caption: 'Contrast therapy ⚡' },
-    { id: 5, gradient: 'from-yellow-400 to-red-500', caption: 'Peak performance 💪' },
-    { id: 6, gradient: 'from-indigo-400 to-purple-500', caption: 'Recovery revolution 🌟' }
+    { id: 1, gradient: "from-blue-400 to-purple-500", caption: "Cold plunge recovery ❄️" },
+    { id: 2, gradient: "from-red-400 to-orange-500", caption: "Infrared sauna session 🔥" },
+    { id: 3, gradient: "from-green-400 to-blue-500", caption: "Mobile setup complete 🚐" },
+    { id: 4, gradient: "from-purple-400 to-pink-500", caption: "Contrast therapy ⚡" },
+    { id: 5, gradient: "from-yellow-400 to-red-500", caption: "Peak performance 💪" },
+    { id: 6, gradient: "from-indigo-400 to-purple-500", caption: "Recovery revolution 🌟" },
   ];
 
   return (
     <div className={className}>
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
         {mockPosts.map((post) => (
-          <div 
+          <div
             key={post.id}
             className="aspect-square rounded-lg overflow-hidden group cursor-pointer relative"
           >

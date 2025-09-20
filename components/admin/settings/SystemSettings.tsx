@@ -1,14 +1,14 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Label } from '@/components/ui/label';
-import { Switch } from '@/components/ui/switch';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Slider } from '@/components/ui/slider';
-import { AlertTriangle, Shield, Activity, Database } from 'lucide-react';
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Label } from "@/components/ui/label";
+import { Slider } from "@/components/ui/slider";
+import { Switch } from "@/components/ui/switch";
+import { Activity, AlertTriangle, Database, Shield } from "lucide-react";
+import { useState } from "react";
 
 interface BusinessSetting {
   key: string;
@@ -31,7 +31,7 @@ export function SystemSettings({ settings, onUpdateSetting, loading }: SystemSet
   const [localValues, setLocalValues] = useState<Record<string, any>>({});
 
   const getSetting = (key: string) => {
-    return settings.find(s => s.key === key);
+    return settings.find((s) => s.key === key);
   };
 
   const getValue = (key: string) => {
@@ -43,14 +43,14 @@ export function SystemSettings({ settings, onUpdateSetting, loading }: SystemSet
   };
 
   const setValue = (key: string, value: any) => {
-    setLocalValues(prev => ({ ...prev, [key]: value }));
+    setLocalValues((prev) => ({ ...prev, [key]: value }));
   };
 
   const handleSave = async (key: string) => {
     const value = localValues[key];
     if (value !== undefined) {
       await onUpdateSetting(key, value);
-      setLocalValues(prev => ({ ...prev, [key]: undefined }));
+      setLocalValues((prev) => ({ ...prev, [key]: undefined }));
     }
   };
 
@@ -61,11 +61,12 @@ export function SystemSettings({ settings, onUpdateSetting, loading }: SystemSet
 
   return (
     <div className="space-y-6">
-      {getValue('maintenance_mode') && (
+      {getValue("maintenance_mode") && (
         <Alert className="border-amber-200 bg-amber-50">
           <AlertTriangle className="h-4 w-4 text-amber-600" />
           <AlertDescription className="text-amber-800">
-            <strong>Maintenance Mode Active:</strong> The booking system is currently disabled for customers.
+            <strong>Maintenance Mode Active:</strong> The booking system is currently disabled for
+            customers.
           </AlertDescription>
         </Alert>
       )}
@@ -78,20 +79,18 @@ export function SystemSettings({ settings, onUpdateSetting, loading }: SystemSet
               <Shield className="h-5 w-5" />
               System Status
             </CardTitle>
-            <CardDescription>
-              Control system-wide settings and maintenance mode.
-            </CardDescription>
+            <CardDescription>Control system-wide settings and maintenance mode.</CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">
             {/* Maintenance Mode */}
-            {getSetting('maintenance_mode') && (
+            {getSetting("maintenance_mode") && (
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
                   <div>
                     <Label className="flex items-center gap-2">
                       Maintenance Mode
-                      <Badge variant={getValue('maintenance_mode') ? 'destructive' : 'secondary'}>
-                        {getValue('maintenance_mode') ? 'Active' : 'Inactive'}
+                      <Badge variant={getValue("maintenance_mode") ? "destructive" : "secondary"}>
+                        {getValue("maintenance_mode") ? "Active" : "Inactive"}
                       </Badge>
                     </Label>
                     <p className="text-sm text-gray-500 mt-1">
@@ -99,25 +98,27 @@ export function SystemSettings({ settings, onUpdateSetting, loading }: SystemSet
                     </p>
                   </div>
                   <Switch
-                    checked={getValue('maintenance_mode') || false}
-                    onCheckedChange={(checked) => setValue('maintenance_mode', checked)}
+                    checked={getValue("maintenance_mode") || false}
+                    onCheckedChange={(checked) => setValue("maintenance_mode", checked)}
                   />
                 </div>
-                {localValues['maintenance_mode'] !== undefined && (
-                  <Button 
-                    size="sm" 
-                    onClick={() => handleSave('maintenance_mode')}
+                {localValues["maintenance_mode"] !== undefined && (
+                  <Button
+                    size="sm"
+                    onClick={async () => handleSave("maintenance_mode")}
                     disabled={loading}
-                    variant={getValue('maintenance_mode') ? 'destructive' : 'default'}
+                    variant={getValue("maintenance_mode") ? "destructive" : "default"}
                   >
-                    {getValue('maintenance_mode') ? 'Activate Maintenance' : 'Deactivate Maintenance'}
+                    {getValue("maintenance_mode")
+                      ? "Activate Maintenance"
+                      : "Deactivate Maintenance"}
                   </Button>
                 )}
               </div>
             )}
 
             {/* Debug Mode */}
-            {getSetting('debug_mode') && (
+            {getSetting("debug_mode") && (
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
                   <div>
@@ -127,14 +128,14 @@ export function SystemSettings({ settings, onUpdateSetting, loading }: SystemSet
                     </p>
                   </div>
                   <Switch
-                    checked={getValue('debug_mode') || false}
-                    onCheckedChange={(checked) => setValue('debug_mode', checked)}
+                    checked={getValue("debug_mode") || false}
+                    onCheckedChange={(checked) => setValue("debug_mode", checked)}
                   />
                 </div>
-                {localValues['debug_mode'] !== undefined && (
-                  <Button 
-                    size="sm" 
-                    onClick={() => handleSave('debug_mode')}
+                {localValues["debug_mode"] !== undefined && (
+                  <Button
+                    size="sm"
+                    onClick={async () => handleSave("debug_mode")}
                     disabled={loading}
                   >
                     Save
@@ -152,13 +153,11 @@ export function SystemSettings({ settings, onUpdateSetting, loading }: SystemSet
               <Activity className="h-5 w-5" />
               Analytics & Tracking
             </CardTitle>
-            <CardDescription>
-              Configure analytics and user tracking settings.
-            </CardDescription>
+            <CardDescription>Configure analytics and user tracking settings.</CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">
             {/* Analytics Enabled */}
-            {getSetting('analytics_enabled') && (
+            {getSetting("analytics_enabled") && (
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
                   <div>
@@ -168,14 +167,14 @@ export function SystemSettings({ settings, onUpdateSetting, loading }: SystemSet
                     </p>
                   </div>
                   <Switch
-                    checked={getValue('analytics_enabled') || false}
-                    onCheckedChange={(checked) => setValue('analytics_enabled', checked)}
+                    checked={getValue("analytics_enabled") || false}
+                    onCheckedChange={(checked) => setValue("analytics_enabled", checked)}
                   />
                 </div>
-                {localValues['analytics_enabled'] !== undefined && (
-                  <Button 
-                    size="sm" 
-                    onClick={() => handleSave('analytics_enabled')}
+                {localValues["analytics_enabled"] !== undefined && (
+                  <Button
+                    size="sm"
+                    onClick={async () => handleSave("analytics_enabled")}
                     disabled={loading}
                   >
                     Save
@@ -185,13 +184,13 @@ export function SystemSettings({ settings, onUpdateSetting, loading }: SystemSet
             )}
 
             {/* Session Timeout */}
-            {getSetting('session_timeout_minutes') && (
+            {getSetting("session_timeout_minutes") && (
               <div className="space-y-3">
                 <Label>Session Timeout</Label>
                 <div className="space-y-2">
                   <Slider
-                    value={[getValue('session_timeout_minutes') || 60]}
-                    onValueChange={([value]) => setValue('session_timeout_minutes', value)}
+                    value={[getValue("session_timeout_minutes") || 60]}
+                    onValueChange={([value]) => setValue("session_timeout_minutes", value)}
                     max={480}
                     min={15}
                     step={15}
@@ -200,7 +199,7 @@ export function SystemSettings({ settings, onUpdateSetting, loading }: SystemSet
                   <div className="flex justify-between text-sm text-gray-500">
                     <span>15 min</span>
                     <span className="font-medium">
-                      {formatTimeUnit(getValue('session_timeout_minutes') || 60, 'minute')}
+                      {formatTimeUnit(getValue("session_timeout_minutes") || 60, "minute")}
                     </span>
                     <span>8 hours</span>
                   </div>
@@ -208,10 +207,10 @@ export function SystemSettings({ settings, onUpdateSetting, loading }: SystemSet
                 <p className="text-xs text-gray-500">
                   How long users stay logged in before requiring re-authentication
                 </p>
-                {localValues['session_timeout_minutes'] !== undefined && (
-                  <Button 
-                    size="sm" 
-                    onClick={() => handleSave('session_timeout_minutes')}
+                {localValues["session_timeout_minutes"] !== undefined && (
+                  <Button
+                    size="sm"
+                    onClick={async () => handleSave("session_timeout_minutes")}
                     disabled={loading}
                   >
                     Save
@@ -229,19 +228,17 @@ export function SystemSettings({ settings, onUpdateSetting, loading }: SystemSet
               <Database className="h-5 w-5" />
               Data Management
             </CardTitle>
-            <CardDescription>
-              Backup and data retention settings.
-            </CardDescription>
+            <CardDescription>Backup and data retention settings.</CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">
             {/* Backup Frequency */}
-            {getSetting('backup_frequency_hours') && (
+            {getSetting("backup_frequency_hours") && (
               <div className="space-y-3">
                 <Label>Automatic Backup Frequency</Label>
                 <div className="space-y-2">
                   <Slider
-                    value={[getValue('backup_frequency_hours') || 24]}
-                    onValueChange={([value]) => setValue('backup_frequency_hours', value)}
+                    value={[getValue("backup_frequency_hours") || 24]}
+                    onValueChange={([value]) => setValue("backup_frequency_hours", value)}
                     max={168}
                     min={1}
                     step={1}
@@ -250,10 +247,12 @@ export function SystemSettings({ settings, onUpdateSetting, loading }: SystemSet
                   <div className="flex justify-between text-sm text-gray-500">
                     <span>1 hour</span>
                     <span className="font-medium">
-                      {getValue('backup_frequency_hours') >= 24 
-                        ? formatTimeUnit(Math.floor((getValue('backup_frequency_hours') || 24) / 24), 'day')
-                        : formatTimeUnit(getValue('backup_frequency_hours') || 24, 'hour')
-                      }
+                      {getValue("backup_frequency_hours") >= 24
+                        ? formatTimeUnit(
+                            Math.floor((getValue("backup_frequency_hours") || 24) / 24),
+                            "day"
+                          )
+                        : formatTimeUnit(getValue("backup_frequency_hours") || 24, "hour")}
                     </span>
                     <span>7 days</span>
                   </div>
@@ -261,10 +260,10 @@ export function SystemSettings({ settings, onUpdateSetting, loading }: SystemSet
                 <p className="text-xs text-gray-500">
                   How often to automatically backup business data
                 </p>
-                {localValues['backup_frequency_hours'] !== undefined && (
-                  <Button 
-                    size="sm" 
-                    onClick={() => handleSave('backup_frequency_hours')}
+                {localValues["backup_frequency_hours"] !== undefined && (
+                  <Button
+                    size="sm"
+                    onClick={async () => handleSave("backup_frequency_hours")}
                     disabled={loading}
                   >
                     Save
@@ -279,46 +278,43 @@ export function SystemSettings({ settings, onUpdateSetting, loading }: SystemSet
         <Card>
           <CardHeader>
             <CardTitle>System Status Overview</CardTitle>
-            <CardDescription>
-              Current system configuration summary.
-            </CardDescription>
+            <CardDescription>Current system configuration summary.</CardDescription>
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
               <div className="grid grid-cols-2 gap-4 text-sm">
                 <div className="flex justify-between">
                   <span>Maintenance Mode:</span>
-                  <Badge variant={getValue('maintenance_mode') ? 'destructive' : 'secondary'}>
-                    {getValue('maintenance_mode') ? 'Active' : 'Inactive'}
+                  <Badge variant={getValue("maintenance_mode") ? "destructive" : "secondary"}>
+                    {getValue("maintenance_mode") ? "Active" : "Inactive"}
                   </Badge>
                 </div>
-                
+
                 <div className="flex justify-between">
                   <span>Debug Mode:</span>
-                  <Badge variant={getValue('debug_mode') ? 'default' : 'secondary'}>
-                    {getValue('debug_mode') ? 'Enabled' : 'Disabled'}
+                  <Badge variant={getValue("debug_mode") ? "default" : "secondary"}>
+                    {getValue("debug_mode") ? "Enabled" : "Disabled"}
                   </Badge>
                 </div>
-                
+
                 <div className="flex justify-between">
                   <span>Analytics:</span>
-                  <Badge variant={getValue('analytics_enabled') ? 'default' : 'secondary'}>
-                    {getValue('analytics_enabled') ? 'Enabled' : 'Disabled'}
+                  <Badge variant={getValue("analytics_enabled") ? "default" : "secondary"}>
+                    {getValue("analytics_enabled") ? "Enabled" : "Disabled"}
                   </Badge>
                 </div>
-                
+
                 <div className="flex justify-between">
                   <span>Session Timeout:</span>
-                  <span>{getValue('session_timeout_minutes') || 60} min</span>
+                  <span>{getValue("session_timeout_minutes") || 60} min</span>
                 </div>
-                
+
                 <div className="flex justify-between">
                   <span>Backup Frequency:</span>
                   <span>
-                    {getValue('backup_frequency_hours') >= 24 
-                      ? `${Math.floor((getValue('backup_frequency_hours') || 24) / 24)} day(s)`
-                      : `${getValue('backup_frequency_hours') || 24} hour(s)`
-                    }
+                    {getValue("backup_frequency_hours") >= 24
+                      ? `${Math.floor((getValue("backup_frequency_hours") || 24) / 24)} day(s)`
+                      : `${getValue("backup_frequency_hours") || 24} hour(s)`}
                   </span>
                 </div>
               </div>

@@ -1,25 +1,18 @@
 // Instagram Grid Component - Social Proof Display
 // Displays Instagram posts in a responsive grid layout
 
-'use client';
+"use client";
 
-import React, { useState, useEffect } from 'react';
-import Image from 'next/image';
-import Link from 'next/link';
-import { Card } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Skeleton } from '@/components/ui/skeleton';
-import { 
-  Instagram, 
-  ExternalLink, 
-  Heart, 
-  MessageCircle,
-  Loader2,
-  RefreshCw
-} from 'lucide-react';
-import { toast } from 'sonner';
-import type { InstagramMedia } from '@/lib/services/instagram';
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { Skeleton } from "@/components/ui/skeleton";
+import type { InstagramMedia } from "@/lib/services/instagram";
+import { ExternalLink, Heart, Instagram, Loader2, MessageCircle, RefreshCw } from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
+import { useEffect, useState } from "react";
+import { toast } from "sonner";
 
 // ===========================================================================
 // TYPES & INTERFACES
@@ -52,16 +45,16 @@ export function InstagramGrid({
   showCaption = true,
   showEngagement = false,
   columns = 3,
-  className = '',
+  className = "",
   useFallback = true,
   autoRefresh = false,
-  refreshInterval = 60 // 1 hour
+  refreshInterval = 60, // 1 hour
 }: InstagramGridProps) {
   const [state, setState] = useState<InstagramGridState>({
     posts: [],
     loading: true,
     error: null,
-    lastUpdated: null
+    lastUpdated: null,
   });
 
   // ===========================================================================
@@ -70,35 +63,35 @@ export function InstagramGrid({
 
   const fetchInstagramPosts = async (showToast = false) => {
     try {
-      setState(prev => ({ ...prev, loading: true, error: null }));
+      setState((prev) => ({ ...prev, loading: true, error: null }));
 
       const response = await fetch(`/api/instagram/posts?count=${count}&fallback=${useFallback}`);
       const result = await response.json();
 
       if (!response.ok) {
-        throw new Error(result.error || 'Failed to fetch Instagram posts');
+        throw new Error(result.error || "Failed to fetch Instagram posts");
       }
 
       setState({
         posts: result.data || [],
         loading: false,
         error: result.error || null,
-        lastUpdated: new Date()
+        lastUpdated: new Date(),
       });
 
       if (showToast && result.data?.length > 0) {
         toast.success(`Refreshed ${result.data.length} Instagram posts`);
       }
     } catch (error) {
-      console.error('Error fetching Instagram posts:', error);
-      setState(prev => ({
+      console.error("Error fetching Instagram posts:", error);
+      setState((prev) => ({
         ...prev,
         loading: false,
-        error: error instanceof Error ? error.message : 'Failed to load Instagram posts'
+        error: error instanceof Error ? error.message : "Failed to load Instagram posts",
       }));
 
       if (showToast) {
-        toast.error('Failed to refresh Instagram posts');
+        toast.error("Failed to refresh Instagram posts");
       }
     }
   };
@@ -115,9 +108,12 @@ export function InstagramGrid({
   useEffect(() => {
     if (!autoRefresh) return;
 
-    const interval = setInterval(() => {
-      fetchInstagramPosts();
-    }, refreshInterval * 60 * 1000);
+    const interval = setInterval(
+      () => {
+        fetchInstagramPosts();
+      },
+      refreshInterval * 60 * 1000
+    );
 
     return () => clearInterval(interval);
   }, [autoRefresh, refreshInterval]);
@@ -132,10 +128,10 @@ export function InstagramGrid({
 
   const handlePostClick = (post: InstagramMedia) => {
     // Track click for analytics
-    if (typeof window !== 'undefined' && window.gtag) {
-      window.gtag('event', 'instagram_post_click', {
-        event_category: 'social_proof',
-        event_label: post.id
+    if (typeof window !== "undefined" && window.gtag) {
+      window.gtag("event", "instagram_post_click", {
+        event_category: "social_proof",
+        event_label: post.id,
       });
     }
   };
@@ -145,19 +141,24 @@ export function InstagramGrid({
   // ===========================================================================
 
   const formatCaption = (caption: string, maxLength = 100) => {
-    if (!caption) return '';
+    if (!caption) return "";
     if (caption.length <= maxLength) return caption;
-    return caption.substring(0, maxLength).trim() + '...';
+    return caption.substring(0, maxLength).trim() + "...";
   };
 
   const getGridClass = () => {
-    const baseClass = 'grid gap-4';
+    const baseClass = "grid gap-4";
     switch (columns) {
-      case 2: return `${baseClass} grid-cols-1 md:grid-cols-2`;
-      case 3: return `${baseClass} grid-cols-1 md:grid-cols-2 lg:grid-cols-3`;
-      case 4: return `${baseClass} grid-cols-2 md:grid-cols-3 lg:grid-cols-4`;
-      case 6: return `${baseClass} grid-cols-2 md:grid-cols-3 lg:grid-cols-6`;
-      default: return `${baseClass} grid-cols-1 md:grid-cols-2 lg:grid-cols-3`;
+      case 2:
+        return `${baseClass} grid-cols-1 md:grid-cols-2`;
+      case 3:
+        return `${baseClass} grid-cols-1 md:grid-cols-2 lg:grid-cols-3`;
+      case 4:
+        return `${baseClass} grid-cols-2 md:grid-cols-3 lg:grid-cols-4`;
+      case 6:
+        return `${baseClass} grid-cols-2 md:grid-cols-3 lg:grid-cols-6`;
+      default:
+        return `${baseClass} grid-cols-1 md:grid-cols-2 lg:grid-cols-3`;
     }
   };
 
@@ -165,13 +166,13 @@ export function InstagramGrid({
     const date = new Date(dateString);
     const now = new Date();
     const diffInHours = Math.floor((now.getTime() - date.getTime()) / (1000 * 60 * 60));
-    
-    if (diffInHours < 1) return 'Just now';
+
+    if (diffInHours < 1) return "Just now";
     if (diffInHours < 24) return `${diffInHours}h ago`;
-    
+
     const diffInDays = Math.floor(diffInHours / 24);
     if (diffInDays < 7) return `${diffInDays}d ago`;
-    
+
     const diffInWeeks = Math.floor(diffInDays / 7);
     return `${diffInWeeks}w ago`;
   };
@@ -233,19 +234,14 @@ export function InstagramGrid({
             </Badge>
           )}
         </div>
-        
+
         <div className="flex items-center gap-2">
           {state.lastUpdated && (
             <span className="text-xs text-muted-foreground">
               Updated {timeAgo(state.lastUpdated.toISOString())}
             </span>
           )}
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={handleRefresh}
-            disabled={state.loading}
-          >
+          <Button variant="ghost" size="sm" onClick={handleRefresh} disabled={state.loading}>
             {state.loading ? (
               <Loader2 className="h-4 w-4 animate-spin" />
             ) : (
@@ -271,8 +267,8 @@ export function InstagramGrid({
       {/* Follow button */}
       <div className="text-center mt-6">
         <Button asChild variant="outline">
-          <Link 
-            href="https://instagram.com/recoverymachine" 
+          <Link
+            href="https://instagram.com/recoverymachine"
             target="_blank"
             rel="noopener noreferrer"
           >
@@ -297,54 +293,41 @@ interface InstagramPostProps {
   onClick: () => void;
 }
 
-function InstagramPost({ 
-  post, 
-  showCaption, 
-  showEngagement, 
-  onClick 
-}: InstagramPostProps) {
+function InstagramPost({ post, showCaption, showEngagement, onClick }: InstagramPostProps) {
   const [imageLoaded, setImageLoaded] = useState(false);
   const [imageError, setImageError] = useState(false);
 
   const handleClick = () => {
     onClick();
-    window.open(post.permalink, '_blank', 'noopener,noreferrer');
+    window.open(post.permalink, "_blank", "noopener,noreferrer");
   };
 
   return (
     <Card className="overflow-hidden group cursor-pointer hover:shadow-lg transition-shadow duration-200">
-      <div 
-        className="relative aspect-square bg-muted"
-        onClick={handleClick}
-      >
+      <div className="relative aspect-square bg-muted" onClick={handleClick}>
         {!imageError ? (
           <>
-            {!imageLoaded && (
-              <Skeleton className="absolute inset-0" />
-            )}
+            {!imageLoaded && <Skeleton className="absolute inset-0" />}
             <Image
               src={post.media_url}
-              alt={post.caption || 'Instagram post'}
+              alt={post.caption || "Instagram post"}
               fill
               className={`object-cover transition-opacity duration-200 ${
-                imageLoaded ? 'opacity-100' : 'opacity-0'
+                imageLoaded ? "opacity-100" : "opacity-0"
               } group-hover:scale-105 transition-transform duration-200`}
               onLoad={() => setImageLoaded(true)}
               onError={() => setImageError(true)}
               sizes="(max-width: 768px) 50vw, (max-width: 1200px) 33vw, 25vw"
             />
-            
+
             {/* Overlay on hover */}
             <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center justify-center">
               <ExternalLink className="h-6 w-6 text-white" />
             </div>
 
             {/* Media type indicator */}
-            {post.media_type === 'CAROUSEL_ALBUM' && (
-              <Badge 
-                variant="secondary" 
-                className="absolute top-2 right-2 text-xs"
-              >
+            {post.media_type === "CAROUSEL_ALBUM" && (
+              <Badge variant="secondary" className="absolute top-2 right-2 text-xs">
                 Album
               </Badge>
             )}
@@ -360,11 +343,9 @@ function InstagramPost({
       {(showCaption || showEngagement) && (
         <div className="p-3">
           {showCaption && post.caption && (
-            <p className="text-sm text-muted-foreground mb-2">
-              {formatCaption(post.caption, 80)}
-            </p>
+            <p className="text-sm text-muted-foreground mb-2">{formatCaption(post.caption, 80)}</p>
           )}
-          
+
           {showEngagement && (
             <div className="flex items-center gap-4 text-xs text-muted-foreground">
               {post.like_count !== undefined && (
@@ -379,9 +360,7 @@ function InstagramPost({
                   <span>{post.comments_count}</span>
                 </div>
               )}
-              <span className="ml-auto">
-                {timeAgo(post.timestamp)}
-              </span>
+              <span className="ml-auto">{timeAgo(post.timestamp)}</span>
             </div>
           )}
         </div>
@@ -394,10 +373,10 @@ function InstagramPost({
 // COMPACT VERSION FOR SMALLER SPACES
 // ===========================================================================
 
-export function InstagramGridCompact({ 
+export function InstagramGridCompact({
   count = 4,
-  className = '' 
-}: { 
+  className = "",
+}: {
   count?: number;
   className?: string;
 }) {
@@ -418,22 +397,22 @@ export function InstagramGridCompact({
 // ===========================================================================
 
 function formatCaption(caption: string, maxLength: number): string {
-  if (!caption) return '';
+  if (!caption) return "";
   if (caption.length <= maxLength) return caption;
-  return caption.substring(0, maxLength).trim() + '...';
+  return caption.substring(0, maxLength).trim() + "...";
 }
 
 function timeAgo(dateString: string): string {
   const date = new Date(dateString);
   const now = new Date();
   const diffInHours = Math.floor((now.getTime() - date.getTime()) / (1000 * 60 * 60));
-  
-  if (diffInHours < 1) return 'Just now';
+
+  if (diffInHours < 1) return "Just now";
   if (diffInHours < 24) return `${diffInHours}h`;
-  
+
   const diffInDays = Math.floor(diffInHours / 24);
   if (diffInDays < 7) return `${diffInDays}d`;
-  
+
   const diffInWeeks = Math.floor(diffInDays / 7);
   return `${diffInWeeks}w`;
 }

@@ -1,34 +1,25 @@
 // Social Share Component - Referral Link Sharing
 // Enables sharing referral links across social platforms
 
-'use client';
+"use client";
 
-import React, { useState } from 'react';
-import { 
-  FacebookShareButton,
-  TwitterShareButton,
-  WhatsappShareButton,
-  LinkedinShareButton,
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { Check, Copy, DollarSign, Gift, MessageCircle, Share2, Users } from "lucide-react";
+import { useState } from "react";
+import {
+  EmailIcon,
   EmailShareButton,
   FacebookIcon,
-  TwitterIcon,
-  WhatsappIcon,
+  FacebookShareButton,
   LinkedinIcon,
-  EmailIcon
-} from 'react-share';
-import { Button } from '@/components/ui/button';
-import { Card } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { 
-  Copy, 
-  Share2, 
-  Check,
-  Gift,
-  Users,
-  DollarSign,
-  MessageCircle
-} from 'lucide-react';
-import { toast } from 'sonner';
+  LinkedinShareButton,
+  TwitterIcon,
+  TwitterShareButton,
+  WhatsappIcon,
+  WhatsappShareButton,
+} from "react-share";
+import { toast } from "sonner";
 
 // ===========================================================================
 // TYPES & INTERFACES
@@ -57,41 +48,42 @@ export function SocialShare({
   referralCode,
   userEmail,
   shareUrl,
-  className = '',
+  className = "",
   showStats = true,
-  compact = false
+  compact = false,
 }: SocialShareProps) {
   const [copied, setCopied] = useState(false);
   const [stats, setStats] = useState<ShareStats>({
     totalShares: 0,
     referralSignups: 0,
-    creditsEarned: 0
+    creditsEarned: 0,
   });
 
   // ===========================================================================
   // SHARE CONTENT CONFIGURATION
   // ===========================================================================
 
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://recoverymachine.com';
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://recoverymachine.com";
   const fullShareUrl = shareUrl || `${baseUrl}/sign-up?ref=${referralCode}`;
-  
+
   const shareContent = {
-    title: 'Recovery Machine - Professional Recovery Therapy',
-    description: 'Get $25 off your first Recovery Machine session! Professional massage, compression therapy, and stretching delivered to your door.',
-    hashtags: ['RecoveryMachine', 'MassageTherapy', 'Wellness', 'Recovery', 'Fitness']
+    title: "Recovery Machine - Professional Recovery Therapy",
+    description:
+      "Get $25 off your first Recovery Machine session! Professional massage, compression therapy, and stretching delivered to your door.",
+    hashtags: ["RecoveryMachine", "MassageTherapy", "Wellness", "Recovery", "Fitness"],
   };
 
   // Platform-specific messages
   const shareMessages = {
     facebook: `I've been loving Recovery Machine's in-home recovery sessions! 💆‍♀️ Use my referral code ${referralCode} and get $25 off your first session. Professional massage, compression therapy, and stretching delivered right to your door! #RecoveryMachine #Wellness`,
-    
+
     twitter: `Amazing recovery sessions with @RecoveryMachine! 💪 Use code ${referralCode} for $25 off your first session. Professional therapy at home! #RecoveryMachine #Wellness ${fullShareUrl}`,
-    
+
     whatsapp: `Hey! I've been using Recovery Machine for in-home recovery sessions and it's incredible! 🔥 Use my code ${referralCode} to get $25 off your first session. Check it out: ${fullShareUrl}`,
-    
+
     linkedin: `Prioritizing recovery has been game-changing for my performance and wellbeing. Recovery Machine brings professional massage, compression therapy, and stretching right to your home. Use referral code ${referralCode} for $25 off your first session.`,
-    
-    email: `Subject: Get $25 off professional recovery therapy at home\n\nHi!\n\nI wanted to share something that's been amazing for my recovery and wellness - Recovery Machine. They bring professional massage, compression therapy, and stretching sessions right to your home.\n\nUse my referral code ${referralCode} and you'll get $25 off your first session. The convenience and quality are incredible!\n\nCheck it out here: ${fullShareUrl}\n\nBest regards`
+
+    email: `Subject: Get $25 off professional recovery therapy at home\n\nHi!\n\nI wanted to share something that's been amazing for my recovery and wellness - Recovery Machine. They bring professional massage, compression therapy, and stretching sessions right to your home.\n\nUse my referral code ${referralCode} and you'll get $25 off your first session. The convenience and quality are incredible!\n\nCheck it out here: ${fullShareUrl}\n\nBest regards`,
   };
 
   // ===========================================================================
@@ -102,40 +94,40 @@ export function SocialShare({
     try {
       await navigator.clipboard.writeText(fullShareUrl);
       setCopied(true);
-      toast.success('Referral link copied to clipboard!');
-      
+      toast.success("Referral link copied to clipboard!");
+
       // Track copy event
-      trackShareEvent('copy');
-      
+      trackShareEvent("copy");
+
       setTimeout(() => setCopied(false), 2000);
     } catch (error) {
-      toast.error('Failed to copy link');
+      toast.error("Failed to copy link");
     }
   };
 
   const handleShare = (platform: string) => {
     // Track share event
     trackShareEvent(platform);
-    
+
     // Update local stats (in production, this would update the database)
-    setStats(prev => ({
+    setStats((prev) => ({
       ...prev,
-      totalShares: prev.totalShares + 1
+      totalShares: prev.totalShares + 1,
     }));
   };
 
   const trackShareEvent = (platform: string) => {
     // Analytics tracking
-    if (typeof window !== 'undefined' && window.gtag) {
-      window.gtag('event', 'referral_share', {
-        event_category: 'social_sharing',
+    if (typeof window !== "undefined" && window.gtag) {
+      window.gtag("event", "referral_share", {
+        event_category: "social_sharing",
         event_label: platform,
-        referral_code: referralCode
+        referral_code: referralCode,
       });
     }
 
     // Log to console for development
-    console.log('Share event:', { platform, referralCode, timestamp: new Date() });
+    console.log("Share event:", { platform, referralCode, timestamp: new Date() });
   };
 
   // ===========================================================================
@@ -145,12 +137,7 @@ export function SocialShare({
   if (compact) {
     return (
       <div className={`flex items-center gap-2 ${className}`}>
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={handleCopyLink}
-          className="flex-1"
-        >
+        <Button variant="outline" size="sm" onClick={handleCopyLink} className="flex-1">
           {copied ? (
             <>
               <Check className="h-4 w-4 mr-2" />
@@ -163,22 +150,22 @@ export function SocialShare({
             </>
           )}
         </Button>
-        
+
         <WhatsappShareButton
           url={fullShareUrl}
           title={shareMessages.whatsapp}
-          onShareWindowClose={() => handleShare('whatsapp')}
+          onShareWindowClose={() => handleShare("whatsapp")}
         >
           <Button variant="outline" size="sm">
             <MessageCircle className="h-4 w-4" />
           </Button>
         </WhatsappShareButton>
-        
+
         <FacebookShareButton
           url={fullShareUrl}
           quote={shareMessages.facebook}
           hashtag="#RecoveryMachine"
-          onShareWindowClose={() => handleShare('facebook')}
+          onShareWindowClose={() => handleShare("facebook")}
         >
           <Button variant="outline" size="sm">
             <Share2 className="h-4 w-4" />
@@ -214,11 +201,7 @@ export function SocialShare({
           <div className="flex-1 p-3 bg-muted rounded-lg font-mono text-lg font-semibold text-center">
             {referralCode}
           </div>
-          <Button
-            variant="outline"
-            onClick={handleCopyLink}
-            className="shrink-0"
-          >
+          <Button variant="outline" onClick={handleCopyLink} className="shrink-0">
             {copied ? (
               <>
                 <Check className="h-4 w-4 mr-2" />
@@ -241,13 +224,12 @@ export function SocialShare({
       <div className="mb-6">
         <label className="text-sm font-medium mb-3 block">Share on Social Media</label>
         <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
-          
           {/* Facebook */}
           <FacebookShareButton
             url={fullShareUrl}
             quote={shareMessages.facebook}
             hashtag="#RecoveryMachine"
-            onShareWindowClose={() => handleShare('facebook')}
+            onShareWindowClose={() => handleShare("facebook")}
             className="w-full"
           >
             <div className="flex flex-col items-center gap-2 p-3 rounded-lg border hover:bg-accent transition-colors">
@@ -261,7 +243,7 @@ export function SocialShare({
             url={fullShareUrl}
             title={shareMessages.twitter}
             hashtags={shareContent.hashtags}
-            onShareWindowClose={() => handleShare('twitter')}
+            onShareWindowClose={() => handleShare("twitter")}
             className="w-full"
           >
             <div className="flex flex-col items-center gap-2 p-3 rounded-lg border hover:bg-accent transition-colors">
@@ -274,7 +256,7 @@ export function SocialShare({
           <WhatsappShareButton
             url={fullShareUrl}
             title={shareMessages.whatsapp}
-            onShareWindowClose={() => handleShare('whatsapp')}
+            onShareWindowClose={() => handleShare("whatsapp")}
             className="w-full"
           >
             <div className="flex flex-col items-center gap-2 p-3 rounded-lg border hover:bg-accent transition-colors">
@@ -288,7 +270,7 @@ export function SocialShare({
             url={fullShareUrl}
             title={shareContent.title}
             summary={shareMessages.linkedin}
-            onShareWindowClose={() => handleShare('linkedin')}
+            onShareWindowClose={() => handleShare("linkedin")}
             className="w-full"
           >
             <div className="flex flex-col items-center gap-2 p-3 rounded-lg border hover:bg-accent transition-colors">
@@ -300,9 +282,9 @@ export function SocialShare({
           {/* Email */}
           <EmailShareButton
             url={fullShareUrl}
-            subject={shareMessages.email.split('\n')[0].replace('Subject: ', '')}
-            body={shareMessages.email.split('\n\n').slice(1).join('\n\n')}
-            onShareWindowClose={() => handleShare('email')}
+            subject={shareMessages.email.split("\n")[0].replace("Subject: ", "")}
+            body={shareMessages.email.split("\n\n").slice(1).join("\n\n")}
+            onShareWindowClose={() => handleShare("email")}
             className="w-full"
           >
             <div className="flex flex-col items-center gap-2 p-3 rounded-lg border hover:bg-accent transition-colors">
@@ -324,7 +306,7 @@ export function SocialShare({
               </div>
               <p className="text-xs text-muted-foreground">Shares</p>
             </div>
-            
+
             <div>
               <div className="flex items-center justify-center gap-1 mb-1">
                 <Users className="h-4 w-4 text-muted-foreground" />
@@ -332,7 +314,7 @@ export function SocialShare({
               </div>
               <p className="text-xs text-muted-foreground">Sign-ups</p>
             </div>
-            
+
             <div>
               <div className="flex items-center justify-center gap-1 mb-1">
                 <DollarSign className="h-4 w-4 text-muted-foreground" />
@@ -364,62 +346,57 @@ export function SocialShare({
 
 interface QuickShareButtonProps {
   referralCode: string;
-  variant?: 'default' | 'outline' | 'ghost';
-  size?: 'sm' | 'default' | 'lg';
+  variant?: "default" | "outline" | "ghost";
+  size?: "sm" | "default" | "lg";
   className?: string;
 }
 
 export function QuickShareButton({
   referralCode,
-  variant = 'default',
-  size = 'default',
-  className = ''
+  variant = "default",
+  size = "default",
+  className = "",
 }: QuickShareButtonProps) {
   const [isOpen, setIsOpen] = useState(false);
 
   const handleNativeShare = async () => {
     const shareUrl = `${process.env.NEXT_PUBLIC_APP_URL}/sign-up?ref=${referralCode}`;
     const shareData = {
-      title: 'Recovery Machine - $25 Off Your First Session',
+      title: "Recovery Machine - $25 Off Your First Session",
       text: `Use my referral code ${referralCode} and get $25 off your first Recovery Machine session!`,
-      url: shareUrl
+      url: shareUrl,
     };
 
     if (navigator.share && navigator.canShare?.(shareData)) {
       try {
         await navigator.share(shareData);
-        
+
         // Track share
-        if (typeof window !== 'undefined' && window.gtag) {
-          window.gtag('event', 'referral_share', {
-            event_category: 'social_sharing',
-            event_label: 'native_share',
-            referral_code: referralCode
+        if (typeof window !== "undefined" && window.gtag) {
+          window.gtag("event", "referral_share", {
+            event_category: "social_sharing",
+            event_label: "native_share",
+            referral_code: referralCode,
           });
         }
       } catch (error) {
-        if ((error as Error).name !== 'AbortError') {
-          console.error('Error sharing:', error);
+        if ((error as Error).name !== "AbortError") {
+          console.error("Error sharing:", error);
         }
       }
     } else {
       // Fallback to copy link
       try {
         await navigator.clipboard.writeText(shareUrl);
-        toast.success('Referral link copied to clipboard!');
+        toast.success("Referral link copied to clipboard!");
       } catch (error) {
-        toast.error('Failed to copy link');
+        toast.error("Failed to copy link");
       }
     }
   };
 
   return (
-    <Button
-      variant={variant}
-      size={size}
-      onClick={handleNativeShare}
-      className={className}
-    >
+    <Button variant={variant} size={size} onClick={handleNativeShare} className={className}>
       <Share2 className="h-4 w-4 mr-2" />
       Share & Earn
     </Button>

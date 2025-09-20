@@ -23,50 +23,50 @@ export const ServiceJsonLd = ({
   areaServed = [
     "Los Angeles, CA",
     "Beverly Hills, CA",
-    "Santa Monica, CA", 
+    "Santa Monica, CA",
     "West Hollywood, CA",
     "Manhattan Beach, CA",
     "Venice, CA",
-    "Malibu, CA"
+    "Malibu, CA",
   ],
   provider = {
     name: siteMetadata.organization.name,
-    url: siteMetadata.siteUrl
+    url: siteMetadata.siteUrl,
   },
-  offers = []
+  offers = [],
 }: ServiceJsonLdProps) => {
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "Service",
-    "name": serviceName,
-    "description": description,
-    "serviceType": serviceType,
-    "provider": {
+    name: serviceName,
+    description: description,
+    serviceType: serviceType,
+    provider: {
       "@type": "LocalBusiness",
-      "name": provider.name,
-      "url": provider.url
+      name: provider.name,
+      url: provider.url,
     },
-    "areaServed": areaServed.map(area => ({
-      "@type": "City", 
-      "name": area
+    areaServed: areaServed.map((area) => ({
+      "@type": "City",
+      name: area,
     })),
-    "hasOfferCatalog": {
+    hasOfferCatalog: {
       "@type": "OfferCatalog",
-      "name": `${serviceName} Offers`,
-      "itemListElement": offers.map(offer => ({
+      name: `${serviceName} Offers`,
+      itemListElement: offers.map((offer) => ({
         "@type": "Offer",
-        "description": offer.description,
+        description: offer.description,
         ...(offer.price && {
-          "price": offer.price,
-          "priceCurrency": offer.priceCurrency || "USD"
-        })
-      }))
+          price: offer.price,
+          priceCurrency: offer.priceCurrency || "USD",
+        }),
+      })),
     },
-    "category": "Health and Wellness",
-    "serviceOutput": {
+    category: "Health and Wellness",
+    serviceOutput: {
       "@type": "Thing",
-      "name": "Improved Recovery and Wellness"
-    }
+      name: "Improved Recovery and Wellness",
+    },
   };
 
   return (
@@ -87,13 +87,13 @@ export const ColdPlungeServiceJsonLd = () => (
       {
         description: "Single Cold Plunge Session",
         price: "150",
-        priceCurrency: "USD"
+        priceCurrency: "USD",
       },
       {
-        description: "Weekly Cold Plunge Package", 
+        description: "Weekly Cold Plunge Package",
         price: "500",
-        priceCurrency: "USD"
-      }
+        priceCurrency: "USD",
+      },
     ]}
   />
 );
@@ -106,14 +106,14 @@ export const InfraredSaunaServiceJsonLd = () => (
     offers={[
       {
         description: "Single Infrared Sauna Session",
-        price: "200", 
-        priceCurrency: "USD"
+        price: "200",
+        priceCurrency: "USD",
       },
       {
         description: "Combined Recovery Package",
         price: "300",
-        priceCurrency: "USD"
-      }
+        priceCurrency: "USD",
+      },
     ]}
   />
 );

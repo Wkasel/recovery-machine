@@ -1,35 +1,34 @@
-'use client'
+"use client";
 
-import { useState, useEffect } from 'react'
-import { ServiceType, services, Address } from '@/lib/types/booking'
-import { cn } from '@/lib/utils'
-import { 
-  CheckCircle, 
-  Calendar, 
-  MapPin, 
-  Clock, 
-  Users, 
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Address, ServiceType, services } from "@/lib/types/booking";
+import {
+  Calendar,
+  CheckCircle,
+  Clock,
   DollarSign,
-  Phone,
-  Mail,
   Download,
+  Mail,
+  MapPin,
+  Phone,
   Share2,
-  Star
-} from 'lucide-react'
-import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Badge } from '@/components/ui/badge'
-import { Alert, AlertDescription } from '@/components/ui/alert'
+  Star,
+  Users,
+} from "lucide-react";
+import { useEffect, useState } from "react";
 
 interface ConfirmationStepProps {
-  bookingId: string
-  serviceType: ServiceType
-  dateTime: string
-  address: Address
-  addOns: { extraVisits: number; familyMembers: number; extendedTime: number }
-  specialInstructions?: string
-  totalPaid: number
-  onNewBooking: () => void
+  bookingId: string;
+  serviceType: ServiceType;
+  dateTime: string;
+  address: Address;
+  addOns: { extraVisits: number; familyMembers: number; extendedTime: number };
+  specialInstructions?: string;
+  totalPaid: number;
+  onNewBooking: () => void;
 }
 
 export function ConfirmationStep({
@@ -40,84 +39,92 @@ export function ConfirmationStep({
   addOns,
   specialInstructions,
   totalPaid,
-  onNewBooking
+  onNewBooking,
 }: ConfirmationStepProps) {
-  const [emailSent, setEmailSent] = useState(false)
-  const [calendarAdded, setCalendarAdded] = useState(false)
+  const [emailSent, setEmailSent] = useState(false);
+  const [calendarAdded, setCalendarAdded] = useState(false);
 
-  const selectedService = services.find(s => s.id === serviceType)
+  const selectedService = services.find((s) => s.id === serviceType);
 
   useEffect(() => {
     // Simulate email confirmation
     const timer = setTimeout(() => {
-      setEmailSent(true)
-    }, 2000)
+      setEmailSent(true);
+    }, 2000);
 
-    return () => clearTimeout(timer)
-  }, [])
+    return () => clearTimeout(timer);
+  }, []);
 
   const formatDateTime = (dateTimeStr: string) => {
-    const date = new Date(dateTimeStr)
+    const date = new Date(dateTimeStr);
     return {
-      date: date.toLocaleDateString('en-US', {
-        weekday: 'long',
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric'
+      date: date.toLocaleDateString("en-US", {
+        weekday: "long",
+        year: "numeric",
+        month: "long",
+        day: "numeric",
       }),
-      time: date.toLocaleTimeString('en-US', {
-        hour: 'numeric',
-        minute: '2-digit',
-        hour12: true
+      time: date.toLocaleTimeString("en-US", {
+        hour: "numeric",
+        minute: "2-digit",
+        hour12: true,
       }),
-      iso: date.toISOString()
-    }
-  }
+      iso: date.toISOString(),
+    };
+  };
 
   const formatAddress = (addr: Address) => {
-    return `${addr.street}, ${addr.city}, ${addr.state} ${addr.zipCode}`
-  }
+    return `${addr.street}, ${addr.city}, ${addr.state} ${addr.zipCode}`;
+  };
 
   const formatPrice = (priceInCents: number) => {
-    return `$${(priceInCents / 100).toFixed(2)}`
-  }
+    return `$${(priceInCents / 100).toFixed(2)}`;
+  };
 
   const generateCalendarEvent = () => {
-    const { date, time, iso } = formatDateTime(dateTime)
-    const startDate = new Date(iso)
-    const endDate = new Date(startDate.getTime() + ((selectedService?.duration || 30) + (addOns.extendedTime || 0)) * 60000)
-    
-    const calendarUrl = new URL('https://calendar.google.com/calendar/render')
-    calendarUrl.searchParams.set('action', 'TEMPLATE')
-    calendarUrl.searchParams.set('text', `Recovery Machine - ${selectedService?.name}`)
-    calendarUrl.searchParams.set('dates', `${startDate.toISOString().replace(/[-:]/g, '').split('.')[0]}Z/${endDate.toISOString().replace(/[-:]/g, '').split('.')[0]}Z`)
-    calendarUrl.searchParams.set('location', formatAddress(address))
-    calendarUrl.searchParams.set('details', `Your ${selectedService?.name} session with Recovery Machine.\n\nBooking ID: ${bookingId}\n\nSpecial Instructions: ${specialInstructions || 'None'}\n\nQuestions? Call us at (555) 123-4567`)
-    
-    return calendarUrl.toString()
-  }
+    const { date, time, iso } = formatDateTime(dateTime);
+    const startDate = new Date(iso);
+    const endDate = new Date(
+      startDate.getTime() + ((selectedService?.duration || 30) + (addOns.extendedTime || 0)) * 60000
+    );
+
+    const calendarUrl = new URL("https://calendar.google.com/calendar/render");
+    calendarUrl.searchParams.set("action", "TEMPLATE");
+    calendarUrl.searchParams.set("text", `Recovery Machine - ${selectedService?.name}`);
+    calendarUrl.searchParams.set(
+      "dates",
+      `${startDate.toISOString().replace(/[-:]/g, "").split(".")[0]}Z/${endDate.toISOString().replace(/[-:]/g, "").split(".")[0]}Z`
+    );
+    calendarUrl.searchParams.set("location", formatAddress(address));
+    calendarUrl.searchParams.set(
+      "details",
+      `Your ${selectedService?.name} session with Recovery Machine.\n\nBooking ID: ${bookingId}\n\nSpecial Instructions: ${specialInstructions || "None"}\n\nQuestions? Call us at (555) 123-4567`
+    );
+
+    return calendarUrl.toString();
+  };
 
   const shareBooking = async () => {
     const shareData = {
-      title: 'Recovery Machine Booking Confirmed',
+      title: "Recovery Machine Booking Confirmed",
       text: `I just booked a ${selectedService?.name} session with Recovery Machine for ${formatDateTime(dateTime).date}!`,
-      url: window.location.origin
-    }
+      url: window.location.origin,
+    };
 
     if (navigator.share) {
       try {
-        await navigator.share(shareData)
+        await navigator.share(shareData);
       } catch (error) {
-        console.log('Error sharing:', error)
+        console.log("Error sharing:", error);
       }
     } else {
       // Fallback to copying to clipboard
-      navigator.clipboard.writeText(`${shareData.text} ${shareData.url}`)
-      alert('Booking details copied to clipboard!')
+      navigator.clipboard.writeText(`${shareData.text} ${shareData.url}`);
+      alert("Booking details copied to clipboard!");
     }
-  }
+  };
 
-  const { date, time } = formatDateTime(dateTime)
+  const { date, time } = formatDateTime(dateTime);
 
   return (
     <div className="space-y-6">
@@ -126,15 +133,9 @@ export function ConfirmationStep({
         <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
           <CheckCircle className="w-10 h-10 text-green-600" />
         </div>
-        <h2 className="text-2xl font-bold text-gray-900 mb-2">
-          Booking Confirmed!
-        </h2>
-        <p className="text-gray-600">
-          We're excited to bring the recovery experience to you
-        </p>
-        <Badge className="mt-2 bg-green-100 text-green-800">
-          Booking ID: {bookingId}
-        </Badge>
+        <h2 className="text-2xl font-bold text-gray-900 mb-2">Booking Confirmed!</h2>
+        <p className="text-gray-600">We're excited to bring the recovery experience to you</p>
+        <Badge className="mt-2 bg-green-100 text-green-800">Booking ID: {bookingId}</Badge>
       </div>
 
       {/* Booking details card */}
@@ -144,9 +145,7 @@ export function ConfirmationStep({
             <CheckCircle className="w-5 h-5 text-green-600" />
             <span>Your Recovery Session</span>
           </CardTitle>
-          <CardDescription>
-            Everything is set up for your appointment
-          </CardDescription>
+          <CardDescription>Everything is set up for your appointment</CardDescription>
         </CardHeader>
         <CardContent className="pt-6 space-y-6">
           {/* Service details */}
@@ -301,42 +300,31 @@ export function ConfirmationStep({
           variant="outline"
           className="w-full"
           onClick={() => {
-            window.open(generateCalendarEvent(), '_blank')
-            setCalendarAdded(true)
+            window.open(generateCalendarEvent(), "_blank");
+            setCalendarAdded(true);
           }}
         >
           <Calendar className="w-4 h-4 mr-2" />
-          {calendarAdded ? 'Added to Calendar' : 'Add to Calendar'}
+          {calendarAdded ? "Added to Calendar" : "Add to Calendar"}
         </Button>
 
-        <Button
-          variant="outline"
-          className="w-full"
-          onClick={() => window.print()}
-        >
+        <Button variant="outline" className="w-full" onClick={() => window.print()}>
           <Download className="w-4 h-4 mr-2" />
           Download Receipt
         </Button>
 
-        <Button
-          variant="outline"
-          className="w-full"
-          onClick={shareBooking}
-        >
+        <Button variant="outline" className="w-full" onClick={shareBooking}>
           <Share2 className="w-4 h-4 mr-2" />
           Share
         </Button>
 
-        <Button
-          className="w-full"
-          onClick={onNewBooking}
-        >
+        <Button className="w-full" onClick={onNewBooking}>
           Book Another Session
         </Button>
       </div>
 
       {/* Email confirmation status */}
-      <Alert className={emailSent ? 'border-green-200 bg-green-50' : 'border-blue-200 bg-blue-50'}>
+      <Alert className={emailSent ? "border-green-200 bg-green-50" : "border-blue-200 bg-blue-50"}>
         <Mail className="h-4 w-4" />
         <AlertDescription>
           {emailSent ? (
@@ -344,9 +332,7 @@ export function ConfirmationStep({
               ✓ Confirmation email sent! Check your inbox for detailed booking information.
             </span>
           ) : (
-            <span className="text-blue-800">
-              📧 Sending confirmation email...
-            </span>
+            <span className="text-blue-800">📧 Sending confirmation email...</span>
           )}
         </AlertDescription>
       </Alert>
@@ -382,12 +368,16 @@ export function ConfirmationStep({
             <p className="text-sm text-amber-700 mb-4">
               Help others discover the benefits of recovery therapy by leaving us a review!
             </p>
-            <Button variant="outline" size="sm" className="border-amber-300 text-amber-700 hover:bg-amber-100">
+            <Button
+              variant="outline"
+              size="sm"
+              className="border-amber-300 text-amber-700 hover:bg-amber-100"
+            >
               Leave a Review
             </Button>
           </div>
         </CardContent>
       </Card>
     </div>
-  )
+  );
 }

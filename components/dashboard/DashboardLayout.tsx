@@ -1,38 +1,37 @@
-'use client'
+"use client";
 
-import { ReactNode } from 'react'
-import { User } from '@supabase/supabase-js'
-import { DashboardTab } from '@/app/profile/page'
-import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { Card } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import { Badge } from '@/components/ui/badge'
-import { 
-  LayoutDashboard, 
-  Calendar, 
-  History, 
-  Users, 
-  Star, 
-  Settings,
+import { DashboardTab } from "@/app/profile/page";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
+import { Card } from "@/components/ui/card";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { User } from "@supabase/supabase-js";
+import {
   ArrowLeft,
-  Coins
-} from 'lucide-react'
-import Link from 'next/link'
+  Calendar,
+  Coins,
+  History,
+  LayoutDashboard,
+  Settings,
+  Star,
+  Users,
+} from "lucide-react";
+import Link from "next/link";
+import { ReactNode } from "react";
 
 interface ProfileData {
-  credits: number
-  referral_code: string
-  address: any
-  phone: string
+  credits: number;
+  referral_code: string;
+  address: any;
+  phone: string;
 }
 
 interface DashboardLayoutProps {
-  user: User
-  profileData: ProfileData
-  activeTab: DashboardTab
-  onTabChange: (tab: DashboardTab) => void
-  children: ReactNode
+  user: User;
+  profileData: ProfileData;
+  activeTab: DashboardTab;
+  onTabChange: (tab: DashboardTab) => void;
+  children: ReactNode;
 }
 
 export function DashboardLayout({
@@ -40,57 +39,57 @@ export function DashboardLayout({
   profileData,
   activeTab,
   onTabChange,
-  children
+  children,
 }: DashboardLayoutProps) {
   const getUserInitials = () => {
     if (user.user_metadata?.full_name) {
       return user.user_metadata.full_name
-        .split(' ')
+        .split(" ")
         .map((name: string) => name[0])
-        .join('')
-        .toUpperCase()
+        .join("")
+        .toUpperCase();
     }
-    return user.email?.substring(0, 2).toUpperCase() || 'RM'
-  }
+    return user.email?.substring(0, 2).toUpperCase() || "RM";
+  };
 
   const tabs = [
     {
-      id: 'overview' as DashboardTab,
-      label: 'Overview',
+      id: "overview" as DashboardTab,
+      label: "Overview",
       icon: LayoutDashboard,
-      description: 'Dashboard home'
+      description: "Dashboard home",
     },
     {
-      id: 'bookings' as DashboardTab,
-      label: 'Bookings',
+      id: "bookings" as DashboardTab,
+      label: "Bookings",
       icon: Calendar,
-      description: 'Manage sessions'
+      description: "Manage sessions",
     },
     {
-      id: 'history' as DashboardTab,
-      label: 'History',
+      id: "history" as DashboardTab,
+      label: "History",
       icon: History,
-      description: 'Past sessions'
+      description: "Past sessions",
     },
     {
-      id: 'referrals' as DashboardTab,
-      label: 'Referrals',
+      id: "referrals" as DashboardTab,
+      label: "Referrals",
       icon: Users,
-      description: 'Invite friends'
+      description: "Invite friends",
     },
     {
-      id: 'reviews' as DashboardTab,
-      label: 'Reviews',
+      id: "reviews" as DashboardTab,
+      label: "Reviews",
       icon: Star,
-      description: 'Rate sessions'
+      description: "Rate sessions",
     },
     {
-      id: 'settings' as DashboardTab,
-      label: 'Settings',
+      id: "settings" as DashboardTab,
+      label: "Settings",
       icon: Settings,
-      description: 'Account settings'
-    }
-  ]
+      description: "Account settings",
+    },
+  ];
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -99,12 +98,15 @@ export function DashboardLayout({
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
-              <Link href="/" className="flex items-center space-x-2 text-gray-600 hover:text-gray-900">
+              <Link
+                href="/"
+                className="flex items-center space-x-2 text-gray-600 hover:text-gray-900"
+              >
                 <ArrowLeft className="w-5 h-5" />
                 <span>Back to Home</span>
               </Link>
             </div>
-            
+
             {/* User info and credits */}
             <div className="flex items-center space-x-4">
               <div className="flex items-center space-x-2">
@@ -113,7 +115,7 @@ export function DashboardLayout({
                   {profileData.credits} Credits
                 </Badge>
               </div>
-              
+
               <div className="flex items-center space-x-3">
                 <Avatar className="h-8 w-8">
                   <AvatarImage src={user.user_metadata?.avatar_url} />
@@ -123,7 +125,7 @@ export function DashboardLayout({
                 </Avatar>
                 <div className="text-sm">
                   <p className="font-medium text-gray-900">
-                    {user.user_metadata?.full_name || 'Recovery Member'}
+                    {user.user_metadata?.full_name || "Recovery Member"}
                   </p>
                   <p className="text-gray-500">{user.email}</p>
                 </div>
@@ -167,7 +169,7 @@ export function DashboardLayout({
                   </TabsTrigger>
                 ))}
               </TabsList>
-              
+
               {/* Mobile overflow menu for remaining tabs */}
               <div className="grid grid-cols-3 mt-2 border-t pt-2">
                 {tabs.slice(3).map((tab) => (
@@ -176,8 +178,8 @@ export function DashboardLayout({
                     onClick={() => onTabChange(tab.id)}
                     className={`flex flex-col items-center space-y-1 py-2 px-2 rounded ${
                       activeTab === tab.id
-                        ? 'bg-blue-50 text-blue-700'
-                        : 'text-gray-600 hover:text-gray-900'
+                        ? "bg-blue-50 text-blue-700"
+                        : "text-gray-600 hover:text-gray-900"
                     }`}
                   >
                     <tab.icon className="w-4 h-4" />
@@ -192,10 +194,8 @@ export function DashboardLayout({
 
       {/* Main Content */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <Card className="min-h-[600px] p-6">
-          {children}
-        </Card>
+        <Card className="min-h-[600px] p-6">{children}</Card>
       </div>
     </div>
-  )
+  );
 }

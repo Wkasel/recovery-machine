@@ -1,12 +1,12 @@
 // Payment email templates and sending service
 // Recovery Machine - Email notifications
 
-import nodemailer from 'nodemailer';
+import nodemailer from "nodemailer";
 
 // Email configuration
 const emailConfig = {
-  host: process.env.SMTP_HOST || 'smtp.gmail.com',
-  port: parseInt(process.env.SMTP_PORT || '587'),
+  host: process.env.SMTP_HOST || "smtp.gmail.com",
+  port: parseInt(process.env.SMTP_PORT || "587"),
   secure: false, // true for 465, false for other ports
   auth: {
     user: process.env.SMTP_USER,
@@ -26,21 +26,21 @@ export interface PaymentEmailData {
   transactionId?: string;
   subscriptionId?: string;
   setupFeeAmount?: number;
-  orderType: 'subscription' | 'one_time' | 'setup_fee';
+  orderType: "subscription" | "one_time" | "setup_fee";
 }
 
 export function generatePaymentConfirmationEmail(data: PaymentEmailData): string {
   const formatAmount = (cents: number) => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD',
+    return new Intl.NumberFormat("en-US", {
+      style: "currency",
+      currency: "USD",
     }).format(cents / 100);
   };
 
   const orderTypeText = {
-    subscription: 'Monthly Subscription',
-    setup_fee: 'Setup Fee',
-    one_time: 'One-time Payment',
+    subscription: "Monthly Subscription",
+    setup_fee: "Setup Fee",
+    one_time: "One-time Payment",
   }[data.orderType];
 
   return `
@@ -71,7 +71,7 @@ export function generatePaymentConfirmationEmail(data: PaymentEmailData): string
         <div class="content">
           <h2>Thank you for your payment!</h2>
           
-          <p>Hi ${data.customerName || 'there'},</p>
+          <p>Hi ${data.customerName || "there"},</p>
           
           <p>We've successfully processed your payment for Recovery Machine services.</p>
           
@@ -80,18 +80,22 @@ export function generatePaymentConfirmationEmail(data: PaymentEmailData): string
             <p><strong>Order ID:</strong> ${data.orderId}</p>
             <p><strong>Payment Type:</strong> ${orderTypeText}</p>
             <p><strong>Amount:</strong> <span class="amount">${formatAmount(data.amount)}</span></p>
-            ${data.setupFeeAmount ? `<p><strong>Setup Fee:</strong> ${formatAmount(data.setupFeeAmount)}</p>` : ''}
-            ${data.transactionId ? `<p><strong>Transaction ID:</strong> ${data.transactionId}</p>` : ''}
-            ${data.subscriptionId ? `<p><strong>Subscription ID:</strong> ${data.subscriptionId}</p>` : ''}
+            ${data.setupFeeAmount ? `<p><strong>Setup Fee:</strong> ${formatAmount(data.setupFeeAmount)}</p>` : ""}
+            ${data.transactionId ? `<p><strong>Transaction ID:</strong> ${data.transactionId}</p>` : ""}
+            ${data.subscriptionId ? `<p><strong>Subscription ID:</strong> ${data.subscriptionId}</p>` : ""}
             <p><strong>Payment Date:</strong> ${new Date().toLocaleDateString()}</p>
           </div>
           
-          ${data.orderType === 'subscription' ? `
+          ${
+            data.orderType === "subscription"
+              ? `
             <h3>Your Subscription</h3>
             <p>Your monthly subscription is now active! You can now book recovery sessions through your dashboard.</p>
             <p><strong>Monthly Amount:</strong> ${formatAmount(40000)}</p>
             <p><strong>Next Billing Date:</strong> ${new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toLocaleDateString()}</p>
-          ` : ''}
+          `
+              : ""
+          }
           
           <a href="${process.env.NEXT_PUBLIC_APP_URL}/dashboard" class="button">
             View Dashboard
@@ -125,9 +129,9 @@ export function generateRefundNotificationEmail(data: {
   refundReason?: string;
 }): string {
   const formatAmount = (cents: number) => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD',
+    return new Intl.NumberFormat("en-US", {
+      style: "currency",
+      currency: "USD",
     }).format(cents / 100);
   };
 
@@ -158,7 +162,7 @@ export function generateRefundNotificationEmail(data: {
         <div class="content">
           <h2>Your refund has been processed</h2>
           
-          <p>Hi ${data.customerName || 'there'},</p>
+          <p>Hi ${data.customerName || "there"},</p>
           
           <p>We've processed your refund request. The refund amount will appear in your original payment method within 3-5 business days.</p>
           
@@ -166,7 +170,7 @@ export function generateRefundNotificationEmail(data: {
             <h3>Refund Details</h3>
             <p><strong>Order ID:</strong> ${data.orderId}</p>
             <p><strong>Refund Amount:</strong> <span class="amount">${formatAmount(data.refundAmount)}</span></p>
-            ${data.refundReason ? `<p><strong>Reason:</strong> ${data.refundReason}</p>` : ''}
+            ${data.refundReason ? `<p><strong>Reason:</strong> ${data.refundReason}</p>` : ""}
             <p><strong>Processed Date:</strong> ${new Date().toLocaleDateString()}</p>
           </div>
           
@@ -218,7 +222,7 @@ export function generateSubscriptionCancelledEmail(data: {
         <div class="content">
           <h2>Your subscription has been cancelled</h2>
           
-          <p>Hi ${data.customerName || 'there'},</p>
+          <p>Hi ${data.customerName || "there"},</p>
           
           <p>We've processed your subscription cancellation request. Your subscription will remain active until your current billing period ends.</p>
           
@@ -259,15 +263,14 @@ export async function sendPaymentConfirmationEmail(data: PaymentEmailData): Prom
     await transporter.sendMail({
       from: `"Recovery Machine" <${process.env.SMTP_FROM || process.env.SMTP_USER}>`,
       to: data.customerEmail,
-      subject: 'Payment Confirmation - Recovery Machine',
+      subject: "Payment Confirmation - Recovery Machine",
       html: htmlContent,
     });
 
-    console.log('Payment confirmation email sent to:', data.customerEmail);
+    console.log("Payment confirmation email sent to:", data.customerEmail);
     return true;
-
   } catch (error) {
-    console.error('Failed to send payment confirmation email:', error);
+    console.error("Failed to send payment confirmation email:", error);
     return false;
   }
 }
@@ -285,15 +288,14 @@ export async function sendRefundNotificationEmail(data: {
     await transporter.sendMail({
       from: `"Recovery Machine" <${process.env.SMTP_FROM || process.env.SMTP_USER}>`,
       to: data.customerEmail,
-      subject: 'Refund Processed - Recovery Machine',
+      subject: "Refund Processed - Recovery Machine",
       html: htmlContent,
     });
 
-    console.log('Refund notification email sent to:', data.customerEmail);
+    console.log("Refund notification email sent to:", data.customerEmail);
     return true;
-
   } catch (error) {
-    console.error('Failed to send refund notification email:', error);
+    console.error("Failed to send refund notification email:", error);
     return false;
   }
 }
@@ -310,15 +312,14 @@ export async function sendSubscriptionCancelledEmail(data: {
     await transporter.sendMail({
       from: `"Recovery Machine" <${process.env.SMTP_FROM || process.env.SMTP_USER}>`,
       to: data.customerEmail,
-      subject: 'Subscription Cancelled - Recovery Machine',
+      subject: "Subscription Cancelled - Recovery Machine",
       html: htmlContent,
     });
 
-    console.log('Subscription cancellation email sent to:', data.customerEmail);
+    console.log("Subscription cancellation email sent to:", data.customerEmail);
     return true;
-
   } catch (error) {
-    console.error('Failed to send subscription cancellation email:', error);
+    console.error("Failed to send subscription cancellation email:", error);
     return false;
   }
 }

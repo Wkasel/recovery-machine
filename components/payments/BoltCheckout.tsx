@@ -1,11 +1,11 @@
-'use client';
+"use client";
 
-import { useState, useEffect, useRef } from 'react';
-import { Card } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Loader2, Shield, CreditCard } from 'lucide-react';
-import { useToast } from '@/hooks/use-toast';
-import { PRICING, type OrderType } from '@/lib/bolt/config';
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { useToast } from "@/hooks/use-toast";
+import { PRICING, type OrderType } from "@/lib/bolt/config";
+import { CreditCard, Loader2, Shield } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
 
 interface BoltCheckoutProps {
   amount: number;
@@ -20,7 +20,7 @@ interface BoltCheckoutProps {
 }
 
 interface BoltCheckoutResult {
-  status: 'success' | 'error' | 'cancelled';
+  status: "success" | "error" | "cancelled";
   checkout_id?: string;
   transaction_id?: string;
   error?: string;
@@ -49,14 +49,14 @@ export function BoltCheckout({
       setLoading(true);
       setError(null);
 
-      const response = await fetch('/api/payments/checkout', {
-        method: 'POST',
+      const response = await fetch("/api/payments/checkout", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({
           amount,
-          currency: 'USD',
+          currency: "USD",
           order_reference: `order_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
           description,
           customer_email: customerEmail,
@@ -67,19 +67,19 @@ export function BoltCheckout({
       });
 
       if (!response.ok) {
-        throw new Error('Failed to create checkout session');
+        throw new Error("Failed to create checkout session");
       }
 
       const data = await response.json();
       setCheckoutUrl(data.checkout_url);
     } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'Unknown error occurred';
+      const errorMessage = err instanceof Error ? err.message : "Unknown error occurred";
       setError(errorMessage);
       onError?.(err);
       toast({
-        title: 'Payment Error',
+        title: "Payment Error",
         description: errorMessage,
-        variant: 'destructive',
+        variant: "destructive",
       });
     } finally {
       setLoading(false);
@@ -89,36 +89,39 @@ export function BoltCheckout({
   // Handle iframe messages from Bolt
   useEffect(() => {
     const handleMessage = (event: MessageEvent) => {
-      if (event.origin !== 'https://checkout.bolt.com' && event.origin !== 'https://checkout-sandbox.bolt.com') {
+      if (
+        event.origin !== "https://checkout.bolt.com" &&
+        event.origin !== "https://checkout-sandbox.bolt.com"
+      ) {
         return;
       }
 
       const { type, data } = event.data;
 
       switch (type) {
-        case 'bolt_checkout_success':
+        case "bolt_checkout_success":
           onSuccess?.(data);
           toast({
-            title: 'Payment Successful!',
-            description: 'Your payment has been processed successfully.',
+            title: "Payment Successful!",
+            description: "Your payment has been processed successfully.",
           });
           break;
 
-        case 'bolt_checkout_error':
+        case "bolt_checkout_error":
           onError?.(data);
           toast({
-            title: 'Payment Failed',
-            description: data.error || 'Payment could not be processed.',
-            variant: 'destructive',
+            title: "Payment Failed",
+            description: data.error || "Payment could not be processed.",
+            variant: "destructive",
           });
           break;
 
-        case 'bolt_checkout_cancelled':
+        case "bolt_checkout_cancelled":
           onCancel?.();
           toast({
-            title: 'Payment Cancelled',
-            description: 'Payment has been cancelled.',
-            variant: 'destructive',
+            title: "Payment Cancelled",
+            description: "Payment has been cancelled.",
+            variant: "destructive",
           });
           break;
 
@@ -127,29 +130,29 @@ export function BoltCheckout({
       }
     };
 
-    window.addEventListener('message', handleMessage);
-    return () => window.removeEventListener('message', handleMessage);
+    window.addEventListener("message", handleMessage);
+    return () => window.removeEventListener("message", handleMessage);
   }, [onSuccess, onError, onCancel, toast]);
 
   // Format amount for display
   const formatAmount = (cents: number) => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD',
+    return new Intl.NumberFormat("en-US", {
+      style: "currency",
+      currency: "USD",
     }).format(cents / 100);
   };
 
   // Get order type display name
   const getOrderTypeDisplay = (type: OrderType) => {
     switch (type) {
-      case 'subscription':
-        return 'Monthly Subscription';
-      case 'setup_fee':
-        return 'Setup Fee';
-      case 'one_time':
-        return 'One-time Payment';
+      case "subscription":
+        return "Monthly Subscription";
+      case "setup_fee":
+        return "Setup Fee";
+      case "one_time":
+        return "One-time Payment";
       default:
-        return 'Payment';
+        return "Payment";
     }
   };
 
@@ -163,15 +166,9 @@ export function BoltCheckout({
               <CreditCard className="h-5 w-5 text-blue-600" />
               <h3 className="text-lg font-semibold">Secure Payment</h3>
             </div>
-            <div className="text-sm text-gray-600">
-              {getOrderTypeDisplay(orderType)}
-            </div>
-            <div className="text-2xl font-bold text-gray-900">
-              {formatAmount(amount)}
-            </div>
-            <div className="text-sm text-gray-500">
-              {description}
-            </div>
+            <div className="text-sm text-gray-600">{getOrderTypeDisplay(orderType)}</div>
+            <div className="text-2xl font-bold text-gray-900">{formatAmount(amount)}</div>
+            <div className="text-sm text-gray-500">{description}</div>
           </div>
 
           {/* Security Badge */}
@@ -182,11 +179,7 @@ export function BoltCheckout({
 
           {/* Checkout Action */}
           {!checkoutUrl && !loading && !error && (
-            <Button
-              onClick={initializeCheckout}
-              className="w-full"
-              size="lg"
-            >
+            <Button onClick={initializeCheckout} className="w-full" size="lg">
               Continue to Payment
             </Button>
           )}
@@ -202,14 +195,8 @@ export function BoltCheckout({
           {/* Error State */}
           {error && (
             <div className="space-y-3">
-              <div className="text-sm text-red-600 text-center">
-                {error}
-              </div>
-              <Button
-                onClick={initializeCheckout}
-                variant="outline"
-                className="w-full"
-              >
+              <div className="text-sm text-red-600 text-center">{error}</div>
+              <Button onClick={initializeCheckout} variant="outline" className="w-full">
                 Try Again
               </Button>
             </div>
@@ -264,9 +251,9 @@ export function PricingDisplay() {
       <Card className="p-4">
         <h4 className="font-semibold mb-2">Monthly Subscription</h4>
         <div className="text-2xl font-bold text-blue-600">
-          {new Intl.NumberFormat('en-US', {
-            style: 'currency',
-            currency: 'USD',
+          {new Intl.NumberFormat("en-US", {
+            style: "currency",
+            currency: "USD",
           }).format(PRICING.MONTHLY_SUBSCRIPTION / 100)}
         </div>
         <div className="text-sm text-gray-500">per month</div>
@@ -275,14 +262,14 @@ export function PricingDisplay() {
       <Card className="p-4">
         <h4 className="font-semibold mb-2">Setup Fees</h4>
         <div className="text-lg font-bold text-green-600">
-          {new Intl.NumberFormat('en-US', {
-            style: 'currency',
-            currency: 'USD',
+          {new Intl.NumberFormat("en-US", {
+            style: "currency",
+            currency: "USD",
           }).format(PRICING.SETUP_FEES.BASIC / 100)}
-          {' - '}
-          {new Intl.NumberFormat('en-US', {
-            style: 'currency',
-            currency: 'USD',
+          {" - "}
+          {new Intl.NumberFormat("en-US", {
+            style: "currency",
+            currency: "USD",
           }).format(PRICING.SETUP_FEES.DELUXE / 100)}
         </div>
         <div className="text-sm text-gray-500">one-time</div>
@@ -291,14 +278,14 @@ export function PricingDisplay() {
       <Card className="p-4">
         <h4 className="font-semibold mb-2">Add-ons</h4>
         <div className="text-lg font-bold text-purple-600">
-          {new Intl.NumberFormat('en-US', {
-            style: 'currency',
-            currency: 'USD',
+          {new Intl.NumberFormat("en-US", {
+            style: "currency",
+            currency: "USD",
           }).format(PRICING.ADD_ONS.EXTENDED_SAUNA / 100)}
-          {' - '}
-          {new Intl.NumberFormat('en-US', {
-            style: 'currency',
-            currency: 'USD',
+          {" - "}
+          {new Intl.NumberFormat("en-US", {
+            style: "currency",
+            currency: "USD",
           }).format(PRICING.ADD_ONS.FAMILY_PACKAGE / 100)}
         </div>
         <div className="text-sm text-gray-500">per session</div>

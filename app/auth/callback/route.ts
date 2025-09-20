@@ -1,6 +1,6 @@
 import { AuthError } from "@/core/errors/auth/AuthError";
-import { createServerSupabaseClient } from "@/lib/supabase/server";
 import { Logger } from "@/lib/logger/Logger";
+import { createServerSupabaseClient } from "@/lib/supabase/server";
 import { NextRequest, NextResponse } from "next/server";
 
 type EmailOtpType = "signup" | "magiclink" | "recovery" | "invite" | "email" | "email-change";
@@ -12,7 +12,12 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
     const next = requestUrl.searchParams.get("next") ?? "/profile";
     const type = requestUrl.searchParams.get("type") as EmailOtpType;
 
-    console.log("Auth callback received:", { code: !!code, next, type, url: requestUrl.toString() });
+    console.log("Auth callback received:", {
+      code: !!code,
+      next,
+      type,
+      url: requestUrl.toString(),
+    });
 
     if (!code) {
       console.error("No auth code provided in callback");

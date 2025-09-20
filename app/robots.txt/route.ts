@@ -1,5 +1,3 @@
-import { MetadataRoute } from 'next';
-
 export function GET(): Response {
   const robotsTxt = `# Robots.txt for The Recovery Machine
 # Mobile Wellness & Recovery Services
@@ -38,8 +36,8 @@ Allow: /infrared-sauna
 Crawl-delay: 1
 
 # Sitemap location
-Sitemap: ${process.env.NEXT_PUBLIC_APP_URL || 'https://therecoverymachine.com'}/sitemap.xml
-Sitemap: ${process.env.NEXT_PUBLIC_APP_URL || 'https://therecoverymachine.com'}/server-sitemap.xml
+Sitemap: ${process.env.NEXT_PUBLIC_APP_URL || "https://therecoverymachine.com"}/sitemap.xml
+Sitemap: ${process.env.NEXT_PUBLIC_APP_URL || "https://therecoverymachine.com"}/server-sitemap.xml
 
 # Special instructions for major search engines
 User-agent: Googlebot
@@ -83,8 +81,8 @@ Allow: /`;
 
   return new Response(robotsTxt, {
     headers: {
-      'Content-Type': 'text/plain',
-      'Cache-Control': 'public, max-age=86400, s-maxage=86400',
+      "Content-Type": "text/plain",
+      "Cache-Control": "public, max-age=86400, s-maxage=86400",
     },
   });
 }

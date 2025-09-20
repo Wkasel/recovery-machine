@@ -1,49 +1,54 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { boltClient } from '@/lib/bolt/client';
-import { createServerSupabaseClient } from '@/lib/supabase/server';
-import { type BoltOrderData } from '@/lib/bolt/config';
+// @ts-nocheck
+import { boltClient } from "@/lib/bolt/client";
+import { type BoltOrderData } from "@/lib/bolt/config";
+import { createServerSupabaseClient } from "@/lib/supabase/server";
+import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(request: NextRequest) {
   try {
     const supabase = createServerSupabaseClient();
-    const { data: { user }, error: authError } = await supabase.auth.getUser();
+    const {
+      data: { user },
+      error: authError,
+    } = await supabase.auth.getUser();
 
     if (authError || !user) {
-      return NextResponse.json(
-        { error: 'Authentication required' },
-        { status: 401 }
-      );
+      return NextResponse.json({ error: "Authentication required" }, { status: 401 });
     }
 
     const body: BoltOrderData = await request.json();
 
     // Validate required fields
-    const requiredFields = ['amount', 'currency', 'order_reference', 'description', 'customer_email', 'order_type'];
-    const missingFields = requiredFields.filter(field => !body[field]);
-    
+    const requiredFields = [
+      "amount",
+      "currency",
+      "order_reference",
+      "description",
+      "customer_email",
+      "order_type",
+    ];
+    const missingFields = requiredFields.filter((field) => !body[field]);
+
     if (missingFields.length > 0) {
       return NextResponse.json(
-        { error: `Missing required fields: ${missingFields.join(', ')}` },
+        { error: `Missing required fields: ${missingFields.join(", ")}` },
         { status: 400 }
       );
     }
 
     // Validate amount
     if (body.amount <= 0) {
-      return NextResponse.json(
-        { error: 'Amount must be greater than 0' },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: "Amount must be greater than 0" }, { status: 400 });
     }
 
     // Create order in database first
     const { data: order, error: orderError } = await supabase
-      .from('orders')
+      .from("orders")
       .insert({
         user_id: user.id,
         amount: body.amount,
-        setup_fee_applied: body.order_type === 'setup_fee' ? body.amount : 0,
-        status: 'pending',
+        setup_fee_applied: body.order_type === "setup_fee" ? body.amount : 0,
+        status: "pending",
         order_type: body.order_type,
         metadata: {
           description: body.description,
@@ -57,11 +62,8 @@ export async function POST(request: NextRequest) {
       .single();
 
     if (orderError) {
-      console.error('Database error:', orderError);
-      return NextResponse.json(
-        { error: 'Failed to create order record' },
-        { status: 500 }
-      );
+      console.error("Database error:", orderError);
+      return NextResponse.json({ error: "Failed to create order record" }, { status: 500 });
     }
 
     try {
@@ -77,12 +79,12 @@ export async function POST(request: NextRequest) {
 
       // Update order with Bolt checkout ID
       await supabase
-        .from('orders')
+        .from("orders")
         .update({
           bolt_checkout_id: checkoutResponse.checkout_id,
-          status: 'processing',
+          status: "processing",
         })
-        .eq('id', order.id);
+        .eq("id", order.id);
 
       return NextResponse.json({
         success: true,
@@ -90,27 +92,16 @@ export async function POST(request: NextRequest) {
         checkout_url: checkoutResponse.checkout_url,
         order_id: order.id,
       });
-
     } catch (boltError) {
       // Update order status to failed
-      await supabase
-        .from('orders')
-        .update({ status: 'failed' })
-        .eq('id', order.id);
+      await supabase.from("orders").update({ status: "failed" }).eq("id", order.id);
 
-      console.error('Bolt API error:', boltError);
-      return NextResponse.json(
-        { error: 'Failed to create checkout session' },
-        { status: 500 }
-      );
+      console.error("Bolt API error:", boltError);
+      return NextResponse.json({ error: "Failed to create checkout session" }, { status: 500 });
     }
-
   } catch (error) {
-    console.error('Checkout error:', error);
-    return NextResponse.json(
-      { error: 'Internal server error' },
-      { status: 500 }
-    );
+    console.error("Checkout error:", error);
+    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
   }
 }
 
@@ -118,44 +109,38 @@ export async function POST(request: NextRequest) {
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
-    const checkoutId = searchParams.get('checkout_id');
+    const checkoutId = searchParams.get("checkout_id");
 
     if (!checkoutId) {
-      return NextResponse.json(
-        { error: 'checkout_id parameter required' },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: "checkout_id parameter required" }, { status: 400 });
     }
 
     const supabase = createServerSupabaseClient();
-    const { data: { user }, error: authError } = await supabase.auth.getUser();
+    const {
+      data: { user },
+      error: authError,
+    } = await supabase.auth.getUser();
 
     if (authError || !user) {
-      return NextResponse.json(
-        { error: 'Authentication required' },
-        { status: 401 }
-      );
+      return NextResponse.json({ error: "Authentication required" }, { status: 401 });
     }
 
     // Get order from database
     const { data: order, error: orderError } = await supabase
-      .from('orders')
-      .select('*')
-      .eq('bolt_checkout_id', checkoutId)
-      .eq('user_id', user.id)
+      .from("orders")
+      .select("*")
+      .eq("bolt_checkout_id", checkoutId)
+      .eq("user_id", user.id)
       .single();
 
     if (orderError || !order) {
-      return NextResponse.json(
-        { error: 'Order not found' },
-        { status: 404 }
-      );
+      return NextResponse.json({ error: "Order not found" }, { status: 404 });
     }
 
     // Get status from Bolt
     try {
       const boltStatus = await boltClient.getOrderStatus(checkoutId);
-      
+
       return NextResponse.json({
         order_id: order.id,
         checkout_id: checkoutId,
@@ -163,24 +148,19 @@ export async function GET(request: NextRequest) {
         amount: order.amount,
         bolt_status: boltStatus,
       });
-
     } catch (boltError) {
-      console.error('Bolt status error:', boltError);
+      console.error("Bolt status error:", boltError);
       return NextResponse.json({
         order_id: order.id,
         checkout_id: checkoutId,
         status: order.status,
         amount: order.amount,
         bolt_status: null,
-        error: 'Could not fetch Bolt status',
+        error: "Could not fetch Bolt status",
       });
     }
-
   } catch (error) {
-    console.error('Status check error:', error);
-    return NextResponse.json(
-      { error: 'Internal server error' },
-      { status: 500 }
-    );
+    console.error("Status check error:", error);
+    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
   }
 }

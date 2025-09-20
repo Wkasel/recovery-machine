@@ -3,12 +3,14 @@ import { z } from "zod";
 export const createBookingSchema = z.object({
   date_time: z.string().datetime("Please select a valid date and time"),
   duration: z.number().min(30).max(120).default(30),
-  add_ons: z.object({
-    extra_visits: z.number().min(0).max(10).default(0),
-    family_members: z.number().min(0).max(5).default(0),
-    branded_towels: z.boolean().default(false),
-    electrolytes: z.boolean().default(false),
-  }).default({}),
+  add_ons: z
+    .object({
+      extra_visits: z.number().min(0).max(10).default(0),
+      family_members: z.number().min(0).max(5).default(0),
+      branded_towels: z.boolean().default(false),
+      electrolytes: z.boolean().default(false),
+    })
+    .default({}),
   notes: z.string().max(500).optional(),
 });
 

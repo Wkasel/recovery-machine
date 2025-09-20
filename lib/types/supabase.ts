@@ -22,8 +22,8 @@ export interface Order {
   bolt_checkout_id: string | null;
   amount: number; // in cents
   setup_fee_applied: number; // in cents
-  status: 'pending' | 'processing' | 'paid' | 'refunded' | 'failed';
-  order_type: 'subscription' | 'one_time' | 'setup_fee';
+  status: "pending" | "processing" | "paid" | "refunded" | "failed";
+  order_type: "subscription" | "one_time" | "setup_fee";
   metadata: Record<string, any>; // JSONB for additional payment data
   created_at: string;
   updated_at: string;
@@ -36,7 +36,7 @@ export interface Booking {
   date_time: string; // TIMESTAMPTZ
   duration: number; // minutes, default 30
   add_ons: Record<string, any>; // JSONB: {extra_visits: 2, family: true, sauna_time: 15}
-  status: 'scheduled' | 'confirmed' | 'in_progress' | 'completed' | 'cancelled' | 'no_show';
+  status: "scheduled" | "confirmed" | "in_progress" | "completed" | "cancelled" | "no_show";
   location_address: Record<string, any>; // JSONB for delivery address
   special_instructions: string | null;
   created_at: string;
@@ -48,7 +48,7 @@ export interface Referral {
   referrer_id: string;
   invitee_email: string;
   invitee_id: string | null; // null until they sign up
-  status: 'pending' | 'signed_up' | 'first_booking' | 'expired';
+  status: "pending" | "signed_up" | "first_booking" | "expired";
   reward_credits: number;
   credits_awarded_at: string | null;
   expires_at: string;
@@ -73,7 +73,7 @@ export interface Admin {
   id: string;
   user_id: string;
   email: string;
-  role: 'super_admin' | 'admin' | 'operator';
+  role: "super_admin" | "admin" | "operator";
   permissions: Record<string, any>; // JSONB for granular permissions
   is_active: boolean;
   created_at: string;
@@ -85,7 +85,7 @@ export interface CreditTransaction {
   user_id: string;
   referral_id: string | null;
   amount: number; // Can be negative for deductions
-  transaction_type: 'referral_bonus' | 'booking_credit' | 'manual_adjustment' | 'refund';
+  transaction_type: "referral_bonus" | "booking_credit" | "manual_adjustment" | "refund";
   description: string | null;
   created_at: string;
 }
@@ -217,22 +217,22 @@ export type ProfileWithStats = Profile & {
 // FORM TYPES FOR FRONTEND
 // ===========================================================================
 
-export type CreateBookingData = Database['public']['Tables']['bookings']['Insert'];
-export type UpdateBookingData = Database['public']['Tables']['bookings']['Update'];
-export type CreateOrderData = Database['public']['Tables']['orders']['Insert'];
-export type CreateReferralData = Database['public']['Tables']['referrals']['Insert'];
-export type CreateReviewData = Database['public']['Tables']['reviews']['Insert'];
-export type UpdateProfileData = Database['public']['Tables']['profiles']['Update'];
+export type CreateBookingData = Database["public"]["Tables"]["bookings"]["Insert"];
+export type UpdateBookingData = Database["public"]["Tables"]["bookings"]["Update"];
+export type CreateOrderData = Database["public"]["Tables"]["orders"]["Insert"];
+export type CreateReferralData = Database["public"]["Tables"]["referrals"]["Insert"];
+export type CreateReviewData = Database["public"]["Tables"]["reviews"]["Insert"];
+export type UpdateProfileData = Database["public"]["Tables"]["profiles"]["Update"];
 
 // ===========================================================================
 // API RESPONSE TYPES
 // ===========================================================================
 
-export type ApiResponse<T> = {
+export interface ApiResponse<T> {
   data: T | null;
   error: string | null;
   success: boolean;
-};
+}
 
 export type PaginatedResponse<T> = ApiResponse<T[]> & {
   pagination: {

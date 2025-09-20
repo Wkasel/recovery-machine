@@ -60,21 +60,24 @@ export function Header({
         </div>
 
         {/* Main Navigation */}
-        <MainNav items={mainNavItems} user={user as IUser | null} />
+        <MainNav items={mainNavItems} user={user} />
 
         {/* Right side - Auth */}
         <div className="flex flex-1 items-center justify-end space-x-4">
           {user ? (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" className="relative h-8 w-8 bg-neutral-900 hover:bg-neutral-800">
+                <Button
+                  variant="ghost"
+                  className="relative h-8 w-8 bg-neutral-900 hover:bg-neutral-800"
+                >
                   <Avatar className="h-6 w-6">
                     <AvatarImage
                       src={user.user_metadata?.avatar_url}
                       alt={user.user_metadata?.full_name || user.email || "User"}
                     />
                     <AvatarFallback className="text-xs bg-neutral-700 text-white">
-                      {getUserInitials(user as IUser)}
+                      {getUserInitials(user)}
                     </AvatarFallback>
                   </Avatar>
                   <span className="sr-only">Open user menu</span>
@@ -88,12 +91,14 @@ export function Header({
                       alt={user.user_metadata?.full_name || user.email || "User"}
                     />
                     <AvatarFallback className="text-xs bg-neutral-700 text-white">
-                      {getUserInitials(user as IUser)}
+                      {getUserInitials(user)}
                     </AvatarFallback>
                   </Avatar>
                   <div className="flex flex-col space-y-1 leading-none">
                     {user.user_metadata?.full_name && (
-                      <p className="font-medium text-white font-mono text-sm">{user.user_metadata.full_name}</p>
+                      <p className="font-medium text-white font-mono text-sm">
+                        {user.user_metadata.full_name}
+                      </p>
                     )}
                     {user.email && (
                       <p className="text-xs text-neutral-400 truncate font-mono">{user.email}</p>
@@ -122,10 +127,17 @@ export function Header({
             </DropdownMenu>
           ) : (
             <div className="flex items-center gap-3">
-              <Button asChild variant="ghost" className="text-sm font-medium text-neutral-400 hover:text-white hover:bg-neutral-900 font-mono h-8 px-4">
+              <Button
+                asChild
+                variant="ghost"
+                className="text-sm font-medium text-neutral-400 hover:text-white hover:bg-neutral-900 font-mono h-8 px-4"
+              >
                 <Link href="/sign-in">Sign in</Link>
               </Button>
-              <Button asChild className="text-sm font-medium bg-white text-black hover:bg-neutral-200 font-mono h-8 px-4">
+              <Button
+                asChild
+                className="text-sm font-medium bg-white text-black hover:bg-neutral-200 font-mono h-8 px-4"
+              >
                 <Link href="/sign-up">Get Started</Link>
               </Button>
             </div>

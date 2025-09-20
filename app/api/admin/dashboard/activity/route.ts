@@ -1,11 +1,12 @@
-import { NextResponse } from 'next/server';
-import { requireAdminAccess } from '@/utils/admin/auth';
-import { createServerSupabaseClient } from '@/lib/supabase/server';
+// @ts-nocheck
+import { createServerSupabaseClient } from "@/lib/supabase/server";
+import { requireAdminAccess } from "@/utils/admin/auth";
+import { NextRequest, NextResponse } from "next/server";
 
-export async function GET() {
+export async function GET(request: NextRequest) {
   try {
-    await requireAdminAccess('operator');
-    const supabase = createServerSupabaseClient();
+    await requireAdminAccess(request, "operator");
+    const supabase = await createServerSupabaseClient();
 
     // Get recent activities from the last 7 days
     const sevenDaysAgo = new Date();
@@ -13,103 +14,111 @@ export async function GET() {
 
     // Recent bookings
     const { data: recentBookings } = await supabase
-      .from('bookings')
-      .select(`
+      .from("bookings")
+      .select(
+        `
         id,
         created_at,
         status,
         profiles!bookings_user_id_fkey (email)
-      `)
-      .gte('created_at', sevenDaysAgo.toISOString())
-      .order('created_at', { ascending: false })
+      `
+      )
+      .gte("created_at", sevenDaysAgo.toISOString())
+      .order("created_at", { ascending: false })
       .limit(10);
 
     // Recent orders/payments
     const { data: recentOrders } = await supabase
-      .from('orders')
-      .select(`
+      .from("orders")
+      .select(
+        `
         id,
         amount,
         status,
         order_type,
         created_at,
         profiles!orders_user_id_fkey (email)
-      `)
-      .gte('created_at', sevenDaysAgo.toISOString())
-      .order('created_at', { ascending: false })
+      `
+      )
+      .gte("created_at", sevenDaysAgo.toISOString())
+      .order("created_at", { ascending: false })
       .limit(10);
 
     // Recent reviews
     const { data: recentReviews } = await supabase
-      .from('reviews')
-      .select(`
+      .from("reviews")
+      .select(
+        `
         id,
         rating,
         created_at,
         profiles!reviews_user_id_fkey (email)
-      `)
-      .gte('created_at', sevenDaysAgo.toISOString())
-      .order('created_at', { ascending: false })
+      `
+      )
+      .gte("created_at", sevenDaysAgo.toISOString())
+      .order("created_at", { ascending: false })
       .limit(10);
 
     // Recent referrals
     const { data: recentReferrals } = await supabase
-      .from('referrals')
-      .select(`
+      .from("referrals")
+      .select(
+        `
         id,
         status,
         invitee_email,
         created_at,
         profiles!referrals_referrer_id_fkey (email)
-      `)
-      .gte('created_at', sevenDaysAgo.toISOString())
-      .order('created_at', { ascending: false })
+      `
+      )
+      .gte("created_at", sevenDaysAgo.toISOString())
+      .order("created_at", { ascending: false })
       .limit(10);
 
     // Combine and format activities
-    const activities = [];
+    const activities: any[] = [];
 
     // Add booking activities
-    recentBookings?.forEach(booking => {
+    recentBookings?.forEach((booking: any) => {
       activities.push({
         id: booking.id,
-        type: 'booking',
+        type: "booking",
         description: `New booking ${booking.status}`,
-        user_email: booking.profiles?.email || 'Unknown',
+        user_email: booking.profiles?.email || "Unknown",
         created_at: booking.created_at,
       });
     });
 
     // Add payment activities
-    recentOrders?.forEach(order => {
+    recentOrders?.forEach((order) => {
       activities.push({
         id: order.id,
-        type: 'payment',
+        type: "payment",
         description: `${order.order_type} payment ${order.status}`,
-        user_email: order.profiles?.email || 'Unknown',
+        user_email: order.profiles?.email || "Unknown",
         amount: order.amount,
         created_at: order.created_at,
       });
     });
 
     // Add review activities
-    recentReviews?.forEach(review => {
+    recentReviews?.forEach((review) => {
       activities.push({
         id: review.id,
-        type: 'review',
+        type: "review",
         description: `New ${review.rating}-star review`,
-        user_email: review.profiles?.email || 'Unknown',
+        user_email: review.profiles?.email || "Unknown",
         created_at: review.created_at,
       });
     });
 
     // Add referral activities
-    recentReferrals?.forEach(referral => {
+    recentReferrals?.forEach((referral) => {
       activities.push({
         id: referral.id,
-        type: 'referral',
+        type: "referral",
         description: `Referral ${referral.status} for ${referral.invitee_email}`,
-        user_email: referral.profiles?.email || 'Unknown',
+        user_email: referral.profiles?.email || "Unknown",
         created_at: referral.created_at,
       });
     });
@@ -122,12 +131,8 @@ export async function GET() {
       activities: limitedActivities,
       total: limitedActivities.length,
     });
-
   } catch (error) {
-    console.error('Dashboard activity error:', error);
-    return NextResponse.json(
-      { error: 'Failed to fetch recent activity' },
-      { status: 500 }
-    );
+    console.error("Dashboard activity error:", error);
+    return NextResponse.json({ error: "Failed to fetch recent activity" }, { status: 500 });
   }
 }

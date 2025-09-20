@@ -1,4 +1,4 @@
-import { faker } from '@faker-js/faker';
+import { faker } from "@faker-js/faker";
 
 // User factories
 export interface TestUser {
@@ -21,12 +21,12 @@ export interface TestAddress {
 export interface TestBooking {
   id: string;
   userId: string;
-  service: 'cold-plunge' | 'infrared-sauna' | 'combo';
-  frequency: 'weekly' | 'bi-weekly' | 'monthly';
+  service: "cold-plunge" | "infrared-sauna" | "combo";
+  frequency: "weekly" | "bi-weekly" | "monthly";
   startDate: Date;
   duration: number;
   location: TestAddress;
-  status: 'pending' | 'confirmed' | 'completed' | 'cancelled';
+  status: "pending" | "confirmed" | "completed" | "cancelled";
   price: number;
   createdAt: Date;
 }
@@ -36,8 +36,8 @@ export interface TestPayment {
   bookingId: string;
   amount: number;
   currency: string;
-  status: 'pending' | 'success' | 'failed' | 'refunded';
-  method: 'card' | 'apple-pay' | 'google-pay';
+  status: "pending" | "success" | "failed" | "refunded";
+  method: "card" | "apple-pay" | "google-pay";
   boltTransactionId?: string;
   createdAt: Date;
 }
@@ -47,7 +47,7 @@ export const createTestUser = (overrides: Partial<TestUser> = {}): TestUser => (
   id: faker.string.uuid(),
   email: faker.internet.email(),
   name: faker.person.fullName(),
-  phone: faker.phone.number('###-###-####'),
+  phone: faker.phone.number("###-###-####"),
   address: createTestAddress(),
   createdAt: faker.date.recent(),
   ...overrides,
@@ -58,19 +58,19 @@ export const createTestAddress = (overrides: Partial<TestAddress> = {}): TestAdd
   city: faker.location.city(),
   state: faker.location.state({ abbreviated: true }),
   zipCode: faker.location.zipCode(),
-  country: 'US',
+  country: "US",
   ...overrides,
 });
 
 export const createTestBooking = (overrides: Partial<TestBooking> = {}): TestBooking => ({
   id: faker.string.uuid(),
   userId: faker.string.uuid(),
-  service: faker.helpers.arrayElement(['cold-plunge', 'infrared-sauna', 'combo']),
-  frequency: faker.helpers.arrayElement(['weekly', 'bi-weekly', 'monthly']),
+  service: faker.helpers.arrayElement(["cold-plunge", "infrared-sauna", "combo"]),
+  frequency: faker.helpers.arrayElement(["weekly", "bi-weekly", "monthly"]),
   startDate: faker.date.future(),
   duration: faker.helpers.arrayElement([60, 90, 120]),
   location: createTestAddress(),
-  status: faker.helpers.arrayElement(['pending', 'confirmed', 'completed']),
+  status: faker.helpers.arrayElement(["pending", "confirmed", "completed"]),
   price: faker.number.int({ min: 150, max: 400 }),
   createdAt: faker.date.recent(),
   ...overrides,
@@ -80,9 +80,9 @@ export const createTestPayment = (overrides: Partial<TestPayment> = {}): TestPay
   id: faker.string.uuid(),
   bookingId: faker.string.uuid(),
   amount: faker.number.int({ min: 150, max: 400 }),
-  currency: 'USD',
-  status: faker.helpers.arrayElement(['pending', 'success', 'failed']),
-  method: faker.helpers.arrayElement(['card', 'apple-pay', 'google-pay']),
+  currency: "USD",
+  status: faker.helpers.arrayElement(["pending", "success", "failed"]),
+  method: faker.helpers.arrayElement(["card", "apple-pay", "google-pay"]),
   boltTransactionId: faker.string.alphanumeric(20),
   createdAt: faker.date.recent(),
   ...overrides,
@@ -93,11 +93,17 @@ export const createTestUsers = (count: number, overrides: Partial<TestUser> = {}
   return Array.from({ length: count }, () => createTestUser(overrides));
 };
 
-export const createTestBookings = (count: number, overrides: Partial<TestBooking> = {}): TestBooking[] => {
+export const createTestBookings = (
+  count: number,
+  overrides: Partial<TestBooking> = {}
+): TestBooking[] => {
   return Array.from({ length: count }, () => createTestBooking(overrides));
 };
 
-export const createTestPayments = (count: number, overrides: Partial<TestPayment> = {}): TestPayment[] => {
+export const createTestPayments = (
+  count: number,
+  overrides: Partial<TestPayment> = {}
+): TestPayment[] => {
   return Array.from({ length: count }, () => createTestPayment(overrides));
 };
 
@@ -106,39 +112,39 @@ export const createBookingWithPayment = () => {
   const user = createTestUser();
   const booking = createTestBooking({ userId: user.id });
   const payment = createTestPayment({ bookingId: booking.id, amount: booking.price });
-  
+
   return { user, booking, payment };
 };
 
 export const createFailedBookingScenario = () => {
   const user = createTestUser();
-  const booking = createTestBooking({ 
-    userId: user.id, 
-    status: 'pending'
+  const booking = createTestBooking({
+    userId: user.id,
+    status: "pending",
   });
-  const payment = createTestPayment({ 
-    bookingId: booking.id, 
+  const payment = createTestPayment({
+    bookingId: booking.id,
     amount: booking.price,
-    status: 'failed'
+    status: "failed",
   });
-  
+
   return { user, booking, payment };
 };
 
 export const createWeeklySubscriptionScenario = () => {
   const user = createTestUser();
-  const booking = createTestBooking({ 
-    userId: user.id, 
-    frequency: 'weekly',
-    service: 'cold-plunge',
-    status: 'confirmed'
+  const booking = createTestBooking({
+    userId: user.id,
+    frequency: "weekly",
+    service: "cold-plunge",
+    status: "confirmed",
   });
-  const payment = createTestPayment({ 
-    bookingId: booking.id, 
+  const payment = createTestPayment({
+    bookingId: booking.id,
     amount: booking.price,
-    status: 'success'
+    status: "success",
   });
-  
+
   return { user, booking, payment };
 };
 
@@ -164,17 +170,17 @@ export const mockSuccessfulBookingResponse = (booking: TestBooking) => ({
   json: async () => ({
     success: true,
     data: booking,
-    message: 'Booking created successfully'
-  })
+    message: "Booking created successfully",
+  }),
 });
 
-export const mockFailedBookingResponse = (error: string = 'Booking failed') => ({
+export const mockFailedBookingResponse = (error: string = "Booking failed") => ({
   status: 400,
   json: async () => ({
     success: false,
     error,
-    message: 'Failed to create booking'
-  })
+    message: "Failed to create booking",
+  }),
 });
 
 export const mockPaymentSuccessResponse = (payment: TestPayment) => ({
@@ -182,15 +188,15 @@ export const mockPaymentSuccessResponse = (payment: TestPayment) => ({
   json: async () => ({
     success: true,
     data: payment,
-    message: 'Payment processed successfully'
-  })
+    message: "Payment processed successfully",
+  }),
 });
 
-export const mockPaymentFailureResponse = (error: string = 'Payment declined') => ({
+export const mockPaymentFailureResponse = (error: string = "Payment declined") => ({
   status: 402,
   json: async () => ({
     success: false,
     error,
-    message: 'Payment processing failed'
-  })
+    message: "Payment processing failed",
+  }),
 });

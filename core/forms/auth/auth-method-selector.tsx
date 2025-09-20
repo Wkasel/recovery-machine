@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { signIn, signUp, sendMagicLink } from "@/core/actions/auth";
+import { sendMagicLink, signIn, signUp } from "@/core/actions/auth";
 import { useState } from "react";
 
 export type AuthMethod = "signin" | "signup" | "magic";
@@ -14,17 +14,14 @@ interface AuthMethodSelectorProps {
   onMethodChange?: (method: AuthMethod) => void;
 }
 
-export function AuthMethodSelector({ 
-  method = "signin", 
-  onMethodChange 
-}: AuthMethodSelectorProps) {
+export function AuthMethodSelector({ method = "signin", onMethodChange }: AuthMethodSelectorProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
 
   const handleSubmit = async (formData: FormData) => {
     setIsLoading(true);
     setMessage(null);
-    
+
     try {
       if (method === "magic") {
         const result = await sendMagicLink(formData);
@@ -59,63 +56,42 @@ export function AuthMethodSelector({
         <form action={handleSubmit} className="space-y-4">
           <div className="space-y-2">
             <Label htmlFor="email">Email</Label>
-            <Input
-              id="email"
-              name="email"
-              type="email"
-              placeholder="m@example.com"
-              required
-            />
+            <Input id="email" name="email" type="email" placeholder="m@example.com" required />
           </div>
-          
+
           {method !== "magic" && (
             <div className="space-y-2">
               <Label htmlFor="password">Password</Label>
-              <Input
-                id="password"
-                name="password"
-                type="password"
-                required
-              />
+              <Input id="password" name="password" type="password" required />
             </div>
           )}
 
           <Button type="submit" className="w-full" disabled={isLoading}>
-            {isLoading ? "Loading..." : 
-             method === "signin" ? "Sign In" :
-             method === "signup" ? "Sign Up" :
-             "Send Magic Link"}
+            {isLoading
+              ? "Loading..."
+              : method === "signin"
+                ? "Sign In"
+                : method === "signup"
+                  ? "Sign Up"
+                  : "Send Magic Link"}
           </Button>
         </form>
 
-        {message && (
-          <p className="mt-4 text-sm text-center text-muted-foreground">
-            {message}
-          </p>
-        )}
+        {message && <p className="mt-4 text-sm text-center text-muted-foreground">{message}</p>}
 
         <div className="mt-4 flex justify-center space-x-2 text-sm">
           {method !== "signin" && (
-            <Button 
-              variant="link" 
-              onClick={() => onMethodChange?.("signin")}
-            >
+            <Button variant="link" onClick={() => onMethodChange?.("signin")}>
               Sign In
             </Button>
           )}
           {method !== "signup" && (
-            <Button 
-              variant="link" 
-              onClick={() => onMethodChange?.("signup")}
-            >
+            <Button variant="link" onClick={() => onMethodChange?.("signup")}>
               Sign Up
             </Button>
           )}
           {method !== "magic" && (
-            <Button 
-              variant="link" 
-              onClick={() => onMethodChange?.("magic")}
-            >
+            <Button variant="link" onClick={() => onMethodChange?.("magic")}>
               Magic Link
             </Button>
           )}

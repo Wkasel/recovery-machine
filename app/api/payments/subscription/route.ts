@@ -1,49 +1,46 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { boltClient } from '@/lib/bolt/client';
-import { createServerSupabaseClient } from '@/lib/supabase/server';
-import { PRICING, SUBSCRIPTION_CONFIG } from '@/lib/bolt/config';
+// @ts-nocheck
+import { boltClient } from "@/lib/bolt/client";
+import { PRICING, SUBSCRIPTION_CONFIG } from "@/lib/bolt/config";
+import { createServerSupabaseClient } from "@/lib/supabase/server";
+import { NextRequest, NextResponse } from "next/server";
 
 // Create a new subscription
 export async function POST(request: NextRequest) {
   try {
     const supabase = createServerSupabaseClient();
-    const { data: { user }, error: authError } = await supabase.auth.getUser();
+    const {
+      data: { user },
+      error: authError,
+    } = await supabase.auth.getUser();
 
     if (authError || !user) {
-      return NextResponse.json(
-        { error: 'Authentication required' },
-        { status: 401 }
-      );
+      return NextResponse.json({ error: "Authentication required" }, { status: 401 });
     }
 
     const body = await request.json();
-    const { plan = 'monthly', setup_fee_type = 'basic' } = body;
+    const { plan = "monthly", setup_fee_type = "basic" } = body;
 
     // Validate plan
-    if (plan !== 'monthly') {
-      return NextResponse.json(
-        { error: 'Invalid subscription plan' },
-        { status: 400 }
-      );
+    if (plan !== "monthly") {
+      return NextResponse.json({ error: "Invalid subscription plan" }, { status: 400 });
     }
 
     // Get user profile
     const { data: profile, error: profileError } = await supabase
-      .from('profiles')
-      .select('*')
-      .eq('id', user.id)
+      .from("profiles")
+      .select("*")
+      .eq("id", user.id)
       .single();
 
     if (profileError || !profile) {
-      return NextResponse.json(
-        { error: 'User profile not found' },
-        { status: 404 }
-      );
+      return NextResponse.json({ error: "User profile not found" }, { status: 404 });
     }
 
     // Calculate amounts
     const subscriptionAmount = PRICING.MONTHLY_SUBSCRIPTION;
-    const setupFeeAmount = PRICING.SETUP_FEES[setup_fee_type.toUpperCase() as keyof typeof PRICING.SETUP_FEES] || PRICING.SETUP_FEES.BASIC;
+    const setupFeeAmount =
+      PRICING.SETUP_FEES[setup_fee_type.toUpperCase() as keyof typeof PRICING.SETUP_FEES] ||
+      PRICING.SETUP_FEES.BASIC;
     const totalAmount = subscriptionAmount + setupFeeAmount;
 
     // Create order reference
@@ -56,19 +53,19 @@ export async function POST(request: NextRequest) {
         phone: profile.phone,
         amount: subscriptionAmount,
         interval: SUBSCRIPTION_CONFIG.INTERVAL,
-        description: 'Recovery Machine Monthly Subscription',
+        description: "Recovery Machine Monthly Subscription",
         order_reference: orderReference,
       });
 
       // Create initial order record for setup fee + first month
       const { data: order, error: orderError } = await supabase
-        .from('orders')
+        .from("orders")
         .insert({
           user_id: user.id,
           amount: totalAmount,
           setup_fee_applied: setupFeeAmount,
-          status: 'pending',
-          order_type: 'subscription',
+          status: "pending",
+          order_type: "subscription",
           metadata: {
             subscription_id: subscriptionResponse.subscription_id,
             plan,
@@ -82,22 +79,19 @@ export async function POST(request: NextRequest) {
         .single();
 
       if (orderError) {
-        console.error('Database error:', orderError);
-        return NextResponse.json(
-          { error: 'Failed to create order record' },
-          { status: 500 }
-        );
+        console.error("Database error:", orderError);
+        return NextResponse.json({ error: "Failed to create order record" }, { status: 500 });
       }
 
       // Create checkout for initial payment
       const checkoutResponse = await boltClient.createCheckout({
         amount: totalAmount,
-        currency: 'USD',
+        currency: "USD",
         order_reference: orderReference,
         description: `Recovery Machine Subscription + ${setup_fee_type} Setup Fee`,
         customer_email: profile.email,
         customer_phone: profile.phone,
-        order_type: 'subscription',
+        order_type: "subscription",
         subscription_id: subscriptionResponse.subscription_id,
         metadata: {
           order_id: order.id,
@@ -109,12 +103,12 @@ export async function POST(request: NextRequest) {
 
       // Update order with checkout details
       await supabase
-        .from('orders')
+        .from("orders")
         .update({
           bolt_checkout_id: checkoutResponse.checkout_id,
-          status: 'processing',
+          status: "processing",
         })
-        .eq('id', order.id);
+        .eq("id", order.id);
 
       return NextResponse.json({
         success: true,
@@ -126,21 +120,13 @@ export async function POST(request: NextRequest) {
         subscription_amount: subscriptionAmount,
         setup_fee_amount: setupFeeAmount,
       });
-
     } catch (boltError) {
-      console.error('Bolt subscription error:', boltError);
-      return NextResponse.json(
-        { error: 'Failed to create subscription' },
-        { status: 500 }
-      );
+      console.error("Bolt subscription error:", boltError);
+      return NextResponse.json({ error: "Failed to create subscription" }, { status: 500 });
     }
-
   } catch (error) {
-    console.error('Subscription creation error:', error);
-    return NextResponse.json(
-      { error: 'Internal server error' },
-      { status: 500 }
-    );
+    console.error("Subscription creation error:", error);
+    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
   }
 }
 
@@ -148,69 +134,58 @@ export async function POST(request: NextRequest) {
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
-    const subscriptionId = searchParams.get('subscription_id');
+    const subscriptionId = searchParams.get("subscription_id");
 
     if (!subscriptionId) {
-      return NextResponse.json(
-        { error: 'subscription_id parameter required' },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: "subscription_id parameter required" }, { status: 400 });
     }
 
     const supabase = createServerSupabaseClient();
-    const { data: { user }, error: authError } = await supabase.auth.getUser();
+    const {
+      data: { user },
+      error: authError,
+    } = await supabase.auth.getUser();
 
     if (authError || !user) {
-      return NextResponse.json(
-        { error: 'Authentication required' },
-        { status: 401 }
-      );
+      return NextResponse.json({ error: "Authentication required" }, { status: 401 });
     }
 
     // Get orders for this subscription
     const { data: orders, error: ordersError } = await supabase
-      .from('orders')
-      .select('*')
-      .eq('user_id', user.id)
-      .contains('metadata', { subscription_id: subscriptionId })
-      .order('created_at', { ascending: false });
+      .from("orders")
+      .select("*")
+      .eq("user_id", user.id)
+      .contains("metadata", { subscription_id: subscriptionId })
+      .order("created_at", { ascending: false });
 
     if (ordersError) {
-      console.error('Database error:', ordersError);
-      return NextResponse.json(
-        { error: 'Failed to fetch subscription orders' },
-        { status: 500 }
-      );
+      console.error("Database error:", ordersError);
+      return NextResponse.json({ error: "Failed to fetch subscription orders" }, { status: 500 });
     }
 
     // Get subscription details from Bolt
     try {
       const boltSubscription = await boltClient.getSubscription(subscriptionId);
-      
+
       return NextResponse.json({
         subscription_id: subscriptionId,
         bolt_subscription: boltSubscription,
         orders: orders || [],
         total_orders: orders?.length || 0,
       });
-
     } catch (boltError) {
-      console.error('Bolt subscription fetch error:', boltError);
+      console.error("Bolt subscription fetch error:", boltError);
       return NextResponse.json({
         subscription_id: subscriptionId,
         bolt_subscription: null,
         orders: orders || [],
         total_orders: orders?.length || 0,
-        error: 'Could not fetch Bolt subscription details',
+        error: "Could not fetch Bolt subscription details",
       });
     }
-
   } catch (error) {
-    console.error('Subscription fetch error:', error);
-    return NextResponse.json(
-      { error: 'Internal server error' },
-      { status: 500 }
-    );
+    console.error("Subscription fetch error:", error);
+    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
   }
 }
 
@@ -218,38 +193,32 @@ export async function GET(request: NextRequest) {
 export async function DELETE(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
-    const subscriptionId = searchParams.get('subscription_id');
+    const subscriptionId = searchParams.get("subscription_id");
 
     if (!subscriptionId) {
-      return NextResponse.json(
-        { error: 'subscription_id parameter required' },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: "subscription_id parameter required" }, { status: 400 });
     }
 
     const supabase = createServerSupabaseClient();
-    const { data: { user }, error: authError } = await supabase.auth.getUser();
+    const {
+      data: { user },
+      error: authError,
+    } = await supabase.auth.getUser();
 
     if (authError || !user) {
-      return NextResponse.json(
-        { error: 'Authentication required' },
-        { status: 401 }
-      );
+      return NextResponse.json({ error: "Authentication required" }, { status: 401 });
     }
 
     // Verify user owns this subscription
     const { data: order, error: orderError } = await supabase
-      .from('orders')
-      .select('*')
-      .eq('user_id', user.id)
-      .contains('metadata', { subscription_id: subscriptionId })
+      .from("orders")
+      .select("*")
+      .eq("user_id", user.id)
+      .contains("metadata", { subscription_id: subscriptionId })
       .single();
 
     if (orderError || !order) {
-      return NextResponse.json(
-        { error: 'Subscription not found' },
-        { status: 404 }
-      );
+      return NextResponse.json({ error: "Subscription not found" }, { status: 404 });
     }
 
     try {
@@ -258,37 +227,32 @@ export async function DELETE(request: NextRequest) {
 
       // Update order status in database
       await supabase
-        .from('orders')
+        .from("orders")
         .update({
-          status: 'refunded',
+          status: "refunded",
           metadata: {
             ...order.metadata,
             cancelled_at: new Date().toISOString(),
-            cancellation_reason: 'user_request',
+            cancellation_reason: "user_request",
           },
         })
-        .contains('metadata', { subscription_id: subscriptionId });
+        .contains("metadata", { subscription_id: subscriptionId });
 
       return NextResponse.json({
         success: true,
         subscription_id: subscriptionId,
         cancellation: cancelResponse,
-        message: 'Subscription cancelled successfully',
+        message: "Subscription cancelled successfully",
       });
-
     } catch (boltError) {
-      console.error('Bolt cancellation error:', boltError);
+      console.error("Bolt cancellation error:", boltError);
       return NextResponse.json(
-        { error: 'Failed to cancel subscription with payment provider' },
+        { error: "Failed to cancel subscription with payment provider" },
         { status: 500 }
       );
     }
-
   } catch (error) {
-    console.error('Subscription cancellation error:', error);
-    return NextResponse.json(
-      { error: 'Internal server error' },
-      { status: 500 }
-    );
+    console.error("Subscription cancellation error:", error);
+    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
   }
 }

@@ -1,11 +1,10 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import { Label } from '@/components/ui/label';
-import { Input } from '@/components/ui/input';
-import { Switch } from '@/components/ui/switch';
-import { Button } from '@/components/ui/button';
-import { Card } from '@/components/ui/card';
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Switch } from "@/components/ui/switch";
 
 interface DayHours {
   open: string;
@@ -32,27 +31,33 @@ interface BusinessHoursEditorProps {
 }
 
 const defaultHours: DayHours = {
-  open: '09:00',
-  close: '17:00',
-  closed: false
+  open: "09:00",
+  close: "17:00",
+  closed: false,
 };
 
 const daysOfWeek = [
-  { key: 'monday', label: 'Monday' },
-  { key: 'tuesday', label: 'Tuesday' },
-  { key: 'wednesday', label: 'Wednesday' },
-  { key: 'thursday', label: 'Thursday' },
-  { key: 'friday', label: 'Friday' },
-  { key: 'saturday', label: 'Saturday' },
-  { key: 'sunday', label: 'Sunday' }
+  { key: "monday", label: "Monday" },
+  { key: "tuesday", label: "Tuesday" },
+  { key: "wednesday", label: "Wednesday" },
+  { key: "thursday", label: "Thursday" },
+  { key: "friday", label: "Friday" },
+  { key: "saturday", label: "Saturday" },
+  { key: "sunday", label: "Sunday" },
 ];
 
-export function BusinessHoursEditor({ value, onChange, onSave, hasChanges, loading }: BusinessHoursEditorProps) {
+export function BusinessHoursEditor({
+  value,
+  onChange,
+  onSave,
+  hasChanges,
+  loading,
+}: BusinessHoursEditorProps) {
   const updateDay = (day: string, updates: Partial<DayHours>) => {
     const currentDay = value[day as keyof BusinessHours] || defaultHours;
     const updatedHours = {
       ...value,
-      [day]: { ...currentDay, ...updates }
+      [day]: { ...currentDay, ...updates },
     };
     onChange(updatedHours);
   };
@@ -75,7 +80,7 @@ export function BusinessHoursEditor({ value, onChange, onSave, hasChanges, loadi
       <div className="grid gap-4">
         {daysOfWeek.map(({ key, label }) => {
           const dayHours = value[key as keyof BusinessHours] || defaultHours;
-          
+
           return (
             <Card key={key} className="p-4">
               <div className="flex items-center justify-between gap-4">
@@ -87,22 +92,26 @@ export function BusinessHoursEditor({ value, onChange, onSave, hasChanges, loadi
                   {!dayHours.closed ? (
                     <>
                       <div className="flex items-center gap-2">
-                        <Label htmlFor={`${key}-open`} className="text-sm">Open:</Label>
+                        <Label htmlFor={`${key}-open`} className="text-sm">
+                          Open:
+                        </Label>
                         <Input
                           id={`${key}-open`}
                           type="time"
-                          value={dayHours.open || '09:00'}
+                          value={dayHours.open || "09:00"}
                           onChange={(e) => updateDay(key, { open: e.target.value })}
                           className="w-32"
                         />
                       </div>
 
                       <div className="flex items-center gap-2">
-                        <Label htmlFor={`${key}-close`} className="text-sm">Close:</Label>
+                        <Label htmlFor={`${key}-close`} className="text-sm">
+                          Close:
+                        </Label>
                         <Input
                           id={`${key}-close`}
                           type="time"
-                          value={dayHours.close || '17:00'}
+                          value={dayHours.close || "17:00"}
                           onChange={(e) => updateDay(key, { close: e.target.value })}
                           className="w-32"
                         />
@@ -124,7 +133,9 @@ export function BusinessHoursEditor({ value, onChange, onSave, hasChanges, loadi
                 </div>
 
                 <div className="flex items-center gap-2">
-                  <Label htmlFor={`${key}-closed`} className="text-sm">Closed:</Label>
+                  <Label htmlFor={`${key}-closed`} className="text-sm">
+                    Closed:
+                  </Label>
                   <Switch
                     id={`${key}-closed`}
                     checked={dayHours.closed || false}
@@ -140,7 +151,7 @@ export function BusinessHoursEditor({ value, onChange, onSave, hasChanges, loadi
       {hasChanges && (
         <div className="flex justify-end pt-4 border-t">
           <Button onClick={onSave} disabled={loading}>
-            {loading ? 'Saving...' : 'Save Business Hours'}
+            {loading ? "Saving..." : "Save Business Hours"}
           </Button>
         </div>
       )}

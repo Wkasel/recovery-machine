@@ -1,13 +1,13 @@
 import { Geist } from "next/font/google";
 import AppProvider from "./providers";
 
+import { GoogleAnalytics } from "@/components/analytics/GoogleAnalytics";
+import { SearchEngineVerifications } from "@/components/analytics/SearchConsoleVerification";
 import { OrganizationJsonLd, WebsiteJsonLd } from "@/components/JsonLd";
 import { Footer } from "@/components/nav/Footer";
 import { Header } from "@/components/nav/Header";
-import { Analytics } from "@vercel/analytics/react";
-import { GoogleAnalytics } from "@/components/analytics/GoogleAnalytics";
-import { SearchEngineVerifications } from "@/components/analytics/SearchConsoleVerification";
 import { WebVitalsTracker } from "@/components/performance/WebVitalsTracker";
+import { Analytics } from "@vercel/analytics/react";
 
 import { globalmetadata } from "./metadata";
 

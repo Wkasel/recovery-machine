@@ -17,7 +17,8 @@ export default function PrivacyPage() {
             <section>
               <h2 className="text-2xl font-bold mb-4">1. Information We Collect</h2>
               <p className="text-neutral-300 leading-relaxed">
-                We collect information you provide directly to us, such as when you create an account, book services, or contact us for support.
+                We collect information you provide directly to us, such as when you create an
+                account, book services, or contact us for support.
               </p>
               <ul className="list-disc list-inside text-neutral-300 mt-4 space-y-2">
                 <li>Personal information (name, email, phone number)</li>
@@ -30,7 +31,8 @@ export default function PrivacyPage() {
             <section>
               <h2 className="text-2xl font-bold mb-4">2. How We Use Your Information</h2>
               <p className="text-neutral-300 leading-relaxed">
-                We use the information we collect to provide, maintain, and improve our services, including:
+                We use the information we collect to provide, maintain, and improve our services,
+                including:
               </p>
               <ul className="list-disc list-inside text-neutral-300 mt-4 space-y-2">
                 <li>Scheduling and delivering recovery sessions</li>
@@ -43,35 +45,40 @@ export default function PrivacyPage() {
             <section>
               <h2 className="text-2xl font-bold mb-4">3. Information Sharing</h2>
               <p className="text-neutral-300 leading-relaxed">
-                We do not sell, trade, or otherwise transfer your personal information to third parties except as described in this policy or with your consent.
+                We do not sell, trade, or otherwise transfer your personal information to third
+                parties except as described in this policy or with your consent.
               </p>
             </section>
 
             <section>
               <h2 className="text-2xl font-bold mb-4">4. Data Security</h2>
               <p className="text-neutral-300 leading-relaxed">
-                We implement appropriate security measures to protect your personal information against unauthorized access, alteration, disclosure, or destruction.
+                We implement appropriate security measures to protect your personal information
+                against unauthorized access, alteration, disclosure, or destruction.
               </p>
             </section>
 
             <section>
               <h2 className="text-2xl font-bold mb-4">5. Your Rights</h2>
               <p className="text-neutral-300 leading-relaxed">
-                You have the right to access, update, or delete your personal information. You may also opt out of certain communications from us.
+                You have the right to access, update, or delete your personal information. You may
+                also opt out of certain communications from us.
               </p>
             </section>
 
             <section>
               <h2 className="text-2xl font-bold mb-4">6. Cookies and Tracking</h2>
               <p className="text-neutral-300 leading-relaxed">
-                We use cookies and similar technologies to enhance your experience on our website and analyze usage patterns.
+                We use cookies and similar technologies to enhance your experience on our website
+                and analyze usage patterns.
               </p>
             </section>
 
             <section>
               <h2 className="text-2xl font-bold mb-4">7. Contact Us</h2>
               <p className="text-neutral-300 leading-relaxed">
-                If you have questions about this Privacy Policy, please contact us at privacy@recoverymachine.com.
+                If you have questions about this Privacy Policy, please contact us at
+                privacy@recoverymachine.com.
               </p>
             </section>
           </div>

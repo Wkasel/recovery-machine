@@ -1,15 +1,15 @@
 "use client";
 
-import { signIn, sendMagicLink } from "@/core/actions/auth";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Alert, AlertDescription } from "@/components/ui/alert";
-import { CheckCircle, Mail, Lock } from "lucide-react";
+import { sendMagicLink, signIn } from "@/core/actions/auth";
+import { CheckCircle, Lock, Mail } from "lucide-react";
 import Link from "next/link";
-import { useState, useEffect, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
+import { Suspense, useEffect, useState } from "react";
 
 function SignInForm(): React.ReactElement {
   const [isLoading, setIsLoading] = useState(false);
@@ -41,7 +41,7 @@ function SignInForm(): React.ReactElement {
       setError("Please enter your email first");
       return;
     }
-    
+
     setIsLoading(true);
     setError("");
     try {
@@ -64,12 +64,12 @@ function SignInForm(): React.ReactElement {
               <Alert className="bg-green-950/50 border-green-900/50">
                 <CheckCircle className="h-4 w-4 text-green-400" />
                 <AlertDescription className="text-green-100">
-                  Magic link sent to <span className="font-medium">{email}</span>. 
-                  Check your email and click the link to sign in.
+                  Magic link sent to <span className="font-medium">{email}</span>. Check your email
+                  and click the link to sign in.
                 </AlertDescription>
               </Alert>
-              <Button 
-                variant="outline" 
+              <Button
+                variant="outline"
                 onClick={() => setMagicLinkSent(false)}
                 className="w-full bg-transparent border-neutral-700 text-white hover:bg-neutral-800"
               >
@@ -100,7 +100,9 @@ function SignInForm(): React.ReactElement {
 
           <form action={handlePasswordSignIn} className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="email" className="text-white">Email</Label>
+              <Label htmlFor="email" className="text-white">
+                Email
+              </Label>
               <Input
                 id="email"
                 name="email"
@@ -113,9 +115,11 @@ function SignInForm(): React.ReactElement {
                 disabled={isLoading}
               />
             </div>
-            
+
             <div className="space-y-2">
-              <Label htmlFor="password" className="text-white">Password</Label>
+              <Label htmlFor="password" className="text-white">
+                Password
+              </Label>
               <Input
                 id="password"
                 name="password"
@@ -127,15 +131,15 @@ function SignInForm(): React.ReactElement {
             </div>
 
             <div className="space-y-3">
-              <Button 
-                type="submit" 
+              <Button
+                type="submit"
                 className="w-full bg-white text-black hover:bg-neutral-200"
                 disabled={isLoading}
               >
                 <Lock className="mr-2 h-4 w-4" />
                 {isLoading ? "Signing in..." : "Sign in with Password"}
               </Button>
-              
+
               <div className="relative">
                 <div className="absolute inset-0 flex items-center">
                   <span className="w-full border-t border-neutral-700" />
@@ -144,8 +148,8 @@ function SignInForm(): React.ReactElement {
                   <span className="bg-neutral-900 px-2 text-neutral-400">Or</span>
                 </div>
               </div>
-              
-              <Button 
+
+              <Button
                 type="button"
                 variant="outline"
                 onClick={handleMagicLink}
@@ -165,7 +169,7 @@ function SignInForm(): React.ReactElement {
                 Sign up
               </Link>
             </p>
-            
+
             <div className="text-xs text-neutral-500">
               By continuing, you agree to our{" "}
               <Link href="/terms" className="text-white hover:underline">
@@ -185,11 +189,13 @@ function SignInForm(): React.ReactElement {
 
 export default function SignInPage(): React.ReactElement {
   return (
-    <Suspense fallback={
-      <div className="min-h-screen bg-black flex items-center justify-center">
-        <div className="animate-spin h-8 w-8 border-2 border-white border-t-transparent rounded-full"></div>
-      </div>
-    }>
+    <Suspense
+      fallback={
+        <div className="min-h-screen bg-black flex items-center justify-center">
+          <div className="animate-spin h-8 w-8 border-2 border-white border-t-transparent rounded-full"></div>
+        </div>
+      }
+    >
       <SignInForm />
     </Suspense>
   );

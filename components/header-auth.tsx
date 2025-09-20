@@ -16,7 +16,7 @@ export default function AuthButton(): ReactElement {
   return user ? (
     <div className="flex items-center gap-4">
       Hey, {user.email}!
-      <Button onClick={() => signOut()} variant={"outline"} disabled={status === "pending"}>
+      <Button onClick={async () => signOut()} variant={"outline"} disabled={status === "pending"}>
         {status === "pending" ? "Signing out..." : "Sign out"}
       </Button>
     </div>

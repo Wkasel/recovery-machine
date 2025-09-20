@@ -1,6 +1,6 @@
 // Simple analytics types for Recovery Machine
 
-export type EventName = 
+export type EventName =
   | "auth_success"
   | "booking_started"
   | "booking_completed"

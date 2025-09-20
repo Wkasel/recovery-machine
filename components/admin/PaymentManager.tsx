@@ -1,44 +1,43 @@
-'use client';
+"use client";
 
-import { useState, useEffect } from 'react';
-import { Card } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Badge } from '@/components/ui/badge';
-import { 
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@/components/ui/table';
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from '@/components/ui/dialog';
-import { 
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
-import { 
-  Search, 
-  Filter, 
-  Download, 
-  RefreshCw, 
-  Eye,
-  DollarSign,
+} from "@/components/ui/select";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { useToast } from "@/hooks/use-toast";
+import {
   CreditCard,
-  Users,
+  DollarSign,
+  Download,
+  Eye,
+  RefreshCw,
+  Search,
   TrendingUp,
-} from 'lucide-react';
-import { useToast } from '@/hooks/use-toast';
+  Users,
+} from "lucide-react";
+import { useEffect, useState } from "react";
 
 interface Order {
   id: string;
@@ -46,8 +45,8 @@ interface Order {
   bolt_checkout_id: string;
   amount: number;
   setup_fee_applied: number;
-  status: 'pending' | 'processing' | 'paid' | 'refunded' | 'failed';
-  order_type: 'subscription' | 'one_time' | 'setup_fee';
+  status: "pending" | "processing" | "paid" | "refunded" | "failed";
+  order_type: "subscription" | "one_time" | "setup_fee";
   metadata: Record<string, any>;
   created_at: string;
   updated_at: string;
@@ -68,9 +67,9 @@ export function PaymentManager() {
   const [orders, setOrders] = useState<Order[]>([]);
   const [stats, setStats] = useState<PaymentStats | null>(null);
   const [loading, setLoading] = useState(true);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [statusFilter, setStatusFilter] = useState<string>('all');
-  const [typeFilter, setTypeFilter] = useState<string>('all');
+  const [searchTerm, setSearchTerm] = useState("");
+  const [statusFilter, setStatusFilter] = useState<string>("all");
+  const [typeFilter, setTypeFilter] = useState<string>("all");
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
   const { toast } = useToast();
 
@@ -81,11 +80,11 @@ export function PaymentManager() {
   const loadPaymentData = async () => {
     try {
       setLoading(true);
-      
+
       // Load orders and stats in parallel
       const [ordersResponse, statsResponse] = await Promise.all([
-        fetch('/api/admin/payments/orders'),
-        fetch('/api/admin/payments/stats'),
+        fetch("/api/admin/payments/orders"),
+        fetch("/api/admin/payments/stats"),
       ]);
 
       if (ordersResponse.ok) {
@@ -97,13 +96,12 @@ export function PaymentManager() {
         const statsData = await statsResponse.json();
         setStats(statsData);
       }
-
     } catch (error) {
-      console.error('Failed to load payment data:', error);
+      console.error("Failed to load payment data:", error);
       toast({
-        title: 'Error',
-        description: 'Failed to load payment data',
-        variant: 'destructive',
+        title: "Error",
+        description: "Failed to load payment data",
+        variant: "destructive",
       });
     } finally {
       setLoading(false);
@@ -112,97 +110,95 @@ export function PaymentManager() {
 
   const processRefund = async (orderId: string, amount?: number) => {
     try {
-      const response = await fetch('/api/payments/refund', {
-        method: 'POST',
+      const response = await fetch("/api/payments/refund", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({
           order_id: orderId,
           amount,
-          reason: 'admin_refund',
+          reason: "admin_refund",
         }),
       });
 
       if (!response.ok) {
-        throw new Error('Failed to process refund');
+        throw new Error("Failed to process refund");
       }
 
       toast({
-        title: 'Success',
-        description: 'Refund processed successfully',
+        title: "Success",
+        description: "Refund processed successfully",
       });
 
       // Reload data
       loadPaymentData();
-
     } catch (error) {
-      console.error('Refund error:', error);
+      console.error("Refund error:", error);
       toast({
-        title: 'Error',
-        description: 'Failed to process refund',
-        variant: 'destructive',
+        title: "Error",
+        description: "Failed to process refund",
+        variant: "destructive",
       });
     }
   };
 
   const exportPayments = async () => {
     try {
-      const response = await fetch('/api/admin/payments/export');
-      
+      const response = await fetch("/api/admin/payments/export");
+
       if (!response.ok) {
-        throw new Error('Failed to export payments');
+        throw new Error("Failed to export payments");
       }
 
       const blob = await response.blob();
       const url = window.URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.style.display = 'none';
+      const a = document.createElement("a");
+      a.style.display = "none";
       a.href = url;
-      a.download = `payments-export-${new Date().toISOString().split('T')[0]}.csv`;
+      a.download = `payments-export-${new Date().toISOString().split("T")[0]}.csv`;
       document.body.appendChild(a);
       a.click();
       window.URL.revokeObjectURL(url);
 
       toast({
-        title: 'Success',
-        description: 'Payments exported successfully',
+        title: "Success",
+        description: "Payments exported successfully",
       });
-
     } catch (error) {
-      console.error('Export error:', error);
+      console.error("Export error:", error);
       toast({
-        title: 'Error',
-        description: 'Failed to export payments',
-        variant: 'destructive',
+        title: "Error",
+        description: "Failed to export payments",
+        variant: "destructive",
       });
     }
   };
 
   const formatAmount = (cents: number) => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD',
+    return new Intl.NumberFormat("en-US", {
+      style: "currency",
+      currency: "USD",
     }).format(cents / 100);
   };
 
   const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit',
+    return new Date(dateString).toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
     });
   };
 
   const getStatusBadge = (status: string) => {
     const colors = {
-      pending: 'bg-yellow-100 text-yellow-800',
-      processing: 'bg-blue-100 text-blue-800',
-      paid: 'bg-green-100 text-green-800',
-      refunded: 'bg-red-100 text-red-800',
-      failed: 'bg-gray-100 text-gray-800',
+      pending: "bg-yellow-100 text-yellow-800",
+      processing: "bg-blue-100 text-blue-800",
+      paid: "bg-green-100 text-green-800",
+      refunded: "bg-red-100 text-red-800",
+      failed: "bg-gray-100 text-gray-800",
     };
 
     return (
@@ -214,27 +210,28 @@ export function PaymentManager() {
 
   const getTypeBadge = (type: string) => {
     const colors = {
-      subscription: 'bg-purple-100 text-purple-800',
-      one_time: 'bg-blue-100 text-blue-800',
-      setup_fee: 'bg-orange-100 text-orange-800',
+      subscription: "bg-purple-100 text-purple-800",
+      one_time: "bg-blue-100 text-blue-800",
+      setup_fee: "bg-orange-100 text-orange-800",
     };
 
     return (
       <Badge className={colors[type as keyof typeof colors] || colors.one_time}>
-        {type.replace('_', ' ')}
+        {type.replace("_", " ")}
       </Badge>
     );
   };
 
   // Filter orders based on search and filters
-  const filteredOrders = orders.filter(order => {
-    const matchesSearch = !searchTerm || 
+  const filteredOrders = orders.filter((order) => {
+    const matchesSearch =
+      !searchTerm ||
       order.id.toLowerCase().includes(searchTerm.toLowerCase()) ||
       order.customer_email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
       order.bolt_checkout_id?.toLowerCase().includes(searchTerm.toLowerCase());
-    
-    const matchesStatus = statusFilter === 'all' || order.status === statusFilter;
-    const matchesType = typeFilter === 'all' || order.order_type === typeFilter;
+
+    const matchesStatus = statusFilter === "all" || order.status === statusFilter;
+    const matchesType = typeFilter === "all" || order.order_type === typeFilter;
 
     return matchesSearch && matchesStatus && matchesType;
   });
@@ -339,20 +336,12 @@ export function PaymentManager() {
           </div>
 
           <div className="flex gap-2">
-            <Button
-              onClick={loadPaymentData}
-              variant="outline"
-              size="sm"
-            >
+            <Button onClick={loadPaymentData} variant="outline" size="sm">
               <RefreshCw className="h-4 w-4 mr-2" />
               Refresh
             </Button>
-            
-            <Button
-              onClick={exportPayments}
-              variant="outline"
-              size="sm"
-            >
+
+            <Button onClick={exportPayments} variant="outline" size="sm">
               <Download className="h-4 w-4 mr-2" />
               Export
             </Button>
@@ -377,32 +366,24 @@ export function PaymentManager() {
           <TableBody>
             {filteredOrders.map((order) => (
               <TableRow key={order.id}>
-                <TableCell className="font-mono text-xs">
-                  {order.id.slice(0, 8)}...
-                </TableCell>
-                
+                <TableCell className="font-mono text-xs">{order.id.slice(0, 8)}...</TableCell>
+
                 <TableCell>
                   <div>
                     <div className="font-medium">
-                      {order.customer_email || order.metadata?.customer_email || 'N/A'}
+                      {order.customer_email || order.metadata?.customer_email || "N/A"}
                     </div>
                     {order.customer_name && (
-                      <div className="text-sm text-gray-500">
-                        {order.customer_name}
-                      </div>
+                      <div className="text-sm text-gray-500">{order.customer_name}</div>
                     )}
                   </div>
                 </TableCell>
-                
-                <TableCell>
-                  {getTypeBadge(order.order_type)}
-                </TableCell>
-                
+
+                <TableCell>{getTypeBadge(order.order_type)}</TableCell>
+
                 <TableCell>
                   <div>
-                    <div className="font-medium">
-                      {formatAmount(order.amount)}
-                    </div>
+                    <div className="font-medium">{formatAmount(order.amount)}</div>
                     {order.setup_fee_applied > 0 && (
                       <div className="text-sm text-gray-500">
                         Setup: {formatAmount(order.setup_fee_applied)}
@@ -410,24 +391,16 @@ export function PaymentManager() {
                     )}
                   </div>
                 </TableCell>
-                
-                <TableCell>
-                  {getStatusBadge(order.status)}
-                </TableCell>
-                
-                <TableCell>
-                  {formatDate(order.created_at)}
-                </TableCell>
-                
+
+                <TableCell>{getStatusBadge(order.status)}</TableCell>
+
+                <TableCell>{formatDate(order.created_at)}</TableCell>
+
                 <TableCell>
                   <div className="flex gap-2">
                     <Dialog>
                       <DialogTrigger asChild>
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={() => setSelectedOrder(order)}
-                        >
+                        <Button variant="outline" size="sm" onClick={() => setSelectedOrder(order)}>
                           <Eye className="h-4 w-4" />
                         </Button>
                       </DialogTrigger>
@@ -444,7 +417,9 @@ export function PaymentManager() {
                               </div>
                               <div>
                                 <label className="text-sm font-medium">Bolt Checkout ID</label>
-                                <p className="font-mono text-sm">{selectedOrder.bolt_checkout_id || 'N/A'}</p>
+                                <p className="font-mono text-sm">
+                                  {selectedOrder.bolt_checkout_id || "N/A"}
+                                </p>
                               </div>
                               <div>
                                 <label className="text-sm font-medium">Amount</label>
@@ -455,18 +430,18 @@ export function PaymentManager() {
                                 <p>{getStatusBadge(selectedOrder.status)}</p>
                               </div>
                             </div>
-                            
+
                             <div>
                               <label className="text-sm font-medium">Metadata</label>
                               <pre className="bg-gray-50 p-2 rounded text-xs overflow-auto">
                                 {JSON.stringify(selectedOrder.metadata, null, 2)}
                               </pre>
                             </div>
-                            
-                            {selectedOrder.status === 'paid' && (
+
+                            {selectedOrder.status === "paid" && (
                               <div className="flex gap-2">
                                 <Button
-                                  onClick={() => processRefund(selectedOrder.id)}
+                                  onClick={async () => processRefund(selectedOrder.id)}
                                   variant="destructive"
                                   size="sm"
                                 >

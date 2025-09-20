@@ -1,13 +1,7 @@
-'use client'
+"use client";
 
-import { useState, useEffect } from 'react'
-import { User } from '@supabase/supabase-js'
-import { createClient } from '@/lib/supabase/client'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
-import { Badge } from '@/components/ui/badge'
-import { Alert, AlertDescription } from '@/components/ui/alert'
-import { 
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import {
   AlertDialog,
   AlertDialogAction,
   AlertDialogCancel,
@@ -16,180 +10,193 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from '@/components/ui/alert-dialog'
-import { 
-  Calendar, 
-  Clock, 
-  MapPin, 
-  Edit, 
-  Trash2, 
+} from "@/components/ui/alert-dialog";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { User } from "@supabase/supabase-js";
+import {
   AlertCircle,
+  Calendar,
   CalendarX,
-  Plus,
   CheckCircle,
-  XCircle
-} from 'lucide-react'
-import Link from 'next/link'
-import { toast } from 'sonner'
+  Clock,
+  Edit,
+  MapPin,
+  Plus,
+  Trash2,
+  XCircle,
+} from "lucide-react";
+import Link from "next/link";
+import { useEffect, useState } from "react";
+import { toast } from "sonner";
 
 interface Booking {
-  id: string
-  date_time: string
-  duration: number
-  add_ons: any
-  status: string
-  location_address: any
-  special_instructions: string
-  created_at: string
-  updated_at: string
+  id: string;
+  date_time: string;
+  duration: number;
+  add_ons: any;
+  status: string;
+  location_address: any;
+  special_instructions: string;
+  created_at: string;
+  updated_at: string;
 }
 
 interface BookingsTabProps {
-  user: User
-  onRefresh: () => void
+  user: User;
+  onRefresh: () => void;
 }
 
 export function BookingsTab({ user, onRefresh }: BookingsTabProps) {
-  const supabase = createBrowserSupabaseClient()
-  const [bookings, setBookings] = useState<Booking[]>([])
-  const [isLoading, setIsLoading] = useState(true)
-  const [cancelDialogOpen, setCancelDialogOpen] = useState(false)
-  const [selectedBooking, setSelectedBooking] = useState<Booking | null>(null)
-  const [cancelling, setCancelling] = useState(false)
+  const supabase = createBrowserSupabaseClient();
+  const [bookings, setBookings] = useState<Booking[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [cancelDialogOpen, setCancelDialogOpen] = useState(false);
+  const [selectedBooking, setSelectedBooking] = useState<Booking | null>(null);
+  const [cancelling, setCancelling] = useState(false);
 
   useEffect(() => {
-    loadBookings()
-  }, [user.id])
+    loadBookings();
+  }, [user.id]);
 
   const loadBookings = async () => {
     try {
       const { data, error } = await supabase
-        .from('bookings')
-        .select('*')
-        .eq('user_id', user.id)
-        .order('date_time', { ascending: true })
+        .from("bookings")
+        .select("*")
+        .eq("user_id", user.id)
+        .order("date_time", { ascending: true });
 
-      if (error) throw error
+      if (error) throw error;
 
       // Filter to show only upcoming and recent bookings
-      const now = new Date()
-      const thirtyDaysAgo = new Date(now.getTime() - (30 * 24 * 60 * 60 * 1000))
-      
-      const relevantBookings = data?.filter(booking => {
-        const bookingDate = new Date(booking.date_time)
-        return bookingDate > thirtyDaysAgo || !['completed', 'cancelled', 'no_show'].includes(booking.status)
-      }) || []
+      const now = new Date();
+      const thirtyDaysAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
 
-      setBookings(relevantBookings)
+      const relevantBookings =
+        data?.filter((booking) => {
+          const bookingDate = new Date(booking.date_time);
+          return (
+            bookingDate > thirtyDaysAgo ||
+            !["completed", "cancelled", "no_show"].includes(booking.status)
+          );
+        }) || [];
+
+      setBookings(relevantBookings);
     } catch (error) {
-      console.error('Error loading bookings:', error)
-      toast.error('Failed to load bookings')
+      console.error("Error loading bookings:", error);
+      toast.error("Failed to load bookings");
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
-  }
+  };
 
   const canCancelBooking = (booking: Booking) => {
-    const bookingDate = new Date(booking.date_time)
-    const now = new Date()
-    const hoursUntilBooking = (bookingDate.getTime() - now.getTime()) / (1000 * 60 * 60)
-    
+    const bookingDate = new Date(booking.date_time);
+    const now = new Date();
+    const hoursUntilBooking = (bookingDate.getTime() - now.getTime()) / (1000 * 60 * 60);
+
     // Can cancel if booking is more than 24 hours away and not already cancelled/completed
-    return hoursUntilBooking > 24 && !['cancelled', 'completed', 'no_show'].includes(booking.status)
-  }
+    return (
+      hoursUntilBooking > 24 && !["cancelled", "completed", "no_show"].includes(booking.status)
+    );
+  };
 
   const canRescheduleBooking = (booking: Booking) => {
-    const bookingDate = new Date(booking.date_time)
-    const now = new Date()
-    const hoursUntilBooking = (bookingDate.getTime() - now.getTime()) / (1000 * 60 * 60)
-    
+    const bookingDate = new Date(booking.date_time);
+    const now = new Date();
+    const hoursUntilBooking = (bookingDate.getTime() - now.getTime()) / (1000 * 60 * 60);
+
     // Can reschedule if booking is more than 48 hours away and not already cancelled/completed
-    return hoursUntilBooking > 48 && !['cancelled', 'completed', 'no_show'].includes(booking.status)
-  }
+    return (
+      hoursUntilBooking > 48 && !["cancelled", "completed", "no_show"].includes(booking.status)
+    );
+  };
 
   const handleCancelBooking = async () => {
-    if (!selectedBooking) return
+    if (!selectedBooking) return;
 
-    setCancelling(true)
+    setCancelling(true);
     try {
       const { error } = await supabase
-        .from('bookings')
-        .update({ 
-          status: 'cancelled',
-          updated_at: new Date().toISOString()
+        .from("bookings")
+        .update({
+          status: "cancelled",
+          updated_at: new Date().toISOString(),
         })
-        .eq('id', selectedBooking.id)
+        .eq("id", selectedBooking.id);
 
-      if (error) throw error
+      if (error) throw error;
 
-      toast.success('Booking cancelled successfully')
-      loadBookings()
-      onRefresh()
+      toast.success("Booking cancelled successfully");
+      loadBookings();
+      onRefresh();
     } catch (error) {
-      console.error('Error cancelling booking:', error)
-      toast.error('Failed to cancel booking')
+      console.error("Error cancelling booking:", error);
+      toast.error("Failed to cancel booking");
     } finally {
-      setCancelling(false)
-      setCancelDialogOpen(false)
-      setSelectedBooking(null)
+      setCancelling(false);
+      setCancelDialogOpen(false);
+      setSelectedBooking(null);
     }
-  }
+  };
 
   const formatDateTime = (dateTime: string) => {
-    const date = new Date(dateTime)
+    const date = new Date(dateTime);
     return {
-      date: date.toLocaleDateString('en-US', {
-        weekday: 'long',
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric'
+      date: date.toLocaleDateString("en-US", {
+        weekday: "long",
+        year: "numeric",
+        month: "long",
+        day: "numeric",
       }),
-      time: date.toLocaleTimeString('en-US', {
-        hour: '2-digit',
-        minute: '2-digit'
-      })
-    }
-  }
+      time: date.toLocaleTimeString("en-US", {
+        hour: "2-digit",
+        minute: "2-digit",
+      }),
+    };
+  };
 
   const getServiceName = (addOns: any) => {
-    if (addOns?.serviceType === 'cold_plunge') return 'Cold Plunge'
-    if (addOns?.serviceType === 'infrared_sauna') return 'Infrared Sauna'
-    if (addOns?.serviceType === 'combo_package') return 'Ultimate Recovery Combo'
-    return 'Recovery Session'
-  }
+    if (addOns?.serviceType === "cold_plunge") return "Cold Plunge";
+    if (addOns?.serviceType === "infrared_sauna") return "Infrared Sauna";
+    if (addOns?.serviceType === "combo_package") return "Ultimate Recovery Combo";
+    return "Recovery Session";
+  };
 
   const getStatusBadge = (status: string) => {
     const statusConfig = {
-      scheduled: { label: 'Scheduled', variant: 'secondary' as const, icon: Calendar },
-      confirmed: { label: 'Confirmed', variant: 'default' as const, icon: CheckCircle },
-      in_progress: { label: 'In Progress', variant: 'default' as const, icon: Clock },
-      completed: { label: 'Completed', variant: 'secondary' as const, icon: CheckCircle },
-      cancelled: { label: 'Cancelled', variant: 'destructive' as const, icon: XCircle },
-      no_show: { label: 'No Show', variant: 'destructive' as const, icon: CalendarX }
-    }
+      scheduled: { label: "Scheduled", variant: "secondary" as const, icon: Calendar },
+      confirmed: { label: "Confirmed", variant: "default" as const, icon: CheckCircle },
+      in_progress: { label: "In Progress", variant: "default" as const, icon: Clock },
+      completed: { label: "Completed", variant: "secondary" as const, icon: CheckCircle },
+      cancelled: { label: "Cancelled", variant: "destructive" as const, icon: XCircle },
+      no_show: { label: "No Show", variant: "destructive" as const, icon: CalendarX },
+    };
 
-    const config = statusConfig[status as keyof typeof statusConfig] || statusConfig.scheduled
-    const Icon = config.icon
+    const config = statusConfig[status as keyof typeof statusConfig] || statusConfig.scheduled;
+    const Icon = config.icon;
 
     return (
       <Badge variant={config.variant} className="flex items-center space-x-1">
         <Icon className="w-3 h-3" />
         <span>{config.label}</span>
       </Badge>
-    )
-  }
+    );
+  };
 
-  const upcomingBookings = bookings.filter(booking => {
-    const bookingDate = new Date(booking.date_time)
-    const now = new Date()
-    return bookingDate > now && !['cancelled', 'no_show'].includes(booking.status)
-  })
+  const upcomingBookings = bookings.filter((booking) => {
+    const bookingDate = new Date(booking.date_time);
+    const now = new Date();
+    return bookingDate > now && !["cancelled", "no_show"].includes(booking.status);
+  });
 
-  const recentBookings = bookings.filter(booking => {
-    const bookingDate = new Date(booking.date_time)
-    const now = new Date()
-    return bookingDate <= now || ['cancelled', 'no_show'].includes(booking.status)
-  })
+  const recentBookings = bookings.filter((booking) => {
+    const bookingDate = new Date(booking.date_time);
+    const now = new Date();
+    return bookingDate <= now || ["cancelled", "no_show"].includes(booking.status);
+  });
 
   if (isLoading) {
     return (
@@ -205,7 +212,7 @@ export function BookingsTab({ user, onRefresh }: BookingsTabProps) {
           ))}
         </div>
       </div>
-    )
+    );
   }
 
   return (
@@ -228,7 +235,7 @@ export function BookingsTab({ user, onRefresh }: BookingsTabProps) {
       <Alert>
         <AlertCircle className="h-4 w-4" />
         <AlertDescription>
-          <strong>Cancellation Policy:</strong> Sessions can be cancelled up to 24 hours in advance. 
+          <strong>Cancellation Policy:</strong> Sessions can be cancelled up to 24 hours in advance.
           Rescheduling is available up to 48 hours before your session.
         </AlertDescription>
       </Alert>
@@ -238,13 +245,13 @@ export function BookingsTab({ user, onRefresh }: BookingsTabProps) {
         <h3 className="text-lg font-semibold text-gray-900">
           Upcoming Sessions ({upcomingBookings.length})
         </h3>
-        
+
         {upcomingBookings.length > 0 ? (
           <div className="space-y-4">
             {upcomingBookings.map((booking) => {
-              const dateTime = formatDateTime(booking.date_time)
-              const canCancel = canCancelBooking(booking)
-              const canReschedule = canRescheduleBooking(booking)
+              const dateTime = formatDateTime(booking.date_time);
+              const canCancel = canCancelBooking(booking);
+              const canReschedule = canRescheduleBooking(booking);
 
               return (
                 <Card key={booking.id} className="border-l-4 border-l-blue-500">
@@ -257,7 +264,7 @@ export function BookingsTab({ user, onRefresh }: BookingsTabProps) {
                           </h4>
                           {getStatusBadge(booking.status)}
                         </div>
-                        
+
                         <div className="space-y-2 text-sm text-gray-600">
                           <div className="flex items-center space-x-2">
                             <Calendar className="w-4 h-4" />
@@ -265,7 +272,9 @@ export function BookingsTab({ user, onRefresh }: BookingsTabProps) {
                           </div>
                           <div className="flex items-center space-x-2">
                             <Clock className="w-4 h-4" />
-                            <span>{dateTime.time} ({booking.duration} minutes)</span>
+                            <span>
+                              {dateTime.time} ({booking.duration} minutes)
+                            </span>
                           </div>
                           {booking.location_address?.street && (
                             <div className="flex items-center space-x-2">
@@ -293,14 +302,14 @@ export function BookingsTab({ user, onRefresh }: BookingsTabProps) {
                             </Link>
                           </Button>
                         )}
-                        
+
                         {canCancel && (
-                          <Button 
-                            variant="outline" 
+                          <Button
+                            variant="outline"
                             size="sm"
                             onClick={() => {
-                              setSelectedBooking(booking)
-                              setCancelDialogOpen(true)
+                              setSelectedBooking(booking);
+                              setCancelDialogOpen(true);
                             }}
                             className="text-red-600 hover:text-red-700 hover:bg-red-50"
                           >
@@ -309,7 +318,7 @@ export function BookingsTab({ user, onRefresh }: BookingsTabProps) {
                           </Button>
                         )}
 
-                        {!canCancel && !canReschedule && booking.status === 'scheduled' && (
+                        {!canCancel && !canReschedule && booking.status === "scheduled" && (
                           <p className="text-xs text-gray-500 text-center">
                             Changes not allowed within 24-48 hours
                           </p>
@@ -318,7 +327,7 @@ export function BookingsTab({ user, onRefresh }: BookingsTabProps) {
                     </div>
                   </CardContent>
                 </Card>
-              )
+              );
             })}
           </div>
         ) : (
@@ -344,10 +353,10 @@ export function BookingsTab({ user, onRefresh }: BookingsTabProps) {
           <h3 className="text-lg font-semibold text-gray-900">
             Recent Sessions ({recentBookings.length})
           </h3>
-          
+
           <div className="space-y-4">
             {recentBookings.map((booking) => {
-              const dateTime = formatDateTime(booking.date_time)
+              const dateTime = formatDateTime(booking.date_time);
 
               return (
                 <Card key={booking.id} className="opacity-75">
@@ -360,18 +369,20 @@ export function BookingsTab({ user, onRefresh }: BookingsTabProps) {
                           </h4>
                           {getStatusBadge(booking.status)}
                         </div>
-                        
+
                         <div className="space-y-2 text-sm text-gray-500">
                           <div className="flex items-center space-x-2">
                             <Calendar className="w-4 h-4" />
-                            <span>{dateTime.date} at {dateTime.time}</span>
+                            <span>
+                              {dateTime.date} at {dateTime.time}
+                            </span>
                           </div>
                         </div>
                       </div>
                     </div>
                   </CardContent>
                 </Card>
-              )
+              );
             })}
           </div>
         </div>
@@ -386,8 +397,10 @@ export function BookingsTab({ user, onRefresh }: BookingsTabProps) {
               Are you sure you want to cancel this booking? This action cannot be undone.
               {selectedBooking && (
                 <div className="mt-3 p-3 bg-gray-50 rounded text-sm">
-                  <strong>{getServiceName(selectedBooking.add_ons)}</strong><br />
-                  {formatDateTime(selectedBooking.date_time).date} at {formatDateTime(selectedBooking.date_time).time}
+                  <strong>{getServiceName(selectedBooking.add_ons)}</strong>
+                  <br />
+                  {formatDateTime(selectedBooking.date_time).date} at{" "}
+                  {formatDateTime(selectedBooking.date_time).time}
                 </div>
               )}
             </AlertDialogDescription>
@@ -399,11 +412,11 @@ export function BookingsTab({ user, onRefresh }: BookingsTabProps) {
               disabled={cancelling}
               className="bg-red-600 hover:bg-red-700"
             >
-              {cancelling ? 'Cancelling...' : 'Cancel Booking'}
+              {cancelling ? "Cancelling..." : "Cancel Booking"}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
     </div>
-  )
+  );
 }

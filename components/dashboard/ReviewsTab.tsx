@@ -1,90 +1,82 @@
-'use client'
+"use client";
 
-import { useState, useEffect } from 'react'
-import { User } from '@supabase/supabase-js'
-import { createClient } from '@/lib/supabase/client'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
-import { Badge } from '@/components/ui/badge'
-import { Textarea } from '@/components/ui/textarea'
-import { 
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
   Dialog,
   DialogContent,
   DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from '@/components/ui/dialog'
-import { 
-  Star,
-  MessageSquare,
-  Calendar,
-  CheckCircle,
-  Edit,
-  Trash2,
-  Plus
-} from 'lucide-react'
-import { toast } from 'sonner'
+} from "@/components/ui/dialog";
+import { Textarea } from "@/components/ui/textarea";
+import { User } from "@supabase/supabase-js";
+import { Calendar, Edit, MessageSquare, Star, Trash2 } from "lucide-react";
+import { useEffect, useState } from "react";
+import { toast } from "sonner";
 
 interface BookingForReview {
-  id: string
-  date_time: string
-  duration: number
-  add_ons: any
-  status: string
-  location_address: any
+  id: string;
+  date_time: string;
+  duration: number;
+  add_ons: any;
+  status: string;
+  location_address: any;
 }
 
 interface Review {
-  id: string
-  booking_id: string
-  rating: number
-  comment: string
-  google_synced: boolean
-  is_featured: boolean
-  reviewer_name: string
-  created_at: string
-  updated_at: string
-  booking?: BookingForReview
+  id: string;
+  booking_id: string;
+  rating: number;
+  comment: string;
+  google_synced: boolean;
+  is_featured: boolean;
+  reviewer_name: string;
+  created_at: string;
+  updated_at: string;
+  booking?: BookingForReview;
 }
 
 interface ReviewsTabProps {
-  user: User
+  user: User;
 }
 
 export function ReviewsTab({ user }: ReviewsTabProps) {
-  const supabase = createBrowserSupabaseClient()
-  const [pendingBookings, setPendingBookings] = useState<BookingForReview[]>([])
-  const [reviews, setReviews] = useState<Review[]>([])
-  const [isLoading, setIsLoading] = useState(true)
-  const [reviewDialogOpen, setReviewDialogOpen] = useState(false)
-  const [selectedBooking, setSelectedBooking] = useState<BookingForReview | null>(null)
-  const [rating, setRating] = useState(0)
-  const [comment, setComment] = useState('')
-  const [reviewerName, setReviewerName] = useState('')
-  const [isSubmitting, setIsSubmitting] = useState(false)
-  const [editingReview, setEditingReview] = useState<Review | null>(null)
+  const supabase = createBrowserSupabaseClient();
+  const [pendingBookings, setPendingBookings] = useState<BookingForReview[]>([]);
+  const [reviews, setReviews] = useState<Review[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [reviewDialogOpen, setReviewDialogOpen] = useState(false);
+  const [selectedBooking, setSelectedBooking] = useState<BookingForReview | null>(null);
+  const [rating, setRating] = useState(0);
+  const [comment, setComment] = useState("");
+  const [reviewerName, setReviewerName] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [editingReview, setEditingReview] = useState<Review | null>(null);
 
   useEffect(() => {
-    loadReviewData()
-  }, [user.id])
+    loadReviewData();
+  }, [user.id]);
 
   const loadReviewData = async () => {
     try {
       // Load completed bookings without reviews
       const { data: bookingsData, error: bookingsError } = await supabase
-        .from('bookings')
-        .select('id, date_time, duration, add_ons, status, location_address')
-        .eq('user_id', user.id)
-        .eq('status', 'completed')
-        .order('date_time', { ascending: false })
+        .from("bookings")
+        .select("id, date_time, duration, add_ons, status, location_address")
+        .eq("user_id", user.id)
+        .eq("status", "completed")
+        .order("date_time", { ascending: false });
 
-      if (bookingsError) throw bookingsError
+      if (bookingsError) throw bookingsError;
 
       // Load existing reviews
       const { data: reviewsData, error: reviewsError } = await supabase
-        .from('reviews')
-        .select(`
+        .from("reviews")
+        .select(
+          `
           *,
           bookings!inner (
             id,
@@ -94,136 +86,135 @@ export function ReviewsTab({ user }: ReviewsTabProps) {
             status,
             location_address
           )
-        `)
-        .eq('user_id', user.id)
-        .order('created_at', { ascending: false })
+        `
+        )
+        .eq("user_id", user.id)
+        .order("created_at", { ascending: false });
 
-      if (reviewsError) throw reviewsError
+      if (reviewsError) throw reviewsError;
 
       // Filter out bookings that already have reviews
-      const reviewedBookingIds = new Set(reviewsData?.map(r => r.booking_id) || [])
-      const pendingReviews = bookingsData?.filter(
-        booking => !reviewedBookingIds.has(booking.id)
-      ) || []
+      const reviewedBookingIds = new Set(reviewsData?.map((r) => r.booking_id) || []);
+      const pendingReviews =
+        bookingsData?.filter((booking) => !reviewedBookingIds.has(booking.id)) || [];
 
-      setPendingBookings(pendingReviews)
-      setReviews(reviewsData || [])
+      setPendingBookings(pendingReviews);
+      setReviews(reviewsData || []);
     } catch (error) {
-      console.error('Error loading review data:', error)
-      toast.error('Failed to load review data')
+      console.error("Error loading review data:", error);
+      toast.error("Failed to load review data");
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
-  }
+  };
 
   const submitReview = async () => {
     if (!selectedBooking || rating === 0) {
-      toast.error('Please provide a rating')
-      return
+      toast.error("Please provide a rating");
+      return;
     }
 
-    setIsSubmitting(true)
+    setIsSubmitting(true);
     try {
       const reviewData = {
         user_id: user.id,
         booking_id: selectedBooking.id,
         rating,
         comment: comment.trim(),
-        reviewer_name: reviewerName.trim() || user.user_metadata?.full_name || 'Anonymous',
+        reviewer_name: reviewerName.trim() || user.user_metadata?.full_name || "Anonymous",
         google_synced: false,
-        is_featured: false
-      }
+        is_featured: false,
+      };
 
       if (editingReview) {
         // Update existing review
         const { error } = await supabase
-          .from('reviews')
+          .from("reviews")
           .update({
             rating,
             comment: comment.trim(),
             reviewer_name: reviewerName.trim() || editingReview.reviewer_name,
-            updated_at: new Date().toISOString()
+            updated_at: new Date().toISOString(),
           })
-          .eq('id', editingReview.id)
+          .eq("id", editingReview.id);
 
-        if (error) throw error
-        toast.success('Review updated successfully!')
+        if (error) throw error;
+        toast.success("Review updated successfully!");
       } else {
         // Create new review
-        const { error } = await supabase
-          .from('reviews')
-          .insert(reviewData)
+        const { error } = await supabase.from("reviews").insert(reviewData);
 
-        if (error) throw error
-        toast.success('Review submitted successfully!')
+        if (error) throw error;
+        toast.success("Review submitted successfully!");
       }
 
-      resetForm()
-      loadReviewData()
+      resetForm();
+      loadReviewData();
     } catch (error) {
-      console.error('Error submitting review:', error)
-      toast.error('Failed to submit review')
+      console.error("Error submitting review:", error);
+      toast.error("Failed to submit review");
     } finally {
-      setIsSubmitting(false)
+      setIsSubmitting(false);
     }
-  }
+  };
 
   const deleteReview = async (reviewId: string) => {
     try {
-      const { error } = await supabase
-        .from('reviews')
-        .delete()
-        .eq('id', reviewId)
+      const { error } = await supabase.from("reviews").delete().eq("id", reviewId);
 
-      if (error) throw error
+      if (error) throw error;
 
-      toast.success('Review deleted successfully')
-      loadReviewData()
+      toast.success("Review deleted successfully");
+      loadReviewData();
     } catch (error) {
-      console.error('Error deleting review:', error)
-      toast.error('Failed to delete review')
+      console.error("Error deleting review:", error);
+      toast.error("Failed to delete review");
     }
-  }
+  };
 
   const resetForm = () => {
-    setReviewDialogOpen(false)
-    setSelectedBooking(null)
-    setEditingReview(null)
-    setRating(0)
-    setComment('')
-    setReviewerName('')
-  }
+    setReviewDialogOpen(false);
+    setSelectedBooking(null);
+    setEditingReview(null);
+    setRating(0);
+    setComment("");
+    setReviewerName("");
+  };
 
   const openReviewDialog = (booking: BookingForReview, existingReview?: Review) => {
-    setSelectedBooking(booking)
-    setEditingReview(existingReview || null)
-    setRating(existingReview?.rating || 0)
-    setComment(existingReview?.comment || '')
-    setReviewerName(existingReview?.reviewer_name || user.user_metadata?.full_name || '')
-    setReviewDialogOpen(true)
-  }
+    setSelectedBooking(booking);
+    setEditingReview(existingReview || null);
+    setRating(existingReview?.rating || 0);
+    setComment(existingReview?.comment || "");
+    setReviewerName(existingReview?.reviewer_name || user.user_metadata?.full_name || "");
+    setReviewDialogOpen(true);
+  };
 
   const getServiceName = (addOns: any) => {
-    if (addOns?.serviceType === 'cold_plunge') return 'Cold Plunge'
-    if (addOns?.serviceType === 'infrared_sauna') return 'Infrared Sauna'
-    if (addOns?.serviceType === 'combo_package') return 'Ultimate Recovery Combo'
-    return 'Recovery Session'
-  }
+    if (addOns?.serviceType === "cold_plunge") return "Cold Plunge";
+    if (addOns?.serviceType === "infrared_sauna") return "Infrared Sauna";
+    if (addOns?.serviceType === "combo_package") return "Ultimate Recovery Combo";
+    return "Recovery Session";
+  };
 
   const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric'
-    })
-  }
+    return new Date(dateString).toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    });
+  };
 
-  const renderStars = (rating: number, size: 'sm' | 'md' | 'lg' = 'md', interactive: boolean = false) => {
+  const renderStars = (
+    rating: number,
+    size: "sm" | "md" | "lg" = "md",
+    interactive: boolean = false
+  ) => {
     const starSize = {
-      sm: 'w-4 h-4',
-      md: 'w-5 h-5',
-      lg: 'w-6 h-6'
-    }[size]
+      sm: "w-4 h-4",
+      md: "w-5 h-5",
+      lg: "w-6 h-6",
+    }[size];
 
     return (
       <div className="flex space-x-1">
@@ -231,16 +222,14 @@ export function ReviewsTab({ user }: ReviewsTabProps) {
           <Star
             key={star}
             className={`${starSize} ${
-              star <= rating
-                ? 'fill-yellow-400 text-yellow-400'
-                : 'text-gray-300'
-            } ${interactive ? 'cursor-pointer hover:text-yellow-400' : ''}`}
+              star <= rating ? "fill-yellow-400 text-yellow-400" : "text-gray-300"
+            } ${interactive ? "cursor-pointer hover:text-yellow-400" : ""}`}
             onClick={interactive ? () => setRating(star) : undefined}
           />
         ))}
       </div>
-    )
-  }
+    );
+  };
 
   if (isLoading) {
     return (
@@ -256,7 +245,7 @@ export function ReviewsTab({ user }: ReviewsTabProps) {
           ))}
         </div>
       </div>
-    )
+    );
   }
 
   return (
@@ -278,7 +267,10 @@ export function ReviewsTab({ user }: ReviewsTabProps) {
           </CardHeader>
           <CardContent className="space-y-4">
             {pendingBookings.map((booking) => (
-              <div key={booking.id} className="flex items-center justify-between p-4 bg-white rounded-lg border">
+              <div
+                key={booking.id}
+                className="flex items-center justify-between p-4 bg-white rounded-lg border"
+              >
                 <div className="flex-1">
                   <h4 className="font-medium text-gray-900">{getServiceName(booking.add_ons)}</h4>
                   <div className="flex items-center space-x-4 text-sm text-gray-600 mt-1">
@@ -322,15 +314,17 @@ export function ReviewsTab({ user }: ReviewsTabProps) {
                           </Badge>
                         )}
                         {review.google_synced && (
-                          <Badge variant="secondary">
-                            Synced to Google
-                          </Badge>
+                          <Badge variant="secondary">Synced to Google</Badge>
                         )}
                       </div>
                       <div className="flex items-center space-x-4 text-sm text-gray-600">
                         <div className="flex items-center space-x-1">
                           <Calendar className="w-4 h-4" />
-                          <span>{review.booking?.date_time ? formatDate(review.booking.date_time) : 'N/A'}</span>
+                          <span>
+                            {review.booking?.date_time
+                              ? formatDate(review.booking.date_time)
+                              : "N/A"}
+                          </span>
                         </div>
                         <span>Reviewed {formatDate(review.created_at)}</span>
                       </div>
@@ -346,7 +340,7 @@ export function ReviewsTab({ user }: ReviewsTabProps) {
                       <Button
                         variant="outline"
                         size="sm"
-                        onClick={() => deleteReview(review.id)}
+                        onClick={async () => deleteReview(review.id)}
                         className="text-red-600 hover:text-red-700"
                       >
                         <Trash2 className="w-4 h-4" />
@@ -357,17 +351,13 @@ export function ReviewsTab({ user }: ReviewsTabProps) {
                   <div className="space-y-3">
                     <div className="flex items-center space-x-2">
                       {renderStars(review.rating)}
-                      <span className="text-sm text-gray-600">
-                        {review.rating} out of 5 stars
-                      </span>
+                      <span className="text-sm text-gray-600">{review.rating} out of 5 stars</span>
                     </div>
 
                     {review.comment && (
                       <div className="bg-gray-50 p-4 rounded-lg">
                         <p className="text-gray-700 italic">"{review.comment}"</p>
-                        <p className="text-sm text-gray-500 mt-2">
-                          - {review.reviewer_name}
-                        </p>
+                        <p className="text-sm text-gray-500 mt-2">- {review.reviewer_name}</p>
                       </div>
                     )}
                   </div>
@@ -378,9 +368,7 @@ export function ReviewsTab({ user }: ReviewsTabProps) {
             <div className="text-center py-8 text-gray-500">
               <MessageSquare className="h-12 w-12 mx-auto mb-4 text-gray-300" />
               <h3 className="text-lg font-medium text-gray-900 mb-2">No reviews yet</h3>
-              <p className="text-gray-600">
-                Complete a session to leave your first review
-              </p>
+              <p className="text-gray-600">Complete a session to leave your first review</p>
             </div>
           )}
         </CardContent>
@@ -390,28 +378,28 @@ export function ReviewsTab({ user }: ReviewsTabProps) {
       <Dialog open={reviewDialogOpen} onOpenChange={() => !isSubmitting && resetForm()}>
         <DialogContent className="max-w-md">
           <DialogHeader>
-            <DialogTitle>
-              {editingReview ? 'Edit Review' : 'Write a Review'}
-            </DialogTitle>
+            <DialogTitle>{editingReview ? "Edit Review" : "Write a Review"}</DialogTitle>
             <DialogDescription>
               {selectedBooking && (
                 <>
-                  {getServiceName(selectedBooking.add_ons)} on {formatDate(selectedBooking.date_time)}
+                  {getServiceName(selectedBooking.add_ons)} on{" "}
+                  {formatDate(selectedBooking.date_time)}
                 </>
               )}
             </DialogDescription>
           </DialogHeader>
-          
+
           <div className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Rating *
-              </label>
-              {renderStars(rating, 'lg', true)}
+              <label className="block text-sm font-medium text-gray-700 mb-2">Rating *</label>
+              {renderStars(rating, "lg", true)}
             </div>
 
             <div>
-              <label htmlFor="reviewer-name" className="block text-sm font-medium text-gray-700 mb-2">
+              <label
+                htmlFor="reviewer-name"
+                className="block text-sm font-medium text-gray-700 mb-2"
+              >
                 Display Name
               </label>
               <input
@@ -444,11 +432,11 @@ export function ReviewsTab({ user }: ReviewsTabProps) {
               Cancel
             </Button>
             <Button onClick={submitReview} disabled={isSubmitting || rating === 0}>
-              {isSubmitting ? 'Submitting...' : editingReview ? 'Update Review' : 'Submit Review'}
+              {isSubmitting ? "Submitting..." : editingReview ? "Update Review" : "Submit Review"}
             </Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
     </div>
-  )
+  );
 }

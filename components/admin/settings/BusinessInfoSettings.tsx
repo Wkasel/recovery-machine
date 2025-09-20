@@ -1,13 +1,12 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Label } from '@/components/ui/label';
-import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { BusinessHoursEditor } from './BusinessHoursEditor';
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { useState } from "react";
+import { BusinessHoursEditor } from "./BusinessHoursEditor";
 
 interface BusinessSetting {
   key: string;
@@ -26,11 +25,15 @@ interface BusinessInfoSettingsProps {
   loading: boolean;
 }
 
-export function BusinessInfoSettings({ settings, onUpdateSetting, loading }: BusinessInfoSettingsProps) {
+export function BusinessInfoSettings({
+  settings,
+  onUpdateSetting,
+  loading,
+}: BusinessInfoSettingsProps) {
   const [localValues, setLocalValues] = useState<Record<string, any>>({});
 
   const getSetting = (key: string) => {
-    return settings.find(s => s.key === key);
+    return settings.find((s) => s.key === key);
   };
 
   const getValue = (key: string) => {
@@ -42,28 +45,28 @@ export function BusinessInfoSettings({ settings, onUpdateSetting, loading }: Bus
   };
 
   const setValue = (key: string, value: any) => {
-    setLocalValues(prev => ({ ...prev, [key]: value }));
+    setLocalValues((prev) => ({ ...prev, [key]: value }));
   };
 
   const handleSave = async (key: string) => {
     const value = localValues[key];
     if (value !== undefined) {
       await onUpdateSetting(key, value);
-      setLocalValues(prev => ({ ...prev, [key]: undefined }));
+      setLocalValues((prev) => ({ ...prev, [key]: undefined }));
     }
   };
 
   const handleAddressChange = (field: string, value: string) => {
-    const currentAddress = getValue('business_address') || {};
+    const currentAddress = getValue("business_address") || {};
     const newAddress = { ...currentAddress, [field]: value };
-    setValue('business_address', newAddress);
+    setValue("business_address", newAddress);
   };
 
-  const businessName = getSetting('business_name');
-  const businessEmail = getSetting('business_email');
-  const businessPhone = getSetting('business_phone');
-  const businessAddress = getSetting('business_address');
-  const businessHours = getSetting('business_hours');
+  const businessName = getSetting("business_name");
+  const businessEmail = getSetting("business_email");
+  const businessPhone = getSetting("business_phone");
+  const businessAddress = getSetting("business_address");
+  const businessHours = getSetting("business_hours");
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -88,16 +91,16 @@ export function BusinessInfoSettings({ settings, onUpdateSetting, loading }: Bus
               </Label>
               <Input
                 id="business_name"
-                value={getValue('business_name') || ''}
-                onChange={(e) => setValue('business_name', e.target.value)}
+                value={getValue("business_name") || ""}
+                onChange={(e) => setValue("business_name", e.target.value)}
                 placeholder="Enter business name"
                 required={businessName.is_required}
               />
               <p className="text-xs text-gray-500">{businessName.description}</p>
-              {localValues['business_name'] !== undefined && (
-                <Button 
-                  size="sm" 
-                  onClick={() => handleSave('business_name')}
+              {localValues["business_name"] !== undefined && (
+                <Button
+                  size="sm"
+                  onClick={async () => handleSave("business_name")}
                   disabled={loading}
                 >
                   Save
@@ -116,16 +119,16 @@ export function BusinessInfoSettings({ settings, onUpdateSetting, loading }: Bus
               <Input
                 id="business_email"
                 type="email"
-                value={getValue('business_email') || ''}
-                onChange={(e) => setValue('business_email', e.target.value)}
+                value={getValue("business_email") || ""}
+                onChange={(e) => setValue("business_email", e.target.value)}
                 placeholder="Enter business email"
                 required={businessEmail.is_required}
               />
               <p className="text-xs text-gray-500">{businessEmail.description}</p>
-              {localValues['business_email'] !== undefined && (
-                <Button 
-                  size="sm" 
-                  onClick={() => handleSave('business_email')}
+              {localValues["business_email"] !== undefined && (
+                <Button
+                  size="sm"
+                  onClick={async () => handleSave("business_email")}
                   disabled={loading}
                 >
                   Save
@@ -144,16 +147,16 @@ export function BusinessInfoSettings({ settings, onUpdateSetting, loading }: Bus
               <Input
                 id="business_phone"
                 type="tel"
-                value={getValue('business_phone') || ''}
-                onChange={(e) => setValue('business_phone', e.target.value)}
+                value={getValue("business_phone") || ""}
+                onChange={(e) => setValue("business_phone", e.target.value)}
                 placeholder="Enter business phone"
                 required={businessPhone.is_required}
               />
               <p className="text-xs text-gray-500">{businessPhone.description}</p>
-              {localValues['business_phone'] !== undefined && (
-                <Button 
-                  size="sm" 
-                  onClick={() => handleSave('business_phone')}
+              {localValues["business_phone"] !== undefined && (
+                <Button
+                  size="sm"
+                  onClick={async () => handleSave("business_phone")}
                   disabled={loading}
                 >
                   Save
@@ -172,17 +175,15 @@ export function BusinessInfoSettings({ settings, onUpdateSetting, loading }: Bus
               Business Address
               <Badge variant="outline">Public</Badge>
             </CardTitle>
-            <CardDescription>
-              Physical address for your business location.
-            </CardDescription>
+            <CardDescription>Physical address for your business location.</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="space-y-2">
               <Label htmlFor="street">Street Address</Label>
               <Input
                 id="street"
-                value={getValue('business_address')?.street || ''}
-                onChange={(e) => handleAddressChange('street', e.target.value)}
+                value={getValue("business_address")?.street || ""}
+                onChange={(e) => handleAddressChange("street", e.target.value)}
                 placeholder="123 Main Street"
               />
             </div>
@@ -192,8 +193,8 @@ export function BusinessInfoSettings({ settings, onUpdateSetting, loading }: Bus
                 <Label htmlFor="city">City</Label>
                 <Input
                   id="city"
-                  value={getValue('business_address')?.city || ''}
-                  onChange={(e) => handleAddressChange('city', e.target.value)}
+                  value={getValue("business_address")?.city || ""}
+                  onChange={(e) => handleAddressChange("city", e.target.value)}
                   placeholder="City"
                 />
               </div>
@@ -201,8 +202,8 @@ export function BusinessInfoSettings({ settings, onUpdateSetting, loading }: Bus
                 <Label htmlFor="state">State</Label>
                 <Input
                   id="state"
-                  value={getValue('business_address')?.state || ''}
-                  onChange={(e) => handleAddressChange('state', e.target.value)}
+                  value={getValue("business_address")?.state || ""}
+                  onChange={(e) => handleAddressChange("state", e.target.value)}
                   placeholder="State"
                 />
               </div>
@@ -212,17 +213,14 @@ export function BusinessInfoSettings({ settings, onUpdateSetting, loading }: Bus
               <Label htmlFor="zip">ZIP Code</Label>
               <Input
                 id="zip"
-                value={getValue('business_address')?.zip || ''}
-                onChange={(e) => handleAddressChange('zip', e.target.value)}
+                value={getValue("business_address")?.zip || ""}
+                onChange={(e) => handleAddressChange("zip", e.target.value)}
                 placeholder="12345"
               />
             </div>
 
-            {localValues['business_address'] !== undefined && (
-              <Button 
-                onClick={() => handleSave('business_address')}
-                disabled={loading}
-              >
+            {localValues["business_address"] !== undefined && (
+              <Button onClick={async () => handleSave("business_address")} disabled={loading}>
                 Save Address
               </Button>
             )}
@@ -238,16 +236,14 @@ export function BusinessInfoSettings({ settings, onUpdateSetting, loading }: Bus
               Business Hours
               <Badge variant="outline">Public</Badge>
             </CardTitle>
-            <CardDescription>
-              Set your operating hours for each day of the week.
-            </CardDescription>
+            <CardDescription>Set your operating hours for each day of the week.</CardDescription>
           </CardHeader>
           <CardContent>
             <BusinessHoursEditor
-              value={getValue('business_hours') || {}}
-              onChange={(hours) => setValue('business_hours', hours)}
-              onSave={() => handleSave('business_hours')}
-              hasChanges={localValues['business_hours'] !== undefined}
+              value={getValue("business_hours") || {}}
+              onChange={(hours) => setValue("business_hours", hours)}
+              onSave={async () => handleSave("business_hours")}
+              hasChanges={localValues["business_hours"] !== undefined}
               loading={loading}
             />
           </CardContent>

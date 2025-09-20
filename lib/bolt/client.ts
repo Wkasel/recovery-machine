@@ -1,7 +1,7 @@
 // Bolt API client
 // Recovery Machine - Payment Processing
 
-import { getBoltConfig, type BoltOrderData, type OrderType } from './config';
+import { getBoltConfig, type BoltOrderData } from "./config";
 
 export class BoltClient {
   private config;
@@ -9,19 +9,20 @@ export class BoltClient {
 
   constructor() {
     this.config = getBoltConfig();
-    this.baseUrl = this.config.environment === 'production' 
-      ? 'https://api.bolt.com' 
-      : 'https://api-sandbox.bolt.com';
+    this.baseUrl =
+      this.config.environment === "production"
+        ? "https://api.bolt.com"
+        : "https://api-sandbox.bolt.com";
   }
 
   private async makeRequest(endpoint: string, options: RequestInit = {}) {
     const url = `${this.baseUrl}${endpoint}`;
-    
+
     const response = await fetch(url, {
       ...options,
       headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${this.config.apiKey}`,
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${this.config.apiKey}`,
         ...options.headers,
       },
     });
@@ -42,13 +43,15 @@ export class BoltClient {
         currency: orderData.currency.toUpperCase(),
         order_reference: orderData.order_reference,
         order_description: orderData.description,
-        items: [{
-          name: orderData.description,
-          total_amount: orderData.amount,
-          quantity: 1,
-          sku: orderData.order_type,
-          description: orderData.description,
-        }],
+        items: [
+          {
+            name: orderData.description,
+            total_amount: orderData.amount,
+            quantity: 1,
+            sku: orderData.order_type,
+            description: orderData.description,
+          },
+        ],
       },
       shopper_identity: {
         email: orderData.customer_email,
@@ -64,8 +67,8 @@ export class BoltClient {
       },
     };
 
-    return this.makeRequest('/v1/checkout', {
-      method: 'POST',
+    return this.makeRequest("/v1/checkout", {
+      method: "POST",
       body: JSON.stringify(checkoutData),
     });
   }
@@ -81,7 +84,7 @@ export class BoltClient {
   }) {
     const subscriptionData = {
       amount: customerData.amount,
-      currency: 'USD',
+      currency: "USD",
       interval: customerData.interval,
       interval_count: 1,
       description: customerData.description,
@@ -91,12 +94,12 @@ export class BoltClient {
       },
       metadata: {
         order_reference: customerData.order_reference,
-        service_type: 'recovery_machine_membership',
+        service_type: "recovery_machine_membership",
       },
     };
 
-    return this.makeRequest('/v1/subscriptions', {
-      method: 'POST',
+    return this.makeRequest("/v1/subscriptions", {
+      method: "POST",
       body: JSON.stringify(subscriptionData),
     });
   }
@@ -104,7 +107,7 @@ export class BoltClient {
   // Cancel a subscription
   async cancelSubscription(subscriptionId: string) {
     return this.makeRequest(`/v1/subscriptions/${subscriptionId}/cancel`, {
-      method: 'POST',
+      method: "POST",
     });
   }
 
@@ -113,11 +116,11 @@ export class BoltClient {
     const refundData = {
       checkout_id: checkoutId,
       amount: amount, // If not provided, refunds full amount
-      reason: 'customer_request',
+      reason: "customer_request",
     };
 
-    return this.makeRequest('/v1/refunds', {
-      method: 'POST',
+    return this.makeRequest("/v1/refunds", {
+      method: "POST",
       body: JSON.stringify(refundData),
     });
   }
@@ -133,28 +136,31 @@ export class BoltClient {
   }
 
   // Update subscription
-  async updateSubscription(subscriptionId: string, updates: {
-    amount?: number;
-    status?: 'active' | 'paused' | 'cancelled';
-    metadata?: Record<string, any>;
-  }) {
+  async updateSubscription(
+    subscriptionId: string,
+    updates: {
+      amount?: number;
+      status?: "active" | "paused" | "cancelled";
+      metadata?: Record<string, any>;
+    }
+  ) {
     return this.makeRequest(`/v1/subscriptions/${subscriptionId}`, {
-      method: 'PATCH',
+      method: "PATCH",
       body: JSON.stringify(updates),
     });
   }
 
   // Verify webhook signature
   verifyWebhookSignature(payload: string, signature: string): boolean {
-    const crypto = require('crypto');
+    const crypto = require("crypto");
     const expectedSignature = crypto
-      .createHmac('sha256', this.config.webhookSecret)
+      .createHmac("sha256", this.config.webhookSecret)
       .update(payload)
-      .digest('hex');
-    
+      .digest("hex");
+
     return crypto.timingSafeEqual(
-      Buffer.from(signature, 'hex'),
-      Buffer.from(expectedSignature, 'hex')
+      Buffer.from(signature, "hex"),
+      Buffer.from(expectedSignature, "hex")
     );
   }
 }

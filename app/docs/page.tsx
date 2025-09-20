@@ -9,7 +9,9 @@ export default function DocsPage() {
             ← Back to Home
           </Link>
           <h1 className="text-4xl font-bold mb-4">Documentation</h1>
-          <p className="text-xl text-neutral-400">Everything you need to know about Recovery Machine</p>
+          <p className="text-xl text-neutral-400">
+            Everything you need to know about Recovery Machine
+          </p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -94,8 +96,8 @@ export default function DocsPage() {
           <p className="text-neutral-400 mb-6">
             Experience professional recovery therapy at your location
           </p>
-          <Link 
-            href="/book" 
+          <Link
+            href="/book"
             className="inline-block bg-neutral-900 border border-neutral-800 text-white px-8 py-3 hover:bg-neutral-800 transition-colors"
           >
             Book Your Session

@@ -30,13 +30,13 @@ export const OrganizationJsonLd = () => {
           "@type": "ContactPoint",
           contactType: "customer service",
           availableLanguage: ["English", "Spanish"],
-          areaServed: "US-CA"
+          areaServed: "US-CA",
         },
         address: {
           "@type": "PostalAddress",
           addressLocality: "Los Angeles",
           addressRegion: "CA",
-          addressCountry: "US"
+          addressCountry: "US",
         },
         // Add business-specific properties
         foundingDate: "2024",
@@ -46,8 +46,8 @@ export const OrganizationJsonLd = () => {
           "Infrared Sauna",
           "Recovery Therapy",
           "Wellness Services",
-          "Mobile Spa Services"
-        ]
+          "Mobile Spa Services",
+        ],
       }}
     </JsonLd>
   );
@@ -71,10 +71,10 @@ export const WebsiteJsonLd = () => {
           "@type": "SearchAction",
           target: {
             "@type": "EntryPoint",
-            urlTemplate: `${siteMetadata.siteUrl}/search?q={search_term_string}`
+            urlTemplate: `${siteMetadata.siteUrl}/search?q={search_term_string}`,
           },
-          "query-input": "required name=search_term_string"
-        }
+          "query-input": "required name=search_term_string",
+        },
       }}
     </JsonLd>
   );
@@ -105,8 +105,8 @@ export const WebPageJsonLd = ({
         mainEntity: {
           "@type": "LocalBusiness",
           name: siteMetadata.organization.name,
-          description: siteMetadata.description
-        }
+          description: siteMetadata.description,
+        },
       }}
     </JsonLd>
   );
@@ -154,8 +154,8 @@ export const ArticleJsonLd = ({
         },
         mainEntityOfPage: {
           "@type": "WebPage",
-          "@id": url
-        }
+          "@id": url,
+        },
       }}
     </JsonLd>
   );
@@ -168,24 +168,24 @@ export const FAQJsonLd = ({ faqs }: { faqs: Array<{ question: string; answer: st
       {{
         "@context": "https://schema.org",
         "@type": "FAQPage",
-        mainEntity: faqs.map(faq => ({
+        mainEntity: faqs.map((faq) => ({
           "@type": "Question",
           name: faq.question,
           acceptedAnswer: {
             "@type": "Answer",
-            text: faq.answer
-          }
-        }))
+            text: faq.answer,
+          },
+        })),
       }}
     </JsonLd>
   );
 };
 
 // Breadcrumb Schema
-export const BreadcrumbJsonLd = ({ 
-  breadcrumbs 
-}: { 
-  breadcrumbs: Array<{ name: string; url: string }> 
+export const BreadcrumbJsonLd = ({
+  breadcrumbs,
+}: {
+  breadcrumbs: Array<{ name: string; url: string }>;
 }) => {
   return (
     <JsonLd>
@@ -196,8 +196,8 @@ export const BreadcrumbJsonLd = ({
           "@type": "ListItem",
           position: index + 1,
           name: breadcrumb.name,
-          item: breadcrumb.url
-        }))
+          item: breadcrumb.url,
+        })),
       }}
     </JsonLd>
   );

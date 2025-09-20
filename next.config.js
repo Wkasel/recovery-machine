@@ -1,20 +1,17 @@
 import createWithBundleAnalyzer from "@next/bundle-analyzer";
-// Sentry import temporarily removed to fix build warnings
+import { withSentryConfig } from '@sentry/nextjs';
 
 /** @type {import('next').NextConfig} */
 const nextConfig = (phase) => {
   const config = {
     reactStrictMode: true,
     typescript: {
-      // !! WARN !!
-      // Dangerously allow production builds to successfully complete even if
-      // your project has type errors.
+      // TypeScript checking temporarily disabled for deployment
       ignoreBuildErrors: true,
     },
     eslint: {
-      // Warning: This allows production builds to successfully complete even if
-      // your project has ESLint errors.
-      ignoreDuringBuilds: true,
+      // ESLint checking enabled for production safety
+      ignoreDuringBuilds: false,
     },
     // Performance optimizations
     experimental: {
@@ -190,10 +187,30 @@ const nextConfig = (phase) => {
     openAnalyzer: process.env.ANALYZE === "true" && process.env.OPEN_ANALYZER === "true",
   });
 
-  // Sentry configuration temporarily removed to fix build warnings
+  // Sentry configuration for error monitoring
+  const sentryConfig = {
+    org: process.env.SENTRY_ORG,
+    project: process.env.SENTRY_PROJECT,
+    silent: !process.env.CI,
+    widenClientFileUpload: true,
+    reactComponentAnnotation: {
+      enabled: true,
+    },
+    tunnelRoute: '/monitoring',
+    hideSourceMaps: true,
+    disableLogger: true,
+    automaticVercelMonitors: true,
+  };
 
-  // Return config without Sentry wrapper for now
-  return withBundleAnalyzer(config);
+  // Return config with Sentry wrapper for error monitoring
+  const configWithBundleAnalyzer = withBundleAnalyzer(config);
+  
+  // Only wrap with Sentry in production or when explicitly enabled
+  if (process.env.NODE_ENV === 'production' || process.env.SENTRY_DSN) {
+    return withSentryConfig(configWithBundleAnalyzer, sentryConfig);
+  }
+  
+  return configWithBundleAnalyzer;
 };
 
 export default nextConfig;

@@ -1,55 +1,55 @@
-'use client'
+"use client";
 
-import { useState } from 'react'
-import { ServiceType, services, ServiceOption } from '@/lib/types/booking'
-import { cn } from '@/lib/utils'
-import { Check, Star, Clock, DollarSign } from 'lucide-react'
-import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Badge } from '@/components/ui/badge'
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { ServiceType, services } from "@/lib/types/booking";
+import { cn } from "@/lib/utils";
+import { Check, Clock, DollarSign, Star } from "lucide-react";
+import { useState } from "react";
 
 interface ServiceSelectionProps {
-  selectedService?: ServiceType
-  onServiceSelect: (serviceType: ServiceType) => void
-  onNext: () => void
+  selectedService?: ServiceType;
+  onServiceSelect: (serviceType: ServiceType) => void;
+  onNext: () => void;
 }
 
-export function ServiceSelection({ selectedService, onServiceSelect, onNext }: ServiceSelectionProps) {
-  const [hoveredService, setHoveredService] = useState<ServiceType | null>(null)
+export function ServiceSelection({
+  selectedService,
+  onServiceSelect,
+  onNext,
+}: ServiceSelectionProps) {
+  const [hoveredService, setHoveredService] = useState<ServiceType | null>(null);
 
   const formatPrice = (priceInCents: number) => {
-    return `$${(priceInCents / 100).toFixed(0)}`
-  }
+    return `$${(priceInCents / 100).toFixed(0)}`;
+  };
 
   const handleServiceSelect = (serviceType: ServiceType) => {
-    onServiceSelect(serviceType)
-  }
+    onServiceSelect(serviceType);
+  };
 
   return (
     <div className="space-y-6">
       <div className="text-center">
-        <h2 className="text-2xl font-bold text-gray-900 mb-2">
-          Choose Your Recovery Experience
-        </h2>
-        <p className="text-gray-600">
-          Select the service that best fits your wellness goals
-        </p>
+        <h2 className="text-2xl font-bold text-gray-900 mb-2">Choose Your Recovery Experience</h2>
+        <p className="text-gray-600">Select the service that best fits your wellness goals</p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {services.map((service) => {
-          const isSelected = selectedService === service.id
-          const isHovered = hoveredService === service.id
+          const isSelected = selectedService === service.id;
+          const isHovered = hoveredService === service.id;
 
           return (
             <Card
               key={service.id}
               className={cn(
-                'relative cursor-pointer transition-all duration-200 border-2',
+                "relative cursor-pointer transition-all duration-200 border-2",
                 isSelected
-                  ? 'border-blue-500 ring-2 ring-blue-200 shadow-lg'
-                  : 'border-gray-200 hover:border-blue-300 hover:shadow-md',
-                service.popular && 'ring-2 ring-amber-200 border-amber-300'
+                  ? "border-blue-500 ring-2 ring-blue-200 shadow-lg"
+                  : "border-gray-200 hover:border-blue-300 hover:shadow-md",
+                service.popular && "ring-2 ring-amber-200 border-amber-300"
               )}
               onMouseEnter={() => setHoveredService(service.id)}
               onMouseLeave={() => setHoveredService(null)}
@@ -73,9 +73,7 @@ export function ServiceSelection({ selectedService, onServiceSelect, onNext }: S
               )}
 
               <CardHeader className="pb-4">
-                <CardTitle className="text-xl font-semibold">
-                  {service.name}
-                </CardTitle>
+                <CardTitle className="text-xl font-semibold">{service.name}</CardTitle>
                 <CardDescription className="text-sm text-gray-600">
                   {service.description}
                 </CardDescription>
@@ -110,7 +108,7 @@ export function ServiceSelection({ selectedService, onServiceSelect, onNext }: S
                 </div>
 
                 {/* Service-specific highlights */}
-                {service.id === 'cold_plunge' && (
+                {service.id === "cold_plunge" && (
                   <div className="bg-blue-50 p-3 rounded-lg">
                     <p className="text-xs text-blue-800">
                       Perfect for post-workout recovery and inflammation reduction
@@ -118,7 +116,7 @@ export function ServiceSelection({ selectedService, onServiceSelect, onNext }: S
                   </div>
                 )}
 
-                {service.id === 'infrared_sauna' && (
+                {service.id === "infrared_sauna" && (
                   <div className="bg-red-50 p-3 rounded-lg">
                     <p className="text-xs text-red-800">
                       Ideal for detoxification and deep relaxation
@@ -126,7 +124,7 @@ export function ServiceSelection({ selectedService, onServiceSelect, onNext }: S
                   </div>
                 )}
 
-                {service.id === 'combo_package' && (
+                {service.id === "combo_package" && (
                   <div className="bg-purple-50 p-3 rounded-lg">
                     <p className="text-xs text-purple-800">
                       Complete recovery experience with maximum benefits
@@ -135,15 +133,13 @@ export function ServiceSelection({ selectedService, onServiceSelect, onNext }: S
                 )}
               </CardContent>
             </Card>
-          )
+          );
         })}
       </div>
 
       {/* Add-on options preview */}
       <div className="bg-gray-50 p-4 rounded-lg">
-        <h3 className="text-lg font-semibold text-gray-900 mb-3">
-          Available Add-ons
-        </h3>
+        <h3 className="text-lg font-semibold text-gray-900 mb-3">Available Add-ons</h3>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
           <div className="flex items-center space-x-2">
             <Check className="w-4 h-4 text-green-500" />
@@ -162,15 +158,10 @@ export function ServiceSelection({ selectedService, onServiceSelect, onNext }: S
 
       {/* Next button */}
       <div className="flex justify-end pt-6">
-        <Button
-          onClick={onNext}
-          disabled={!selectedService}
-          size="lg"
-          className="px-8"
-        >
+        <Button onClick={onNext} disabled={!selectedService} size="lg" className="px-8">
           Continue to Location
         </Button>
       </div>
     </div>
-  )
+  );
 }

@@ -23,13 +23,12 @@ interface MainNavProps {
   user: IUser | null;
 }
 
-
 export function MainNav({ items = navigationConfig.mainNav, children, user }: MainNavProps) {
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
 
   // Simplified nav items for Recovery Machine
-  const navItems = user 
+  const navItems = user
     ? [
         { href: "/", label: "Home" },
         { href: "/book", label: "Book Session" },
@@ -81,13 +80,17 @@ export function MainNav({ items = navigationConfig.mainNav, children, user }: Ma
           </SheetTrigger>
           <SheetContent side="left" className="w-[300px] sm:w-[400px]">
             <div className="flex flex-col space-y-3 mt-6">
-              <Link href="/" className="flex items-center space-x-2 mb-6" onClick={() => setOpen(false)}>
+              <Link
+                href="/"
+                className="flex items-center space-x-2 mb-6"
+                onClick={() => setOpen(false)}
+              >
                 <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
                   <Snowflake className="h-4 w-4" />
                 </div>
                 <span className="font-bold">The Recovery Machine</span>
               </Link>
-              
+
               {navItems.map((item) => (
                 <Link
                   key={item.href}
@@ -101,7 +104,7 @@ export function MainNav({ items = navigationConfig.mainNav, children, user }: Ma
                   {item.label}
                 </Link>
               ))}
-              
+
               {!user && (
                 <div className="pt-4 mt-4 border-t space-y-2">
                   <Link

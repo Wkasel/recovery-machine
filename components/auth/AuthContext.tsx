@@ -1,6 +1,6 @@
 "use client";
 
-import { signOutWithRedirect, getUser } from "@/core/actions/auth";
+import { getUser, signOutWithRedirect } from "@/core/actions/auth";
 import { IUser } from "@/lib/types/auth";
 import type { User } from "@supabase/supabase-js";
 import { useQueryClient } from "@tanstack/react-query";

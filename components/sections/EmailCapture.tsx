@@ -1,11 +1,11 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { ArrowRight, Gift, Mail, Star } from "lucide-react";
 import { useState } from "react";
-import { Mail, Gift, Star, ArrowRight } from "lucide-react";
 
 export function EmailCapture() {
   const [email, setEmail] = useState("");
@@ -17,10 +17,10 @@ export function EmailCapture() {
     if (!email) return;
 
     setIsLoading(true);
-    
+
     // Simulate API call - in production, this would call your Supabase function
     try {
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      await new Promise((resolve) => setTimeout(resolve, 1000));
       setIsSubscribed(true);
       setEmail("");
     } catch (error) {
@@ -39,12 +39,10 @@ export function EmailCapture() {
               <div className="w-16 h-16 bg-neutral-900 border border-neutral-800 flex items-center justify-center mx-auto mb-6">
                 <Mail className="h-8 w-8 text-white" />
               </div>
-              <h3 className="text-2xl font-bold text-white mb-4">
-                Welcome to Recovery Machine!
-              </h3>
+              <h3 className="text-2xl font-bold text-white mb-4">Welcome to Recovery Machine!</h3>
               <p className="text-neutral-400 mb-6">
-                Thank you for subscribing! Check your email for your 10% discount code 
-                and exclusive recovery tips.
+                Thank you for subscribing! Check your email for your 10% discount code and exclusive
+                recovery tips.
               </p>
               <Badge className="bg-neutral-900 text-white border border-neutral-800 px-4 py-2">
                 <Gift className="h-4 w-4 mr-2" />
@@ -75,7 +73,7 @@ export function EmailCapture() {
               <p className="text-lg sm:text-xl text-neutral-400 mb-2">
                 Join our community of high performers and unlock expert recovery strategies
               </p>
-              
+
               {/* Value Proposition */}
               <div className="flex items-center justify-center gap-2 text-white font-semibold mb-8">
                 <Star className="h-5 w-5 fill-current" />
@@ -122,9 +120,11 @@ export function EmailCapture() {
                   <Mail className="h-6 w-6 text-white" />
                 </div>
                 <h4 className="font-semibold text-white mb-2">Expert Tips</h4>
-                <p className="text-sm text-neutral-400">Weekly recovery protocols from professionals</p>
+                <p className="text-sm text-neutral-400">
+                  Weekly recovery protocols from professionals
+                </p>
               </div>
-              
+
               <div className="text-center">
                 <div className="w-12 h-12 bg-neutral-900 border border-neutral-800 flex items-center justify-center mx-auto mb-3">
                   <Gift className="h-6 w-6 text-white" />
@@ -132,7 +132,7 @@ export function EmailCapture() {
                 <h4 className="font-semibold text-white mb-2">Exclusive Offers</h4>
                 <p className="text-sm text-neutral-400">Member-only discounts and early access</p>
               </div>
-              
+
               <div className="text-center">
                 <div className="w-12 h-12 bg-neutral-900 border border-neutral-800 flex items-center justify-center mx-auto mb-3">
                   <Star className="h-6 w-6 text-white" />

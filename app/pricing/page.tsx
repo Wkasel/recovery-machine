@@ -1,27 +1,33 @@
 import { Pricing } from "@/components/sections/Pricing";
-import Link from "next/link";
 import { Metadata } from "next";
+import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "Pricing - Recovery Machine Mobile Wellness Services",
-  description: "Transparent pricing for mobile cold plunge and infrared sauna services. Weekly memberships starting at $400/month with 75% savings. Professional recovery at your location.",
-  keywords: "cold plunge pricing, infrared sauna cost, mobile wellness pricing, recovery membership, Los Angeles wellness services",
+  description:
+    "Transparent pricing for mobile cold plunge and infrared sauna services. Weekly memberships starting at $400/month with 75% savings. Professional recovery at your location.",
+  keywords:
+    "cold plunge pricing, infrared sauna cost, mobile wellness pricing, recovery membership, Los Angeles wellness services",
   openGraph: {
     title: "Recovery Machine Pricing - Mobile Wellness Services",
-    description: "Weekly memberships starting at $400/month with 75% savings. Professional cold plunge and infrared sauna delivered to your door.",
+    description:
+      "Weekly memberships starting at $400/month with 75% savings. Professional cold plunge and infrared sauna delivered to your door.",
     type: "website",
-    images: [{
-      url: "/api/og?title=Recovery%20Machine%20Pricing&description=Mobile%20Wellness%20Services",
-      width: 1200,
-      height: 630,
-      alt: "Recovery Machine Pricing - Mobile Wellness Services"
-    }]
+    images: [
+      {
+        url: "/api/og?title=Recovery%20Machine%20Pricing&description=Mobile%20Wellness%20Services",
+        width: 1200,
+        height: 630,
+        alt: "Recovery Machine Pricing - Mobile Wellness Services",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
     title: "Recovery Machine Pricing - Mobile Wellness Services",
-    description: "Weekly memberships starting at $400/month with 75% savings. Professional recovery at your location."
-  }
+    description:
+      "Weekly memberships starting at $400/month with 75% savings. Professional recovery at your location.",
+  },
 };
 
 export default function PricingPage() {

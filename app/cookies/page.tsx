@@ -17,8 +17,9 @@ export default function CookiesPage() {
             <section>
               <h2 className="text-2xl font-bold mb-4">What Are Cookies</h2>
               <p className="text-neutral-300 leading-relaxed">
-                Cookies are small text files that are stored on your computer or mobile device when you visit a website. 
-                They help us provide you with a better experience by remembering your preferences and improving our services.
+                Cookies are small text files that are stored on your computer or mobile device when
+                you visit a website. They help us provide you with a better experience by
+                remembering your preferences and improving our services.
               </p>
             </section>
 
@@ -38,29 +39,29 @@ export default function CookiesPage() {
 
             <section>
               <h2 className="text-2xl font-bold mb-4">Types of Cookies We Use</h2>
-              
+
               <div className="space-y-6">
                 <div>
                   <h3 className="text-lg font-semibold mb-2 text-white">Essential Cookies</h3>
                   <p className="text-neutral-300">
-                    These cookies are necessary for the website to function properly. They enable core functionality 
-                    such as security, network management, and accessibility.
+                    These cookies are necessary for the website to function properly. They enable
+                    core functionality such as security, network management, and accessibility.
                   </p>
                 </div>
 
                 <div>
                   <h3 className="text-lg font-semibold mb-2 text-white">Analytics Cookies</h3>
                   <p className="text-neutral-300">
-                    These cookies help us understand how visitors interact with our website by collecting and 
-                    reporting information anonymously.
+                    These cookies help us understand how visitors interact with our website by
+                    collecting and reporting information anonymously.
                   </p>
                 </div>
 
                 <div>
                   <h3 className="text-lg font-semibold mb-2 text-white">Functional Cookies</h3>
                   <p className="text-neutral-300">
-                    These cookies enable enhanced functionality and personalization, such as remembering your 
-                    preferences and settings.
+                    These cookies enable enhanced functionality and personalization, such as
+                    remembering your preferences and settings.
                   </p>
                 </div>
               </div>
@@ -69,32 +70,33 @@ export default function CookiesPage() {
             <section>
               <h2 className="text-2xl font-bold mb-4">Managing Cookies</h2>
               <p className="text-neutral-300 leading-relaxed">
-                You can control and manage cookies in your browser settings. Most browsers allow you to refuse 
-                cookies or delete existing ones. However, please note that disabling cookies may affect the 
-                functionality of our website.
+                You can control and manage cookies in your browser settings. Most browsers allow you
+                to refuse cookies or delete existing ones. However, please note that disabling
+                cookies may affect the functionality of our website.
               </p>
             </section>
 
             <section>
               <h2 className="text-2xl font-bold mb-4">Third-Party Cookies</h2>
               <p className="text-neutral-300 leading-relaxed">
-                We may use third-party services like Google Analytics that may set their own cookies. These 
-                services help us improve our website and understand our users better.
+                We may use third-party services like Google Analytics that may set their own
+                cookies. These services help us improve our website and understand our users better.
               </p>
             </section>
 
             <section>
               <h2 className="text-2xl font-bold mb-4">Updates to This Policy</h2>
               <p className="text-neutral-300 leading-relaxed">
-                We may update this Cookie Policy from time to time. Any changes will be posted on this page 
-                with an updated revision date.
+                We may update this Cookie Policy from time to time. Any changes will be posted on
+                this page with an updated revision date.
               </p>
             </section>
 
             <section>
               <h2 className="text-2xl font-bold mb-4">Contact Us</h2>
               <p className="text-neutral-300 leading-relaxed">
-                If you have questions about our use of cookies, please contact us at privacy@recoverymachine.com.
+                If you have questions about our use of cookies, please contact us at
+                privacy@recoverymachine.com.
               </p>
             </section>
           </div>
