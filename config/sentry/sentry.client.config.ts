@@ -6,7 +6,17 @@ import * as Sentry from "@sentry/nextjs";
 import { SupabaseIntegration } from "@supabase/sentry-js-integration";
 import { SupabaseClient } from "@supabase/supabase-js";
 
+declare global {
+  interface Window {
+    __SENTRY_INITIALIZED__?: boolean;
+  }
+}
+
 const SENTRY_DSN = process.env.NEXT_PUBLIC_SENTRY_DSN;
+
+// Prevent multiple Sentry initializations
+if (typeof window !== 'undefined' && !window.__SENTRY_INITIALIZED__) {
+  window.__SENTRY_INITIALIZED__ = true;
 
 Sentry.init({
   dsn: SENTRY_DSN,
@@ -42,3 +52,5 @@ Sentry.init({
     }),
   ],
 });
+
+}
