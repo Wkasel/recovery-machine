@@ -1,3 +1,5 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
 import { Instagram, Star, TrendingUp, Users } from "lucide-react";
 import Link from "next/link";
@@ -110,11 +112,9 @@ export function SocialProof() {
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const ensureScript = () =>
+    const ensureScript = async () =>
       new Promise<void>((resolve) => {
-        const existing = document.querySelector(
-          'script[src="https://w.behold.so/widget.js"]'
-        ) as HTMLScriptElement | null;
+        const existing = document.querySelector('script[src="https://w.behold.so/widget.js"]');
         if (existing) {
           if (existing.getAttribute("data-loaded") === "true") return resolve();
           existing.addEventListener("load", () => resolve());
@@ -138,7 +138,10 @@ export function SocialProof() {
         };
       };
       if (anyWindow.BeholdWidget && containerRef.current) {
-        anyWindow.BeholdWidget.render({ widgetId: "your-widget-id", container: containerRef.current });
+        anyWindow.BeholdWidget.render({
+          widgetId: "your-widget-id",
+          container: containerRef.current,
+        });
       }
     });
   }, []);
@@ -165,7 +168,10 @@ export function SocialProof() {
             {benefits.map((item) => {
               const IconComponent = item.icon;
               return (
-                <div key={item.title} className="text-center p-8 bg-black border border-neutral-800">
+                <div
+                  key={item.title}
+                  className="text-center p-8 bg-black border border-neutral-800"
+                >
                   <div className="flex justify-center mb-6">
                     <div className="w-20 h-20 bg-neutral-900 border border-neutral-800 flex items-center justify-center">
                       <IconComponent className="h-10 w-10 text-brand" />

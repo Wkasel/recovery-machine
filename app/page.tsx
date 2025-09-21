@@ -1,25 +1,28 @@
-import { Suspense } from "react";
-import { HomePage } from "@/components/HomePage";
+import { OfferModalDebug } from "@/components/debug/OfferModalDebug";
+import Hero from "@/components/hero";
+import { HomePageClient } from "@/components/HomePageClient";
+import { EmailCapture } from "@/components/sections/EmailCapture";
+import HowItWorks from "@/components/sections/HowItWorks";
+import { Pricing } from "@/components/sections/Pricing";
+import { SocialProof } from "@/components/sections/SocialProof";
 import { LocalBusinessSchema } from "@/components/seo/LocalBusinessSchema";
-
-function HomePageFallback() {
-  return (
-    <div className="bg-black text-white min-h-screen">
-      <LocalBusinessSchema />
-      <div className="animate-pulse">
-        <div className="h-96 bg-gray-800 rounded"></div>
-      </div>
-    </div>
-  );
-}
 
 export default function Home() {
   return (
     <div className="bg-black text-white min-h-screen">
       <LocalBusinessSchema />
-      <Suspense fallback={<HomePageFallback />}>
-        <HomePage />
-      </Suspense>
+
+      {/* SSR-rendered content for SEO */}
+      <Hero />
+      <HowItWorks />
+      <SocialProof />
+      <Pricing />
+      <EmailCapture />
+
+      {/* Client-only modal functionality */}
+      <HomePageClient />
+
+      <OfferModalDebug />
     </div>
   );
 }

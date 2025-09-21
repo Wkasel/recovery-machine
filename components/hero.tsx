@@ -1,4 +1,5 @@
-// @ts-nocheck"use client";
+"use client";
+// @ts-nocheck
 
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Calendar, Shield, Star } from "lucide-react";
