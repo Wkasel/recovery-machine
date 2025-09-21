@@ -11,24 +11,27 @@ const CSRF_SECRET_COOKIE = "__csrf-secret";
 export function generateCSRFToken(): string {
   const array = new Uint8Array(32);
   crypto.getRandomValues(array);
-  return Array.from(array, byte => byte.toString(16).padStart(2, '0')).join('');
+  return Array.from(array, (byte) => byte.toString(16).padStart(2, "0")).join("");
 }
 
 export function generateCSRFSecret(): string {
   const array = new Uint8Array(32);
   crypto.getRandomValues(array);
-  return Array.from(array, byte => byte.toString(16).padStart(2, '0')).join('');
+  return Array.from(array, (byte) => byte.toString(16).padStart(2, "0")).join("");
 }
 
 export async function hashToken(token: string, secret: string): Promise<string> {
   const encoder = new TextEncoder();
   const data = encoder.encode(token + secret);
-  const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+  const hashBuffer = await crypto.subtle.digest("SHA-256", data);
   const hashArray = new Uint8Array(hashBuffer);
-  return Array.from(hashArray, byte => byte.toString(16).padStart(2, '0')).join('');
+  return Array.from(hashArray, (byte) => byte.toString(16).padStart(2, "0")).join("");
 }
 
-export async function verifyCSRFToken(request: NextRequest, expectedHash: string): Promise<boolean> {
+export async function verifyCSRFToken(
+  request: NextRequest,
+  expectedHash: string
+): Promise<boolean> {
   const token = request.headers.get(CSRF_TOKEN_HEADER);
   const secret = request.cookies.get(CSRF_SECRET_COOKIE)?.value;
 
@@ -46,6 +49,8 @@ export function isSecureOrigin(request: NextRequest): boolean {
   const allowedOrigins = [
     process.env.NEXT_PUBLIC_SITE_URL,
     process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : null,
+    "https://recovery-machine.vercel.app", // Production domain
+    "https://therecoverymachine.com", // Production domain
     "http://localhost:3000", // Development
     "http://localhost:3001", // Development (alternate port)
     "http://localhost:3002", // Development (alternate port)
