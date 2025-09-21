@@ -169,7 +169,7 @@ export function BookingCalendar({
         </p>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 pb-20 md:pb-6">
         {/* Calendar */}
         <div className="lg:col-span-2">
           <Card>
@@ -183,6 +183,7 @@ export function BookingCalendar({
                   <Button
                     variant={calendarView === "month" ? "default" : "outline"}
                     size="sm"
+                    className="min-h-[44px] min-w-[60px]"
                     onClick={() => setCalendarView("month")}
                   >
                     Month
@@ -190,6 +191,7 @@ export function BookingCalendar({
                   <Button
                     variant={calendarView === "week" ? "default" : "outline"}
                     size="sm"
+                    className="min-h-[44px] min-w-[60px]"
                     onClick={() => setCalendarView("week")}
                   >
                     Week
@@ -231,6 +233,18 @@ export function BookingCalendar({
                   }
                   return "";
                 }}
+                // Mobile-specific optimizations
+                eventDisplay="block"
+                dayHeaderFormat={{ weekday: 'short' }}
+                titleFormat={{ year: 'numeric', month: 'short' }}
+                // Enable mobile touch interactions
+                longPressDelay={300}
+                eventLongPressDelay={300}
+                selectLongPressDelay={300}
+                // Better mobile responsiveness
+                aspectRatio={typeof window !== 'undefined' && window.innerWidth < 768 ? 1.0 : 1.35}
+                contentHeight="auto"
+                handleWindowResize={true}
               />
             </CardContent>
           </Card>
@@ -268,7 +282,7 @@ export function BookingCalendar({
                         disabled={!slot.available}
                         onClick={() => handleTimeSelect(slot.time)}
                         className={cn(
-                          "h-12",
+                          "h-12 min-h-[44px] text-sm",
                           slot.selected && "ring-2 ring-blue-500",
                           !slot.available && "opacity-50 cursor-not-allowed"
                         )}
@@ -358,6 +372,7 @@ export function BookingCalendar({
                     <Button
                       variant="outline"
                       size="sm"
+                      className="min-h-[44px] min-w-[44px] p-0"
                       onClick={() =>
                         onAddOnsChange({
                           ...addOns,
@@ -372,6 +387,7 @@ export function BookingCalendar({
                     <Button
                       variant="outline"
                       size="sm"
+                      className="min-h-[44px] min-w-[44px] p-0"
                       onClick={() =>
                         onAddOnsChange({
                           ...addOns,
@@ -397,6 +413,7 @@ export function BookingCalendar({
                     <Button
                       variant="outline"
                       size="sm"
+                      className="min-h-[44px] min-w-[44px] p-0"
                       onClick={() =>
                         onAddOnsChange({
                           ...addOns,
@@ -411,6 +428,7 @@ export function BookingCalendar({
                     <Button
                       variant="outline"
                       size="sm"
+                      className="min-h-[44px] min-w-[44px] p-0"
                       onClick={() =>
                         onAddOnsChange({
                           ...addOns,
@@ -436,6 +454,7 @@ export function BookingCalendar({
                     <Button
                       variant="outline"
                       size="sm"
+                      className="min-h-[44px] min-w-[44px] p-0"
                       onClick={() =>
                         onAddOnsChange({
                           ...addOns,
@@ -450,6 +469,7 @@ export function BookingCalendar({
                     <Button
                       variant="outline"
                       size="sm"
+                      className="min-h-[44px] min-w-[44px] p-0"
                       onClick={() =>
                         onAddOnsChange({
                           ...addOns,
@@ -483,8 +503,20 @@ export function BookingCalendar({
         </div>
       </div>
 
-      {/* Navigation buttons */}
-      <div className="flex justify-between pt-6">
+      {/* Sticky Mobile Footer */}
+      <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 p-4 md:hidden z-50">
+        <div className="flex gap-3 max-w-md mx-auto">
+          <Button variant="outline" onClick={onBack} className="flex-1">
+            Back
+          </Button>
+          <Button onClick={onNext} disabled={!isNextEnabled} className="flex-1">
+            Continue to Address
+          </Button>
+        </div>
+      </div>
+
+      {/* Desktop Navigation buttons */}
+      <div className="hidden md:flex justify-between pt-6">
         <Button variant="outline" onClick={onBack} size="lg">
           Back to Address
         </Button>

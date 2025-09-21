@@ -36,7 +36,7 @@ export function ServiceSelection({
         <p className="text-neutral-400">Select the service that best fits your wellness goals</p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pb-20 md:pb-6">
         {services.map((service) => {
           const isSelected = selectedService === service.id;
           const isHovered = hoveredService === service.id;
@@ -45,7 +45,7 @@ export function ServiceSelection({
             <Card
               key={service.id}
               className={cn(
-                "relative cursor-pointer transition-all duration-200 border-2",
+                "relative cursor-pointer transition-all duration-200 border-2 min-h-[44px]",
                 isSelected
                   ? "border-blue-500 ring-2 ring-blue-200 shadow-lg"
                   : "border-gray-200 hover:border-blue-300 hover:shadow-md",
@@ -156,8 +156,17 @@ export function ServiceSelection({
         </div>
       </div>
 
-      {/* Next button */}
-      <div className="flex justify-end pt-6">
+      {/* Sticky Mobile Footer */}
+      <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 p-4 md:hidden z-50">
+        <div className="flex gap-3 max-w-md mx-auto">
+          <Button onClick={onNext} disabled={!selectedService} className="flex-1 min-h-[48px]">
+            Continue to Location
+          </Button>
+        </div>
+      </div>
+
+      {/* Desktop Next button */}
+      <div className="hidden md:flex justify-end pt-6">
         <Button onClick={onNext} disabled={!selectedService} size="lg" className="px-8">
           Continue to Location
         </Button>

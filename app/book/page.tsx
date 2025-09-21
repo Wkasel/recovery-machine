@@ -59,7 +59,9 @@ export default function BookingPage(): React.ReactElement {
       setCurrentStep(step);
       setBookingState((prev) => ({ ...prev, currentStep: step }));
       // Scroll to top on mobile when changing steps
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      setTimeout(() => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }, 100);
     }
   };
 
@@ -74,7 +76,9 @@ export default function BookingPage(): React.ReactElement {
     setBookingState((prev) => ({ ...prev, currentStep: step }));
     // Scroll to top on mobile when moving between steps
     if (typeof window !== 'undefined') {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      setTimeout(() => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }, 100);
     }
   };
 

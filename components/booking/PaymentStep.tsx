@@ -217,7 +217,7 @@ export function PaymentStep({
         <p className="text-gray-600">Review your details and complete payment</p>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 pb-20 md:pb-6">
         {/* Booking Summary */}
         <div className="space-y-4">
           <Card>
@@ -290,7 +290,7 @@ export function PaymentStep({
               <div className="grid grid-cols-1 gap-3">
                 <div
                   className={cn(
-                    "border-2 rounded-lg p-4 cursor-pointer transition-all",
+                    "border-2 rounded-lg p-4 cursor-pointer transition-all min-h-[60px] touch-manipulation",
                     paymentMethod === "card"
                       ? "border-blue-500 bg-blue-50"
                       : "border-gray-200 hover:border-gray-300"
@@ -318,7 +318,7 @@ export function PaymentStep({
 
                 <div
                   className={cn(
-                    "border-2 rounded-lg p-4 cursor-pointer transition-all",
+                    "border-2 rounded-lg p-4 cursor-pointer transition-all min-h-[60px] touch-manipulation",
                     paymentMethod === "subscription"
                       ? "border-blue-500 bg-blue-50"
                       : "border-gray-200 hover:border-gray-300"
@@ -432,7 +432,7 @@ export function PaymentStep({
                       <button
                         key={code.code}
                         onClick={() => setPromoCode(code.code)}
-                        className="px-2 py-1 text-xs bg-yellow-100 text-yellow-800 rounded hover:bg-yellow-200 transition-colors"
+                        className="px-2 py-1 text-xs bg-yellow-100 text-yellow-800 rounded hover:bg-yellow-200 transition-colors min-h-[32px] min-w-[60px] touch-manipulation"
                         title={code.description}
                       >
                         {code.code}
@@ -447,9 +447,9 @@ export function PaymentStep({
                   placeholder="Promo code"
                   value={promoCode}
                   onChange={(e) => setPromoCode(e.target.value)}
-                  className="flex-1"
+                  className="flex-1 min-h-[44px]"
                 />
-                <Button variant="outline" onClick={handlePromoCodeApply} disabled={!promoCode}>
+                <Button variant="outline" onClick={handlePromoCodeApply} disabled={!promoCode} className="min-h-[44px] min-w-[70px]">
                   Apply
                 </Button>
               </div>
@@ -534,8 +534,31 @@ export function PaymentStep({
         </div>
       </div>
 
-      {/* Navigation buttons */}
-      <div className="flex justify-between pt-6">
+      {/* Sticky Mobile Footer */}
+      <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 p-4 md:hidden z-50">
+        <div className="flex gap-3 max-w-md mx-auto">
+          <Button variant="outline" onClick={onBack} disabled={isProcessingPayment} className="flex-1 min-h-[48px]">
+            Back to Calendar
+          </Button>
+          <Button
+            onClick={handlePayment}
+            disabled={!termsAccepted || isProcessingPayment}
+            className="flex-1 min-h-[48px] text-sm"
+          >
+            {isProcessingPayment ? (
+              <>
+                <Loader2 className="w-4 h-4 mr-1 animate-spin" />
+                Processing...
+              </>
+            ) : (
+              <>Complete - {formatPrice(calculateTotal())}</>
+            )}
+          </Button>
+        </div>
+      </div>
+
+      {/* Desktop Navigation buttons */}
+      <div className="hidden md:flex justify-between pt-6">
         <Button variant="outline" onClick={onBack} size="lg" disabled={isProcessingPayment}>
           Back to Calendar
         </Button>

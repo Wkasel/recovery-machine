@@ -161,7 +161,7 @@ export function AddressForm({
         <p className="text-neutral-400">We'll bring the recovery experience right to your location</p>
       </div>
 
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 pb-20 md:pb-6">
         {/* Google Places Autocomplete */}
         <div className="space-y-2">
           <Label htmlFor="autocomplete-address" className="text-white">Search Address</Label>
@@ -187,7 +187,7 @@ export function AddressForm({
               {...register("street")}
               id={streetId}
               placeholder="123 Main St"
-              className="bg-neutral-900 border border-neutral-800 text-white placeholder:text-neutral-500"
+              className="bg-neutral-900 border border-neutral-800 text-white placeholder:text-neutral-500 min-h-[44px]"
               onChange={async (e) => {
                 setValue("street", e.target.value, { shouldValidate: true });
                 await trigger();
@@ -202,7 +202,7 @@ export function AddressForm({
               {...register("city")}
               id={cityId}
               placeholder="Orange County / Los Angeles"
-              className="bg-neutral-900 border border-neutral-800 text-white placeholder:text-neutral-500"
+              className="bg-neutral-900 border border-neutral-800 text-white placeholder:text-neutral-500 min-h-[44px]"
               onChange={async (e) => {
                 setValue("city", e.target.value, { shouldValidate: true });
                 await trigger();
@@ -218,7 +218,7 @@ export function AddressForm({
               id={stateId}
               placeholder="CA"
               maxLength={2}
-              className="bg-neutral-900 border border-neutral-800 text-white placeholder:text-neutral-500"
+              className="bg-neutral-900 border border-neutral-800 text-white placeholder:text-neutral-500 min-h-[44px]"
               onChange={async (e) => {
                 setValue("state", e.target.value, { shouldValidate: true });
                 await trigger();
@@ -234,7 +234,7 @@ export function AddressForm({
               id={zipId}
               placeholder="90210"
               maxLength={10}
-              className="bg-neutral-900 border border-neutral-800 text-white placeholder:text-neutral-500"
+              className="bg-neutral-900 border border-neutral-800 text-white placeholder:text-neutral-500 min-h-[44px]"
               onChange={async (e) => {
                 setValue("zipCode", e.target.value, { shouldValidate: true });
                 // Trigger validation for all fields to ensure form validity
@@ -350,8 +350,20 @@ export function AddressForm({
           </CardContent>
         </Card>
 
-        {/* Navigation buttons */}
-        <div className="flex justify-between pt-6">
+        {/* Sticky Mobile Footer */}
+        <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 p-4 md:hidden z-50">
+          <div className="flex gap-3 max-w-md mx-auto">
+            <Button type="button" variant="outline" onClick={onBack} className="flex-1 min-h-[48px]">
+              Back to Service
+            </Button>
+            <Button type="submit" disabled={!isValid || !setupFee} className="flex-1 min-h-[48px]">
+              Continue to Calendar
+            </Button>
+          </div>
+        </div>
+
+        {/* Desktop Navigation buttons */}
+        <div className="hidden md:flex justify-between pt-6">
           <Button type="button" variant="outline" onClick={onBack} size="lg">
             Back to Service
           </Button>
