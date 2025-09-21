@@ -46,6 +46,11 @@ export default function ProfilePage() {
   // Dashboard state
   const [activeTab, setActiveTab] = useState<DashboardTab>("overview");
 
+  // Handle tab changes
+  const handleTabChange = (tab: DashboardTab) => {
+    setActiveTab(tab);
+  };
+
   // Check authentication and load profile data
   useEffect(() => {
     checkAuthAndLoadProfile();
@@ -211,7 +216,7 @@ export default function ProfilePage() {
         user={user}
         profileData={profileData}
         activeTab={activeTab}
-        onTabChange={setActiveTab}
+        onTabChange={handleTabChange}
       >
         {renderActiveTab()}
       </DashboardLayout>

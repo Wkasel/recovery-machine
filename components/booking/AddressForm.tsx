@@ -178,19 +178,44 @@ export function AddressForm({
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="space-y-2">
             <Label htmlFor="street">Street Address *</Label>
-            <Input {...register("street")} id="street" placeholder="123 Main St" />
+            <Input 
+              {...register("street")} 
+              id="street" 
+              placeholder="123 Main St"
+              onChange={async (e) => {
+                setValue("street", e.target.value, { shouldValidate: true });
+                await trigger();
+              }}
+            />
             {errors.street && <p className="text-sm text-red-600">{errors.street.message}</p>}
           </div>
 
           <div className="space-y-2">
             <Label htmlFor="city">City *</Label>
-            <Input {...register("city")} id="city" placeholder="Los Angeles" />
+            <Input 
+              {...register("city")} 
+              id="city" 
+              placeholder="Orange County / Los Angeles"
+              onChange={async (e) => {
+                setValue("city", e.target.value, { shouldValidate: true });
+                await trigger();
+              }}
+            />
             {errors.city && <p className="text-sm text-red-600">{errors.city.message}</p>}
           </div>
 
           <div className="space-y-2">
             <Label htmlFor="state">State *</Label>
-            <Input {...register("state")} id="state" placeholder="CA" maxLength={2} />
+            <Input 
+              {...register("state")} 
+              id="state" 
+              placeholder="CA" 
+              maxLength={2}
+              onChange={async (e) => {
+                setValue("state", e.target.value, { shouldValidate: true });
+                await trigger();
+              }}
+            />
             {errors.state && <p className="text-sm text-red-600">{errors.state.message}</p>}
           </div>
 
@@ -201,8 +226,10 @@ export function AddressForm({
               id="zipCode"
               placeholder="90210"
               maxLength={10}
-              onChange={(e) => {
+              onChange={async (e) => {
                 setValue("zipCode", e.target.value, { shouldValidate: true });
+                // Trigger validation for all fields to ensure form validity
+                await trigger();
                 if (e.target.value.length >= 5 && watchedAddress.city && watchedAddress.state) {
                   calculateSetupFee({
                     ...watchedAddress,
@@ -292,21 +319,21 @@ export function AddressForm({
               <div>
                 <h3 className="font-medium text-green-900">Service Area</h3>
                 <p className="text-sm text-green-700">
-                  We currently serve Los Angeles County and surrounding areas. Setup fees vary based
+                  We currently serve Orange County and Los Angeles areas. Setup fees vary based
                   on distance from our facility.
                 </p>
                 <div className="mt-2 flex flex-wrap gap-2">
                   <Badge variant="secondary" className="bg-green-100 text-green-800">
-                    Beverly Hills
+                    Newport Beach
                   </Badge>
                   <Badge variant="secondary" className="bg-green-100 text-green-800">
-                    Santa Monica
+                    Irvine
                   </Badge>
                   <Badge variant="secondary" className="bg-green-100 text-green-800">
-                    West Hollywood
+                    Huntington Beach
                   </Badge>
                   <Badge variant="secondary" className="bg-green-100 text-green-800">
-                    Manhattan Beach
+                    Los Angeles
                   </Badge>
                 </div>
               </div>

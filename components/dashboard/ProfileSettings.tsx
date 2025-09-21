@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { createBrowserSupabaseClient } from "@/lib/supabase/client";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
@@ -174,8 +175,8 @@ export function ProfileSettings({ user, profileData, onRefresh }: ProfileSetting
     <div className="space-y-6">
       {/* Header */}
       <div>
-        <h2 className="text-2xl font-bold text-gray-900">Account Settings</h2>
-        <p className="text-gray-600 mt-1">Manage your profile and preferences</p>
+        <h2 className="text-2xl font-bold text-white">Account Settings</h2>
+        <p className="text-gray-300 mt-1">Manage your profile and preferences</p>
       </div>
 
       {/* Personal Information */}
@@ -260,7 +261,7 @@ export function ProfileSettings({ user, profileData, onRefresh }: ProfileSetting
                 id="city"
                 value={settings.address.city}
                 onChange={(e) => handleAddressChange("city", e.target.value)}
-                placeholder="San Francisco"
+                placeholder="Orange County / Los Angeles"
               />
             </div>
             <div>

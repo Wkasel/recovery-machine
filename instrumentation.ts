@@ -17,11 +17,12 @@ export async function register() {
           breadcrumbs: true,
           errors: true,
         }),
-        new Sentry.Integrations.Undici({
-          shouldCreateSpanForRequest: (url) => {
-            return !url.startsWith(`${process.env.NEXT_PUBLIC_SUPABASE_URL}/rest`);
-          },
-        }),
+        // Temporarily disabled due to undefined Undici integration
+        // new Sentry.Integrations.Undici({
+        //   shouldCreateSpanForRequest: (url) => {
+        //     return !url.startsWith(`${process.env.NEXT_PUBLIC_SUPABASE_URL}/rest`);
+        //   },
+        // }),
       ],
     });
   }

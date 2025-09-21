@@ -14,6 +14,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { createBrowserSupabaseClient } from "@/lib/supabase/client";
 import { User } from "@supabase/supabase-js";
 import {
   AlertCircle,
@@ -220,8 +221,8 @@ export function BookingsTab({ user, onRefresh }: BookingsTabProps) {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-2xl font-bold text-gray-900">Your Bookings</h2>
-          <p className="text-gray-600 mt-1">Manage your recovery sessions</p>
+          <h2 className="text-2xl font-bold text-white">Your Bookings</h2>
+          <p className="text-gray-300 mt-1">Manage your recovery sessions</p>
         </div>
         <Button asChild>
           <Link href="/book">
@@ -242,7 +243,7 @@ export function BookingsTab({ user, onRefresh }: BookingsTabProps) {
 
       {/* Upcoming Bookings */}
       <div className="space-y-4">
-        <h3 className="text-lg font-semibold text-gray-900">
+        <h3 className="text-lg font-semibold text-white">
           Upcoming Sessions ({upcomingBookings.length})
         </h3>
 
@@ -259,13 +260,13 @@ export function BookingsTab({ user, onRefresh }: BookingsTabProps) {
                     <div className="flex items-start justify-between">
                       <div className="space-y-3 flex-1">
                         <div className="flex items-center space-x-3">
-                          <h4 className="text-lg font-semibold text-gray-900">
+                          <h4 className="text-lg font-semibold text-white">
                             {getServiceName(booking.add_ons)}
                           </h4>
                           {getStatusBadge(booking.status)}
                         </div>
 
-                        <div className="space-y-2 text-sm text-gray-600">
+                        <div className="space-y-2 text-sm text-gray-300">
                           <div className="flex items-center space-x-2">
                             <Calendar className="w-4 h-4" />
                             <span>{dateTime.date}</span>
@@ -334,8 +335,8 @@ export function BookingsTab({ user, onRefresh }: BookingsTabProps) {
           <Card>
             <CardContent className="p-8 text-center">
               <CalendarX className="h-12 w-12 mx-auto mb-4 text-gray-300" />
-              <h3 className="text-lg font-medium text-gray-900 mb-2">No upcoming sessions</h3>
-              <p className="text-gray-600 mb-4">Ready to book your next recovery session?</p>
+              <h3 className="text-lg font-medium text-white mb-2">No upcoming sessions</h3>
+              <p className="text-gray-300 mb-4">Ready to book your next recovery session?</p>
               <Button asChild>
                 <Link href="/book">
                   <Plus className="w-4 h-4 mr-2" />
@@ -350,7 +351,7 @@ export function BookingsTab({ user, onRefresh }: BookingsTabProps) {
       {/* Recent Bookings */}
       {recentBookings.length > 0 && (
         <div className="space-y-4">
-          <h3 className="text-lg font-semibold text-gray-900">
+          <h3 className="text-lg font-semibold text-white">
             Recent Sessions ({recentBookings.length})
           </h3>
 

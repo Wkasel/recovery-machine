@@ -1,4 +1,4 @@
-import { requireSecureRequest } from "@/lib/security/csrf-edge";
+import { requireSecureRequest } from "@/lib/security/csrf";
 import { updateSession } from "@/lib/supabase/middleware";
 import { type NextRequest } from "next/server";
 

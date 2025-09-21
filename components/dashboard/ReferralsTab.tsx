@@ -13,6 +13,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
+import { createBrowserSupabaseClient } from "@/lib/supabase/client";
 import { Label } from "@/components/ui/label";
 import { User } from "@supabase/supabase-js";
 import {
@@ -277,8 +278,8 @@ Check it out: ${getReferralLink()}`;
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-2xl font-bold text-gray-900">Referral Program</h2>
-          <p className="text-gray-600 mt-1">Earn $50 for every friend you refer</p>
+          <h2 className="text-2xl font-bold text-white">Referral Program</h2>
+          <p className="text-gray-300 mt-1">Earn $50 for every friend you refer</p>
         </div>
         <Button onClick={() => setInviteDialogOpen(true)}>
           <Plus className="w-4 h-4 mr-2" />
@@ -292,7 +293,7 @@ Check it out: ${getReferralLink()}`;
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600">Total Referrals</p>
+                <p className="text-sm font-medium text-gray-300">Total Referrals</p>
                 <p className="text-2xl font-bold text-blue-600">{referrals.length}</p>
               </div>
               <div className="h-12 w-12 bg-blue-100 rounded-lg flex items-center justify-center">
@@ -306,7 +307,7 @@ Check it out: ${getReferralLink()}`;
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600">Credits Earned</p>
+                <p className="text-sm font-medium text-gray-300">Credits Earned</p>
                 <p className="text-2xl font-bold text-green-600">{getTotalEarned()}</p>
               </div>
               <div className="h-12 w-12 bg-green-100 rounded-lg flex items-center justify-center">
@@ -320,7 +321,7 @@ Check it out: ${getReferralLink()}`;
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600">Pending Earnings</p>
+                <p className="text-sm font-medium text-gray-300">Pending Earnings</p>
                 <p className="text-2xl font-bold text-orange-600">{getPendingEarnings()}</p>
               </div>
               <div className="h-12 w-12 bg-orange-100 rounded-lg flex items-center justify-center">
@@ -389,8 +390,8 @@ Check it out: ${getReferralLink()}`;
               <div className="h-12 w-12 bg-blue-100 rounded-lg flex items-center justify-center mx-auto mb-3">
                 <Share2 className="h-6 w-6 text-blue-600" />
               </div>
-              <h3 className="font-semibold text-gray-900 mb-2">1. Share Your Code</h3>
-              <p className="text-sm text-gray-600">
+              <h3 className="font-semibold text-white mb-2">1. Share Your Code</h3>
+              <p className="text-sm text-gray-300">
                 Send your referral code or link to friends and family
               </p>
             </div>
@@ -398,8 +399,8 @@ Check it out: ${getReferralLink()}`;
               <div className="h-12 w-12 bg-green-100 rounded-lg flex items-center justify-center mx-auto mb-3">
                 <UserPlus className="h-6 w-6 text-green-600" />
               </div>
-              <h3 className="font-semibold text-gray-900 mb-2">2. They Sign Up</h3>
-              <p className="text-sm text-gray-600">
+              <h3 className="font-semibold text-white mb-2">2. They Sign Up</h3>
+              <p className="text-sm text-gray-300">
                 Your friend creates an account using your referral code
               </p>
             </div>
@@ -407,8 +408,8 @@ Check it out: ${getReferralLink()}`;
               <div className="h-12 w-12 bg-purple-100 rounded-lg flex items-center justify-center mx-auto mb-3">
                 <Gift className="h-6 w-6 text-purple-600" />
               </div>
-              <h3 className="font-semibold text-gray-900 mb-2">3. Earn Rewards</h3>
-              <p className="text-sm text-gray-600">
+              <h3 className="font-semibold text-white mb-2">3. Earn Rewards</h3>
+              <p className="text-sm text-gray-300">
                 Get $50 in credits when they book their first session
               </p>
             </div>
@@ -431,8 +432,8 @@ Check it out: ${getReferralLink()}`;
                   className="flex items-center justify-between p-4 bg-gray-50 rounded-lg"
                 >
                   <div className="flex-1">
-                    <p className="font-medium text-gray-900">{referral.invitee_email}</p>
-                    <p className="text-sm text-gray-600">
+                    <p className="font-medium text-white">{referral.invitee_email}</p>
+                    <p className="text-sm text-gray-300">
                       Sent {formatDate(referral.created_at)}
                       {referral.expires_at && ` • Expires ${formatDate(referral.expires_at)}`}
                     </p>
@@ -459,8 +460,8 @@ Check it out: ${getReferralLink()}`;
           ) : (
             <div className="text-center py-8 text-gray-500">
               <Users className="h-12 w-12 mx-auto mb-4 text-gray-300" />
-              <h3 className="text-lg font-medium text-gray-900 mb-2">No referrals yet</h3>
-              <p className="text-gray-600 mb-4">Start inviting friends to earn rewards!</p>
+              <h3 className="text-lg font-medium text-white mb-2">No referrals yet</h3>
+              <p className="text-gray-300 mb-4">Start inviting friends to earn rewards!</p>
               <Button onClick={() => setInviteDialogOpen(true)}>
                 <Plus className="w-4 h-4 mr-2" />
                 Send Your First Invite

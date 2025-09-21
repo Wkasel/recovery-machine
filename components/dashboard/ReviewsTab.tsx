@@ -12,6 +12,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Textarea } from "@/components/ui/textarea";
+import { createBrowserSupabaseClient } from "@/lib/supabase/client";
 import { User } from "@supabase/supabase-js";
 import { Calendar, Edit, MessageSquare, Star, Trash2 } from "lucide-react";
 import { useEffect, useState } from "react";
@@ -252,8 +253,8 @@ export function ReviewsTab({ user }: ReviewsTabProps) {
     <div className="space-y-6">
       {/* Header */}
       <div>
-        <h2 className="text-2xl font-bold text-gray-900">Reviews & Feedback</h2>
-        <p className="text-gray-600 mt-1">Rate your recovery sessions and share your experience</p>
+        <h2 className="text-2xl font-bold text-white">Reviews & Feedback</h2>
+        <p className="text-gray-300 mt-1">Rate your recovery sessions and share your experience</p>
       </div>
 
       {/* Pending Reviews */}
@@ -272,8 +273,8 @@ export function ReviewsTab({ user }: ReviewsTabProps) {
                 className="flex items-center justify-between p-4 bg-white rounded-lg border"
               >
                 <div className="flex-1">
-                  <h4 className="font-medium text-gray-900">{getServiceName(booking.add_ons)}</h4>
-                  <div className="flex items-center space-x-4 text-sm text-gray-600 mt-1">
+                  <h4 className="font-medium text-white">{getServiceName(booking.add_ons)}</h4>
+                  <div className="flex items-center space-x-4 text-sm text-gray-300 mt-1">
                     <div className="flex items-center space-x-1">
                       <Calendar className="w-4 h-4" />
                       <span>{formatDate(booking.date_time)}</span>
@@ -305,7 +306,7 @@ export function ReviewsTab({ user }: ReviewsTabProps) {
                   <div className="flex items-start justify-between mb-4">
                     <div className="flex-1">
                       <div className="flex items-center space-x-3 mb-2">
-                        <h4 className="font-medium text-gray-900">
+                        <h4 className="font-medium text-white">
                           {getServiceName(review.booking?.add_ons)}
                         </h4>
                         {review.is_featured && (
@@ -317,7 +318,7 @@ export function ReviewsTab({ user }: ReviewsTabProps) {
                           <Badge variant="secondary">Synced to Google</Badge>
                         )}
                       </div>
-                      <div className="flex items-center space-x-4 text-sm text-gray-600">
+                      <div className="flex items-center space-x-4 text-sm text-gray-300">
                         <div className="flex items-center space-x-1">
                           <Calendar className="w-4 h-4" />
                           <span>
@@ -351,7 +352,7 @@ export function ReviewsTab({ user }: ReviewsTabProps) {
                   <div className="space-y-3">
                     <div className="flex items-center space-x-2">
                       {renderStars(review.rating)}
-                      <span className="text-sm text-gray-600">{review.rating} out of 5 stars</span>
+                      <span className="text-sm text-gray-300">{review.rating} out of 5 stars</span>
                     </div>
 
                     {review.comment && (
@@ -367,8 +368,8 @@ export function ReviewsTab({ user }: ReviewsTabProps) {
           ) : (
             <div className="text-center py-8 text-gray-500">
               <MessageSquare className="h-12 w-12 mx-auto mb-4 text-gray-300" />
-              <h3 className="text-lg font-medium text-gray-900 mb-2">No reviews yet</h3>
-              <p className="text-gray-600">Complete a session to leave your first review</p>
+              <h3 className="text-lg font-medium text-white mb-2">No reviews yet</h3>
+              <p className="text-gray-300">Complete a session to leave your first review</p>
             </div>
           )}
         </CardContent>

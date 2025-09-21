@@ -57,6 +57,27 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* Default text colors for better visibility */
+* {
+  color: var(--color-foreground);
+}
+
+/* Specific overrides for common text elements */
+p, span, div, h1, h2, h3, h4, h5, h6, a, label, button {
+  color: inherit;
+}
+
+/* Ensure input text is visible */
+input, textarea, select {
+  color: var(--color-foreground);
+  background-color: var(--color-input);
+}
+
+/* Card content should be white text */
+.card, [data-testid="card"] {
+  color: var(--color-card-foreground);
+}
+
 /* Force dark theme globally */
 html {
   color-scheme: dark;

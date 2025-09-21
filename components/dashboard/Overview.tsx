@@ -4,6 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
+import { createBrowserSupabaseClient } from "@/lib/supabase/client";
 import { User } from "@supabase/supabase-js";
 import {
   ArrowRight,
@@ -200,10 +201,10 @@ export function Overview({ user, profileData, onRefresh }: OverviewProps) {
       {/* Welcome Section */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">
+          <h1 className="text-2xl font-bold text-white">
             Welcome back, {user.user_metadata?.full_name || "Recovery Member"}!
           </h1>
-          <p className="text-gray-600 mt-1">Here's your recovery journey overview</p>
+          <p className="text-gray-300 mt-1">Here's your recovery journey overview</p>
         </div>
         <Button asChild>
           <Link href="/book">
@@ -219,7 +220,7 @@ export function Overview({ user, profileData, onRefresh }: OverviewProps) {
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600">Total Credits</p>
+                <p className="text-sm font-medium text-gray-300">Total Credits</p>
                 <p className="text-2xl font-bold text-green-600">{profileData.credits}</p>
               </div>
               <div className="h-12 w-12 bg-green-100 rounded-lg flex items-center justify-center">
@@ -233,7 +234,7 @@ export function Overview({ user, profileData, onRefresh }: OverviewProps) {
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600">Upcoming Sessions</p>
+                <p className="text-sm font-medium text-gray-300">Upcoming Sessions</p>
                 <p className="text-2xl font-bold text-blue-600">{stats?.upcomingBookings || 0}</p>
               </div>
               <div className="h-12 w-12 bg-blue-100 rounded-lg flex items-center justify-center">
@@ -247,7 +248,7 @@ export function Overview({ user, profileData, onRefresh }: OverviewProps) {
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600">Completed Sessions</p>
+                <p className="text-sm font-medium text-gray-300">Completed Sessions</p>
                 <p className="text-2xl font-bold text-purple-600">
                   {stats?.completedSessions || 0}
                 </p>
@@ -263,7 +264,7 @@ export function Overview({ user, profileData, onRefresh }: OverviewProps) {
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600">Total Referrals</p>
+                <p className="text-sm font-medium text-gray-300">Total Referrals</p>
                 <p className="text-2xl font-bold text-orange-600">{stats?.totalReferrals || 0}</p>
               </div>
               <div className="h-12 w-12 bg-orange-100 rounded-lg flex items-center justify-center">
@@ -327,7 +328,7 @@ export function Overview({ user, profileData, onRefresh }: OverviewProps) {
             <Progress value={rewardProgress.progress} className="h-2" />
             <div className="flex items-center space-x-2">
               <Gift className="w-4 h-4 text-green-600" />
-              <span className="text-sm text-gray-600">
+              <span className="text-sm text-gray-300">
                 {rewardProgress.sessionsLeft} more sessions to earn bonus credits!
               </span>
             </div>
@@ -349,14 +350,14 @@ export function Overview({ user, profileData, onRefresh }: OverviewProps) {
                 return (
                   <div
                     key={activity.id}
-                    className="flex items-center space-x-4 p-3 bg-gray-50 rounded-lg"
+                    className="flex items-center space-x-4 p-3 bg-gray-700 rounded-lg"
                   >
-                    <div className="h-10 w-10 bg-white rounded-lg flex items-center justify-center">
-                      <Icon className="h-5 w-5 text-gray-600" />
+                    <div className="h-10 w-10 bg-gray-600 rounded-lg flex items-center justify-center">
+                      <Icon className="h-5 w-5 text-gray-300" />
                     </div>
                     <div className="flex-1">
-                      <p className="text-sm font-medium text-gray-900">{activity.description}</p>
-                      <p className="text-xs text-gray-500">{formatDate(activity.date)}</p>
+                      <p className="text-sm font-medium text-white">{activity.description}</p>
+                      <p className="text-xs text-gray-400">{formatDate(activity.date)}</p>
                     </div>
                     {activity.amount && (
                       <Badge variant="secondary" className="bg-green-100 text-green-800">
@@ -368,10 +369,10 @@ export function Overview({ user, profileData, onRefresh }: OverviewProps) {
               })}
             </div>
           ) : (
-            <div className="text-center py-8 text-gray-500">
-              <Clock className="h-12 w-12 mx-auto mb-4 text-gray-300" />
-              <p>No recent activity yet</p>
-              <p className="text-sm">Start your recovery journey by booking your first session!</p>
+            <div className="text-center py-8 text-gray-400">
+              <Clock className="h-12 w-12 mx-auto mb-4 text-gray-500" />
+              <p className="text-gray-300">No recent activity yet</p>
+              <p className="text-sm text-gray-400">Start your recovery journey by booking your first session!</p>
             </div>
           )}
         </CardContent>

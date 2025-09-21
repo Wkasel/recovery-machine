@@ -225,7 +225,7 @@ const seoContent = {
     '/science': 'Cold therapy and sauna research benefits'
   },
   localSEO: {
-    serviceAreas: ['San Francisco Bay Area', 'Los Angeles', 'Austin'],
+    serviceAreas: ['Orange County', 'Los Angeles', 'Austin'],
     businessSchema: 'Health and wellness service provider',
     reviews: 'Google My Business integration'
   }

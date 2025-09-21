@@ -4,7 +4,7 @@ import { DashboardTab } from "@/app/profile/page";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+// import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { User } from "@supabase/supabase-js";
 import {
   ArrowLeft,
@@ -92,15 +92,15 @@ export function DashboardLayout({
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-900">
       {/* Header */}
-      <div className="bg-white border-b border-gray-200">
+      <div className="bg-gray-800 border-b border-gray-700">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
               <Link
                 href="/"
-                className="flex items-center space-x-2 text-gray-600 hover:text-gray-900"
+                className="flex items-center space-x-2 text-gray-300 hover:text-white"
               >
                 <ArrowLeft className="w-5 h-5" />
                 <span>Back to Home</span>
@@ -111,7 +111,7 @@ export function DashboardLayout({
             <div className="flex items-center space-x-4">
               <div className="flex items-center space-x-2">
                 <Coins className="w-4 h-4 text-green-600" />
-                <Badge variant="secondary" className="bg-green-100 text-green-800">
+                <Badge variant="secondary" className="bg-green-900 text-green-100 border-green-700">
                   {profileData.credits} Credits
                 </Badge>
               </div>
@@ -119,15 +119,15 @@ export function DashboardLayout({
               <div className="flex items-center space-x-3">
                 <Avatar className="h-8 w-8">
                   <AvatarImage src={user.user_metadata?.avatar_url} />
-                  <AvatarFallback className="bg-blue-100 text-blue-800">
+                  <AvatarFallback className="bg-blue-900 text-blue-100">
                     {getUserInitials()}
                   </AvatarFallback>
                 </Avatar>
                 <div className="text-sm">
-                  <p className="font-medium text-gray-900">
+                  <p className="font-medium text-white">
                     {user.user_metadata?.full_name || "Recovery Member"}
                   </p>
-                  <p className="text-gray-500">{user.email}</p>
+                  <p className="text-gray-300">{user.email}</p>
                 </div>
               </div>
             </div>
@@ -136,65 +136,75 @@ export function DashboardLayout({
       </div>
 
       {/* Navigation Tabs */}
-      <div className="bg-white border-b border-gray-200">
+      <div className="bg-gray-800 border-b border-gray-700">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <Tabs value={activeTab} onValueChange={(value) => onTabChange(value as DashboardTab)}>
-            {/* Desktop Tabs */}
-            <div className="hidden md:block">
-              <TabsList className="grid w-full grid-cols-6 bg-transparent border-0 p-0">
-                {tabs.map((tab) => (
-                  <TabsTrigger
-                    key={tab.id}
-                    value={tab.id}
-                    className="flex items-center space-x-2 py-4 px-6 data-[state=active]:bg-blue-50 data-[state=active]:text-blue-700 data-[state=active]:border-b-2 data-[state=active]:border-blue-700 rounded-none border-b-2 border-transparent"
-                  >
-                    <tab.icon className="w-4 h-4" />
-                    <span className="font-medium">{tab.label}</span>
-                  </TabsTrigger>
-                ))}
-              </TabsList>
+          {/* Custom Tab Implementation - Desktop */}
+          <div className="hidden md:block">
+            <div className="grid w-full grid-cols-6 bg-transparent border-0 p-0" role="tablist">
+              {tabs.map((tab) => (
+                <button
+                  key={tab.id}
+                  role="tab"
+                  aria-selected={activeTab === tab.id}
+                  onClick={() => onTabChange(tab.id)}
+                  className={`flex items-center space-x-2 py-4 px-6 rounded-none border-b-2 transition-colors ${
+                    activeTab === tab.id
+                      ? "bg-blue-900 text-blue-100 border-blue-400"
+                      : "border-transparent text-gray-300 hover:text-white hover:bg-gray-700"
+                  }`}
+                >
+                  <tab.icon className="w-4 h-4" />
+                  <span className="font-medium">{tab.label}</span>
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Custom Tab Implementation - Mobile */}
+          <div className="md:hidden">
+            <div className="grid w-full grid-cols-3 bg-transparent border-0 p-0" role="tablist">
+              {tabs.slice(0, 3).map((tab) => (
+                <button
+                  key={tab.id}
+                  role="tab"
+                  aria-selected={activeTab === tab.id}
+                  onClick={() => onTabChange(tab.id)}
+                  className={`flex flex-col items-center space-y-1 py-3 px-2 transition-colors ${
+                    activeTab === tab.id
+                      ? "bg-blue-900 text-blue-100"
+                      : "text-gray-300 hover:text-white"
+                  }`}
+                >
+                  <tab.icon className="w-4 h-4" />
+                  <span className="text-xs font-medium">{tab.label}</span>
+                </button>
+              ))}
             </div>
 
-            {/* Mobile Tabs */}
-            <div className="md:hidden">
-              <TabsList className="grid w-full grid-cols-3 bg-transparent border-0 p-0">
-                {tabs.slice(0, 3).map((tab) => (
-                  <TabsTrigger
-                    key={tab.id}
-                    value={tab.id}
-                    className="flex flex-col items-center space-y-1 py-3 px-2 data-[state=active]:bg-blue-50 data-[state=active]:text-blue-700"
-                  >
-                    <tab.icon className="w-4 h-4" />
-                    <span className="text-xs font-medium">{tab.label}</span>
-                  </TabsTrigger>
-                ))}
-              </TabsList>
-
-              {/* Mobile overflow menu for remaining tabs */}
-              <div className="grid grid-cols-3 mt-2 border-t pt-2">
-                {tabs.slice(3).map((tab) => (
-                  <button
-                    key={tab.id}
-                    onClick={() => onTabChange(tab.id)}
-                    className={`flex flex-col items-center space-y-1 py-2 px-2 rounded ${
-                      activeTab === tab.id
-                        ? "bg-blue-50 text-blue-700"
-                        : "text-gray-600 hover:text-gray-900"
-                    }`}
-                  >
-                    <tab.icon className="w-4 h-4" />
-                    <span className="text-xs font-medium">{tab.label}</span>
-                  </button>
-                ))}
-              </div>
+            {/* Mobile overflow menu for remaining tabs */}
+            <div className="grid grid-cols-3 mt-2 border-t pt-2">
+              {tabs.slice(3).map((tab) => (
+                <button
+                  key={tab.id}
+                  onClick={() => onTabChange(tab.id)}
+                  className={`flex flex-col items-center space-y-1 py-2 px-2 rounded transition-colors ${
+                    activeTab === tab.id
+                      ? "bg-blue-900 text-blue-100"
+                      : "text-gray-300 hover:text-white"
+                  }`}
+                >
+                  <tab.icon className="w-4 h-4" />
+                  <span className="text-xs font-medium">{tab.label}</span>
+                </button>
+              ))}
             </div>
-          </Tabs>
+          </div>
         </div>
       </div>
 
       {/* Main Content */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <Card className="min-h-[600px] p-6">{children}</Card>
+        <Card className="min-h-[600px] p-6 bg-gray-800 border-gray-700 text-white">{children}</Card>
       </div>
     </div>
   );

@@ -3,6 +3,7 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { createBrowserSupabaseClient } from "@/lib/supabase/client";
 import {
   Dialog,
   DialogContent,
@@ -275,8 +276,8 @@ Thank you for choosing Recovery Machine!
     <div className="space-y-6">
       {/* Header */}
       <div>
-        <h2 className="text-2xl font-bold text-gray-900">Booking History</h2>
-        <p className="text-gray-600 mt-1">View your past recovery sessions and receipts</p>
+        <h2 className="text-2xl font-bold text-white">Booking History</h2>
+        <p className="text-gray-300 mt-1">View your past recovery sessions and receipts</p>
       </div>
 
       {/* Filters */}
@@ -322,13 +323,13 @@ Thank you for choosing Recovery Machine!
                   <div className="flex items-start justify-between">
                     <div className="space-y-3 flex-1">
                       <div className="flex items-center space-x-3">
-                        <h4 className="text-lg font-semibold text-gray-900">
+                        <h4 className="text-lg font-semibold text-white">
                           {getServiceName(booking.add_ons)}
                         </h4>
                         {getStatusBadge(booking.status)}
                       </div>
 
-                      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm text-gray-600">
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm text-gray-300">
                         <div className="flex items-center space-x-2">
                           <Calendar className="w-4 h-4" />
                           <span>
@@ -403,12 +404,12 @@ Thank you for choosing Recovery Machine!
           <Card>
             <CardContent className="p-8 text-center">
               <HistoryIcon className="h-12 w-12 mx-auto mb-4 text-gray-300" />
-              <h3 className="text-lg font-medium text-gray-900 mb-2">
+              <h3 className="text-lg font-medium text-white mb-2">
                 {searchTerm || statusFilter !== "all"
                   ? "No matching bookings"
                   : "No booking history"}
               </h3>
-              <p className="text-gray-600">
+              <p className="text-gray-300">
                 {searchTerm || statusFilter !== "all"
                   ? "Try adjusting your search or filter criteria"
                   : "Your completed sessions will appear here"}
@@ -431,7 +432,7 @@ Thank you for choosing Recovery Machine!
               <div className="border rounded-lg p-4 bg-gray-50">
                 <div className="text-center mb-4">
                   <h3 className="font-bold text-lg">RECOVERY MACHINE</h3>
-                  <p className="text-sm text-gray-600">Receipt</p>
+                  <p className="text-sm text-gray-300">Receipt</p>
                 </div>
 
                 <div className="space-y-2 text-sm">

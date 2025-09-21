@@ -40,8 +40,8 @@ export function isSecureOrigin(request: NextRequest): boolean {
   const allowedOrigins = [
     process.env.NEXT_PUBLIC_SITE_URL,
     process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : null,
-    "http://localhost:3000", // Development
-    "https://localhost:3000", // Development with HTTPS
+    "http://localhost:3002", // Development
+    "https://localhost:3002", // Development with HTTPS
   ].filter(Boolean);
 
   // Check origin header
