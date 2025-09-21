@@ -1,5 +1,5 @@
 import { createServerSupabaseClient } from "@/lib/supabase/server";
-import { requireAdminAccess } from "@/lib/admin/auth";
+import { requireAdminAccess } from "@/lib/utils/admin/auth";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(request: NextRequest) {

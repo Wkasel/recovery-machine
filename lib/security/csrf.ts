@@ -1,28 +1,34 @@
-import { createHash, randomBytes } from "crypto";
 import { NextRequest } from "next/server";
 
 /**
  * CSRF Protection for Server Actions and API Routes
+ * Edge Runtime compatible using Web Crypto API
  */
 
 const CSRF_TOKEN_HEADER = "x-csrf-token";
 const CSRF_SECRET_COOKIE = "__csrf-secret";
 
 export function generateCSRFToken(): string {
-  return randomBytes(32).toString("hex");
+  const array = new Uint8Array(32);
+  crypto.getRandomValues(array);
+  return Array.from(array, byte => byte.toString(16).padStart(2, '0')).join('');
 }
 
 export function generateCSRFSecret(): string {
-  return randomBytes(32).toString("hex");
+  const array = new Uint8Array(32);
+  crypto.getRandomValues(array);
+  return Array.from(array, byte => byte.toString(16).padStart(2, '0')).join('');
 }
 
-export function hashToken(token: string, secret: string): string {
-  return createHash("sha256")
-    .update(token + secret)
-    .digest("hex");
+export async function hashToken(token: string, secret: string): Promise<string> {
+  const encoder = new TextEncoder();
+  const data = encoder.encode(token + secret);
+  const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+  const hashArray = new Uint8Array(hashBuffer);
+  return Array.from(hashArray, byte => byte.toString(16).padStart(2, '0')).join('');
 }
 
-export function verifyCSRFToken(request: NextRequest, expectedHash: string): boolean {
+export async function verifyCSRFToken(request: NextRequest, expectedHash: string): Promise<boolean> {
   const token = request.headers.get(CSRF_TOKEN_HEADER);
   const secret = request.cookies.get(CSRF_SECRET_COOKIE)?.value;
 
@@ -30,7 +36,7 @@ export function verifyCSRFToken(request: NextRequest, expectedHash: string): boo
     return false;
   }
 
-  const computedHash = hashToken(token, secret);
+  const computedHash = await hashToken(token, secret);
   return computedHash === expectedHash;
 }
 
