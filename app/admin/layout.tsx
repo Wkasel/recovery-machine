@@ -1,4 +1,4 @@
-import { AdminClientWrapper } from "@/components/admin/AdminClientWrapper";
+import { AdminPanelClient } from "@/components/admin/AdminPanelClient";
 import { createServerSupabaseClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 
@@ -48,11 +48,11 @@ export default async function AdminLayout({
       redirect("/profile");
     }
 
-    // Pass the authenticated user and admin data to the client wrapper
+    // Pass the authenticated user and admin data to the client panel
     return (
-      <AdminClientWrapper user={user} adminData={adminData}>
+      <AdminPanelClient user={user} adminData={adminData}>
         {children}
-      </AdminClientWrapper>
+      </AdminPanelClient>
     );
   } catch (error) {
     console.error("Admin layout error:", error);

@@ -1,13 +1,12 @@
 "use client";
 
+import { useState, useEffect } from "react";
+import { User } from "@supabase/supabase-js";
 import { AdminHeader } from "@/components/admin/AdminHeader";
 import { AdminSidebar } from "@/components/admin/AdminSidebar";
 import { AuthDebug } from "@/components/debug/AuthDebug";
-import { User } from "@supabase/supabase-js";
-import dynamic from "next/dynamic";
-import { useEffect, useState } from "react";
 
-interface AdminClientWrapperProps {
+interface AdminPanelClientProps {
   children: React.ReactNode;
   user: User;
   adminData: {
@@ -15,15 +14,15 @@ interface AdminClientWrapperProps {
   } | null;
 }
 
-export function AdminClientWrapper({ children, user, adminData }: AdminClientWrapperProps) {
-  const [isClient, setIsClient] = useState(false);
+export function AdminPanelClient({ children, user, adminData }: AdminPanelClientProps) {
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    setIsClient(true);
+    setMounted(true);
   }, []);
 
-  // Show loading state during SSR or if data is missing
-  if (!isClient || !adminData || !user) {
+  // Don't render anything until mounted to prevent hydration issues
+  if (!mounted) {
     return (
       <div className="min-h-screen bg-black text-white">
         <div className="animate-pulse">
@@ -40,19 +39,31 @@ export function AdminClientWrapper({ children, user, adminData }: AdminClientWra
     );
   }
 
+  // Ensure we have all required data
+  if (!adminData?.role || !user?.email) {
+    return (
+      <div className="min-h-screen bg-black text-white flex items-center justify-center">
+        <div className="text-center">
+          <h2 className="text-xl font-bold mb-2">Access Denied</h2>
+          <p>You don't have admin permissions.</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-black text-white">
       <AdminHeader
         user={user}
         admin={{
-          role: adminData?.role || '',
+          role: adminData.role,
           email: user.email || ''
         }}
       />
       <div className="flex">
         <AdminSidebar
           admin={{
-            role: adminData?.role || '',
+            role: adminData.role,
             permissions: {}
           }}
         />

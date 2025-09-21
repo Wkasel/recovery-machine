@@ -13,28 +13,33 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Bell, LogOut, Menu, Settings, User } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { createBrowserSupabaseClient } from "@/lib/supabase/client";
 
 interface AdminHeaderProps {
-  admin: {
-    role: string;
-    email: string;
-  };
-  user: {
-    id: string;
+  admin?: {
+    role?: string;
+    email?: string;
+  } | null;
+  user?: {
+    id?: string;
     email?: string;
     user_metadata?: any;
-  };
+  } | null;
 }
 
 export function AdminHeader({ admin, user }: AdminHeaderProps) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isHydrated, setIsHydrated] = useState(false);
   const router = useRouter();
   const supabase = createBrowserSupabaseClient();
 
-  // Defensive programming - handle case where admin prop might be undefined during hydration
-  if (!admin || !user) {
+  useEffect(() => {
+    setIsHydrated(true);
+  }, []);
+
+  // Early return with loading state for any missing props or during hydration
+  if (!isHydrated || !admin?.role || !user?.email) {
     return (
       <header className="bg-white shadow-sm border-b border-gray-200">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -54,7 +59,9 @@ export function AdminHeader({ admin, user }: AdminHeaderProps) {
     router.push("/");
   };
 
-  const getRoleBadgeColor = (role: string) => {
+  const getRoleBadgeColor = (role: string | undefined | null) => {
+    if (!role) return "bg-gray-100 text-gray-800";
+    
     switch (role) {
       case "super_admin":
         return "bg-red-100 text-red-800";
@@ -100,16 +107,16 @@ export function AdminHeader({ admin, user }: AdminHeaderProps) {
               <DropdownMenuTrigger asChild>
                 <Button variant="ghost" className="flex items-center gap-3 h-auto py-2 text-white">
                   <Avatar className="h-8 w-8">
-                    <AvatarImage src={user.user_metadata?.avatar_url} />
-                    <AvatarFallback>{user.email?.slice(0, 2).toUpperCase()}</AvatarFallback>
+                    <AvatarImage src={user?.user_metadata?.avatar_url} />
+                    <AvatarFallback>{user?.email?.slice(0, 2).toUpperCase() || "AD"}</AvatarFallback>
                   </Avatar>
 
                   <div className="flex flex-col items-start">
                     <span className="text-sm font-medium text-white">
-                      {user.user_metadata?.full_name || user.email}
+                      {user?.user_metadata?.full_name || user?.email || "Admin User"}
                     </span>
-                    <Badge className={getRoleBadgeColor(admin.role)} variant="secondary">
-                      {admin.role.replace("_", " ")}
+                    <Badge className={getRoleBadgeColor(admin?.role)} variant="secondary">
+                      {admin?.role?.replace("_", " ") || "Loading..."}
                     </Badge>
                   </div>
                 </Button>

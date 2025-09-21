@@ -3,9 +3,9 @@ import { createServerSupabaseClient } from "@/lib/supabase/server";
 import { requireAdminAccess } from "@/utils/admin/auth";
 import { NextResponse } from "next/server";
 
-export async function GET() {
+export async function GET(request: Request) {
   try {
-    await requireAdminAccess(null, "operator");
+    await requireAdminAccess(request, "operator");
     const supabase = await createServerSupabaseClient();
 
     // Get current and previous month dates for growth calculations
