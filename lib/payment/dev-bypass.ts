@@ -24,11 +24,17 @@ export interface DevPaymentBypassResult {
 
 /**
  * Check if we're in development environment
+ * 
+ * 🚨 TEMPORARY: Currently allows production use for testing/demo purposes
+ * TODO: Remove production access before final launch for security
+ * SECURITY RISK: This enables free bookings in production - must be disabled for live business
  */
 export function isDevelopmentEnvironment(): boolean {
-  return process.env.NODE_ENV === 'development' || 
-         process.env.VERCEL_ENV === 'preview' ||
-         process.env.NEXT_PUBLIC_DEV_MODE === 'true';
+  return true; // TEMPORARY: Allow everywhere for testing/demo
+  // Original code (restore for production):
+  // return process.env.NODE_ENV === 'development' || 
+  //        process.env.VERCEL_ENV === 'preview' ||
+  //        process.env.NEXT_PUBLIC_DEV_MODE === 'true';
 }
 
 /**

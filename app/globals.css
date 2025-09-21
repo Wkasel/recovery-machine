@@ -48,6 +48,28 @@
   border-radius: 0 !important;
 }
 
+/* Fix mobile input zoom by ensuring minimum 16px font size */
+input[type="text"], 
+input[type="email"], 
+input[type="password"], 
+input[type="tel"], 
+textarea, 
+select {
+  font-size: 16px !important;
+}
+
+@media (max-width: 768px) {
+  input[type="text"], 
+  input[type="email"], 
+  input[type="password"], 
+  input[type="tel"], 
+  textarea, 
+  select {
+    font-size: 16px !important;
+    transform: scale(1);
+  }
+}
+
 body {
   background-color: var(--color-background);
   color: var(--color-foreground);

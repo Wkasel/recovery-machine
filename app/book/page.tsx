@@ -58,6 +58,8 @@ export default function BookingPage(): React.ReactElement {
     if (completedSteps.includes(step) || step === currentStep) {
       setCurrentStep(step);
       setBookingState((prev) => ({ ...prev, currentStep: step }));
+      // Scroll to top on mobile when changing steps
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   };
 
@@ -70,6 +72,10 @@ export default function BookingPage(): React.ReactElement {
   const moveToStep = (step: BookingStep) => {
     setCurrentStep(step);
     setBookingState((prev) => ({ ...prev, currentStep: step }));
+    // Scroll to top on mobile when moving between steps
+    if (typeof window !== 'undefined') {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
   };
 
   const handleServiceSelect = (serviceType: ServiceType) => {
