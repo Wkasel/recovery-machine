@@ -27,15 +27,7 @@ export function preloadCriticalResources() {
     document.head.appendChild(link);
   });
 
-  // Preload critical API endpoints
-  const criticalEndpoints = ["/api/services", "/api/availability"];
-
-  criticalEndpoints.forEach((href) => {
-    const link = document.createElement("link");
-    link.rel = "prefetch";
-    link.href = href;
-    document.head.appendChild(link);
-  });
+  // Avoid prefetching non-existent endpoints in dev to prevent 404 noise
 
   monitor.mark("preload-end");
   monitor.measure("preload-duration", "preload-start", "preload-end");

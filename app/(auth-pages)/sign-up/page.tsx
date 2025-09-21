@@ -48,40 +48,37 @@ export default function SignUpPage(): React.ReactElement {
 
   if (magicLinkSent) {
     return (
-      <div className="min-h-screen bg-black flex items-center justify-center p-4">
-        <Card className="w-full max-w-md bg-neutral-900 border-neutral-800">
-          <CardContent className="p-6">
-            <div className="text-center space-y-4">
-              <Alert className="bg-green-950/50 border-green-900/50">
-                <CheckCircle className="h-4 w-4 text-green-400" />
-                <AlertDescription className="text-green-100">
-                  Magic link sent to <span className="font-medium">{email}</span>. Check your email
-                  and click the link to create your account.
-                </AlertDescription>
-              </Alert>
-              <Button
-                variant="outline"
-                onClick={() => setMagicLinkSent(false)}
-                className="w-full bg-transparent border-neutral-700 text-white hover:bg-neutral-800"
-              >
-                Try different email
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
+      <Card className="w-full bg-neutral-900 border-neutral-800">
+        <CardContent className="p-6">
+          <div className="text-center space-y-4">
+            <Alert className="bg-green-950/50 border-green-900/50">
+              <CheckCircle className="h-4 w-4 text-green-400" />
+              <AlertDescription className="text-green-100">
+                Magic link sent to <span className="font-medium">{email}</span>. Check your email
+                and click the link to create your account.
+              </AlertDescription>
+            </Alert>
+            <Button
+              variant="outline"
+              onClick={() => setMagicLinkSent(false)}
+              className="w-full bg-transparent border-neutral-700 text-white hover:bg-neutral-800"
+            >
+              Try different email
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
     );
   }
 
   return (
-    <div className="min-h-screen bg-black flex items-center justify-center p-4">
-      <Card className="w-full max-w-md bg-neutral-900 border-neutral-800">
-        <CardHeader className="text-center">
-          <CardTitle className="text-2xl font-bold text-white">Create Account</CardTitle>
-          <CardDescription className="text-neutral-400">
-            Join The Recovery Machine community
-          </CardDescription>
-        </CardHeader>
+    <Card className="w-full bg-neutral-900 border-neutral-800">
+      <CardHeader className="text-center">
+        <CardTitle className="text-2xl font-bold text-white">Create Account</CardTitle>
+        <CardDescription className="text-neutral-400">
+          Join The Recovery Machine community
+        </CardDescription>
+      </CardHeader>
         <CardContent className="space-y-4">
           {error && (
             <Alert className="bg-red-950/50 border-red-900/50">
@@ -176,6 +173,5 @@ export default function SignUpPage(): React.ReactElement {
           </div>
         </CardContent>
       </Card>
-    </div>
   );
 }

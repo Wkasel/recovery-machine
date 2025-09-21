@@ -5,8 +5,8 @@ import { NextResponse } from "next/server";
 
 export async function GET() {
   try {
-    await requireAdminAccess("operator");
-    const supabase = createServerSupabaseClient();
+    await requireAdminAccess(null, "operator");
+    const supabase = await createServerSupabaseClient();
 
     // Get current and previous month dates for growth calculations
     const now = new Date();

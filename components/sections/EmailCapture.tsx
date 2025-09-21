@@ -41,12 +41,11 @@ export function EmailCapture() {
               </div>
               <h3 className="text-2xl font-bold text-white mb-4">Welcome to Recovery Machine!</h3>
               <p className="text-neutral-400 mb-6">
-                Thank you for subscribing! Check your email for your 10% discount code and exclusive
-                recovery tips.
+                Thank you for subscribing! You'll now receive exclusive recovery tips and updates.
               </p>
               <Badge className="bg-neutral-900 text-white border border-neutral-800 px-4 py-2">
-                <Gift className="h-4 w-4 mr-2" />
-                10% Off Code Sent
+                <Mail className="h-4 w-4 mr-2" />
+                Successfully Subscribed
               </Badge>
             </CardContent>
           </Card>
@@ -61,24 +60,14 @@ export function EmailCapture() {
         <Card className="bg-black border border-neutral-800">
           <CardContent className="p-8 sm:p-12">
             <div className="text-center mb-8">
-              {/* Incentive Badge */}
+              {/* Newsletter Badge */}
               <Badge className="bg-neutral-900 text-white border border-neutral-800 px-6 py-2 mb-6 text-sm font-semibold">
-                <Gift className="h-4 w-4 mr-2" />
-                Limited Time Offer
+                <Mail className="h-4 w-4 mr-2" />
+                Newsletter
               </Badge>
 
-              <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4">
-                Get Recovery Tips & Exclusive Offers
-              </h2>
-              <p className="text-lg sm:text-xl text-neutral-400 mb-2">
-                Join our community of high performers and unlock expert recovery strategies
-              </p>
-
-              {/* Value Proposition */}
-              <div className="flex items-center justify-center gap-2 text-white font-semibold mb-8">
-                <Star className="h-5 w-5 fill-current" />
-                <span>Unlock 10% off your first month</span>
-              </div>
+              <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4">Get recovery tips that work</h2>
+              <p className="text-lg sm:text-xl text-neutral-400 mb-8">Short, actionable emails. One click to unsubscribe.</p>
             </div>
 
             {/* Email Form */}
@@ -99,13 +88,13 @@ export function EmailCapture() {
                   type="submit"
                   size="lg"
                   disabled={isLoading || !email}
-                  className="h-12 px-8 bg-neutral-900 border border-neutral-800 text-white hover:bg-neutral-800 font-semibold disabled:opacity-50"
+                  className="h-12 px-8 bg-brand text-black hover:bg-brand/90 font-semibold disabled:opacity-50"
                 >
                   {isLoading ? (
                     <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
                   ) : (
                     <>
-                      Get 10% Off
+                      Subscribe
                       <ArrowRight className="ml-2 h-5 w-5" />
                     </>
                   )}
@@ -144,12 +133,7 @@ export function EmailCapture() {
 
             {/* Trust Indicators */}
             <div className="text-center mt-8 pt-6 border-t border-neutral-800">
-              <p className="text-sm text-neutral-500">
-                🔒 Your email is safe with us. Unsubscribe anytime. No spam, ever.
-              </p>
-              <p className="text-xs text-neutral-600 mt-2">
-                Join 2,500+ subscribers who trust Recovery Machine
-              </p>
+              <p className="text-sm text-neutral-500">🔒 We won’t spam you. Unsubscribe anytime.</p>
             </div>
           </CardContent>
         </Card>

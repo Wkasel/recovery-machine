@@ -8,7 +8,7 @@ export const navigationConfig = {
     },
     {
       title: "Dashboard",
-      href: "/protected",
+      href: "/profile",
       auth: true,
     },
   ] as NavItem[],
@@ -16,12 +16,12 @@ export const navigationConfig = {
   userNav: [
     {
       title: "Profile",
-      href: "/protected/profile",
+      href: "/profile",
       auth: true,
     },
     {
-      title: "Settings",
-      href: "/protected/settings",
+      title: "Settings", 
+      href: "/profile",
       auth: true,
     },
   ] as NavItem[],

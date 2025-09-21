@@ -32,8 +32,8 @@ export function ServiceSelection({
   return (
     <div className="space-y-6">
       <div className="text-center">
-        <h2 className="text-2xl font-bold text-gray-900 mb-2">Choose Your Recovery Experience</h2>
-        <p className="text-gray-600">Select the service that best fits your wellness goals</p>
+        <h2 className="text-2xl font-bold text-white mb-2">Choose Your Recovery Experience</h2>
+        <p className="text-neutral-400">Select the service that best fits your wellness goals</p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -74,7 +74,7 @@ export function ServiceSelection({
 
               <CardHeader className="pb-4">
                 <CardTitle className="text-xl font-semibold">{service.name}</CardTitle>
-                <CardDescription className="text-sm text-gray-600">
+                <CardDescription className="text-sm text-neutral-400">
                   {service.description}
                 </CardDescription>
               </CardHeader>
@@ -84,11 +84,11 @@ export function ServiceSelection({
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-2">
                     <DollarSign className="w-5 h-5 text-green-600" />
-                    <span className="text-2xl font-bold text-gray-900">
+                    <span className="text-2xl font-bold text-white">
                       {formatPrice(service.basePrice)}
                     </span>
                   </div>
-                  <div className="flex items-center space-x-1 text-gray-500">
+                  <div className="flex items-center space-x-1 text-neutral-400">
                     <Clock className="w-4 h-4" />
                     <span className="text-sm">{service.duration} min</span>
                   </div>
@@ -96,12 +96,12 @@ export function ServiceSelection({
 
                 {/* Features */}
                 <div className="space-y-2">
-                  <p className="text-sm font-medium text-gray-900">Includes:</p>
+                  <p className="text-sm font-medium text-white">Includes:</p>
                   <ul className="space-y-1">
-                    {service.features.map((feature, index) => (
-                      <li key={index} className="flex items-start space-x-2">
+                    {service.features.map((feature) => (
+                      <li key={feature} className="flex items-start space-x-2">
                         <Check className="w-4 h-4 text-green-500 mt-0.5 flex-shrink-0" />
-                        <span className="text-sm text-gray-600">{feature}</span>
+                        <span className="text-sm text-neutral-400">{feature}</span>
                       </li>
                     ))}
                   </ul>
@@ -138,8 +138,8 @@ export function ServiceSelection({
       </div>
 
       {/* Add-on options preview */}
-      <div className="bg-gray-50 p-4 rounded-lg">
-        <h3 className="text-lg font-semibold text-gray-900 mb-3">Available Add-ons</h3>
+      <div className="bg-neutral-900 border border-neutral-800 p-4">
+        <h3 className="text-lg font-semibold text-white mb-3">Available Add-ons</h3>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
           <div className="flex items-center space-x-2">
             <Check className="w-4 h-4 text-green-500" />

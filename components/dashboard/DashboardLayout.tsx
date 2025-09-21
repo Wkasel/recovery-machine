@@ -1,11 +1,11 @@
 "use client";
 
-import { DashboardTab } from "@/app/profile/page";
+import type { DashboardTab } from "@/app/profile/page";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 // import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { User } from "@supabase/supabase-js";
+import type { User } from "@supabase/supabase-js";
 import {
   ArrowLeft,
   Calendar,
@@ -17,7 +17,7 @@ import {
   Users,
 } from "lucide-react";
 import Link from "next/link";
-import { ReactNode } from "react";
+import type { ReactNode } from "react";
 
 interface ProfileData {
   credits: number;
@@ -92,9 +92,9 @@ export function DashboardLayout({
   ];
 
   return (
-    <div className="min-h-screen bg-gray-900">
+    <div className="min-h-screen bg-black">
       {/* Header */}
-      <div className="bg-gray-800 border-b border-gray-700">
+      <div className="bg-black border-b border-neutral-800">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
@@ -109,9 +109,9 @@ export function DashboardLayout({
 
             {/* User info and credits */}
             <div className="flex items-center space-x-4">
-              <div className="flex items-center space-x-2">
+            <div className="flex items-center space-x-2">
                 <Coins className="w-4 h-4 text-green-600" />
-                <Badge variant="secondary" className="bg-green-900 text-green-100 border-green-700">
+              <Badge variant="secondary" className="bg-neutral-900 text-green-300 border-neutral-800">
                   {profileData.credits} Credits
                 </Badge>
               </div>
@@ -136,21 +136,22 @@ export function DashboardLayout({
       </div>
 
       {/* Navigation Tabs */}
-      <div className="bg-gray-800 border-b border-gray-700">
+      <div className="bg-black border-b border-neutral-800">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Custom Tab Implementation - Desktop */}
           <div className="hidden md:block">
             <div className="grid w-full grid-cols-6 bg-transparent border-0 p-0" role="tablist">
               {tabs.map((tab) => (
                 <button
+                  type="button"
                   key={tab.id}
                   role="tab"
                   aria-selected={activeTab === tab.id}
                   onClick={() => onTabChange(tab.id)}
                   className={`flex items-center space-x-2 py-4 px-6 rounded-none border-b-2 transition-colors ${
                     activeTab === tab.id
-                      ? "bg-blue-900 text-blue-100 border-blue-400"
-                      : "border-transparent text-gray-300 hover:text-white hover:bg-gray-700"
+                      ? "bg-neutral-900 text-white border-neutral-700"
+                      : "border-transparent text-neutral-400 hover:text-white hover:bg-neutral-900"
                   }`}
                 >
                   <tab.icon className="w-4 h-4" />
@@ -165,14 +166,15 @@ export function DashboardLayout({
             <div className="grid w-full grid-cols-3 bg-transparent border-0 p-0" role="tablist">
               {tabs.slice(0, 3).map((tab) => (
                 <button
+                  type="button"
                   key={tab.id}
                   role="tab"
                   aria-selected={activeTab === tab.id}
                   onClick={() => onTabChange(tab.id)}
                   className={`flex flex-col items-center space-y-1 py-3 px-2 transition-colors ${
                     activeTab === tab.id
-                      ? "bg-blue-900 text-blue-100"
-                      : "text-gray-300 hover:text-white"
+                      ? "bg-neutral-900 text-white"
+                      : "text-neutral-400 hover:text-white"
                   }`}
                 >
                   <tab.icon className="w-4 h-4" />
@@ -182,15 +184,16 @@ export function DashboardLayout({
             </div>
 
             {/* Mobile overflow menu for remaining tabs */}
-            <div className="grid grid-cols-3 mt-2 border-t pt-2">
+            <div className="grid grid-cols-3 mt-2 border-t border-neutral-800 pt-2">
               {tabs.slice(3).map((tab) => (
                 <button
+                  type="button"
                   key={tab.id}
                   onClick={() => onTabChange(tab.id)}
                   className={`flex flex-col items-center space-y-1 py-2 px-2 rounded transition-colors ${
                     activeTab === tab.id
-                      ? "bg-blue-900 text-blue-100"
-                      : "text-gray-300 hover:text-white"
+                      ? "bg-neutral-900 text-white"
+                      : "text-neutral-400 hover:text-white"
                   }`}
                 >
                   <tab.icon className="w-4 h-4" />
@@ -204,7 +207,7 @@ export function DashboardLayout({
 
       {/* Main Content */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <Card className="min-h-[600px] p-6 bg-gray-800 border-gray-700 text-white">{children}</Card>
+        <Card className="min-h-[600px] p-6 bg-black border-neutral-800 text-white">{children}</Card>
       </div>
     </div>
   );

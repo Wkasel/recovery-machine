@@ -48,7 +48,7 @@ export default function BookingPage(): React.ReactElement {
 
   if (!mounted || authLoading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-black flex items-center justify-center">
         <div className="animate-spin h-8 w-8 border-2 border-blue-600 border-t-transparent rounded-full"></div>
       </div>
     );
@@ -253,11 +253,11 @@ export default function BookingPage(): React.ReactElement {
 
   if (showBoltCheckout && checkoutData) {
     return (
-      <div className="min-h-screen bg-gray-50 py-12">
+      <div className="min-h-screen bg-black py-12">
         <div className="container mx-auto px-4 max-w-2xl">
           <div className="text-center mb-8">
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">Complete Your Payment</h1>
-            <p className="text-gray-600">Secure payment processing for your recovery session</p>
+            <h1 className="text-3xl font-bold text-white mb-2">Complete Your Payment</h1>
+            <p className="text-neutral-400">Secure payment processing for your recovery session</p>
           </div>
 
           <BoltCheckout
@@ -272,12 +272,12 @@ export default function BookingPage(): React.ReactElement {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
+    <div className="min-h-screen bg-black py-8">
       <div className="container mx-auto px-4 max-w-6xl">
         {/* Header */}
         <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Book Your Recovery Session</h1>
-          <p className="text-gray-600">
+          <h1 className="text-3xl font-bold text-white mb-2">Book Your Recovery Session</h1>
+          <p className="text-neutral-400">
             Professional cold plunge & infrared sauna delivered to your door
           </p>
         </div>
@@ -295,9 +295,9 @@ export default function BookingPage(): React.ReactElement {
         </div>
 
         {/* Step content */}
-        <div className="bg-white rounded-lg shadow-sm border p-6 md:p-8">
+        <div className="bg-black border border-neutral-800 p-6 md:p-8">
           {isLoading && (
-            <div className="absolute inset-0 bg-white bg-opacity-50 flex items-center justify-center z-10">
+            <div className="absolute inset-0 bg-black/50 flex items-center justify-center z-10">
               <div className="flex items-center space-x-2">
                 <Loader2 className="w-6 h-6 animate-spin" />
                 <span>Processing...</span>
@@ -344,10 +344,10 @@ export default function BookingPage(): React.ReactElement {
             bookingState.setupFee &&
             (!user ? (
               <div className="text-center space-y-6">
-                <h2 className="text-2xl font-bold text-gray-900 mb-2">
+                <h2 className="text-2xl font-bold text-white mb-2">
                   Sign In to Complete Booking
                 </h2>
-                <p className="text-gray-600 mb-6">
+                <p className="text-neutral-400 mb-6">
                   Please sign in or create an account to complete your booking and payment.
                 </p>
                 <div className="space-y-4">

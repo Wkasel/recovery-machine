@@ -27,10 +27,8 @@ export default function Hero() {
         {/* Trust Indicator - Minimal Style */}
         <div className="mb-8">
           <div className="inline-flex items-center gap-2 bg-neutral-900 px-4 py-2 border border-neutral-800">
-            <Star className="h-4 w-4 text-white" />
-            <span className="text-neutral-300 text-sm font-mono">
-              4.8/5 · 500+ recoveries delivered
-            </span>
+            <Star className="h-4 w-4 text-brand" />
+            <span className="text-neutral-300 text-sm font-mono">Professional mobile recovery</span>
           </div>
         </div>
 
@@ -46,10 +44,8 @@ export default function Hero() {
 
         {/* Subheadline - Clean and Direct */}
         <div className="mb-12">
-          <p className="text-neutral-400 text-lg sm:text-xl md:text-2xl mb-6 max-w-2xl mx-auto leading-relaxed">
-            Professional-grade mobile cold plunge & infrared sauna delivered to your door.
-            <br />
-            Weekly sessions for peak performance.
+          <p className="text-neutral-300 text-xl mb-6 max-w-2xl mx-auto leading-relaxed">
+            Cold plunge + infrared sauna. We come to you. Book in 60 seconds.
           </p>
         </div>
 
@@ -60,14 +56,14 @@ export default function Hero() {
             className="bg-white text-black hover:bg-neutral-200 text-lg font-medium h-12 px-8 border-0"
           >
             <Link href="/book" className="flex items-center">
-              <span className="mr-2">Book Your Recovery</span>
+              <span className="mr-2">Book Now</span>
               <ArrowRight className="h-4 w-4" />
             </Link>
           </Button>
           <Button
             onClick={scrollToHowItWorks}
             variant="outline"
-            className="border border-neutral-700 text-white hover:bg-neutral-900 text-lg font-medium h-12 px-8"
+            className="border border-brand text-brand hover:bg-brand/10 text-lg font-medium h-12 px-8"
           >
             How It Works
           </Button>
@@ -84,8 +80,8 @@ export default function Hero() {
             <span className="text-sm font-mono">Flexible Scheduling</span>
           </div>
           <div className="flex items-center justify-center gap-3 text-neutral-400 bg-neutral-900 px-4 py-3 border border-neutral-800">
-            <Star className="h-4 w-4" />
-            <span className="text-sm font-mono">4.8/5 Rating</span>
+            <Star className="h-4 w-4 text-brand" />
+            <span className="text-sm font-mono">Pro Equipment</span>
           </div>
         </div>
       </div>
@@ -93,6 +89,7 @@ export default function Hero() {
       {/* Minimal Scroll Indicator */}
       <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-20">
         <button
+          type="button"
           onClick={scrollToHowItWorks}
           className="text-neutral-600 hover:text-white p-2"
           aria-label="Scroll to How It Works section"

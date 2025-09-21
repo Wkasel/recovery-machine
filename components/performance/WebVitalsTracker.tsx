@@ -10,13 +10,20 @@ export function WebVitalsTracker() {
     initPerformanceOptimizations();
 
     // Load web vitals and track them
-    import("web-vitals").then(({ onCLS, onFID, onFCP, onLCP, onTTFB, onINP }) => {
-      onCLS(sendToAnalytics);
-      onFID(sendToAnalytics);
-      onFCP(sendToAnalytics);
-      onLCP(sendToAnalytics);
-      onTTFB(sendToAnalytics);
-      onINP(sendToAnalytics);
+    import("web-vitals").then((mod) => {
+      const onCLS = mod.onCLS || (mod as any).getCLS;
+      const onFID = mod.onFID || (mod as any).getFID;
+      const onFCP = mod.onFCP || (mod as any).getFCP;
+      const onLCP = mod.onLCP || (mod as any).getLCP;
+      const onTTFB = mod.onTTFB || (mod as any).getTTFB;
+      const onINP = mod.onINP || (mod as any).getINP;
+
+      if (typeof onCLS === "function") onCLS(sendToAnalytics);
+      if (typeof onFID === "function") onFID(sendToAnalytics);
+      if (typeof onFCP === "function") onFCP(sendToAnalytics);
+      if (typeof onLCP === "function") onLCP(sendToAnalytics);
+      if (typeof onTTFB === "function") onTTFB(sendToAnalytics);
+      if (typeof onINP === "function") onINP(sendToAnalytics);
     });
 
     // Track custom wellness-specific metrics

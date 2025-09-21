@@ -56,9 +56,9 @@ export function AdminSidebar({ admin }: AdminSidebarProps) {
 
   return (
     <div className="hidden lg:fixed lg:inset-y-0 lg:z-40 lg:flex lg:w-64 lg:flex-col">
-      <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-white border-r border-gray-200 px-6">
+      <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-black border-r border-neutral-800 px-6">
         <div className="flex h-16 shrink-0 items-center">
-          <h2 className="text-xl font-bold text-gray-900">Recovery Machine</h2>
+          <h2 className="text-xl font-bold text-white">Recovery Machine</h2>
         </div>
 
         <nav className="flex flex-1 flex-col">
@@ -73,14 +73,14 @@ export function AdminSidebar({ admin }: AdminSidebarProps) {
                         href={item.href}
                         className={cn(
                           isActive
-                            ? "bg-blue-50 text-blue-700"
-                            : "text-gray-700 hover:text-blue-700 hover:bg-blue-50",
-                          "group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold"
+                            ? "bg-neutral-900 text-white"
+                            : "text-neutral-400 hover:text-white hover:bg-neutral-900",
+                          "group flex gap-x-3 rounded-none p-2 text-sm leading-6 font-semibold border-b border-neutral-900"
                         )}
                       >
                         <item.icon
                           className={cn(
-                            isActive ? "text-blue-700" : "text-gray-400 group-hover:text-blue-700",
+                            isActive ? "text-brand" : "text-neutral-500 group-hover:text-brand",
                             "h-6 w-6 shrink-0"
                           )}
                           aria-hidden="true"
@@ -95,8 +95,8 @@ export function AdminSidebar({ admin }: AdminSidebarProps) {
           </ul>
         </nav>
 
-        <div className="border-t border-gray-200 pt-4 pb-4">
-          <div className="text-xs font-semibold leading-6 text-gray-400 uppercase tracking-wide">
+        <div className="border-t border-neutral-800 pt-4 pb-4">
+          <div className="text-xs font-semibold leading-6 text-neutral-500 uppercase tracking-wide">
             Role: {admin.role.replace("_", " ")}
           </div>
         </div>

@@ -23,24 +23,14 @@ interface MainNavProps {
   user: IUser | null;
 }
 
-export function MainNav({ items = navigationConfig.mainNav, children, user }: MainNavProps) {
-  const [open, setOpen] = useState(false);
-  const pathname = usePathname();
-
-  // Simplified nav items for Recovery Machine
-  const navItems = user
-    ? [
-        { href: "/", label: "Home" },
-        { href: "/book", label: "Book Session" },
-        { href: "/protected", label: "Dashboard" },
-      ]
-    : [
-        { href: "/", label: "Home" },
-        { href: "/book", label: "Book Session" },
-        { href: "/about", label: "About" },
-      ];
-
-  const NavContent = () => (
+function NavContent({
+  navItems,
+  pathname,
+}: {
+  navItems: Array<{ href: string; label: string }>;
+  pathname: string | null;
+}) {
+  return (
     <NavigationMenuList className="flex flex-col md:flex-row gap-1">
       {navItems.map((item) => (
         <NavigationMenuItem key={item.href}>
@@ -48,8 +38,8 @@ export function MainNav({ items = navigationConfig.mainNav, children, user }: Ma
             <Link
               href={item.href}
               className={cn(
-                "group inline-flex h-9 w-max items-center justify-center rounded-md px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50",
-                pathname === item.href && "bg-accent text-accent-foreground"
+                "group inline-flex h-9 w-max items-center justify-center rounded-md px-4 py-2 text-sm font-medium transition-colors text-white hover:bg-neutral-900 hover:text-white focus:bg-neutral-900 focus:text-white focus:outline-none disabled:pointer-events-none disabled:opacity-50",
+                pathname === item.href && "bg-neutral-900 text-white"
               )}
             >
               {item.label}
@@ -59,13 +49,33 @@ export function MainNav({ items = navigationConfig.mainNav, children, user }: Ma
       ))}
     </NavigationMenuList>
   );
+}
+
+export function MainNav({ items = navigationConfig.mainNav, children, user }: MainNavProps) {
+  const [open, setOpen] = useState(false);
+  const pathname = usePathname();
+  const [mounted, setMounted] = useState(false);
+  React.useEffect(() => setMounted(true), []);
+
+  // Simplified nav items for Recovery Machine
+  const navItems = user
+    ? [
+        { href: "/", label: "Home" },
+        { href: "/book", label: "Book Session" },
+        { href: "/profile", label: "Dashboard" },
+      ]
+    : [
+        { href: "/", label: "Home" },
+        { href: "/book", label: "Book Session" },
+        { href: "/about", label: "About" },
+      ];
 
   return (
     <div className="flex items-center">
       {/* Desktop Navigation */}
       <div className="hidden md:flex">
         <NavigationMenu>
-          <NavContent />
+          <NavContent navItems={navItems} pathname={mounted ? pathname : null} />
         </NavigationMenu>
       </div>
 
@@ -98,7 +108,7 @@ export function MainNav({ items = navigationConfig.mainNav, children, user }: Ma
                   onClick={() => setOpen(false)}
                   className={cn(
                     "block px-3 py-2 rounded-md text-base font-medium transition-colors hover:bg-accent hover:text-accent-foreground",
-                    pathname === item.href && "bg-accent text-accent-foreground"
+                    mounted && pathname === item.href && "bg-accent text-accent-foreground"
                   )}
                 >
                   {item.label}

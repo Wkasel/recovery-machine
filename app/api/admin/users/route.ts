@@ -5,8 +5,8 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(request: NextRequest) {
   try {
-    await requireAdminAccess("operator");
-    const supabase = createServerSupabaseClient();
+    await requireAdminAccess(request, "operator");
+    const supabase = await createServerSupabaseClient();
 
     const { searchParams } = new URL(request.url);
     const limit = parseInt(searchParams.get("limit") || "50");

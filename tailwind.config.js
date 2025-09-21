@@ -14,6 +14,9 @@ module.exports = {
         // Force Vercel dark theme colors
         background: '#000000',
         foreground: '#ffffff',
+        // Near-black range
+        'near-black': '#0a0a0a',
+        'near-black-2': '#111111',
         card: '#111111',
         'card-foreground': '#ffffff',
         popover: '#111111',
@@ -31,11 +34,13 @@ module.exports = {
         border: '#262626',
         input: '#111111',
         ring: '#ffffff',
-        
+
         // Vercel minimal palette
         'vercel-black': '#000000',
         'vercel-white': '#ffffff',
         'vercel-gray': '#737373',
+        // Brand accent (teal)
+        brand: '#4CC1B3',
       },
       // Force all border radius to 0 - Sharp edges everywhere
       borderRadius: {

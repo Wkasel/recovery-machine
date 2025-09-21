@@ -45,6 +45,7 @@ const steps = [
 export default function HowItWorks() {
   const [activeStep, setActiveStep] = useState(0);
   const sectionRef = useRef<HTMLElement>(null);
+  const sectionId = "how-it-works";
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -54,20 +55,17 @@ export default function HowItWorks() {
   }, []);
 
   return (
-    <section ref={sectionRef} id="how-it-works" className="py-24 lg:py-32 bg-black">
+    <section ref={sectionRef} id={sectionId} className="py-24 lg:py-32 bg-black">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl relative">
         {/* Header */}
         <div className="text-center mb-20">
           <div className="inline-flex items-center gap-2 bg-neutral-900 text-white px-4 py-2 border border-neutral-800 text-sm font-semibold mb-6">
-            <Sparkles className="h-4 w-4" />
+            <Sparkles className="h-4 w-4 text-brand" />
             <span>Simple Process</span>
           </div>
-          <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-6 tracking-tight">
-            How It Works
-          </h2>
+          <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-6 tracking-tight">How It Works</h2>
           <p className="text-xl text-neutral-400 max-w-3xl mx-auto leading-relaxed">
-            Professional recovery delivered to your doorstep.
-            <span className="font-semibold text-white">Simple, convenient, effective.</span>
+            Book → We arrive → You recover. Repeat weekly.
           </p>
         </div>
 
@@ -78,7 +76,13 @@ export default function HowItWorks() {
             const isActive = activeStep === index;
 
             return (
-              <div key={index} className="group relative" onMouseEnter={() => setActiveStep(index)}>
+              <button
+                type="button"
+                key={step.title}
+                className="group relative text-left"
+                onMouseEnter={() => setActiveStep(index)}
+                onFocus={() => setActiveStep(index)}
+              >
                 {/* Connection Line - Fixed Spacing */}
                 {index < steps.length - 1 && (
                   <div className="hidden lg:block absolute top-1/2 -right-5 z-0 transform -translate-y-1/2">
@@ -100,14 +104,14 @@ export default function HowItWorks() {
 
                   {/* Duration Badge */}
                   <div className="absolute -top-3 -left-3 flex items-center gap-1 bg-neutral-900 border border-neutral-800 px-2 py-1">
-                    <Clock className="h-3 w-3 text-neutral-400" />
+                    <Clock className="h-3 w-3 text-brand" />
                     <span className="text-xs font-medium text-neutral-400">{step.duration}</span>
                   </div>
 
                   <div className="text-center pt-6">
                     {/* Icon */}
                     <div className="inline-flex items-center justify-center w-16 h-16 bg-neutral-900 border border-neutral-800 mb-6 mx-auto">
-                      <IconComponent className="w-8 h-8 text-white" />
+                      <IconComponent className="w-8 h-8 text-brand" />
                     </div>
 
                     <h3 className="text-lg font-bold text-white mb-4">{step.title}</h3>
@@ -115,7 +119,7 @@ export default function HowItWorks() {
                     <p className="text-neutral-400 leading-relaxed text-sm">{step.description}</p>
                   </div>
                 </Card>
-              </div>
+              </button>
             );
           })}
         </div>

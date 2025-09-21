@@ -1,28 +1,19 @@
 import { createServerSupabaseClient } from "@/lib/supabase/server";
 
 export async function checkAdminAccess(
+  userEmail: string,
   minimumRole: "operator" | "admin" | "super_admin" = "admin"
 ) {
   const supabase = await createServerSupabaseClient();
 
-  const {
-    data: { user },
-    error: authError,
-  } = await supabase.auth.getUser();
-
-  if (authError || !user) {
-    return { isAdmin: false, error: "Authentication required", user: null, admin: null };
-  }
-
   const { data: admin, error: adminError } = await supabase
     .from("admins")
     .select("*")
-    .eq("user_id", user.id)
-    .eq("is_active", true)
+    .eq("email", userEmail)
     .single();
 
   if (adminError || !admin) {
-    return { isAdmin: false, error: "Admin access required", user, admin: null };
+    return { isAdmin: false, error: "Admin access required", admin: null };
   }
 
   // Check role hierarchy
@@ -34,23 +25,33 @@ export async function checkAdminAccess(
     return {
       isAdmin: false,
       error: `Insufficient permissions. Required: ${minimumRole}, Current: ${admin.role}`,
-      user,
       admin,
     };
   }
 
-  return { isAdmin: true, error: null, user, admin };
+  return { isAdmin: true, error: null, admin };
 }
 
 export async function requireAdminAccess(
   request: any,
   minimumRole: "operator" | "admin" | "super_admin" = "admin"
 ) {
-  const result = await checkAdminAccess(minimumRole);
+  const supabase = await createServerSupabaseClient();
+
+  const {
+    data: { user },
+    error: authError,
+  } = await supabase.auth.getUser();
+
+  if (authError || !user) {
+    throw new Error("Authentication required");
+  }
+
+  const result = await checkAdminAccess(user.email!, minimumRole);
 
   if (!result.isAdmin) {
     throw new Error(result.error || "Access denied");
   }
 
-  return { user: result.user!, admin: result.admin! };
+  return { user, admin: result.admin! };
 }

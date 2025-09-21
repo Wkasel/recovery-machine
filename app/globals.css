@@ -21,12 +21,12 @@
   --color-border: #262626;
   --color-input: #111111;
   --color-ring: #ffffff;
-  
+
   /* Vercel Sharp Design Variables - No Rounded Corners */
   --radius: 0;
   --radius-lg: 0;
   --radius-xl: 0;
-  
+
   /* Minimal Monochrome Palette - Only 3 Colors */
   --color-vercel-black: #000000;
   --color-vercel-white: #ffffff;
@@ -57,14 +57,17 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Default text colors for better visibility */
-* {
-  color: var(--color-foreground);
-}
-
-/* Specific overrides for common text elements */
-p, span, div, h1, h2, h3, h4, h5, h6, a, label, button {
-  color: inherit;
+/* Text color defaults
+   - Keep body text white for dark theme
+   - Ensure light surfaces get dark text by default so content is readable
+*/
+/* Note: Components can still override with Tailwind text-* utilities */
+.bg-white,
+.bg-gray-50,
+.bg-neutral-50,
+.bg-gray-100,
+.bg-stone-50 {
+  color: #0a0a0a;
 }
 
 /* Ensure input text is visible */
@@ -120,7 +123,7 @@ html {
 
 /* Vercel Minimal Design - No Gradients */
 .vercel-bg {
-  background: var(--color-vercel-black);
+  background: #0a0a0a;
 }
 
 .vercel-text {
@@ -183,7 +186,7 @@ html {
 }
 
 .vercel-card {
-  background: var(--color-card);
+  background: #0a0a0a;
   padding: 1.5rem;
   border: none;
 }
@@ -202,7 +205,7 @@ button, input, textarea, select, div, span, section, nav, header, main, footer {
 
 /* Remove all transform and animation classes */
 .animate-spin,
-.animate-ping, 
+.animate-ping,
 .animate-pulse,
 .animate-bounce,
 .animate-float,

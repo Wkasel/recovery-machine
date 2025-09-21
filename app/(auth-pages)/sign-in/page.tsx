@@ -25,16 +25,6 @@ function SignInForm(): React.ReactElement {
     }
   }, [searchParams]);
 
-  const handlePasswordSignIn = async (formData: FormData) => {
-    setIsLoading(true);
-    setError("");
-    try {
-      await signIn(formData);
-    } catch (err: any) {
-      setError(err.message || "Failed to sign in");
-    }
-    setIsLoading(false);
-  };
 
   const handleMagicLink = async () => {
     if (!email) {
@@ -57,40 +47,37 @@ function SignInForm(): React.ReactElement {
 
   if (magicLinkSent) {
     return (
-      <div className="min-h-screen bg-black flex items-center justify-center p-4">
-        <Card className="w-full max-w-md bg-neutral-900 border-neutral-800">
-          <CardContent className="p-6">
-            <div className="text-center space-y-4">
-              <Alert className="bg-green-950/50 border-green-900/50">
-                <CheckCircle className="h-4 w-4 text-green-400" />
-                <AlertDescription className="text-green-100">
-                  Magic link sent to <span className="font-medium">{email}</span>. Check your email
-                  and click the link to sign in.
-                </AlertDescription>
-              </Alert>
-              <Button
-                variant="outline"
-                onClick={() => setMagicLinkSent(false)}
-                className="w-full bg-transparent border-neutral-700 text-white hover:bg-neutral-800"
-              >
-                Try different email
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
+      <Card className="w-full bg-neutral-900 border-neutral-800">
+        <CardContent className="p-6">
+          <div className="text-center space-y-4">
+            <Alert className="bg-green-950/50 border-green-900/50">
+              <CheckCircle className="h-4 w-4 text-green-400" />
+              <AlertDescription className="text-green-100">
+                Magic link sent to <span className="font-medium">{email}</span>. Check your email
+                and click the link to sign in.
+              </AlertDescription>
+            </Alert>
+            <Button
+              variant="outline"
+              onClick={() => setMagicLinkSent(false)}
+              className="w-full bg-transparent border-neutral-700 text-white hover:bg-neutral-800"
+            >
+              Try different email
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
     );
   }
 
   return (
-    <div className="min-h-screen bg-black flex items-center justify-center p-4">
-      <Card className="w-full max-w-md bg-neutral-900 border-neutral-800">
-        <CardHeader className="text-center">
-          <CardTitle className="text-2xl font-bold text-white">Welcome Back</CardTitle>
-          <CardDescription className="text-neutral-400">
-            Sign in to your Recovery Machine account
-          </CardDescription>
-        </CardHeader>
+    <Card className="w-full bg-neutral-900 border-neutral-800">
+      <CardHeader className="text-center">
+        <CardTitle className="text-2xl font-bold text-white">Welcome Back</CardTitle>
+        <CardDescription className="text-neutral-400">
+          Sign in to your Recovery Machine account
+        </CardDescription>
+      </CardHeader>
         <CardContent className="space-y-4">
           {error && (
             <Alert className="bg-red-950/50 border-red-900/50">
@@ -98,7 +85,7 @@ function SignInForm(): React.ReactElement {
             </Alert>
           )}
 
-          <form action={handlePasswordSignIn} className="space-y-4">
+          <form action={signIn} className="space-y-4">
             <div className="space-y-2">
               <Label htmlFor="email" className="text-white">
                 Email
@@ -112,7 +99,6 @@ function SignInForm(): React.ReactElement {
                 onChange={(e) => setEmail(e.target.value)}
                 required
                 className="bg-neutral-800 border-neutral-700 text-white placeholder:text-neutral-500"
-                disabled={isLoading}
               />
             </div>
 
@@ -126,7 +112,6 @@ function SignInForm(): React.ReactElement {
                 type="password"
                 placeholder="Enter your password"
                 className="bg-neutral-800 border-neutral-700 text-white placeholder:text-neutral-500"
-                disabled={isLoading}
               />
             </div>
 
@@ -134,10 +119,9 @@ function SignInForm(): React.ReactElement {
               <Button
                 type="submit"
                 className="w-full bg-white text-black hover:bg-neutral-200"
-                disabled={isLoading}
               >
                 <Lock className="mr-2 h-4 w-4" />
-                {isLoading ? "Signing in..." : "Sign in with Password"}
+                Sign in with Password
               </Button>
 
               <div className="relative">
@@ -183,7 +167,6 @@ function SignInForm(): React.ReactElement {
           </div>
         </CardContent>
       </Card>
-    </div>
   );
 }
 
@@ -191,7 +174,7 @@ export default function SignInPage(): React.ReactElement {
   return (
     <Suspense
       fallback={
-        <div className="min-h-screen bg-black flex items-center justify-center">
+        <div className="flex items-center justify-center p-8">
           <div className="animate-spin h-8 w-8 border-2 border-white border-t-transparent rounded-full"></div>
         </div>
       }

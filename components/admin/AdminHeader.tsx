@@ -33,6 +33,22 @@ export function AdminHeader({ admin, user }: AdminHeaderProps) {
   const router = useRouter();
   const supabase = createBrowserSupabaseClient();
 
+  // Defensive programming - handle case where admin prop might be undefined during hydration
+  if (!admin || !user) {
+    return (
+      <header className="bg-white shadow-sm border-b border-gray-200">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="flex h-16 justify-between items-center">
+            <div className="flex items-center">
+              <h1 className="text-2xl font-bold text-gray-900">Admin Panel</h1>
+            </div>
+            <div className="animate-pulse bg-gray-200 h-8 w-32 rounded"></div>
+          </div>
+        </div>
+      </header>
+    );
+  }
+
   const handleSignOut = async () => {
     await supabase.auth.signOut();
     router.push("/");
@@ -52,8 +68,8 @@ export function AdminHeader({ admin, user }: AdminHeaderProps) {
   };
 
   return (
-    <header className="bg-white shadow-sm border-b border-gray-200">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <header className="bg-black border-b border-neutral-800">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-white">
         <div className="flex h-16 justify-between items-center">
           <div className="flex items-center">
             <Button
@@ -66,13 +82,13 @@ export function AdminHeader({ admin, user }: AdminHeaderProps) {
             </Button>
 
             <div className="hidden lg:block">
-              <h1 className="text-2xl font-bold text-gray-900">Admin Panel</h1>
+              <h1 className="text-2xl font-bold text-white">Admin Panel</h1>
             </div>
           </div>
 
           <div className="flex items-center gap-4">
             {/* Notifications */}
-            <Button variant="ghost" size="sm" className="relative">
+            <Button variant="ghost" size="sm" className="relative text-white">
               <Bell className="h-5 w-5" />
               <span className="absolute -top-1 -right-1 h-4 w-4 bg-red-500 rounded-full text-xs text-white flex items-center justify-center">
                 3
@@ -82,14 +98,14 @@ export function AdminHeader({ admin, user }: AdminHeaderProps) {
             {/* User Menu */}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" className="flex items-center gap-3 h-auto py-2">
+                <Button variant="ghost" className="flex items-center gap-3 h-auto py-2 text-white">
                   <Avatar className="h-8 w-8">
                     <AvatarImage src={user.user_metadata?.avatar_url} />
                     <AvatarFallback>{user.email?.slice(0, 2).toUpperCase()}</AvatarFallback>
                   </Avatar>
 
                   <div className="flex flex-col items-start">
-                    <span className="text-sm font-medium">
+                    <span className="text-sm font-medium text-white">
                       {user.user_metadata?.full_name || user.email}
                     </span>
                     <Badge className={getRoleBadgeColor(admin.role)} variant="secondary">

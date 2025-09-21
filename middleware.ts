@@ -3,15 +3,18 @@ import { updateSession } from "@/lib/supabase/middleware";
 import { type NextRequest } from "next/server";
 
 export async function middleware(request: NextRequest) {
-  // Apply security checks for state-changing requests
+  // Skip security checks in development to avoid edge runtime issues
+  if (process.env.NODE_ENV !== "production") {
+    // Just update Supabase session in development
+    return await updateSession(request);
+  }
+
+  // Apply security checks for state-changing requests in production
   try {
     requireSecureRequest(request);
   } catch (error) {
     console.warn("Security check failed:", error);
-    // Log security violations but don't block in development
-    if (process.env.NODE_ENV === "production") {
-      return new Response("Forbidden", { status: 403 });
-    }
+    return new Response("Forbidden", { status: 403 });
   }
 
   // Update Supabase session

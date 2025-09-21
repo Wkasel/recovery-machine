@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Instagram, Star, TrendingUp, Users } from "lucide-react";
 import Link from "next/link";
+import { useEffect, useId, useRef } from "react";
 import { TestimonialCarousel } from "./TestimonialCarousel";
 
 // Enhanced testimonials with professional photos
@@ -86,57 +87,92 @@ export const testimonials = [
 // This eliminates API rate limits and maintenance overhead
 // Configuration is managed through Behold.so dashboard
 
-const stats = [
+const benefits = [
   {
     icon: Users,
-    value: "500+",
-    label: "Active Members",
+    title: "On‑site setup included",
+    desc: "We bring everything. You simply show up.",
   },
   {
     icon: Star,
-    value: "4.8/5",
-    label: "Average Rating",
+    title: "Pro‑grade equipment",
+    desc: "Cold plunge + infrared sauna, calibrated.",
   },
   {
     icon: TrendingUp,
-    value: "95%",
-    label: "Member Satisfaction",
+    title: "Flexible scheduling",
+    desc: "Book sessions that fit your week.",
   },
 ];
 
 export function SocialProof() {
+  const beholdContainerId = useId();
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const ensureScript = () =>
+      new Promise<void>((resolve) => {
+        const existing = document.querySelector(
+          'script[src="https://w.behold.so/widget.js"]'
+        ) as HTMLScriptElement | null;
+        if (existing) {
+          if (existing.getAttribute("data-loaded") === "true") return resolve();
+          existing.addEventListener("load", () => resolve());
+          return;
+        }
+        const script = document.createElement("script");
+        script.src = "https://w.behold.so/widget.js";
+        script.type = "module";
+        script.async = true;
+        script.addEventListener("load", () => {
+          script.setAttribute("data-loaded", "true");
+          resolve();
+        });
+        document.head.appendChild(script);
+      });
+
+    ensureScript().then(() => {
+      const anyWindow = window as unknown as {
+        BeholdWidget?: {
+          render: (opts: { widgetId: string; container: HTMLElement | string }) => void;
+        };
+      };
+      if (anyWindow.BeholdWidget && containerRef.current) {
+        anyWindow.BeholdWidget.render({ widgetId: "your-widget-id", container: containerRef.current });
+      }
+    });
+  }, []);
+
   return (
     <section className="py-24 lg:py-32 bg-black">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl relative">
-        {/* Stats Section */}
+        {/* Benefits Section */}
         <div className="text-center mb-24">
           <div className="inline-flex items-center gap-2 bg-neutral-900 text-white px-4 py-2 border border-neutral-800 text-sm font-semibold mb-8">
-            <Star className="h-4 w-4" />
-            <span>Trusted by Athletes & Professionals</span>
+            <Star className="h-4 w-4 text-brand" />
+            <span>Why it works</span>
           </div>
 
           <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-8 tracking-tight">
-            Join 500+ High Performers
+            Results without the commute
           </h2>
 
           <p className="text-xl text-neutral-400 max-w-3xl mx-auto mb-16 leading-relaxed">
-            Athletes, executives, and wellness professionals trust us for
-            <span className="font-semibold text-white"> consistent, professional recovery</span> at
-            their doorstep.
+            Recover faster at home with a simple, guided routine.
           </p>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
-            {stats.map((stat, index) => {
-              const IconComponent = stat.icon;
+            {benefits.map((item) => {
+              const IconComponent = item.icon;
               return (
-                <div key={index} className="text-center p-8 bg-black border border-neutral-800">
+                <div key={item.title} className="text-center p-8 bg-black border border-neutral-800">
                   <div className="flex justify-center mb-6">
                     <div className="w-20 h-20 bg-neutral-900 border border-neutral-800 flex items-center justify-center">
-                      <IconComponent className="h-10 w-10 text-white" />
+                      <IconComponent className="h-10 w-10 text-brand" />
                     </div>
                   </div>
-                  <div className="text-4xl font-bold text-white mb-3">{stat.value}</div>
-                  <div className="text-neutral-400 font-medium">{stat.label}</div>
+                  <div className="text-xl font-semibold text-white mb-2">{item.title}</div>
+                  <div className="text-neutral-400">{item.desc}</div>
                 </div>
               );
             })}
@@ -172,39 +208,9 @@ export function SocialProof() {
           {/* Behold.so Instagram Widget */}
           <div className="mb-8">
             <div
-              id="behold-widget"
-              className="min-h-[400px] rounded-lg overflow-hidden"
-              dangerouslySetInnerHTML={{
-                __html: `
-                  <script>
-                    (() => {
-                      const script = document.createElement('script');
-                      script.src = 'https://w.behold.so/widget.js';
-                      script.type = 'module';
-                      script.onload = () => {
-                        if (window.BeholdWidget) {
-                          window.BeholdWidget.render({
-                            widgetId: 'your-widget-id',
-                            container: '#behold-widget'
-                          });
-                        }
-                      };
-                      if (!document.querySelector('script[src="https://w.behold.so/widget.js"]')) {
-                        document.head.appendChild(script);
-                      }
-                    })();
-                  </script>
-                  <div id="behold-instagram-feed" style="min-height: 400px; display: flex; align-items: center; justify-content: center; background: linear-gradient(45deg, #f3f4f6 0%, #e5e7eb 100%); border-radius: 8px;">
-                    <div style="text-align: center; color: #6b7280;">
-                      <svg width="48" height="48" viewBox="0 0 24 24" fill="currentColor" style="margin: 0 auto 16px;">
-                        <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
-                      </svg>
-                      <p style="font-weight: 600; margin-bottom: 8px;">Instagram Feed Loading...</p>
-                      <p style="font-size: 14px;">Powered by Behold.so</p>
-                    </div>
-                  </div>
-                `,
-              }}
+              id={beholdContainerId}
+              ref={containerRef}
+              className="min-h-[400px] rounded-lg overflow-hidden border border-neutral-800"
             />
           </div>
 

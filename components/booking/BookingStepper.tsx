@@ -1,6 +1,6 @@
 "use client";
 
-import { BookingStep } from "@/lib/types/booking";
+import type { BookingStep } from "@/lib/types/booking";
 import { cn } from "@/lib/utils";
 import { Calendar, Check, CheckCircle, CreditCard, MapPin } from "lucide-react";
 
@@ -69,24 +69,25 @@ export function BookingStepper({ currentStep, completedSteps, onStepClick }: Boo
                     <div
                       className={cn(
                         "flex-1 h-0.5 mx-2",
-                        isCompleted || index <= currentStepIndex ? "bg-blue-600" : "bg-gray-200"
+                        isCompleted || index <= currentStepIndex ? "bg-brand" : "bg-neutral-800"
                       )}
                     />
                   )}
 
                   {/* Step circle */}
                   <button
+                    type="button"
                     onClick={() => isClickable && onStepClick?.(step.id)}
                     disabled={!isClickable}
                     className={cn(
                       "flex items-center justify-center w-10 h-10 rounded-full border-2 transition-all duration-200",
                       isCompleted
-                        ? "bg-blue-600 border-blue-600 text-white"
+                        ? "bg-brand border-brand text-black"
                         : isCurrent
-                          ? "border-blue-600 bg-white text-blue-600 ring-4 ring-blue-100"
-                          : "border-gray-300 bg-white text-gray-400",
+                          ? "border-brand bg-white text-brand ring-4 ring-brand/20"
+                          : "border-neutral-700 bg-black text-neutral-500",
                       isClickable && !isCompleted && !isCurrent
-                        ? "hover:border-blue-400 hover:text-blue-400 cursor-pointer"
+                        ? "hover:border-brand hover:text-brand cursor-pointer"
                         : !isClickable
                           ? "cursor-not-allowed"
                           : "cursor-pointer"
@@ -104,7 +105,7 @@ export function BookingStepper({ currentStep, completedSteps, onStepClick }: Boo
                     <div
                       className={cn(
                         "flex-1 h-0.5 mx-2",
-                        isCompleted || index < currentStepIndex ? "bg-blue-600" : "bg-gray-200"
+                        isCompleted || index < currentStepIndex ? "bg-brand" : "bg-neutral-800"
                       )}
                     />
                   )}
@@ -136,7 +137,7 @@ export function MobileBookingStepper({ currentStep, completedSteps }: BookingSte
   const currentStepData = steps[currentStepIndex];
 
   return (
-    <div className="md:hidden bg-white border-b border-gray-200 px-4 py-3">
+    <div className="md:hidden bg-black border-b border-neutral-800 px-4 py-3">
       <div className="flex items-center justify-between">
         <div className="flex items-center">
           <div
@@ -148,18 +149,18 @@ export function MobileBookingStepper({ currentStep, completedSteps }: BookingSte
             <currentStepData.icon className="w-4 h-4" />
           </div>
           <div className="ml-3">
-            <p className="text-sm font-medium text-gray-900">{currentStepData.name}</p>
-            <p className="text-xs text-gray-500">{currentStepData.description}</p>
+            <p className="text-sm font-medium text-white">{currentStepData.name}</p>
+            <p className="text-xs text-neutral-500">{currentStepData.description}</p>
           </div>
         </div>
 
-        <div className="text-sm text-gray-500">
+        <div className="text-sm text-neutral-500">
           {currentStepIndex + 1} of {steps.length}
         </div>
       </div>
 
       {/* Progress bar */}
-      <div className="mt-3 w-full bg-gray-200 rounded-full h-2">
+      <div className="mt-3 w-full bg-neutral-800 rounded-full h-2">
         <div
           className="bg-blue-600 h-2 rounded-full transition-all duration-300"
           style={{

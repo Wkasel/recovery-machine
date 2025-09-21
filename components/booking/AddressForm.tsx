@@ -11,7 +11,7 @@ import { BookingService } from "@/lib/services/booking-service";
 import { Address, addressSchema, SetupFeeCalculation } from "@/lib/types/booking";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { AlertCircle, Clock, DollarSign, Loader2, MapPin } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useId, useRef, useState, useCallback } from "react";
 import { useForm } from "react-hook-form";
 
 interface AddressFormProps {
@@ -57,6 +57,21 @@ export function AddressForm({
 
   const watchedAddress = watch();
 
+  const calculateSetupFee = useCallback(async (addressData: Address) => {
+    if (!addressData.zipCode) return;
+
+    setIsCalculatingFee(true);
+    try {
+      const feeCalculation = await BookingService.calculateSetupFee(addressData);
+      setSetupFee(feeCalculation);
+      onSetupFeeCalculated(feeCalculation);
+    } catch (error) {
+      console.error("Error calculating setup fee:", error);
+    } finally {
+      setIsCalculatingFee(false);
+    }
+  }, [onSetupFeeCalculated]);
+
   // Load Google Maps API
   useEffect(() => {
     const loadGoogleMapsScript = () => {
@@ -80,20 +95,7 @@ export function AddressForm({
     loadGoogleMapsScript();
   }, []);
 
-  // Initialize Google Places Autocomplete
-  useEffect(() => {
-    if (googleMapsLoaded && inputRef.current && !autocompleteRef.current) {
-      autocompleteRef.current = new window.google.maps.places.Autocomplete(inputRef.current, {
-        types: ["address"],
-        componentRestrictions: { country: "us" },
-        fields: ["address_components", "formatted_address", "geometry", "place_id"],
-      });
-
-      autocompleteRef.current.addListener("place_changed", handlePlaceSelected);
-    }
-  }, [googleMapsLoaded]);
-
-  const handlePlaceSelected = () => {
+  const handlePlaceSelected = useCallback(() => {
     const place = autocompleteRef.current.getPlace();
 
     if (!place.address_components) return;
@@ -123,22 +125,25 @@ export function AddressForm({
 
     // Calculate setup fee
     calculateSetupFee(addressData);
-  };
+  }, [setValue, calculateSetupFee]);
 
-  const calculateSetupFee = async (addressData: Address) => {
-    if (!addressData.zipCode) return;
+  // Initialize Google Places Autocomplete
+  useEffect(() => {
+    if (googleMapsLoaded && inputRef.current && !autocompleteRef.current) {
+      autocompleteRef.current = new window.google.maps.places.Autocomplete(inputRef.current, {
+        types: ["address"],
+        componentRestrictions: { country: "us" },
+        fields: ["address_components", "formatted_address", "geometry", "place_id"],
+      });
 
-    setIsCalculatingFee(true);
-    try {
-      const feeCalculation = await BookingService.calculateSetupFee(addressData);
-      setSetupFee(feeCalculation);
-      onSetupFeeCalculated(feeCalculation);
-    } catch (error) {
-      console.error("Error calculating setup fee:", error);
-    } finally {
-      setIsCalculatingFee(false);
+      autocompleteRef.current.addListener("place_changed", handlePlaceSelected);
     }
-  };
+  }, [googleMapsLoaded, handlePlaceSelected]);
+
+  const streetId = useId();
+  const cityId = useId();
+  const stateId = useId();
+  const zipId = useId();
 
   const onSubmit = (data: Address) => {
     onAddressChange(data);
@@ -152,36 +157,37 @@ export function AddressForm({
   return (
     <div className="space-y-6">
       <div className="text-center">
-        <h2 className="text-2xl font-bold text-gray-900 mb-2">Where should we set up?</h2>
-        <p className="text-gray-600">We'll bring the recovery experience right to your location</p>
+        <h2 className="text-2xl font-bold text-white mb-2">Where should we set up?</h2>
+        <p className="text-neutral-400">We'll bring the recovery experience right to your location</p>
       </div>
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
         {/* Google Places Autocomplete */}
         <div className="space-y-2">
-          <Label htmlFor="autocomplete-address">Search Address</Label>
+          <Label htmlFor="autocomplete-address" className="text-white">Search Address</Label>
           <div className="relative">
-            <MapPin className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+            <MapPin className="absolute left-3 top-3 h-4 w-4 text-neutral-500" />
             <Input
               ref={inputRef}
               placeholder="Start typing your address..."
-              className="pl-10"
+              className="pl-10 bg-neutral-900 border border-neutral-800 text-white placeholder:text-neutral-500"
               onChange={(e) => {
                 setValue("street", e.target.value, { shouldValidate: true });
               }}
             />
           </div>
-          <p className="text-sm text-gray-500">Start typing to see address suggestions</p>
+          <p className="text-sm text-neutral-500">Start typing to see address suggestions</p>
         </div>
 
         {/* Manual address fields */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="space-y-2">
-            <Label htmlFor="street">Street Address *</Label>
-            <Input 
-              {...register("street")} 
-              id="street" 
+            <Label htmlFor={streetId} className="text-white">Street Address *</Label>
+            <Input
+              {...register("street")}
+              id={streetId}
               placeholder="123 Main St"
+              className="bg-neutral-900 border border-neutral-800 text-white placeholder:text-neutral-500"
               onChange={async (e) => {
                 setValue("street", e.target.value, { shouldValidate: true });
                 await trigger();
@@ -191,11 +197,12 @@ export function AddressForm({
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="city">City *</Label>
-            <Input 
-              {...register("city")} 
-              id="city" 
+            <Label htmlFor={cityId} className="text-white">City *</Label>
+            <Input
+              {...register("city")}
+              id={cityId}
               placeholder="Orange County / Los Angeles"
+              className="bg-neutral-900 border border-neutral-800 text-white placeholder:text-neutral-500"
               onChange={async (e) => {
                 setValue("city", e.target.value, { shouldValidate: true });
                 await trigger();
@@ -205,12 +212,13 @@ export function AddressForm({
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="state">State *</Label>
-            <Input 
-              {...register("state")} 
-              id="state" 
-              placeholder="CA" 
+            <Label htmlFor={stateId} className="text-white">State *</Label>
+            <Input
+              {...register("state")}
+              id={stateId}
+              placeholder="CA"
               maxLength={2}
+              className="bg-neutral-900 border border-neutral-800 text-white placeholder:text-neutral-500"
               onChange={async (e) => {
                 setValue("state", e.target.value, { shouldValidate: true });
                 await trigger();
@@ -220,12 +228,13 @@ export function AddressForm({
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="zipCode">ZIP Code *</Label>
+            <Label htmlFor={zipId} className="text-white">ZIP Code *</Label>
             <Input
               {...register("zipCode")}
-              id="zipCode"
+              id={zipId}
               placeholder="90210"
               maxLength={10}
+              className="bg-neutral-900 border border-neutral-800 text-white placeholder:text-neutral-500"
               onChange={async (e) => {
                 setValue("zipCode", e.target.value, { shouldValidate: true });
                 // Trigger validation for all fields to ensure form validity
@@ -244,8 +253,8 @@ export function AddressForm({
 
         {/* Setup fee calculation */}
         {isCalculatingFee && (
-          <Card>
-            <CardContent className="flex items-center justify-center py-6">
+          <Card className="bg-black border border-neutral-800">
+            <CardContent className="flex items-center justify-center py-6 text-white">
               <Loader2 className="w-6 h-6 animate-spin mr-2" />
               <span>Calculating setup fee...</span>
             </CardContent>
@@ -253,30 +262,30 @@ export function AddressForm({
         )}
 
         {setupFee && (
-          <Card className="border-blue-200 bg-blue-50">
+          <Card className="bg-black border border-neutral-800">
             <CardHeader>
-              <CardTitle className="flex items-center space-x-2">
-                <DollarSign className="w-5 h-5 text-green-600" />
+              <CardTitle className="flex items-center space-x-2 text-white">
+                <DollarSign className="w-5 h-5 text-brand" />
                 <span>Setup Fee Calculation</span>
               </CardTitle>
-              <CardDescription>One-time fee for equipment delivery and setup</CardDescription>
+              <CardDescription className="text-neutral-400">One-time fee for equipment delivery and setup</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <div className="flex justify-between">
-                    <span className="text-sm text-gray-600">Base setup fee:</span>
-                    <span className="font-medium">{formatPrice(setupFee.baseSetupFee)}</span>
+                    <span className="text-sm text-neutral-400">Base setup fee:</span>
+                    <span className="font-medium text-white">{formatPrice(setupFee.baseSetupFee)}</span>
                   </div>
                   {setupFee.distanceFee > 0 && (
                     <div className="flex justify-between">
-                      <span className="text-sm text-gray-600">Distance fee:</span>
-                      <span className="font-medium">{formatPrice(setupFee.distanceFee)}</span>
+                      <span className="text-sm text-neutral-400">Distance fee:</span>
+                      <span className="font-medium text-white">{formatPrice(setupFee.distanceFee)}</span>
                     </div>
                   )}
                   <div className="flex justify-between border-t pt-2">
-                    <span className="font-semibold">Total setup fee:</span>
-                    <span className="font-semibold text-lg">
+                    <span className="font-semibold text-white">Total setup fee:</span>
+                    <span className="font-semibold text-lg text-white">
                       {formatPrice(setupFee.totalSetupFee)}
                     </span>
                   </div>
@@ -284,14 +293,14 @@ export function AddressForm({
 
                 <div className="space-y-2">
                   <div className="flex items-center space-x-2">
-                    <MapPin className="w-4 h-4 text-gray-400" />
-                    <span className="text-sm text-gray-600">
+                    <MapPin className="w-4 h-4 text-brand" />
+                    <span className="text-sm text-neutral-400">
                       Distance: {setupFee.distance} miles
                     </span>
                   </div>
                   <div className="flex items-center space-x-2">
-                    <Clock className="w-4 h-4 text-gray-400" />
-                    <span className="text-sm text-gray-600">
+                    <Clock className="w-4 h-4 text-brand" />
+                    <span className="text-sm text-neutral-400">
                       Est. travel time: {setupFee.estimatedTravelTime} min
                     </span>
                   </div>
@@ -299,9 +308,9 @@ export function AddressForm({
               </div>
 
               {setupFee.totalSetupFee >= 40000 && (
-                <Alert>
+                <Alert className="bg-black border border-neutral-800">
                   <AlertCircle className="h-4 w-4" />
-                  <AlertDescription>
+                  <AlertDescription className="text-neutral-300">
                     This location has a higher setup fee due to distance. Consider choosing a
                     location closer to our service area to reduce costs.
                   </AlertDescription>
@@ -312,27 +321,27 @@ export function AddressForm({
         )}
 
         {/* Service area info */}
-        <Card className="border-green-200 bg-green-50">
+        <Card className="bg-black border border-neutral-800">
           <CardContent className="py-4">
             <div className="flex items-start space-x-3">
-              <MapPin className="w-5 h-5 text-green-600 mt-0.5" />
+              <MapPin className="w-5 h-5 text-brand mt-0.5" />
               <div>
-                <h3 className="font-medium text-green-900">Service Area</h3>
-                <p className="text-sm text-green-700">
+                <h3 className="font-medium text-white">Service Area</h3>
+                <p className="text-sm text-neutral-400">
                   We currently serve Orange County and Los Angeles areas. Setup fees vary based
                   on distance from our facility.
                 </p>
                 <div className="mt-2 flex flex-wrap gap-2">
-                  <Badge variant="secondary" className="bg-green-100 text-green-800">
+                  <Badge variant="secondary" className="bg-neutral-900 text-white border border-neutral-800">
                     Newport Beach
                   </Badge>
-                  <Badge variant="secondary" className="bg-green-100 text-green-800">
+                  <Badge variant="secondary" className="bg-neutral-900 text-white border border-neutral-800">
                     Irvine
                   </Badge>
-                  <Badge variant="secondary" className="bg-green-100 text-green-800">
+                  <Badge variant="secondary" className="bg-neutral-900 text-white border border-neutral-800">
                     Huntington Beach
                   </Badge>
-                  <Badge variant="secondary" className="bg-green-100 text-green-800">
+                  <Badge variant="secondary" className="bg-neutral-900 text-white border border-neutral-800">
                     Los Angeles
                   </Badge>
                 </div>

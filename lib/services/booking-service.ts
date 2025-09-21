@@ -28,7 +28,8 @@ export class BookingService {
         .select("date_time, duration")
         .gte("date_time", `${date}T00:00:00`)
         .lt("date_time", `${date}T23:59:59`)
-        .not("status", "in", "(cancelled,no_show)");
+        // Some environments may not support "no_show" in the enum; filter only cancelled
+        .neq("status", "cancelled");
 
       if (bookingsError) throw bookingsError;
 
@@ -106,7 +107,7 @@ export class BookingService {
         .select("id, date_time, duration, user_id")
         .gte("date_time", startTime.toISOString())
         .lt("date_time", endTime.toISOString())
-        .not("status", "in", "(cancelled,no_show)");
+        .neq("status", "cancelled");
 
       if (error) throw error;
 
