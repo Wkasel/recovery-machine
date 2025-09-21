@@ -10,6 +10,11 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Address, ServiceType, SetupFeeCalculation, services } from "@/lib/types/booking";
 import { cn } from "@/lib/utils";
+import { 
+  validateDevPromoCode, 
+  isDevelopmentEnvironment,
+  getAvailableDevPromoCodes 
+} from "@/lib/payment/dev-bypass";
 import {
   AlertCircle,
   Calendar,
@@ -20,8 +25,10 @@ import {
   Lock,
   MapPin,
   Users,
+  Code,
 } from "lucide-react";
 import { useState } from "react";
+import { toast } from "sonner";
 
 interface PaymentStepProps {
   serviceType: ServiceType;
@@ -48,7 +55,12 @@ export function PaymentStep({
   const [termsAccepted, setTermsAccepted] = useState(false);
   const [promoCode, setPromoCode] = useState("");
   const [promoDiscount, setPromoDiscount] = useState(0);
+  const [promoApplied, setPromoApplied] = useState(false);
+  const [shouldBypassPayment, setShouldBypassPayment] = useState(false);
   const [paymentMethod, setPaymentMethod] = useState<"card" | "subscription">("card");
+  
+  const isDevMode = isDevelopmentEnvironment();
+  const availableDevCodes = getAvailableDevPromoCodes();
 
   const selectedService = services.find((s) => s.id === serviceType);
 
@@ -98,33 +110,99 @@ export function PaymentStep({
   };
 
   const handlePromoCodeApply = () => {
-    // Mock promo code validation
+    const code = promoCode.toUpperCase().trim();
+    
+    // Check dev bypass codes first (if in dev mode)
+    if (isDevMode) {
+      const devResult = validateDevPromoCode(code);
+      if (devResult.isValid) {
+        setPromoDiscount(devResult.discount === 100 ? calculateTotal() : devResult.discount * 100);
+        setShouldBypassPayment(devResult.shouldBypassPayment);
+        setPromoApplied(true);
+        toast.success(`Dev code applied: ${devResult.description}`);
+        return;
+      }
+    }
+    
+    // Regular promo codes
     const validPromoCodes: Record<string, number> = {
       FIRST20: 2000, // $20 off
       RECOVERY10: 1000, // $10 off
       NEWUSER: 1500, // $15 off
     };
 
-    const discount = validPromoCodes[promoCode.toUpperCase()] || 0;
-    setPromoDiscount(discount);
+    const discount = validPromoCodes[code] || 0;
+    if (discount > 0) {
+      setPromoDiscount(discount);
+      setPromoApplied(true);
+      setShouldBypassPayment(false);
+      toast.success(`Promo code applied! You saved ${formatPrice(discount)}`);
+    } else {
+      toast.error("Invalid promo code");
+      setPromoDiscount(0);
+      setPromoApplied(false);
+      setShouldBypassPayment(false);
+    }
   };
 
   const handlePayment = async () => {
     setIsProcessingPayment(true);
 
-    // Simulate payment processing
     try {
+      // If we should bypass payment (dev mode with 100% discount)
+      if (shouldBypassPayment && isDevMode) {
+        const bookingData = {
+          serviceType,
+          dateTime,
+          duration: (selectedService?.duration || 30) + addOns.extendedTime,
+          address,
+          addOns,
+          specialInstructions,
+          servicePrice: selectedService?.basePrice || 0,
+          addOnsPrice: calculateAddOnCost(),
+        };
+
+        const response = await fetch("/api/payments/dev-bypass", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            promoCode: promoCode.toUpperCase().trim(),
+            bookingData,
+            setupFee: setupFee.totalSetupFee,
+          }),
+        });
+
+        if (!response.ok) {
+          throw new Error("Dev payment bypass failed");
+        }
+
+        const result = await response.json();
+        
+        if (result.success) {
+          toast.success("Booking confirmed with dev bypass!");
+          onPayment();
+          return;
+        } else {
+          throw new Error(result.error || "Dev payment bypass failed");
+        }
+      }
+
+      // Regular payment processing (simulate for now)
       await new Promise((resolve) => setTimeout(resolve, 2000));
 
-      // In a real implementation, you would:
+      // TODO: In a real implementation, you would:
       // 1. Process payment with Stripe/Bolt
       // 2. Create booking in database
       // 3. Send confirmation email
       // 4. Redirect to confirmation page
 
+      toast.success("Payment processed successfully!");
       onPayment();
     } catch (error) {
       console.error("Payment failed:", error);
+      toast.error(error instanceof Error ? error.message : "Payment failed");
     } finally {
       setIsProcessingPayment(false);
     }
@@ -340,6 +418,30 @@ export function PaymentStep({
           {/* Promo code */}
           <Card>
             <CardContent className="pt-6">
+              {isDevMode && (
+                <div className="mb-4 p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
+                  <div className="flex items-center space-x-2 mb-2">
+                    <Code className="w-4 h-4 text-yellow-600" />
+                    <span className="text-sm font-medium text-yellow-800">Development Mode</span>
+                  </div>
+                  <p className="text-xs text-yellow-700 mb-2">
+                    Available dev codes for payment bypass:
+                  </p>
+                  <div className="flex flex-wrap gap-1">
+                    {availableDevCodes.map((code) => (
+                      <button
+                        key={code.code}
+                        onClick={() => setPromoCode(code.code)}
+                        className="px-2 py-1 text-xs bg-yellow-100 text-yellow-800 rounded hover:bg-yellow-200 transition-colors"
+                        title={code.description}
+                      >
+                        {code.code}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+              
               <div className="flex space-x-2">
                 <Input
                   placeholder="Promo code"
@@ -351,10 +453,19 @@ export function PaymentStep({
                   Apply
                 </Button>
               </div>
-              {promoDiscount > 0 && (
-                <p className="text-sm text-green-600 mt-2">
-                  Promo code applied! You saved {formatPrice(promoDiscount)}
-                </p>
+              
+              {promoApplied && promoDiscount > 0 && (
+                <div className="mt-2">
+                  {shouldBypassPayment ? (
+                    <p className="text-sm text-blue-600 font-medium">
+                      🔧 DEV MODE: Payment bypassed - booking will be free!
+                    </p>
+                  ) : (
+                    <p className="text-sm text-green-600">
+                      Promo code applied! You saved {formatPrice(promoDiscount)}
+                    </p>
+                  )}
+                </div>
               )}
             </CardContent>
           </Card>
