@@ -98,6 +98,40 @@ input, textarea, select {
   background-color: var(--color-input);
 }
 
+/* Mobile calendar improvements */
+@media (max-width: 768px) {
+  .fc-daygrid-day {
+    min-height: 48px !important;
+    cursor: pointer !important;
+    touch-action: manipulation !important;
+  }
+  
+  .fc-daygrid-day-number {
+    padding: 8px !important;
+    font-size: 16px !important;
+    cursor: pointer !important;
+    touch-action: manipulation !important;
+  }
+  
+  .fc-day-today {
+    background-color: rgba(59, 130, 246, 0.1) !important;
+  }
+  
+  .fc-daygrid-day:hover,
+  .fc-daygrid-day:active {
+    background-color: rgba(59, 130, 246, 0.2) !important;
+  }
+  
+  /* Ensure calendar cells are tappable */
+  .fc-daygrid-day-frame {
+    cursor: pointer !important;
+    min-height: 48px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+}
+
 /* Card content should be white text */
 .card, [data-testid="card"] {
   color: var(--color-card-foreground);

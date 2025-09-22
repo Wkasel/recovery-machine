@@ -183,21 +183,48 @@ export default function BookingPage(): React.ReactElement {
         termsAccepted: true,
       };
 
-      const result = await createBookingWithPayment(bookingData);
+      // Call our bookings API to create the booking and order
+      const response = await fetch("/api/bookings", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(bookingData),
+      });
 
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || "Failed to create booking");
+      }
+
+      const result = await response.json();
+      
       if (result.success) {
-        // Set up Bolt checkout
-        setCheckoutData({
-          amount,
-          orderType: "one_time",
-          description: `Recovery Machine - ${selectedService?.name} session`,
-          customerEmail: user.email!,
-          metadata: {
-            bookingId: (result as any).booking?.id || "temp-booking-id",
-            orderId: (result as any).orderId || "temp-order-id",
-          },
+        // Convert API response to UI format
+        const confirmedBooking: DatabaseBooking = {
+          id: result.booking.id,
+          user_id: result.booking.user_id,
+          order_id: result.booking.order_id,
+          date_time: result.booking.date_time,
+          duration: result.booking.duration,
+          add_ons: result.booking.add_ons,
+          status: result.booking.status,
+          location_address: result.booking.location_address,
+          special_instructions: result.booking.special_instructions,
+          created_at: result.booking.created_at,
+          updated_at: result.booking.updated_at,
+        };
+
+        setFinalBooking(confirmedBooking);
+        markStepCompleted("payment");
+        moveToStep("confirmation");
+
+        toast({
+          title: "Booking Confirmed!",
+          description: "Your recovery session has been booked successfully.",
         });
-        setShowBoltCheckout(true);
+      } else {
+        throw new Error(result.error || "Failed to create booking");
       }
     } catch (error) {
       console.error("Booking error:", error);

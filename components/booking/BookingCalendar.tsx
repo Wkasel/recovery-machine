@@ -87,7 +87,10 @@ export function BookingCalendar({
   };
 
   const handleDateSelect = (selectInfo: any) => {
-    const selectedDateStr = selectInfo.startStr.split("T")[0];
+    // Handle both select events (desktop) and dateClick events (mobile)
+    const selectedDateStr = selectInfo.startStr ? 
+      selectInfo.startStr.split("T")[0] : 
+      selectInfo.dateStr;
     setSelectedDate(selectedDateStr);
     setSelectedTime("");
   };
@@ -163,8 +166,8 @@ export function BookingCalendar({
   return (
     <div className="space-y-6">
       <div className="text-center">
-        <h2 className="text-2xl font-bold text-gray-900 mb-2">Choose Your Appointment Time</h2>
-        <p className="text-gray-600">
+        <h2 className="text-2xl font-bold text-white mb-2">Choose Your Appointment Time</h2>
+        <p className="text-neutral-400">
           Select a date and time that works best for your {selectedService?.name} session
         </p>
       </div>
@@ -175,8 +178,8 @@ export function BookingCalendar({
           <Card>
             <CardHeader>
               <div className="flex items-center justify-between">
-                <CardTitle className="flex items-center space-x-2">
-                  <Calendar className="w-5 h-5" />
+                <CardTitle className="flex items-center space-x-2 text-white">
+                  <Calendar className="w-5 h-5 text-white" />
                   <span>Select Date</span>
                 </CardTitle>
                 <div className="flex space-x-2">
@@ -214,6 +217,7 @@ export function BookingCalendar({
                 dayMaxEvents={true}
                 weekends={true}
                 select={handleDateSelect}
+                dateClick={handleDateSelect} // Add dateClick for mobile compatibility
                 validRange={{
                   start: new Date().toISOString().split("T")[0], // No past dates
                 }}
@@ -237,14 +241,18 @@ export function BookingCalendar({
                 eventDisplay="block"
                 dayHeaderFormat={{ weekday: 'short' }}
                 titleFormat={{ year: 'numeric', month: 'short' }}
-                // Enable mobile touch interactions
-                longPressDelay={300}
-                eventLongPressDelay={300}
-                selectLongPressDelay={300}
+                // Enhanced mobile touch interactions
+                longPressDelay={0} // Disable long press to make single taps work better
+                eventLongPressDelay={0}
+                selectLongPressDelay={0}
+                unselectAuto={false} // Keep selection when clicking elsewhere
                 // Better mobile responsiveness
                 aspectRatio={typeof window !== 'undefined' && window.innerWidth < 768 ? 1.0 : 1.35}
                 contentHeight="auto"
                 handleWindowResize={true}
+                // Additional mobile touch improvements
+                selectAllow={() => true} // Always allow selection
+                selectOverlap={false} // Prevent overlapping selections
               />
             </CardContent>
           </Card>
@@ -253,8 +261,8 @@ export function BookingCalendar({
           {selectedDate && (
             <Card className="mt-4">
               <CardHeader>
-                <CardTitle className="flex items-center space-x-2">
-                  <Clock className="w-5 h-5" />
+                <CardTitle className="flex items-center space-x-2 text-white">
+                  <Clock className="w-5 h-5 text-white" />
                   <span>Available Times</span>
                 </CardTitle>
                 <CardDescription>
@@ -308,7 +316,7 @@ export function BookingCalendar({
           {/* Booking summary */}
           <Card>
             <CardHeader>
-              <CardTitle>Booking Summary</CardTitle>
+              <CardTitle className="text-white">Booking Summary</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div>
@@ -354,8 +362,8 @@ export function BookingCalendar({
           {/* Add-ons */}
           <Card>
             <CardHeader>
-              <CardTitle className="flex items-center space-x-2">
-                <Plus className="w-5 h-5" />
+              <CardTitle className="flex items-center space-x-2 text-white">
+                <Plus className="w-5 h-5 text-white" />
                 <span>Add-ons</span>
               </CardTitle>
               <CardDescription>Customize your experience</CardDescription>
@@ -489,7 +497,7 @@ export function BookingCalendar({
           {/* Special instructions */}
           <Card>
             <CardHeader>
-              <CardTitle>Special Instructions</CardTitle>
+              <CardTitle className="text-white">Special Instructions</CardTitle>
             </CardHeader>
             <CardContent>
               <Textarea

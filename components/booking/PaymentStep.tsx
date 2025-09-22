@@ -213,8 +213,8 @@ export function PaymentStep({
   return (
     <div className="space-y-6">
       <div className="text-center">
-        <h2 className="text-2xl font-bold text-gray-900 mb-2">Complete Your Booking</h2>
-        <p className="text-gray-600">Review your details and complete payment</p>
+        <h2 className="text-2xl font-bold text-white mb-2">Complete Your Booking</h2>
+        <p className="text-neutral-400">Review your details and complete payment</p>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 pb-20 md:pb-6">
@@ -222,7 +222,7 @@ export function PaymentStep({
         <div className="space-y-4">
           <Card>
             <CardHeader>
-              <CardTitle>Booking Summary</CardTitle>
+              <CardTitle className="text-white">Booking Summary</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               {/* Service */}
@@ -284,7 +284,7 @@ export function PaymentStep({
           {/* Payment method selection */}
           <Card>
             <CardHeader>
-              <CardTitle>Payment Options</CardTitle>
+              <CardTitle className="text-white">Payment Options</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="grid grid-cols-1 gap-3">
@@ -292,8 +292,8 @@ export function PaymentStep({
                   className={cn(
                     "border-2 rounded-lg p-4 cursor-pointer transition-all min-h-[60px] touch-manipulation",
                     paymentMethod === "card"
-                      ? "border-blue-500 bg-blue-50"
-                      : "border-gray-200 hover:border-gray-300"
+                      ? "border-neutral-600 bg-neutral-800 text-white"
+                      : "border-neutral-700 hover:border-neutral-600 bg-neutral-900 text-white"
                   )}
                   onClick={() => setPaymentMethod("card")}
                 >
@@ -301,17 +301,17 @@ export function PaymentStep({
                     <div
                       className={cn(
                         "w-4 h-4 rounded-full border-2",
-                        paymentMethod === "card" ? "border-blue-500 bg-blue-500" : "border-gray-300"
+                        paymentMethod === "card" ? "border-white bg-white" : "border-neutral-500"
                       )}
                     >
                       {paymentMethod === "card" && (
-                        <div className="w-2 h-2 bg-white rounded-full mx-auto mt-0.5" />
+                        <div className="w-2 h-2 bg-black rounded-full mx-auto mt-0.5" />
                       )}
                     </div>
                     <CreditCard className="w-5 h-5 text-gray-600" />
                     <div>
-                      <p className="font-medium">Pay per session</p>
-                      <p className="text-sm text-gray-600">One-time payment</p>
+                      <p className="font-medium text-white">Pay per session</p>
+                      <p className="text-sm text-neutral-400">One-time payment</p>
                     </div>
                   </div>
                 </div>
@@ -320,8 +320,8 @@ export function PaymentStep({
                   className={cn(
                     "border-2 rounded-lg p-4 cursor-pointer transition-all min-h-[60px] touch-manipulation",
                     paymentMethod === "subscription"
-                      ? "border-blue-500 bg-blue-50"
-                      : "border-gray-200 hover:border-gray-300"
+                      ? "border-neutral-600 bg-neutral-800 text-white"
+                      : "border-neutral-700 hover:border-neutral-600 bg-neutral-900 text-white"
                   )}
                   onClick={() => setPaymentMethod("subscription")}
                 >
@@ -330,18 +330,18 @@ export function PaymentStep({
                       className={cn(
                         "w-4 h-4 rounded-full border-2",
                         paymentMethod === "subscription"
-                          ? "border-blue-500 bg-blue-500"
-                          : "border-gray-300"
+                          ? "border-white bg-white"
+                          : "border-neutral-500"
                       )}
                     >
                       {paymentMethod === "subscription" && (
-                        <div className="w-2 h-2 bg-white rounded-full mx-auto mt-0.5" />
+                        <div className="w-2 h-2 bg-black rounded-full mx-auto mt-0.5" />
                       )}
                     </div>
                     <Badge className="bg-green-100 text-green-800">Save 20%</Badge>
                     <div>
-                      <p className="font-medium">Monthly membership</p>
-                      <p className="text-sm text-gray-600">4 sessions per month</p>
+                      <p className="font-medium text-white">Monthly membership</p>
+                      <p className="text-sm text-neutral-400">4 sessions per month</p>
                     </div>
                   </div>
                 </div>
@@ -355,8 +355,8 @@ export function PaymentStep({
           {/* Pricing breakdown */}
           <Card>
             <CardHeader>
-              <CardTitle className="flex items-center space-x-2">
-                <DollarSign className="w-5 h-5" />
+              <CardTitle className="flex items-center space-x-2 text-white">
+                <DollarSign className="w-5 h-5 text-white" />
                 <span>Pricing Breakdown</span>
               </CardTitle>
             </CardHeader>
@@ -473,8 +473,8 @@ export function PaymentStep({
           {/* Payment form */}
           <Card>
             <CardHeader>
-              <CardTitle className="flex items-center space-x-2">
-                <Lock className="w-5 h-5" />
+              <CardTitle className="flex items-center space-x-2 text-white">
+                <Lock className="w-5 h-5 text-white" />
                 <span>Secure Payment</span>
               </CardTitle>
               <CardDescription>Your payment information is encrypted and secure</CardDescription>

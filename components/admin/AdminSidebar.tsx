@@ -63,7 +63,7 @@ export function AdminSidebar({ admin }: AdminSidebarProps) {
     { name: "Orders", href: "/admin/orders", icon: ShoppingCart },
     { name: "Reviews", href: "/admin/reviews", icon: Star },
     { name: "Referrals", href: "/admin/referrals", icon: UserPlus },
-    { name: "Analytics", href: "/admin/analytics", icon: PieChart },
+    // { name: "Analytics", href: "/admin/analytics", icon: PieChart }, // Disabled - not implemented
     { name: "Notifications", href: "/admin/notifications", icon: Bell },
     { name: "Service Areas", href: "/admin/service-areas", icon: MapPin },
     { name: "Email Templates", href: "/admin/email-templates", icon: Mail },

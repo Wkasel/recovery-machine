@@ -8,10 +8,10 @@ export async function POST(
   { params }: { params: Promise<{ userId: string }> }
 ) {
   try {
-    const { admin } = await requireAdminAccess("admin"); // Require admin level for credit adjustments
+    await requireAdminAccess(request, "admin"); // Require admin level for credit adjustments
     const resolvedParams = await params;
     const userId = resolvedParams.userId;
-    const supabase = createServerSupabaseClient();
+    const supabase = await createServerSupabaseClient();
     // userId already defined above
 
     const { amount, reason } = await request.json();
@@ -46,7 +46,7 @@ export async function POST(
         user_id: userId,
         amount,
         transaction_type: "manual_adjustment",
-        description: `${reason} (by admin: ${admin.email})`,
+        description: `${reason} (by admin)`,
       })
       .select()
       .single();

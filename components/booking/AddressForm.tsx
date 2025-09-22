@@ -265,7 +265,7 @@ export function AddressForm({
           <Card className="bg-black border border-neutral-800">
             <CardHeader>
               <CardTitle className="flex items-center space-x-2 text-white">
-                <DollarSign className="w-5 h-5 text-brand" />
+                <DollarSign className="w-5 h-5 text-white" />
                 <span>Setup Fee Calculation</span>
               </CardTitle>
               <CardDescription className="text-neutral-400">One-time fee for equipment delivery and setup</CardDescription>
@@ -293,13 +293,13 @@ export function AddressForm({
 
                 <div className="space-y-2">
                   <div className="flex items-center space-x-2">
-                    <MapPin className="w-4 h-4 text-brand" />
+                    <MapPin className="w-4 h-4 text-white" />
                     <span className="text-sm text-neutral-400">
                       Distance: {setupFee.distance} miles
                     </span>
                   </div>
                   <div className="flex items-center space-x-2">
-                    <Clock className="w-4 h-4 text-brand" />
+                    <Clock className="w-4 h-4 text-white" />
                     <span className="text-sm text-neutral-400">
                       Est. travel time: {setupFee.estimatedTravelTime} min
                     </span>
@@ -324,7 +324,7 @@ export function AddressForm({
         <Card className="bg-black border border-neutral-800">
           <CardContent className="py-4">
             <div className="flex items-start space-x-3">
-              <MapPin className="w-5 h-5 text-brand mt-0.5" />
+              <MapPin className="w-5 h-5 text-white mt-0.5" />
               <div>
                 <h3 className="font-medium text-white">Service Area</h3>
                 <p className="text-sm text-neutral-400">

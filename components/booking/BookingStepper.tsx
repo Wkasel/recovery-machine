@@ -69,7 +69,7 @@ export function BookingStepper({ currentStep, completedSteps, onStepClick }: Boo
                     <div
                       className={cn(
                         "flex-1 h-0.5 mx-2",
-                        isCompleted || index <= currentStepIndex ? "bg-brand" : "bg-neutral-800"
+                        isCompleted || index <= currentStepIndex ? "bg-white" : "bg-neutral-800"
                       )}
                     />
                   )}
@@ -82,12 +82,12 @@ export function BookingStepper({ currentStep, completedSteps, onStepClick }: Boo
                     className={cn(
                       "flex items-center justify-center w-10 h-10 rounded-full border-2 transition-all duration-200",
                       isCompleted
-                        ? "bg-brand border-brand text-black"
+                        ? "bg-white border-white text-black"
                         : isCurrent
-                          ? "border-brand bg-white text-brand ring-4 ring-brand/20"
+                          ? "border-white bg-white text-black ring-4 ring-white/20"
                           : "border-neutral-700 bg-black text-neutral-500",
                       isClickable && !isCompleted && !isCurrent
-                        ? "hover:border-brand hover:text-brand cursor-pointer"
+                        ? "hover:border-white hover:text-black cursor-pointer"
                         : !isClickable
                           ? "cursor-not-allowed"
                           : "cursor-pointer"
@@ -105,7 +105,7 @@ export function BookingStepper({ currentStep, completedSteps, onStepClick }: Boo
                     <div
                       className={cn(
                         "flex-1 h-0.5 mx-2",
-                        isCompleted || index < currentStepIndex ? "bg-brand" : "bg-neutral-800"
+                        isCompleted || index < currentStepIndex ? "bg-white" : "bg-neutral-800"
                       )}
                     />
                   )}
@@ -116,12 +116,12 @@ export function BookingStepper({ currentStep, completedSteps, onStepClick }: Boo
                   <p
                     className={cn(
                       "text-sm font-medium",
-                      isCurrent ? "text-blue-600" : isCompleted ? "text-gray-900" : "text-gray-500"
+                      isCurrent ? "text-white" : isCompleted ? "text-white" : "text-neutral-500"
                     )}
                   >
                     {step.name}
                   </p>
-                  <p className="text-xs text-gray-500 mt-1">{step.description}</p>
+                  <p className="text-xs text-neutral-400 mt-1">{step.description}</p>
                 </div>
               </li>
             );

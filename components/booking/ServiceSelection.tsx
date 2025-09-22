@@ -73,7 +73,7 @@ export function ServiceSelection({
               )}
 
               <CardHeader className="pb-4">
-                <CardTitle className="text-xl font-semibold">{service.name}</CardTitle>
+                <CardTitle className="text-xl font-semibold text-white">{service.name}</CardTitle>
                 <CardDescription className="text-sm text-neutral-400">
                   {service.description}
                 </CardDescription>
