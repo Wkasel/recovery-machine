@@ -9,6 +9,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Address, ServiceType, SetupFeeCalculation, services } from "@/lib/types/booking";
+import { User } from "@supabase/supabase-js";
 import { cn } from "@/lib/utils";
 import { 
   validateDevPromoCode, 
@@ -37,8 +38,9 @@ interface PaymentStepProps {
   setupFee: SetupFeeCalculation;
   addOns: { extraVisits: number; familyMembers: number; extendedTime: number };
   specialInstructions?: string;
-  onPayment: () => void;
+  onPayment: (guestData?: { email: string; phone: string }) => void;
   onBack: () => void;
+  user?: User | null;
 }
 
 export function PaymentStep({
@@ -50,6 +52,7 @@ export function PaymentStep({
   specialInstructions,
   onPayment,
   onBack,
+  user,
 }: PaymentStepProps) {
   const [isProcessingPayment, setIsProcessingPayment] = useState(false);
   const [termsAccepted, setTermsAccepted] = useState(false);
@@ -57,6 +60,12 @@ export function PaymentStep({
   const [promoDiscount, setPromoDiscount] = useState(0);
   const [promoApplied, setPromoApplied] = useState(false);
   const [shouldBypassPayment, setShouldBypassPayment] = useState(false);
+
+  // Guest booking fields
+  const [guestEmail, setGuestEmail] = useState("");
+  const [guestPhone, setGuestPhone] = useState("");
+
+  const isGuestBooking = !user;
   const [paymentMethod, setPaymentMethod] = useState<"card" | "subscription">("card");
   
   const isDevMode = isDevelopmentEnvironment();
@@ -146,6 +155,27 @@ export function PaymentStep({
   };
 
   const handlePayment = async () => {
+    // Validate guest fields for non-authenticated users
+    if (isGuestBooking) {
+      if (!guestEmail || !guestPhone) {
+        toast.error("Please enter your email and phone number to continue.");
+        return;
+      }
+      
+      // Basic email validation
+      if (!guestEmail.includes("@")) {
+        toast.error("Please enter a valid email address.");
+        return;
+      }
+      
+      // Basic phone validation (at least 10 digits)
+      const phoneDigits = guestPhone.replace(/\D/g, '');
+      if (phoneDigits.length < 10) {
+        toast.error("Please enter a valid phone number.");
+        return;
+      }
+    }
+
     setIsProcessingPayment(true);
 
     try {
@@ -182,7 +212,7 @@ export function PaymentStep({
         
         if (result.success) {
           toast.success("Booking confirmed with dev bypass!");
-          onPayment();
+          onPayment(isGuestBooking ? { email: guestEmail, phone: guestPhone } : undefined);
           return;
         } else {
           throw new Error(result.error || "Dev payment bypass failed");
@@ -199,7 +229,7 @@ export function PaymentStep({
       // 4. Redirect to confirmation page
 
       toast.success("Payment processed successfully!");
-      onPayment();
+      onPayment(isGuestBooking ? { email: guestEmail, phone: guestPhone } : undefined);
     } catch (error) {
       console.error("Payment failed:", error);
       toast.error(error instanceof Error ? error.message : "Payment failed");
@@ -469,6 +499,48 @@ export function PaymentStep({
               )}
             </CardContent>
           </Card>
+
+          {/* Guest Information - only show for non-authenticated users */}
+          {isGuestBooking && (
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-white">Contact Information</CardTitle>
+                <CardDescription>We'll create an account for you to manage your bookings</CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div>
+                  <Label htmlFor="guest-email" className="text-white">Email Address *</Label>
+                  <Input
+                    id="guest-email"
+                    type="email"
+                    value={guestEmail}
+                    onChange={(e) => setGuestEmail(e.target.value)}
+                    placeholder="your.email@example.com"
+                    className="bg-neutral-800 border-neutral-600 text-white"
+                    required
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="guest-phone" className="text-white">Phone Number *</Label>
+                  <Input
+                    id="guest-phone"
+                    type="tel"
+                    value={guestPhone}
+                    onChange={(e) => setGuestPhone(e.target.value)}
+                    placeholder="(555) 123-4567"
+                    className="bg-neutral-800 border-neutral-600 text-white"
+                    required
+                  />
+                </div>
+                <div className="bg-blue-950 border border-blue-800 p-3 rounded-md">
+                  <p className="text-sm text-blue-200">
+                    <strong>New to Recovery Machine?</strong> We'll automatically create an account for you 
+                    with this email so you can track your bookings and earn referral credits.
+                  </p>
+                </div>
+              </CardContent>
+            </Card>
+          )}
 
           {/* Payment form */}
           <Card>

@@ -147,7 +147,7 @@ export default function BookingPage(): React.ReactElement {
     return basePrice + setupFee + addOnsCost;
   };
 
-  const handlePayment = async () => {
+  const handlePayment = async (guestData?: { email: string; phone: string }) => {
     if (!bookingState.serviceType || !bookingState.dateTime || !bookingState.address) {
       toast({
         title: "Missing Information",
@@ -157,11 +157,8 @@ export default function BookingPage(): React.ReactElement {
       return;
     }
 
-    // Redirect to login if not authenticated
-    if (!user) {
-      router.push("/auth/login?redirect=/book");
-      return;
-    }
+    // No auth check - allow guest bookings
+    // Email will be collected in payment step for auto-account creation
 
     setIsLoading(true);
 
@@ -181,6 +178,11 @@ export default function BookingPage(): React.ReactElement {
         setupFee: bookingState.setupFee?.totalSetupFee || 0,
         orderType: "one_time" as const,
         termsAccepted: true,
+        // Include guest booking info if no user
+        guestBooking: !user,
+        userEmail: user?.email || null,
+        guestEmail: guestData?.email || null,
+        guestPhone: guestData?.phone || null,
       };
 
       // Call our bookings API to create the booking and order
@@ -200,29 +202,34 @@ export default function BookingPage(): React.ReactElement {
       const result = await response.json();
       
       if (result.success) {
-        // Convert API response to UI format
-        const confirmedBooking: DatabaseBooking = {
-          id: result.booking.id,
-          user_id: result.booking.user_id,
-          order_id: result.booking.order_id,
-          date_time: result.booking.date_time,
-          duration: result.booking.duration,
-          add_ons: result.booking.add_ons,
-          status: result.booking.status,
-          location_address: result.booking.location_address,
-          special_instructions: result.booking.special_instructions,
-          created_at: result.booking.created_at,
-          updated_at: result.booking.updated_at,
-        };
-
-        setFinalBooking(confirmedBooking);
-        markStepCompleted("payment");
-        moveToStep("confirmation");
-
         toast({
           title: "Booking Confirmed!",
-          description: "Your recovery session has been booked successfully.",
+          description: "Redirecting to your confirmation page...",
         });
+
+        // Redirect to public confirmation page with token
+        if (result.confirmationUrl) {
+          window.location.href = result.confirmationUrl;
+        } else {
+          // Fallback to old confirmation step if no URL
+          const confirmedBooking: DatabaseBooking = {
+            id: result.booking.id,
+            user_id: result.booking.user_id,
+            order_id: result.booking.order_id,
+            date_time: result.booking.date_time,
+            duration: result.booking.duration,
+            add_ons: result.booking.add_ons,
+            status: result.booking.status,
+            location_address: result.booking.address || result.booking.location_address,
+            special_instructions: result.booking.notes || result.booking.special_instructions,
+            created_at: result.booking.created_at,
+            updated_at: result.booking.updated_at,
+          };
+
+          setFinalBooking(confirmedBooking);
+          markStepCompleted("payment");
+          moveToStep("confirmation");
+        }
       } else {
         throw new Error(result.error || "Failed to create booking");
       }
@@ -378,30 +385,7 @@ export default function BookingPage(): React.ReactElement {
             bookingState.serviceType &&
             bookingState.dateTime &&
             bookingState.address &&
-            bookingState.setupFee &&
-            (!user ? (
-              <div className="text-center space-y-6">
-                <h2 className="text-2xl font-bold text-white mb-2">
-                  Sign In to Complete Booking
-                </h2>
-                <p className="text-neutral-400 mb-6">
-                  Please sign in or create an account to complete your booking and payment.
-                </p>
-                <div className="space-y-4">
-                  <Button asChild className="w-full" size="lg">
-                    <Link href="/auth/login?redirect=/book">Sign In</Link>
-                  </Button>
-                  <Button asChild variant="outline" className="w-full" size="lg">
-                    <Link href="/auth/register?redirect=/book">Create Account</Link>
-                  </Button>
-                </div>
-                <div className="flex justify-between pt-6">
-                  <Button variant="outline" onClick={() => moveToStep("calendar")} size="lg">
-                    Back to Calendar
-                  </Button>
-                </div>
-              </div>
-            ) : (
+            bookingState.setupFee && (
               <PaymentStep
                 serviceType={bookingState.serviceType}
                 dateTime={bookingState.dateTime}
@@ -413,8 +397,9 @@ export default function BookingPage(): React.ReactElement {
                 specialInstructions={bookingState.specialInstructions}
                 onPayment={handlePayment}
                 onBack={() => moveToStep("calendar")}
+                user={user} // Pass user to show email field for guests
               />
-            ))}
+            )}
 
           {currentStep === "confirmation" && finalBooking && (
             <BookingConfirmation

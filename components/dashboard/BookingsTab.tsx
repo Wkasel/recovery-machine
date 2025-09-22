@@ -255,7 +255,7 @@ export function BookingsTab({ user, onRefresh }: BookingsTabProps) {
               const canReschedule = canRescheduleBooking(booking);
 
               return (
-                <Card key={booking.id} className="border-l-4 border-l-blue-500">
+                <Card key={booking.id} className="border-l-4 border-l-neutral-600">
                   <CardContent className="p-6">
                     <div className="flex items-start justify-between">
                       <div className="space-y-3 flex-1">

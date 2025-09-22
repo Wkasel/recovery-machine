@@ -150,10 +150,10 @@ export default function ProfilePage() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-black flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading your dashboard...</p>
+          <p className="text-neutral-400">Loading your dashboard...</p>
         </div>
       </div>
     );
@@ -161,11 +161,11 @@ export default function ProfilePage() {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
+      <div className="min-h-screen bg-black flex items-center justify-center p-4">
         <div className="max-w-md w-full">
-          <Alert className="border-red-200 bg-red-50">
+          <Alert className="border-red-500 bg-red-950">
             <AlertCircle className="h-4 w-4" />
-            <AlertDescription className="text-red-800">{error}</AlertDescription>
+            <AlertDescription className="text-red-200">{error}</AlertDescription>
           </Alert>
           <div className="mt-4 flex space-x-4">
             <Button onClick={() => window.location.reload()} className="flex-1">

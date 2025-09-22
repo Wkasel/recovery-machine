@@ -235,10 +235,10 @@ export function Overview({ user, profileData, onRefresh }: OverviewProps) {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-gray-300">Upcoming Sessions</p>
-                <p className="text-2xl font-bold text-blue-600">{stats?.upcomingBookings || 0}</p>
+                <p className="text-2xl font-bold text-neutral-100">{stats?.upcomingBookings || 0}</p>
               </div>
-              <div className="h-12 w-12 bg-blue-100 rounded-lg flex items-center justify-center">
-                <Calendar className="h-6 w-6 text-blue-600" />
+              <div className="h-12 w-12 bg-neutral-800 rounded-lg flex items-center justify-center">
+                <Calendar className="h-6 w-6 text-neutral-300" />
               </div>
             </div>
           </CardContent>

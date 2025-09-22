@@ -95,13 +95,11 @@ export function createDevPaymentRecord(
   }
 
   return {
-    id: `dev_order_${Date.now()}_${Math.random().toString(36).substring(7)}`,
     user_id: userId,
     bolt_checkout_id: `dev_checkout_${Date.now()}`,
     amount: amount,
     setup_fee_applied: setupFee,
     status: 'paid' as const,
-    order_type: 'one_time' as const,
     metadata: {
       dev_bypass: true,
       created_with: 'dev-bypass-system',

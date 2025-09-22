@@ -11,8 +11,6 @@ import {
 
 export async function POST(request: NextRequest) {
   try {
-    // Note: isDevelopmentEnvironment() returns true for production (temporarily enabled for testing)
-
     const body = await request.json();
     const { promoCode, bookingData, setupFee } = body;
 
@@ -33,91 +31,51 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const supabase = await createServerSupabaseClient();
+    console.log('🔧 DEV MODE: Payment bypass activated with code:', promoCode);
 
-    // Get the authenticated user
-    const { data: { user }, error: authError } = await supabase.auth.getUser();
-    
-    if (authError || !user) {
+    // For dev bypass, route through the working /api/bookings endpoint
+    // This ensures we use the same logic and avoid RLS issues
+    const bookingRequest = {
+      serviceType: bookingData.serviceType || "recovery_session",
+      dateTime: bookingData.dateTime,
+      duration: bookingData.duration,
+      address: bookingData.address,
+      addOns: bookingData.addOns,
+      specialInstructions: bookingData.specialInstructions,
+      amount: 0, // Free with dev bypass
+      setupFee: 0, // Free with dev bypass
+      orderType: "one_time"
+    };
+
+    // Create a new request for the bookings API
+    const bookingResponse = await fetch(`${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3001'}/api/bookings`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Cookie': request.headers.get('Cookie') || '', // Forward auth cookies
+      },
+      body: JSON.stringify(bookingRequest)
+    });
+
+    if (!bookingResponse.ok) {
+      const errorData = await bookingResponse.json();
+      console.error("Booking API error:", errorData);
       return NextResponse.json(
-        { error: "Authentication required" },
-        { status: 401 }
-      );
-    }
-
-    // Calculate amounts (all $0 with 100% discount)
-    const servicePrice = bookingData.servicePrice || 0;
-    const addOnsPrice = bookingData.addOnsPrice || 0;
-    const totalServiceAmount = servicePrice + addOnsPrice;
-    const setupFeeAmount = setupFee || 0;
-    
-    // Apply 100% discount
-    const discountedServiceAmount = 0;
-    const discountedSetupFee = 0;
-    const finalAmount = discountedServiceAmount + discountedSetupFee;
-
-    // Create the order record
-    const orderData = createDevPaymentRecord(
-      user.id,
-      finalAmount,
-      discountedSetupFee
-    );
-
-    // Validate order data before insertion
-    validateOrderCreation(orderData);
-
-    const { data: order, error: orderError } = await supabase
-      .from("orders")
-      .insert([orderData])
-      .select()
-      .single();
-
-    if (orderError) {
-      console.error("Error creating dev order:", orderError);
-      return NextResponse.json(
-        { error: "Failed to create order" },
+        { error: errorData.error || "Failed to create booking" },
         { status: 500 }
       );
     }
 
-    // Create the booking record
-    const { data: booking, error: bookingError } = await supabase
-      .from("bookings")
-      .insert([
-        {
-          user_id: user.id,
-          order_id: order.id,
-          date_time: bookingData.dateTime,
-          duration: bookingData.duration,
-          add_ons: bookingData.addOns,
-          location_address: bookingData.address,
-          special_instructions: bookingData.specialInstructions,
-          status: "confirmed", // Immediately confirmed since "payment" succeeded
-        },
-      ])
-      .select()
-      .single();
-
-    if (bookingError) {
-      console.error("Error creating booking:", bookingError);
-      return NextResponse.json(
-        { error: "Failed to create booking" },
-        { status: 500 }
-      );
-    }
+    const bookingResult = await bookingResponse.json();
 
     console.log('🔧 DEV MODE: Successfully created booking with payment bypass');
 
     return NextResponse.json({
-      success: true,
-      order: order,
-      booking: booking,
+      ...bookingResult,
       paymentBypass: true,
       devMode: true,
-      originalAmount: totalServiceAmount + setupFeeAmount,
-      finalAmount: finalAmount,
       discount: promoResult.discount,
-      message: `Booking confirmed with ${promoResult.description}`
+      message: `Booking confirmed with ${promoResult.description}`,
     });
 
   } catch (error) {

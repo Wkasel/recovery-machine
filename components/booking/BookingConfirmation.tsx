@@ -6,7 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Address, DatabaseBooking, services } from "@/lib/types/booking";
-import { Calendar, Check, Clock, Mail, MapPin, Phone, Plus, Share2, Users } from "lucide-react";
+import { AlertCircle, Calendar, Check, Clock, Mail, MapPin, Phone, Plus, Share2, Users } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 
@@ -45,8 +45,20 @@ export function BookingConfirmation({
     };
   };
 
-  const formatAddress = (addr: Address) => {
-    return `${addr.street}, ${addr.city}, ${addr.state} ${addr.zipCode}`;
+  const formatAddress = (addr: any) => {
+    if (!addr) return "Address not available";
+    
+    // Handle different address formats
+    if (typeof addr === 'string') return addr;
+    
+    // Handle object format
+    const street = addr.street || addr.address || addr.line1 || '';
+    const city = addr.city || '';
+    const state = addr.state || addr.region || '';
+    const zipCode = addr.zipCode || addr.zip || addr.postal_code || '';
+    
+    const parts = [street, city, `${state} ${zipCode}`.trim()].filter(Boolean);
+    return parts.join(', ');
   };
 
   const formatPrice = (priceInCents: number) => {
@@ -162,13 +174,13 @@ export function BookingConfirmation({
           <CardContent className="space-y-4">
             <div>
               <p className="font-medium">Delivery Address</p>
-              <p className="text-gray-600">{formatAddress(booking.location_address)}</p>
+              <p className="text-gray-600">{formatAddress(booking.address)}</p>
             </div>
 
-            {booking.special_instructions && (
+            {booking.notes && (
               <div>
                 <p className="text-sm text-gray-600">Special Instructions</p>
-                <p className="text-sm bg-gray-50 p-3 rounded-lg">{booking.special_instructions}</p>
+                <p className="text-sm bg-gray-50 p-3 rounded-lg">{booking.notes}</p>
               </div>
             )}
 

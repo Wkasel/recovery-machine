@@ -35,10 +35,11 @@ export interface Booking {
   order_id: string | null;
   date_time: string; // TIMESTAMPTZ
   duration: number; // minutes, default 30
+  service_type: string; // Required NOT NULL field
   add_ons: Record<string, any>; // JSONB: {extra_visits: 2, family: true, sauna_time: 15}
   status: "scheduled" | "confirmed" | "in_progress" | "completed" | "cancelled" | "no_show";
-  location_address: Record<string, any>; // JSONB for delivery address
-  special_instructions: string | null;
+  address: Record<string, any>; // JSONB for delivery address
+  notes: string | null; // Column is 'notes' not 'special_instructions'
   created_at: string;
   updated_at: string;
 }

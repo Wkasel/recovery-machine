@@ -119,7 +119,7 @@ export function DashboardLayout({
               <div className="flex items-center space-x-3">
                 <Avatar className="h-8 w-8">
                   <AvatarImage src={user.user_metadata?.avatar_url} />
-                  <AvatarFallback className="bg-blue-900 text-blue-100">
+                  <AvatarFallback className="bg-neutral-800 text-neutral-100">
                     {getUserInitials()}
                   </AvatarFallback>
                 </Avatar>

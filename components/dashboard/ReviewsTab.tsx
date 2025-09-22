@@ -259,10 +259,10 @@ export function ReviewsTab({ user }: ReviewsTabProps) {
 
       {/* Pending Reviews */}
       {pendingBookings.length > 0 && (
-        <Card className="border-blue-200 bg-blue-50">
+        <Card className="border-neutral-600 bg-neutral-900">
           <CardHeader>
-            <CardTitle className="text-blue-900">Pending Reviews</CardTitle>
-            <CardDescription className="text-blue-700">
+            <CardTitle className="text-neutral-100">Pending Reviews</CardTitle>
+            <CardDescription className="text-neutral-300">
               Help others by sharing your experience with these completed sessions
             </CardDescription>
           </CardHeader>
@@ -409,7 +409,7 @@ export function ReviewsTab({ user }: ReviewsTabProps) {
                 value={reviewerName}
                 onChange={(e) => setReviewerName(e.target.value)}
                 placeholder="Your name for the review"
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full px-3 py-2 border border-neutral-600 bg-neutral-800 text-neutral-100 rounded-md focus:outline-none focus:ring-2 focus:ring-neutral-500 focus:border-transparent"
               />
             </div>
 
