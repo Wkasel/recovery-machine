@@ -85,7 +85,6 @@ export async function POST(request: NextRequest) {
     const bookingDuration = Math.max(1, duration || 30);
     
     // Check for overlapping bookings for this user
-    const serviceRoleClient = createServiceRoleClient();
     const startTime = new Date(dateTime);
     const endTime = new Date(startTime.getTime() + bookingDuration * 60000);
     
