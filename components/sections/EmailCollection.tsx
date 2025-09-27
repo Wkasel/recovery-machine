@@ -113,8 +113,8 @@ export default function EmailCollection() {
 
             {/* Form */}
             <div>
-              <Card className="shadow-2xl">
-                <CardContent className="p-8">
+              <Card className="shadow-2xl bg-white">
+                <CardContent className="p-8 bg-white">
                   <div className="text-center mb-6">
                     <Mail className="w-12 h-12 text-blue-600 mx-auto mb-4" />
                     <h3 className="text-2xl font-bold text-gray-900 mb-2">Get Early Access</h3>

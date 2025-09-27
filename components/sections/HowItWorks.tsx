@@ -59,9 +59,9 @@ export default function HowItWorks() {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl relative">
         {/* Header */}
         <div className="text-center mb-20">
-          <div className="inline-flex items-center gap-2 bg-muted px-4 py-2 border border-border text-sm font-semibold mb-6">
-            <Sparkles className="h-4 w-4 text-primary" />
-            <span className="text-muted-foreground">Simple Process</span>
+          <div className="inline-flex items-center gap-2 bg-black px-4 py-2 border border-neutral-800 text-sm font-semibold mb-6">
+            <Sparkles className="h-4 w-4 text-white" />
+            <span className="text-white">Simple Process</span>
           </div>
           <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-foreground mb-6 tracking-tight">How It Works</h2>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
@@ -103,15 +103,15 @@ export default function HowItWorks() {
                   </div>
 
                   {/* Duration Badge */}
-                  <div className="absolute -top-3 -left-3 flex items-center gap-1 bg-muted border border-border px-2 py-1">
-                    <Clock className="h-3 w-3 text-primary" />
-                    <span className="text-xs font-medium text-muted-foreground">{step.duration}</span>
+                  <div className="absolute -top-3 -left-3 flex items-center gap-1 bg-black border border-neutral-800 px-2 py-1">
+                    <Clock className="h-3 w-3 text-white" />
+                    <span className="text-xs font-medium text-white">{step.duration}</span>
                   </div>
 
                   <div className="text-center pt-6">
                     {/* Icon */}
-                    <div className="inline-flex items-center justify-center w-16 h-16 bg-muted border border-border mb-6 mx-auto">
-                      <IconComponent className="w-8 h-8 text-primary" />
+                    <div className="inline-flex items-center justify-center w-16 h-16 bg-black border border-neutral-800 mb-6 mx-auto">
+                      <IconComponent className="w-8 h-8 text-white" />
                     </div>
 
                     <h3 className="text-lg font-bold text-foreground mb-4">{step.title}</h3>
