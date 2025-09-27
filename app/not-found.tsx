@@ -1,15 +1,5 @@
-import { Metadata } from "next";
 import Link from "next/link";
 import { Home, ArrowLeft } from "lucide-react";
-
-export const metadata: Metadata = {
-  title: "Page Not Found - Recovery Machine",
-  description: "The page you're looking for doesn't exist. Return to Recovery Machine home.",
-  robots: {
-    index: false,
-    follow: false,
-  },
-};
 
 export default function NotFound() {
   return (
@@ -32,13 +22,13 @@ export default function NotFound() {
               <Home className="h-4 w-4" />
               Go Home
             </Link>
-            <button
-              onClick={() => window.history.back()}
+            <Link
+              href="/"
               className="inline-flex items-center justify-center gap-2 bg-neutral-900 border border-neutral-800 text-white px-6 py-3 hover:bg-neutral-800 transition-colors font-medium"
             >
               <ArrowLeft className="h-4 w-4" />
               Go Back
-            </button>
+            </Link>
           </div>
         </div>
 
