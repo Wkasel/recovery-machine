@@ -1,4 +1,4 @@
-import { Pricing } from "@/components/sections/Pricing";
+import Pricing from "@/components/sections/Pricing";
 import { Metadata } from "next";
 import Link from "next/link";
 
@@ -30,7 +30,7 @@ export const metadata: Metadata = {
   },
 };
 
-export default function PricingPage() {
+export default function PricingPage(): JSX.Element {
   return (
     <div className="min-h-screen bg-background text-foreground">
       <div className="container mx-auto px-4 py-8">
