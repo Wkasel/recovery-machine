@@ -47,6 +47,14 @@ const steps = [
 
 export default function HowItWorks() {
   const [activeStep, setActiveStep] = useState(0);
+  const [email, setEmail] = useState("");
+  const [email2, setEmail2] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading2, setIsLoading2] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isSubmitted2, setIsSubmitted2] = useState(false);
+  const [error, setError] = useState("");
+  const [error2, setError2] = useState("");
   const sectionRef = useRef<HTMLElement>(null);
   const sectionId = "how-it-works";
 
@@ -56,6 +64,82 @@ export default function HowItWorks() {
     }, 3000);
     return () => clearInterval(interval);
   }, []);
+
+  const handleEmailSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!email) return;
+
+    setIsLoading(true);
+    setError("");
+
+    try {
+      const response = await fetch("/api/newsletter/subscribe", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email,
+          source: "how_it_works_header",
+          metadata: {
+            section: "how-it-works",
+            position: "header",
+          },
+        }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        setIsSubmitted(true);
+        setEmail("");
+      } else {
+        setError(data.error || "Something went wrong. Please try again.");
+      }
+    } catch (error) {
+      setError("Something went wrong. Please try again.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleEmailSubmit2 = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!email2) return;
+
+    setIsLoading2(true);
+    setError2("");
+
+    try {
+      const response = await fetch("/api/newsletter/subscribe", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: email2,
+          source: "how_it_works_footer",
+          metadata: {
+            section: "how-it-works",
+            position: "footer",
+          },
+        }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        setIsSubmitted2(true);
+        setEmail2("");
+      } else {
+        setError2(data.error || "Something went wrong. Please try again.");
+      }
+    } catch (error) {
+      setError2("Something went wrong. Please try again.");
+    } finally {
+      setIsLoading2(false);
+    }
+  };
 
   return (
     <section ref={sectionRef} id={sectionId} className="py-24 lg:py-32 bg-muted/30">
@@ -73,21 +157,42 @@ export default function HowItWorks() {
           
           {/* Email Collection CTA */}
           <div className="flex justify-center">
-            <div className="flex flex-col sm:flex-row gap-4 items-center">
-              <input
-                type="email"
-                placeholder="Enter your email for updates"
-                className="h-14 px-6 text-lg bg-background border-2 border-primary/20 rounded-lg focus:border-primary focus:outline-none transition-colors min-w-[300px]"
-                required
-              />
-              <Button
-                size="lg"
-                className="bg-primary text-primary-foreground hover:bg-primary/90 font-bold text-xl px-12 py-6 h-14 shadow-xl"
-              >
-                <span className="mr-3">Get Early Access</span>
-                <ArrowRight className="w-6 h-6" />
-              </Button>
-            </div>
+            {isSubmitted ? (
+              <div className="text-center p-6 bg-primary/10 border border-primary/20 rounded-lg">
+                <div className="text-primary mb-2">✓ Success!</div>
+                <p className="text-foreground">
+                  Thanks for joining! We'll keep you updated on our launch.
+                </p>
+              </div>
+            ) : (
+              <form onSubmit={handleEmailSubmit} className="flex flex-col sm:flex-row gap-4 items-center">
+                <input
+                  type="email"
+                  placeholder="Enter your email for updates"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="h-14 px-6 text-lg bg-background border-2 border-primary/20 rounded-lg focus:border-primary focus:outline-none transition-colors min-w-[300px]"
+                  required
+                  disabled={isLoading}
+                />
+                <Button
+                  type="submit"
+                  size="lg"
+                  disabled={isLoading || !email}
+                  className="bg-primary text-primary-foreground hover:bg-primary/90 font-bold text-xl px-12 py-6 h-14 shadow-xl"
+                >
+                  {isLoading ? (
+                    <div className="w-5 h-5 border-2 border-primary-foreground/30 border-t-primary-foreground rounded-full animate-spin"></div>
+                  ) : (
+                    <>
+                      <span className="mr-3">Get Early Access</span>
+                      <ArrowRight className="w-6 h-6" />
+                    </>
+                  )}
+                </Button>
+                {error && <p className="text-destructive text-sm mt-2">{error}</p>}
+              </form>
+            )}
           </div>
         </div>
 
@@ -242,21 +347,42 @@ export default function HowItWorks() {
           <p className="text-xl text-neutral-400 mb-8 max-w-2xl mx-auto">
             Be the first to experience professional mobile recovery in Orange County and Los Angeles. Get early access and exclusive offers.
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 items-center justify-center max-w-md mx-auto">
-            <input
-              type="email"
-              placeholder="Enter your email"
-              className="h-14 px-6 text-lg bg-white text-black border-2 border-white rounded-lg focus:outline-none transition-colors flex-1 min-w-[250px]"
-              required
-            />
-            <Button
-              size="lg"
-              className="bg-white text-black hover:bg-gray-100 font-bold text-xl px-8 py-6 h-14"
-            >
-              <span className="mr-3">Join Waitlist</span>
-              <ArrowRight className="w-6 h-6" />
-            </Button>
-          </div>
+          {isSubmitted2 ? (
+            <div className="text-center p-6 bg-green-900/20 border border-green-800 rounded-lg max-w-md mx-auto">
+              <div className="text-green-400 mb-2">✓ Success!</div>
+              <p className="text-white">
+                You're on the waitlist! We'll contact you when we launch.
+              </p>
+            </div>
+          ) : (
+            <form onSubmit={handleEmailSubmit2} className="flex flex-col sm:flex-row gap-4 items-center justify-center max-w-md mx-auto">
+              <input
+                type="email"
+                placeholder="Enter your email"
+                value={email2}
+                onChange={(e) => setEmail2(e.target.value)}
+                className="h-14 px-6 text-lg bg-white text-black border-2 border-white rounded-lg focus:outline-none transition-colors flex-1 min-w-[250px]"
+                required
+                disabled={isLoading2}
+              />
+              <Button
+                type="submit"
+                size="lg"
+                disabled={isLoading2 || !email2}
+                className="bg-white text-black hover:bg-gray-100 font-bold text-xl px-8 py-6 h-14"
+              >
+                {isLoading2 ? (
+                  <div className="w-5 h-5 border-2 border-black/30 border-t-black rounded-full animate-spin"></div>
+                ) : (
+                  <>
+                    <span className="mr-3">Join Waitlist</span>
+                    <ArrowRight className="w-6 h-6" />
+                  </>
+                )}
+              </Button>
+              {error2 && <p className="text-red-400 text-sm mt-2">{error2}</p>}
+            </form>
+          )}
         </div>
       </div>
     </section>

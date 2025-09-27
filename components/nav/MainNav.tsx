@@ -156,24 +156,6 @@ export function MainNav({ items = navigationConfig.mainNav, children, user }: Ma
                 </Link>
               ))}
 
-              {!user && (
-                <div className="pt-4 mt-4 border-t space-y-2">
-                  <Link
-                    href="/sign-in"
-                    onClick={() => setOpen(false)}
-                    className="block px-3 py-2 rounded-md text-base font-medium transition-colors hover:bg-accent hover:text-accent-foreground"
-                  >
-                    Sign in
-                  </Link>
-                  <Link
-                    href="/sign-up"
-                    onClick={() => setOpen(false)}
-                    className="block px-3 py-2 rounded-md text-base font-medium bg-primary text-primary-foreground hover:bg-primary/90"
-                  >
-                    Get Started
-                  </Link>
-                </div>
-              )}
             </div>
           </SheetContent>
         </Sheet>

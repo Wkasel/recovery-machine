@@ -22,29 +22,33 @@ export default function EmailCollection() {
     try {
       const supabase = createBrowserSupabaseClient();
 
-      // Insert email into the database
-      const { error: insertError } = await supabase.from("email_subscribers").insert([
-        {
+      // Use the API route instead of direct Supabase call
+      const response = await fetch("/api/newsletter/subscribe", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
           email: email,
           source: "homepage_cta",
-          subscribed_at: new Date().toISOString(),
-          tags: ["homepage", "early_access"],
-        },
-      ]);
+          metadata: {
+            tags: ["homepage", "early_access"],
+          },
+        }),
+      });
 
-      if (insertError) {
-        throw insertError;
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || "Failed to subscribe");
       }
+
 
       setIsSubmitted(true);
       setEmail("");
     } catch (err: any) {
       console.error("Email subscription error:", err);
-      if (err.code === "23505") {
-        setError("This email is already subscribed!");
-      } else {
-        setError("Something went wrong. Please try again.");
-      }
+      setError(err.message || "Something went wrong. Please try again.");
     } finally {
       setIsLoading(false);
     }
