@@ -1,6 +1,6 @@
 // @ts-nocheck
 import { boltClient } from "@/lib/bolt/client";
-import { createServiceSupabaseClient } from "@/lib/supabase/service";
+import { createServiceRoleClient } from "@/lib/supabase/service-role";
 import { NextRequest, NextResponse } from "next/server";
 
 // Webhook event types from Bolt
@@ -37,7 +37,7 @@ export async function POST(request: NextRequest) {
     console.log("Bolt webhook received:", event.event_type, event.data);
 
     // Initialize Supabase service client (bypasses RLS for webhook processing)
-    const supabase = createServiceSupabaseClient();
+    const supabase = createServiceRoleClient();
 
     switch (event.event_type) {
       case "checkout.completed":
