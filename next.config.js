@@ -91,6 +91,18 @@ const nextConfig = (phase) => {
           source: '/api/(.*)',
           headers: [
             {
+              key: 'Access-Control-Allow-Origin',
+              value: '*'
+            },
+            {
+              key: 'Access-Control-Allow-Methods',
+              value: 'GET, POST, PUT, DELETE, OPTIONS'
+            },
+            {
+              key: 'Access-Control-Allow-Headers',
+              value: 'Content-Type, Authorization'
+            },
+            {
               key: 'Cache-Control',
               value: 'public, max-age=0, s-maxage=86400, stale-while-revalidate'
             }

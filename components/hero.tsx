@@ -113,7 +113,7 @@ export default function Hero() {
                 <form onSubmit={handleEmailSubmit} className="flex flex-col gap-4">
                   <input
                     type="email"
-                    placeholder="Enter your email to book a session"
+                    placeholder="Enter your email for updates"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     className="h-14 px-6 text-lg bg-background border-2 border-primary/20 rounded-lg focus:border-primary focus:outline-none transition-colors"
@@ -130,7 +130,7 @@ export default function Hero() {
                       <div className="w-5 h-5 border-2 border-primary-foreground/30 border-t-primary-foreground rounded-full animate-spin"></div>
                     ) : (
                       <>
-                        <span className="mr-3">Book Session</span>
+                        <span className="mr-3">Get Updates</span>
                         <ArrowRight className="h-5 w-5" />
                       </>
                     )}

@@ -83,10 +83,10 @@ export default function AboutPage() {
               plunge and infrared sauna therapy without leaving your home.
             </p>
             <Link
-              href="/book"
+              href="/contact"
               className="inline-block bg-primary text-primary-foreground px-8 py-3 hover:bg-primary/90 transition-colors rounded-md"
             >
-              Book Your First Session
+              Contact Us
             </Link>
           </section>
         </div>

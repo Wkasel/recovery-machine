@@ -38,10 +38,10 @@ export default function BlogPage() {
                 About Us
               </Link>
               <Link
-                href="/book"
+                href="/contact"
                 className="bg-neutral-900 border border-neutral-800 text-white px-6 py-2 hover:bg-neutral-800 transition-colors"
               >
-                Book Session
+                Contact Us
               </Link>
             </div>
           </div>

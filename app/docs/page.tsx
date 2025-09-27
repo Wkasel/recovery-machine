@@ -35,8 +35,8 @@ export default function DocsPage() {
                   </Link>
                 </li>
                 <li>
-                  <Link href="/book" className="text-neutral-300 hover:text-white">
-                    Book Your First Session
+                  <Link href="/contact" className="text-neutral-300 hover:text-white">
+                    Contact Us
                   </Link>
                 </li>
               </ul>
@@ -97,10 +97,10 @@ export default function DocsPage() {
             Experience professional recovery therapy at your location
           </p>
           <Link
-            href="/book"
+            href="/contact"
             className="inline-block bg-neutral-900 border border-neutral-800 text-white px-8 py-3 hover:bg-neutral-800 transition-colors"
           >
-            Book Your Session
+            Contact Us
           </Link>
         </div>
       </div>
