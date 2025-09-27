@@ -8,8 +8,8 @@ export async function updateSession(request: NextRequest) {
   });
 
   const supabase = createServerClient<Database>(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    process.env.NEXT_PUBLIC_SUPABASE_URL,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
     {
       cookies: {
         getAll() {
@@ -47,7 +47,7 @@ export async function updateSession(request: NextRequest) {
     hasUser: !!user,
     userEmail: user?.email,
     authError: authError?.message,
-    cookies: request.cookies.getAll().map(c => ({ name: c.name, hasValue: !!c.value }))
+    cookies: request.cookies.getAll().map((c) => ({ name: c.name, hasValue: !!c.value })),
   });
 
   // Check if the current path is a public path
@@ -74,6 +74,7 @@ export async function updateSession(request: NextRequest) {
     // API routes that should be public
     request.nextUrl.pathname.startsWith("/api/og") ||
     request.nextUrl.pathname.startsWith("/api/sitemap") ||
+    request.nextUrl.pathname.startsWith("/api/newsletter") ||
     request.nextUrl.pathname.startsWith("/sitemap") ||
     request.nextUrl.pathname.startsWith("/robots");
 
