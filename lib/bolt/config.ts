@@ -34,15 +34,15 @@ export function getBoltConfig(): BoltConfig {
     merchantId: process.env.BOLT_MERCHANT_ID || "",
   };
 
-  // Validate required config in production
-  if (process.env.NODE_ENV === "production") {
-    const missing = Object.entries(config).filter(([key, value]) => !value);
-    if (missing.length > 0) {
-      throw new Error(`Missing Bolt configuration: ${missing.map(([key]) => key).join(", ")}`);
-    }
-  }
-
   return config;
+}
+
+// Validate Bolt configuration (call this only when actually using Bolt features)
+export function validateBoltConfig(config: BoltConfig): void {
+  const missing = Object.entries(config).filter(([key, value]) => !value);
+  if (missing.length > 0) {
+    throw new Error(`Missing Bolt configuration: ${missing.map(([key]) => key).join(", ")}`);
+  }
 }
 
 // Bolt API endpoints

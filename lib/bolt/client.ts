@@ -1,7 +1,7 @@
 // Bolt API client
 // Recovery Machine - Payment Processing
 
-import { getBoltConfig, type BoltOrderData } from "./config";
+import { getBoltConfig, validateBoltConfig, type BoltOrderData } from "./config";
 
 export class BoltClient {
   private config;
@@ -16,6 +16,9 @@ export class BoltClient {
   }
 
   private async makeRequest(endpoint: string, options: RequestInit = {}) {
+    // Validate config only when making actual API calls
+    validateBoltConfig(this.config);
+    
     const url = `${this.baseUrl}${endpoint}`;
 
     const response = await fetch(url, {
