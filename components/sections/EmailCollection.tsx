@@ -1,11 +1,12 @@
 "use client";
 
 import { createBrowserSupabaseClient } from "@/lib/supabase/client";
-import { ArrowRight, CheckCircle, Gift, Mail } from "lucide-react";
+import { ArrowRight, CheckCircle, Gift, Mail, Calendar } from "lucide-react";
 import { useState } from "react";
 import { Button } from "../ui/button";
 import { Card, CardContent } from "../ui/card";
 import { Input } from "../ui/input";
+import Link from "next/link";
 
 export default function EmailCollection() {
   const [email, setEmail] = useState("");
@@ -50,10 +51,10 @@ export default function EmailCollection() {
   };
 
   const benefits = [
-    "Exclusive early access to new services",
-    "Special pricing and member-only discounts",
-    "Recovery tips from certified specialists",
-    "Priority booking for high-demand times",
+    "Priority booking for popular time slots",
+    "Member-only pricing and exclusive discounts",
+    "Weekly recovery tips from certified specialists", 
+    "First access to new recovery services",
   ];
 
   if (isSubmitted) {
@@ -65,13 +66,24 @@ export default function EmailCollection() {
               <CheckCircle className="w-16 h-16 text-green-500 mx-auto mb-6" />
               <h2 className="text-3xl font-bold text-gray-900 mb-4">You're In!</h2>
               <p className="text-xl text-gray-600 mb-6">
-                Welcome to Recovery Machine. Check your email for exclusive early access details.
+                Welcome to Recovery Machine! You're all set to receive recovery tips and member perks.
               </p>
-              <div className="bg-green-100 rounded-lg p-4">
-                <p className="text-green-800 font-medium">
-                  🎉 You'll receive your welcome guide and special pricing within the next few
-                  minutes.
-                </p>
+              <div className="space-y-4">
+                <div className="bg-green-50 dark:bg-green-950 border border-green-200 dark:border-green-800 rounded-lg p-4">
+                  <p className="text-green-800 dark:text-green-200 font-medium">
+                    🎉 You'll receive your welcome guide and special pricing within the next few minutes.
+                  </p>
+                </div>
+                <Button
+                  asChild
+                  size="lg"
+                  className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold"
+                >
+                  <Link href="/book" className="flex items-center justify-center">
+                    <Calendar className="w-5 h-5 mr-2" />
+                    Book Your First Session
+                  </Link>
+                </Button>
               </div>
             </CardContent>
           </Card>
@@ -89,17 +101,31 @@ export default function EmailCollection() {
             <div>
               <div className="flex items-center mb-6">
                 <Gift className="w-8 h-8 text-yellow-400 mr-3" />
-                <span className="bg-yellow-400 text-gray-900 px-3 py-1 rounded-full text-sm font-semibold">
-                  Early Access Offer
+                <span className="bg-green-400 dark:bg-green-600 text-gray-900 dark:text-green-50 px-3 py-1 rounded-full text-sm font-semibold">
+                  Now Available
                 </span>
               </div>
 
-              <h2 className="text-4xl md:text-5xl font-bold mb-6">Join the Recovery Revolution</h2>
+              <h2 className="text-4xl md:text-5xl font-bold mb-6">Ready to Book Your Recovery?</h2>
 
               <p className="text-xl opacity-90 mb-8">
-                Be among the first to experience mobile recovery services in your area. Get
-                exclusive access and special launch pricing.
+                Mobile cold plunge and infrared sauna sessions are now available! Book your session today or join our newsletter for weekly tips and member perks.
               </p>
+
+              {/* Primary Booking CTA */}
+              <div className="mb-8">
+                <Button
+                  asChild
+                  size="lg"
+                  className="bg-white text-blue-600 hover:bg-gray-100 font-bold text-lg px-8 py-4 h-auto"
+                >
+                  <Link href="/book" className="flex items-center">
+                    <Calendar className="w-6 h-6 mr-3" />
+                    Book Your Session Now
+                    <ArrowRight className="w-5 h-5 ml-2" />
+                  </Link>
+                </Button>
+              </div>
 
               <div className="space-y-4">
                 {benefits.map((benefit, index) => (
@@ -113,13 +139,13 @@ export default function EmailCollection() {
 
             {/* Form */}
             <div>
-              <Card className="shadow-2xl">
-                <CardContent className="p-8">
+              <Card className="shadow-2xl bg-white">
+                <CardContent className="p-8 bg-white">
                   <div className="text-center mb-6">
                     <Mail className="w-12 h-12 text-blue-600 mx-auto mb-4" />
-                    <h3 className="text-2xl font-bold text-gray-900 mb-2">Get Early Access</h3>
+                    <h3 className="text-2xl font-bold text-gray-900 mb-2">Join Our Newsletter</h3>
                     <p className="text-gray-600">
-                      Join our waitlist and be first to know when we launch in your area.
+                      Get weekly recovery tips, member-only discounts, and priority booking.
                     </p>
                   </div>
 
@@ -150,7 +176,7 @@ export default function EmailCollection() {
                         </div>
                       ) : (
                         <div className="flex items-center">
-                          Get Early Access
+                          Join Newsletter
                           <ArrowRight className="w-5 h-5 ml-2" />
                         </div>
                       )}

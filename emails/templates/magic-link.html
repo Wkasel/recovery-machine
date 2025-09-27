@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your magic link - Recovery Machine</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #f9fafb;
+        }
+        .email-container {
+            background: white;
+            margin: 20px;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .header {
+            background: linear-gradient(135deg, #7c3aed, #5b21b6);
+            color: white;
+            padding: 30px 20px;
+            text-align: center;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 28px;
+            font-weight: 600;
+        }
+        .content {
+            padding: 30px 20px;
+        }
+        .magic-link-box {
+            background: #f3f4f6;
+            border: 2px solid #7c3aed;
+            border-radius: 8px;
+            padding: 25px;
+            margin: 25px 0;
+            text-align: center;
+        }
+        .magic-link-box h3 {
+            margin-top: 0;
+            color: #5b21b6;
+            font-size: 24px;
+        }
+        .cta-button {
+            display: inline-block;
+            background: #7c3aed;
+            color: white;
+            text-decoration: none;
+            padding: 16px 32px;
+            border-radius: 8px;
+            font-weight: 600;
+            margin: 20px 0;
+            transition: background 0.3s;
+            font-size: 18px;
+        }
+        .cta-button:hover {
+            background: #5b21b6;
+        }
+        .footer {
+            background: #f8fafc;
+            padding: 20px;
+            text-align: center;
+            color: #6b7280;
+            font-size: 14px;
+        }
+        .security-note {
+            background: #fef3c7;
+            border: 1px solid #f59e0b;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 20px 0;
+            font-size: 14px;
+        }
+        .backup-link {
+            background: #f3f4f6;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 20px 0;
+            word-break: break-all;
+            font-family: monospace;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <div class="email-container">
+        <div class="header">
+            <h1>🪄 Your Magic Link</h1>
+            <p style="margin: 10px 0 0 0; opacity: 0.9;">Quick and secure sign-in</p>
+        </div>
+        
+        <div class="content">
+            <h2>Hi {{ .Email }},</h2>
+            
+            <p>You requested a magic link to sign in to your Recovery Machine account. Click the button below to securely access your dashboard without entering a password.</p>
+            
+            <div class="magic-link-box">
+                <h3>✨ Sign In Instantly</h3>
+                <p>One click. No password needed.</p>
+                
+                <a href="{{ .ConfirmationURL }}" class="cta-button">
+                    Sign Me In
+                </a>
+                
+                <p style="font-size: 14px; color: #6b7280; margin-top: 15px;">
+                    This link expires in 1 hour for your security.
+                </p>
+            </div>
+            
+            <h3>🔐 What You'll Access</h3>
+            <ul>
+                <li>📅 <strong>Book & manage sessions</strong> - Schedule your next recovery appointment</li>
+                <li>📊 <strong>Recovery dashboard</strong> - Track your wellness progress</li>
+                <li>💳 <strong>Billing & payments</strong> - Manage your membership and payments</li>
+                <li>🎁 <strong>Referral program</strong> - Earn credits for inviting friends</li>
+                <li>⚙️ <strong>Account settings</strong> - Update preferences and contact info</li>
+            </ul>
+            
+            <div class="security-note">
+                <strong>🔒 Security Note:</strong> This magic link was requested for {{ .Email }}. If you didn't request this sign-in link, you can safely ignore this email. Your account remains secure.
+            </div>
+            
+            <h3>🚫 Can't click the button?</h3>
+            <p>Copy and paste this link into your browser:</p>
+            <div class="backup-link">
+                {{ .ConfirmationURL }}
+            </div>
+            
+            <h3>💡 Why Magic Links?</h3>
+            <p>Magic links are a secure, password-free way to access your account. Benefits include:</p>
+            <ul>
+                <li>🛡️ <strong>Enhanced security</strong> - No password to remember or compromise</li>
+                <li>⚡ <strong>Quick access</strong> - One click from your trusted email</li>
+                <li>📱 <strong>Mobile friendly</strong> - Perfect for accessing on any device</li>
+                <li>🔒 <strong>Time-limited</strong> - Links expire automatically for safety</li>
+            </ul>
+            
+            <h3>❓ Need Help?</h3>
+            <p>Having trouble signing in? Our support team is ready to assist:</p>
+            
+            <p>📞 <strong>Phone:</strong> <a href="tel:+1-XXX-XXX-XXXX">+1-XXX-XXX-XXXX</a><br>
+            📧 <strong>Email:</strong> <a href="mailto:support@therecoverymachine.com">support@therecoverymachine.com</a><br>
+            💬 <strong>Live Chat:</strong> Available on our website 9AM-6PM PST</p>
+        </div>
+        
+        <div class="footer">
+            <p>Recovery Machine • Mobile Wellness Services<br>
+            Professional recovery delivered to your door</p>
+            
+            <p style="font-size: 12px; margin-top: 20px;">
+                This magic link was requested from IP address {{ .IPAddress }}.<br>
+                <a href="{{ .SiteURL }}/privacy">Privacy Policy</a> • 
+                <a href="{{ .SiteURL }}/contact">Contact Support</a>
+            </p>
+        </div>
+    </div>
+</body>
+</html>

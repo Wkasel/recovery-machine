@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How was your session? - Recovery Machine</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #f9fafb;
+        }
+        .email-container {
+            background: white;
+            margin: 20px;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .header {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            color: white;
+            padding: 30px 20px;
+            text-align: center;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 28px;
+            font-weight: 600;
+        }
+        .content {
+            padding: 30px 20px;
+        }
+        .feedback-box {
+            background: #fef3c7;
+            border: 2px solid #f59e0b;
+            border-radius: 8px;
+            padding: 25px;
+            margin: 25px 0;
+            text-align: center;
+        }
+        .feedback-box h3 {
+            margin-top: 0;
+            color: #92400e;
+            font-size: 24px;
+        }
+        .rating-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+        .rating-button {
+            display: inline-block;
+            padding: 15px 20px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            min-width: 80px;
+            text-align: center;
+        }
+        .rating-excellent {
+            background: #10b981;
+            color: white;
+        }
+        .rating-excellent:hover {
+            background: #059669;
+        }
+        .rating-good {
+            background: #3b82f6;
+            color: white;
+        }
+        .rating-good:hover {
+            background: #2563eb;
+        }
+        .rating-okay {
+            background: #f59e0b;
+            color: white;
+        }
+        .rating-okay:hover {
+            background: #d97706;
+        }
+        .rating-poor {
+            background: #ef4444;
+            color: white;
+        }
+        .rating-poor:hover {
+            background: #dc2626;
+        }
+        .session-recap {
+            background: #f0f9ff;
+            border: 1px solid #0ea5e9;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        .detail-row:last-child {
+            border-bottom: none;
+        }
+        .detail-label {
+            color: #374151;
+            font-weight: 500;
+        }
+        .detail-value {
+            font-weight: 600;
+            color: #111827;
+        }
+        .benefits-experienced {
+            background: #f0fdf4;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        .benefits-experienced h3 {
+            margin-top: 0;
+            color: #166534;
+        }
+        .benefits-list {
+            list-style: none;
+            padding: 0;
+        }
+        .benefits-list li {
+            padding: 5px 0;
+            position: relative;
+            padding-left: 25px;
+        }
+        .benefits-list li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #16a34a;
+            font-weight: bold;
+        }
+        .cta-button {
+            display: inline-block;
+            background: #f59e0b;
+            color: white;
+            text-decoration: none;
+            padding: 14px 28px;
+            border-radius: 8px;
+            font-weight: 600;
+            margin: 10px;
+            transition: background 0.3s;
+        }
+        .cta-button:hover {
+            background: #d97706;
+        }
+        .cta-button.secondary {
+            background: transparent;
+            color: #f59e0b;
+            border: 2px solid #f59e0b;
+        }
+        .cta-button.secondary:hover {
+            background: #f59e0b;
+            color: white;
+        }
+        .footer {
+            background: #f8fafc;
+            padding: 20px;
+            text-align: center;
+            color: #6b7280;
+            font-size: 14px;
+        }
+        .next-session {
+            background: #dbeafe;
+            border: 1px solid #3b82f6;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        .social-share {
+            background: #f3f4f6;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="email-container">
+        <div class="header">
+            <h1>🌟 How was your session?</h1>
+            <p style="margin: 10px 0 0 0; opacity: 0.9;">We'd love to hear about your recovery experience</p>
+        </div>
+        
+        <div class="content">
+            <h2>Hi {{ .CustomerName }},</h2>
+            
+            <p>Thank you for choosing Recovery Machine! We hope you had an amazing recovery session with our mobile cold plunge and infrared sauna service.</p>
+            
+            <div class="feedback-box">
+                <h3>⭐ Rate Your Experience</h3>
+                <p>How would you rate your session today?</p>
+                
+                <div class="rating-buttons">
+                    <a href="{{ .SiteURL }}/feedback/{{ .BookingID }}?rating=5" class="rating-button rating-excellent">
+                        😍<br>Excellent
+                    </a>
+                    <a href="{{ .SiteURL }}/feedback/{{ .BookingID }}?rating=4" class="rating-button rating-good">
+                        😊<br>Good
+                    </a>
+                    <a href="{{ .SiteURL }}/feedback/{{ .BookingID }}?rating=3" class="rating-button rating-okay">
+                        😐<br>Okay
+                    </a>
+                    <a href="{{ .SiteURL }}/feedback/{{ .BookingID }}?rating=2" class="rating-button rating-poor">
+                        😞<br>Poor
+                    </a>
+                </div>
+                
+                <p style="font-size: 14px; color: #6b7280; margin-top: 15px;">
+                    Click any rating above to leave detailed feedback
+                </p>
+            </div>
+            
+            <div class="session-recap">
+                <h3 style="margin-top: 0; color: #0ea5e9;">📋 Today's Session</h3>
+                
+                <div class="detail-row">
+                    <span class="detail-label">Date & Time:</span>
+                    <span class="detail-value">{{ .SessionDateTime }}</span>
+                </div>
+                
+                <div class="detail-row">
+                    <span class="detail-label">Service:</span>
+                    <span class="detail-value">{{ .ServiceType }}</span>
+                </div>
+                
+                <div class="detail-row">
+                    <span class="detail-label">Duration:</span>
+                    <span class="detail-value">{{ .Duration }} minutes</span>
+                </div>
+                
+                <div class="detail-row">
+                    <span class="detail-label">Specialist:</span>
+                    <span class="detail-value">{{ .SpecialistName }}</span>
+                </div>
+            </div>
+            
+            <div class="benefits-experienced">
+                <h3>🧊 Recovery Benefits You Just Experienced</h3>
+                <ul class="benefits-list">
+                    <li><strong>Enhanced muscle recovery</strong> - Cold therapy reduces inflammation</li>
+                    <li><strong>Improved circulation</strong> - Heat/cold contrast boosts blood flow</li>
+                    <li><strong>Stress reduction</strong> - Activates parasympathetic nervous system</li>
+                    <li><strong>Better sleep quality</strong> - Session benefits continue tonight</li>
+                    <li><strong>Mental clarity</strong> - Cold exposure releases endorphins</li>
+                    <li><strong>Detoxification</strong> - Infrared sauna eliminates toxins</li>
+                </ul>
+            </div>
+            
+            <h3>💡 Maximize Your Recovery</h3>
+            <p>To get the most from today's session:</p>
+            <ul>
+                <li>🚰 <strong>Stay hydrated</strong> - Drink plenty of water for the next 24 hours</li>
+                <li>🛌 <strong>Rest well tonight</strong> - Your body will continue healing while you sleep</li>
+                <li>🍎 <strong>Eat nutritious foods</strong> - Support your recovery with quality nutrition</li>
+                <li>📱 <strong>Track how you feel</strong> - Notice improvements in energy and recovery</li>
+            </ul>
+            
+            <div class="next-session">
+                <h3 style="margin-top: 0; color: #1e40af;">📅 Ready for Your Next Session?</h3>
+                <p>Consistent recovery sessions provide compound benefits. Book your next appointment to maintain momentum!</p>
+                
+                <div style="margin: 20px 0;">
+                    <a href="{{ .SiteURL }}/book?utm_source=feedback_email&utm_campaign=repeat_booking" class="cta-button">
+                        Book Next Session
+                    </a>
+                    {{if not .IsSubscriber}}
+                    <a href="{{ .SiteURL }}/pricing?utm_source=feedback_email&utm_campaign=membership" class="cta-button secondary">
+                        Join Membership (Save 75%)
+                    </a>
+                    {{end}}
+                </div>
+            </div>
+            
+            <div class="social-share">
+                <h3 style="margin-top: 0;">📸 Share Your Experience</h3>
+                <p>Love what you experienced? Share it with friends and help spread the wellness!</p>
+                
+                <div style="margin: 15px 0;">
+                    <a href="https://www.instagram.com/therecoverymachine" style="margin: 0 10px; text-decoration: none;">📷 Instagram</a>
+                    <a href="https://twitter.com/intent/tweet?text=Just had an amazing recovery session with @RecoveryMachine! Mobile cold plunge and infrared sauna delivered right to my door. 🧊🔥" style="margin: 0 10px; text-decoration: none;">🐦 Twitter</a>
+                </div>
+                
+                <p style="font-size: 14px; color: #6b7280;">
+                    Tag us @therecoverymachine for a chance to be featured!
+                </p>
+            </div>
+            
+            <h3>🤝 Refer Friends & Earn Rewards</h3>
+            <p>Know someone who could benefit from mobile recovery? Refer them and both of you save!</p>
+            <ul>
+                <li>💰 <strong>$50 credit</strong> for you when they book their first session</li>
+                <li>💰 <strong>$50 discount</strong> for your friend on their first booking</li>
+                <li>🎯 <strong>Unlimited referrals</strong> - earn credits for every friend</li>
+            </ul>
+            
+            <div style="text-align: center; margin: 25px 0;">
+                <a href="{{ .SiteURL }}/referrals?utm_source=feedback_email" class="cta-button">
+                    Refer Friends & Earn $50
+                </a>
+            </div>
+            
+            <p><strong>Questions or concerns?</strong> We're here to help! Reply to this email or contact us:</p>
+            <p>📞 <strong>Phone:</strong> <a href="tel:+1-XXX-XXX-XXXX">+1-XXX-XXX-XXXX</a><br>
+            📧 <strong>Email:</strong> <a href="mailto:hello@therecoverymachine.com">hello@therecoverymachine.com</a></p>
+        </div>
+        
+        <div class="footer">
+            <p>Recovery Machine • Mobile Wellness Services<br>
+            Thank you for choosing professional mobile recovery!</p>
+            
+            <p style="font-size: 12px; margin-top: 20px;">
+                <a href="{{ .SiteURL }}/feedback/{{ .BookingID }}">Leave Detailed Feedback</a> • 
+                <a href="{{ .SiteURL }}/dashboard">Your Dashboard</a> • 
+                <a href="{{ .SiteURL }}/contact">Contact Us</a>
+            </p>
+        </div>
+    </div>
+</body>
+</html>

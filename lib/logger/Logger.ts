@@ -92,4 +92,35 @@ export class Logger {
   public error(message: string, metadata?: Partial<LogMetadata>, error?: Error): void {
     this.log("error", message, metadata, error);
   }
+
+  /**
+   * Static convenience methods for easy console.log replacement
+   */
+  public static info(message: string, metadata?: any): void {
+    if (process.env.NODE_ENV === 'development') {
+      console.log(`[INFO] ${message}`, metadata || '');
+    }
+    Logger.getInstance().info(message, metadata);
+  }
+
+  public static error(message: string, error?: any): void {
+    if (process.env.NODE_ENV === 'development') {
+      console.error(`[ERROR] ${message}`, error || '');
+    }
+    Logger.getInstance().error(message, { error });
+  }
+
+  public static warn(message: string, metadata?: any): void {
+    if (process.env.NODE_ENV === 'development') {
+      console.warn(`[WARN] ${message}`, metadata || '');
+    }
+    Logger.getInstance().warn(message, metadata);
+  }
+
+  public static debug(message: string, metadata?: any): void {
+    if (process.env.NODE_ENV === 'development') {
+      console.debug(`[DEBUG] ${message}`, metadata || '');
+    }
+    Logger.getInstance().debug(message, metadata);
+  }
 }

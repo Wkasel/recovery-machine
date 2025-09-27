@@ -83,19 +83,34 @@ const benefits = [
   },
 ];
 
-export function Pricing() {
+export default function Pricing() {
   return (
-    <section className="py-20 lg:py-32 bg-black">
+    <section className="py-20 lg:py-32 bg-muted/30">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
         {/* Section Header */}
         <div className="text-center mb-16">
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-6">
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-foreground mb-6">
             Simple, Transparent Pricing
           </h2>
-          <p className="text-lg sm:text-xl text-neutral-400 max-w-3xl mx-auto leading-relaxed">
+          <p className="text-lg sm:text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed mb-8">
             Professional recovery at a fraction of the cost. No hidden fees, no long-term contracts,
             maximum flexibility.
           </p>
+          
+          {/* Big Booking CTA */}
+          <div className="flex justify-center">
+            <Button
+              asChild
+              size="lg"
+              className="bg-primary text-primary-foreground hover:bg-primary/90 font-bold text-xl px-16 py-6 h-auto shadow-xl"
+            >
+              <Link href="/book" className="flex items-center">
+                <Calendar className="w-7 h-7 mr-4" />
+                Book Your Recovery Session
+                <ArrowRight className="w-6 h-6 ml-4" />
+              </Link>
+            </Button>
+          </div>
         </div>
 
         {/* Benefits Grid */}
@@ -167,11 +182,12 @@ export function Pricing() {
                 <Button
                   asChild
                   size="lg"
-                  className="w-full bg-neutral-900 border border-neutral-800 text-white hover:bg-neutral-800 text-lg font-semibold h-14"
+                  className="w-full bg-primary text-primary-foreground hover:bg-primary/90 text-xl font-bold h-16 shadow-lg"
                 >
                   <Link href="/book" className="inline-flex items-center justify-center">
+                    <Calendar className="mr-3 h-6 w-6" />
                     {plan.cta}
-                    <ArrowRight className="ml-2 h-5 w-5" />
+                    <ArrowRight className="ml-3 h-6 w-6" />
                   </Link>
                 </Button>
 
@@ -268,19 +284,24 @@ export function Pricing() {
         </div>
 
         {/* Final CTA */}
-        <div className="text-center mt-16">
+        <div className="text-center mt-16 bg-black border border-neutral-800 p-12">
+          <h3 className="text-3xl font-bold text-white mb-4">Ready to Transform Your Recovery?</h3>
+          <p className="text-xl text-neutral-400 mb-8 max-w-2xl mx-auto">
+            Join 500+ members who've transformed their recovery routine with mobile wellness services.
+          </p>
           <Button
             asChild
             size="lg"
-            className="bg-neutral-900 border border-neutral-800 text-white hover:bg-neutral-800 px-12 py-4 text-lg font-semibold"
+            className="bg-primary text-primary-foreground hover:bg-primary/90 font-bold text-xl px-16 py-6 h-auto shadow-xl"
           >
             <Link href="/book" className="inline-flex items-center">
-              Get Started Today
-              <ArrowRight className="ml-2 h-5 w-5" />
+              <Calendar className="mr-4 h-7 w-7" />
+              Start Your Recovery Journey
+              <ArrowRight className="ml-4 h-6 w-6" />
             </Link>
           </Button>
-          <p className="mt-4 text-neutral-500">
-            Join 500+ members who've transformed their recovery routine
+          <p className="mt-6 text-neutral-500">
+            Available 7 days a week • Orange County & Los Angeles
           </p>
         </div>
       </div>

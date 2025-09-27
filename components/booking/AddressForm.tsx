@@ -116,6 +116,11 @@ export function AddressForm({
       lng: place.geometry?.location?.lng(),
     };
 
+    // Update the autocomplete input value to show the selected address
+    if (inputRef.current && place.formatted_address) {
+      inputRef.current.value = place.formatted_address;
+    }
+
     // Update form values
     Object.entries(addressData).forEach(([key, value]) => {
       if (value) {
@@ -171,9 +176,6 @@ export function AddressForm({
               ref={inputRef}
               placeholder="Start typing your address..."
               className="pl-10 bg-neutral-900 border border-neutral-800 text-white placeholder:text-neutral-500"
-              onChange={(e) => {
-                setValue("street", e.target.value, { shouldValidate: true });
-              }}
             />
           </div>
           <p className="text-sm text-neutral-500">Start typing to see address suggestions</p>
