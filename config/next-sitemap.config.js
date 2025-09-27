@@ -1,6 +1,6 @@
 /** @type {import('next-sitemap').IConfig} */
 const config = {
-  siteUrl: process.env.SITE_URL || process.env.NEXT_PUBLIC_APP_URL || "https://therecoverymachine.com",
+  siteUrl: process.env.SITE_URL || process.env.NEXT_PUBLIC_APP_URL || "https://therecoverymachine.co",
   generateRobotsTxt: true,
   generateIndexSitemap: true,
   sitemapSize: 7000,
@@ -29,7 +29,7 @@ const config = {
     ],
     additionalSitemaps: [
       // Add any additional dynamic sitemaps here
-      `${process.env.SITE_URL || process.env.NEXT_PUBLIC_APP_URL || "https://therecoverymachine.com"}/server-sitemap.xml`,
+      `${process.env.SITE_URL || process.env.NEXT_PUBLIC_APP_URL || "https://therecoverymachine.co"}/server-sitemap.xml`,
     ],
   },
   // Transform function to customize each URL entry

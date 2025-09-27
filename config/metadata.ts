@@ -29,7 +29,7 @@ export const siteMetadata: SiteMetadata = {
   siteUrl:
     process.env.NEXT_PUBLIC_SITE_URL ||
     process.env.NEXT_PUBLIC_APP_URL ||
-    "https://therecoverymachine.com",
+    "https://therecoverymachine.co",
   locale: "en_US",
   type: "website",
   twitterHandle: "@therecoverymachine",
@@ -41,14 +41,14 @@ export const siteMetadata: SiteMetadata = {
     url:
       process.env.NEXT_PUBLIC_SITE_URL ||
       process.env.NEXT_PUBLIC_APP_URL ||
-      "https://therecoverymachine.com",
+      "https://therecoverymachine.co",
   },
   organization: {
     name: "The Recovery Machine",
     url:
       process.env.NEXT_PUBLIC_SITE_URL ||
       process.env.NEXT_PUBLIC_APP_URL ||
-      "https://therecoverymachine.com",
-    logo: "https://therecoverymachine.com/logo.png",
+      "https://therecoverymachine.co",
+    logo: "https://therecoverymachine.co/logo.png",
   },
 };

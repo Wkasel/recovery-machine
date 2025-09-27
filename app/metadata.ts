@@ -49,7 +49,7 @@ export const globalmetadata: Metadata = {
     },
   },
   alternates: {
-    canonical: process.env.NEXT_PUBLIC_APP_URL || "https://therecoverymachine.com",
+    canonical: process.env.NEXT_PUBLIC_APP_URL || "https://therecoverymachine.co",
     languages: {
       "en-US": "/en-US",
     },
