@@ -65,15 +65,13 @@ export default function Hero() {
 
           {/* Primary CTAs - Vercel Style Buttons */}
           <div className="flex flex-col sm:flex-row gap-6 justify-center items-center w-full">
-            <Button
-              asChild
-              className="bg-primary text-primary-foreground hover:bg-primary/90 text-xl font-semibold h-14 px-12 border-0 min-w-[200px]"
+            <Link 
+              href="/book" 
+              className="inline-flex items-center justify-center whitespace-nowrap font-bold transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 active:scale-95 bg-primary text-primary-foreground hover:bg-primary/90 hover:shadow-xl text-xl h-14 px-12 rounded-lg shadow-lg border-2 border-primary/20 min-w-[200px] transform hover:scale-105"
             >
-              <Link href="/book" className="flex items-center justify-center">
-                <span className="mr-3">Book Now</span>
-                <ArrowRight className="h-5 w-5" />
-              </Link>
-            </Button>
+              <span className="mr-3">Book Now</span>
+              <ArrowRight className="h-5 w-5" />
+            </Link>
             <Button
               onClick={scrollToHowItWorks}
               variant="outline"

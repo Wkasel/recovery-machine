@@ -9,9 +9,12 @@ import {
   Repeat,
   Sparkles,
   UserPlus,
+  Calendar,
 } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { Card } from "../ui/card";
+import { Button } from "../ui/button";
+import Link from "next/link";
 
 const steps = [
   {
@@ -64,9 +67,24 @@ export default function HowItWorks() {
             <span className="text-white">Simple Process</span>
           </div>
           <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-foreground mb-6 tracking-tight">How It Works</h2>
-          <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
+          <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed mb-8">
             Book → We arrive → You recover. Repeat weekly.
           </p>
+          
+          {/* Big Booking CTA */}
+          <div className="flex justify-center">
+            <Button
+              asChild
+              size="lg"
+              className="bg-primary text-primary-foreground hover:bg-primary/90 font-bold text-xl px-16 py-6 h-auto shadow-xl"
+            >
+              <Link href="/book" className="flex items-center">
+                <Calendar className="w-7 h-7 mr-4" />
+                Book Your Recovery Session
+                <ArrowRight className="w-6 h-6 ml-4" />
+              </Link>
+            </Button>
+          </div>
         </div>
 
         {/* Steps Grid - Fixed Dark Theme */}
@@ -212,6 +230,25 @@ export default function HowItWorks() {
               </p>
             </div>
           </div>
+        </div>
+
+        {/* Call to Action */}
+        <div className="text-center bg-black border border-neutral-800 p-12">
+          <h3 className="text-3xl font-bold text-white mb-4">Ready to Start Your Recovery Journey?</h3>
+          <p className="text-xl text-neutral-400 mb-8 max-w-2xl mx-auto">
+            Book your mobile recovery session today. Available 7 days a week in Orange County and Los Angeles.
+          </p>
+          <Button
+            asChild
+            size="lg"
+            className="bg-white text-black hover:bg-gray-100 font-bold text-xl px-12 py-6 h-auto"
+          >
+            <Link href="/book" className="flex items-center">
+              <Calendar className="w-6 h-6 mr-3" />
+              Book Your Session
+              <ArrowRight className="w-6 h-6 ml-3" />
+            </Link>
+          </Button>
         </div>
       </div>
     </section>
