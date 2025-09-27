@@ -44,10 +44,10 @@ export const navigationConfig = {
 
   footerNav: {
     services: [
-      { title: "Cold Plunge LA", href: "/cold-plunge-la" },
-      { title: "Infrared Sauna Delivery", href: "/infrared-sauna-delivery" },
-      { title: "Athletic Recovery", href: "/athletic-recovery" },
-      { title: "Corporate Wellness", href: "/corporate-wellness" },
+      { title: "Cold Plunge", href: "/services" },
+      { title: "Infrared Sauna", href: "/services" },
+      { title: "Athletic Recovery", href: "/services" },
+      { title: "Corporate Wellness", href: "/services" },
     ],
     locations: [
       { title: "Orange County", href: "/services#orange-county" },

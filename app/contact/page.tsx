@@ -86,18 +86,6 @@ export default function ContactPage() {
               </div>
             </section>
 
-            <section>
-              <h3 className="text-xl font-bold mb-4">Quick Start</h3>
-              <p className="text-muted-foreground mb-4">
-                Ready to experience professional recovery at home? Book your first session today.
-              </p>
-              <Link
-                href="/book"
-                className="inline-block bg-neutral-900 border border-neutral-800 text-white px-6 py-3 hover:bg-neutral-800 transition-colors"
-              >
-                Book Session
-              </Link>
-            </section>
           </div>
 
           <div className="space-y-8">
