@@ -1,4 +1,4 @@
-import { Clock, Mail, MapPin, Phone } from "lucide-react";
+import { Clock, Instagram, MapPin } from "lucide-react";
 import { Metadata } from "next";
 import Link from "next/link";
 
@@ -49,21 +49,18 @@ export default function ContactPage() {
               <div className="space-y-6">
                 <div className="flex items-center gap-4">
                   <div className="w-12 h-12 bg-neutral-900 border border-neutral-800 flex items-center justify-center">
-                    <Phone className="h-6 w-6" />
+                    <Instagram className="h-6 w-6" />
                   </div>
                   <div>
-                    <h3 className="font-semibold">Phone</h3>
-                    <p className="text-muted-foreground">(555) 123-4567</p>
-                  </div>
-                </div>
-
-                <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 bg-neutral-900 border border-neutral-800 flex items-center justify-center">
-                    <Mail className="h-6 w-6" />
-                  </div>
-                  <div>
-                    <h3 className="font-semibold">Email</h3>
-                    <p className="text-muted-foreground">hello@recoverymachine.com</p>
+                    <h3 className="font-semibold">Follow Us</h3>
+                    <a 
+                      href="https://www.instagram.com/therecoverymachine_/" 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="text-muted-foreground hover:text-primary transition-colors"
+                    >
+                      @therecoverymachine_
+                    </a>
                   </div>
                 </div>
 
@@ -73,7 +70,7 @@ export default function ContactPage() {
                   </div>
                   <div>
                     <h3 className="font-semibold">Service Area</h3>
-                    <p className="text-muted-foreground">Greater Los Angeles Area</p>
+                    <p className="text-muted-foreground">Orange County & Los Angeles</p>
                   </div>
                 </div>
 
@@ -110,7 +107,7 @@ export default function ContactPage() {
                 <div>
                   <h4 className="font-semibold mb-2">How far do you travel?</h4>
                   <p className="text-muted-foreground text-sm">
-                    We service the greater Los Angeles area. Setup fees may vary based on distance.
+                    We service Orange County and Los Angeles. Setup fees may vary based on distance.
                   </p>
                 </div>
 
@@ -146,7 +143,14 @@ export default function ContactPage() {
                 Interested in corporate wellness programs or partnership opportunities?
               </p>
               <p className="text-muted-foreground">
-                Email: <span className="text-white">business@recoverymachine.com</span>
+                Contact us via <a 
+                  href="https://www.instagram.com/therecoverymachine_/" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="text-primary hover:underline"
+                >
+                  Instagram
+                </a>
               </p>
             </section>
           </div>

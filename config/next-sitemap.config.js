@@ -15,6 +15,9 @@ const config = {
     "/protected/*",
     "/debug",
     "/error",
+    "/profile/*",
+    "/admin/*",
+    "/locations/*", // Exclude old location pages
   ],
   robotsTxtOptions: {
     policies: [

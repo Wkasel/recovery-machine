@@ -50,8 +50,8 @@ export const navigationConfig = {
       { title: "Corporate Wellness", href: "/corporate-wellness" },
     ],
     locations: [
-      { title: "Beverly Hills", href: "/locations/beverly-hills" },
-      { title: "Santa Monica", href: "/locations/santa-monica" },
+      { title: "Orange County", href: "/orange-county" },
+      { title: "Los Angeles", href: "/los-angeles" },
       { title: "Book Service Area", href: "/book" },
     ],
     company: [
