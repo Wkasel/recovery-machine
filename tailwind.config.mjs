@@ -1,4 +1,4 @@
-/** @type {import('tailwindcss').Config} */
+/** @type {import('@tailwindcss/postcss').Config} */
 export default {
   content: [
     './pages/**/*.{ts,tsx}',
@@ -6,7 +6,6 @@ export default {
     './app/**/*.{ts,tsx}',
     './src/**/*.{ts,tsx}',
   ],
-  darkMode: 'class',
   theme: {
     extend: {
       colors: {
@@ -106,5 +105,4 @@ export default {
       },
     },
   },
-  plugins: [],
 }
