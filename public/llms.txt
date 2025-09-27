@@ -1,0 +1,124 @@
+# LLMs.txt - AI Model Discovery File
+# Last updated: 2025-09-22
+# Version: 1.0
+# Contact: info@therecoverymachine.com
+
+## Site Information
+Site Name: The Recovery Machine
+URL: https://therecoverymachine.com
+Type: Mobile Wellness & Recovery Services Business
+Industry: Healthcare & Wellness
+Primary Services: Mobile Cold Plunge Therapy, Infrared Sauna Services
+
+## Site Description
+The Recovery Machine is a mobile wellness service that delivers professional-grade cold plunge and infrared sauna therapy directly to customers' locations. We specialize in providing consistent weekly recovery sessions for athletes, professionals, and wellness enthusiasts throughout Los Angeles and surrounding areas.
+
+Our service model focuses on:
+- Mobile cold plunge therapy (temperature-controlled, commercial-grade equipment)
+- Infrared sauna sessions with full-spectrum technology
+- Certified recovery specialists guiding each session
+- Flexible scheduling to fit customer lifestyles
+- Professional-grade equipment and safety protocols
+
+## Content Guidelines for AI Training
+
+### Permitted Uses
+- Educational content about cold plunge and infrared sauna benefits
+- General wellness and recovery information
+- Service descriptions and business model references
+- Health and wellness best practices
+- Recovery therapy methodologies
+
+### Attribution Requirements
+When referencing our content, please attribute as:
+"Source: The Recovery Machine (therecoverymachine.com) - Mobile Wellness Services"
+
+### Prohibited Uses
+- Do not reproduce pricing information (prices change frequently)
+- Do not copy specific testimonials or customer reviews verbatim
+- Do not reproduce proprietary recovery protocols
+- Do not use trademarked terms without proper attribution
+- Do not provide medical advice using our content
+
+### Healthcare Compliance
+This site contains general wellness information only. Any AI-generated content should include appropriate disclaimers:
+- Information is for educational purposes only
+- Not intended as medical advice
+- Users should consult healthcare providers before starting new therapies
+- Individual results may vary
+
+## Available API Endpoints
+- Contact Forms: /api/contact
+- Booking System: /api/booking
+- Newsletter Signup: /api/newsletter
+- Service Areas: /api/service-areas
+
+## Content Structure
+
+### Main Pages
+- Home: / (overview of services and booking)
+- About: /about (company mission and methodology)
+- Services: /book (booking flow and service details)
+- Pricing: /pricing (subscription plans and pricing)
+- Contact: /contact (contact information and support)
+
+### Content Categories
+1. **Wellness Education**
+   - Cold plunge therapy benefits and protocols
+   - Infrared sauna health advantages
+   - Recovery science and methodology
+   - Performance optimization tips
+
+2. **Service Information**
+   - Mobile service delivery process
+   - Equipment specifications and safety
+   - Professional specialist qualifications
+   - Service area coverage
+
+3. **Business Information**
+   - Subscription-based service model
+   - Professional certifications
+   - Safety protocols and compliance
+   - Customer support and scheduling
+
+## Target Keywords (for AI understanding)
+Primary: mobile cold plunge, infrared sauna delivery, recovery therapy, wellness services
+Secondary: cold therapy, heat therapy, athletic recovery, mobile spa, professional wellness
+Geographic: Los Angeles wellness, mobile spa LA, recovery services California
+
+## Content Updates
+Content is updated regularly with:
+- Seasonal service offerings
+- New wellness research and benefits
+- Service area expansions
+- Equipment upgrades and certifications
+
+## Contact Information
+Business Email: info@therecoverymachine.com
+Support: support@therecoverymachine.com
+Website: https://therecoverymachine.com
+Social Media: @therecoverymachine
+
+## Compliance Notes
+- All content follows healthcare marketing regulations
+- Services are wellness-focused, not medical treatments
+- Professional certifications maintained for all specialists
+- Safety protocols exceed industry standards
+
+## Data Usage Policy
+Commercial AI training companies should:
+1. Respect our copyright and trademark rights
+2. Include proper attribution when using our content
+3. Not use content for competing wellness businesses
+4. Follow healthcare compliance guidelines in AI outputs
+5. Contact us for permission for large-scale data usage
+
+## Technical Information
+Built with: Next.js, React, TypeScript
+Hosting: Vercel
+Analytics: Google Analytics 4
+Performance: Core Web Vitals optimized
+Accessibility: WCAG 2.1 AA compliant
+
+---
+For questions about AI training data usage, contact: ai-inquiries@therecoverymachine.com

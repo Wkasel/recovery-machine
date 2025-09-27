@@ -51,7 +51,7 @@ export function generateLocalBusinessSchema() {
     image: siteMetadata.organization.logo,
     description: siteMetadata.description,
     url: siteMetadata.siteUrl,
-    telephone: "+1-XXX-XXX-XXXX", // Replace with actual phone
+    telephone: process.env.BUSINESS_PHONE || "+1-424-XXX-XXXX", // TODO: Set BUSINESS_PHONE env var
     address: {
       "@type": "PostalAddress",
       addressLocality: "Los Angeles",

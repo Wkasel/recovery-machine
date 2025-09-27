@@ -83,16 +83,16 @@ const benefits = [
   },
 ];
 
-export function Pricing() {
+export default function Pricing() {
   return (
-    <section className="py-20 lg:py-32 bg-black">
+    <section className="py-20 lg:py-32 bg-muted/30">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
         {/* Section Header */}
         <div className="text-center mb-16">
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-6">
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-foreground mb-6">
             Simple, Transparent Pricing
           </h2>
-          <p className="text-lg sm:text-xl text-neutral-400 max-w-3xl mx-auto leading-relaxed">
+          <p className="text-lg sm:text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
             Professional recovery at a fraction of the cost. No hidden fees, no long-term contracts,
             maximum flexibility.
           </p>

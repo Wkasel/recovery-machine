@@ -259,7 +259,7 @@ export default function ReviewsManager() {
                         {getServiceName(review.bookings?.add_ons)}
                       </h4>
                       {review.is_featured && (
-                        <Badge className="bg-yellow-100 text-yellow-800">Featured</Badge>
+                        <Badge variant="warning">Featured</Badge>
                       )}
                       {review.google_synced && (
                         <Badge variant="secondary">Google Synced</Badge>
@@ -294,7 +294,8 @@ export default function ReviewsManager() {
                       variant="outline"
                       size="sm"
                       onClick={() => toggleFeatured(review.id, review.is_featured)}
-                      className={review.is_featured ? "bg-yellow-100 text-yellow-800" : ""}
+                      className={review.is_featured ? "" : ""}
+                      variant={review.is_featured ? "warning" : "outline"}
                     >
                       {review.is_featured ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                     </Button>

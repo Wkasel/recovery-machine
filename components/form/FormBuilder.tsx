@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { useZodForm } from "@/core/forms/hooks/use-zod-form";
+import { useZodForm } from "@/lib/hooks/use-zod-form";
 import type { EventName } from "@/lib/types/analytics";
 import { FormSkeleton } from "@/lib/ui/loading/skeletons";
 import { ReactNode } from "react";

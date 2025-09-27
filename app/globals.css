@@ -1,128 +1,40 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 
-@theme {
-  /* Vercel Dark Theme - Primary Design System */
-  --color-background: #000000;
-  --color-foreground: #ffffff;
-  --color-card: #111111;
-  --color-card-foreground: #ffffff;
-  --color-popover: #111111;
-  --color-popover-foreground: #ffffff;
-  --color-primary: #ffffff;
-  --color-primary-foreground: #000000;
-  --color-secondary: #262626;
-  --color-secondary-foreground: #ffffff;
-  --color-muted: #262626;
-  --color-muted-foreground: #a3a3a3;
-  --color-accent: #262626;
-  --color-accent-foreground: #ffffff;
-  --color-destructive: #ef4444;
-  --color-destructive-foreground: #ffffff;
-  --color-border: #262626;
-  --color-input: #111111;
-  --color-ring: #ffffff;
+@import "../styles/design-system.css";
 
-  /* Vercel Sharp Design Variables - No Rounded Corners */
-  --radius: 0;
-  --radius-lg: 0;
-  --radius-xl: 0;
-
-  /* Minimal Monochrome Palette - Only 3 Colors */
-  --color-vercel-black: #000000;
-  --color-vercel-white: #ffffff;
-  --color-vercel-gray: #737373;
-
-  --color-sidebar-background: #000000;
-  --color-sidebar-foreground: #ffffff;
-  --color-sidebar-primary: #ffffff;
-  --color-sidebar-primary-foreground: #000000;
-  --color-sidebar-accent: #262626;
-  --color-sidebar-accent-foreground: #ffffff;
-  --color-sidebar-border: #262626;
-  --color-sidebar-ring: #ffffff;
-}
-
-* {
-  border-color: var(--color-border);
-  /* Force all elements to have sharp corners */
-  border-radius: 0 !important;
-}
-
-/* Fix mobile input zoom by ensuring minimum 16px font size */
-input[type="text"], 
-input[type="email"], 
-input[type="password"], 
-input[type="tel"], 
-textarea, 
+/* Mobile input zoom prevention */
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="tel"],
+textarea,
 select {
   font-size: 16px !important;
 }
 
-@media (max-width: 768px) {
-  input[type="text"], 
-  input[type="email"], 
-  input[type="password"], 
-  input[type="tel"], 
-  textarea, 
-  select {
-    font-size: 16px !important;
-    transform: scale(1);
-  }
-}
-
-body {
-  background-color: var(--color-background);
-  color: var(--color-foreground);
-  font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-/* Text color defaults
-   - Keep body text white for dark theme
-   - Ensure light surfaces get dark text by default so content is readable
-*/
-/* Note: Components can still override with Tailwind text-* utilities */
-.bg-white,
-.bg-gray-50,
-.bg-neutral-50,
-.bg-gray-100,
-.bg-stone-50 {
-  color: #0a0a0a;
-}
-
-/* Ensure input text is visible */
-input, textarea, select {
-  color: var(--color-foreground);
-  background-color: var(--color-input);
-}
-
-/* Mobile calendar improvements */
+/* Mobile calendar optimization */
 @media (max-width: 768px) {
   .fc-daygrid-day {
     min-height: 48px !important;
     cursor: pointer !important;
     touch-action: manipulation !important;
   }
-  
+
   .fc-daygrid-day-number {
     padding: 8px !important;
     font-size: 16px !important;
     cursor: pointer !important;
-    touch-action: manipulation !important;
   }
-  
+
   .fc-day-today {
-    background-color: rgba(59, 130, 246, 0.1) !important;
+    background-color: hsl(var(--primary) / 0.1) !important;
   }
-  
+
   .fc-daygrid-day:hover,
   .fc-daygrid-day:active {
-    background-color: rgba(59, 130, 246, 0.2) !important;
+    background-color: hsl(var(--primary) / 0.2) !important;
   }
-  
-  /* Ensure calendar cells are tappable */
+
   .fc-daygrid-day-frame {
     cursor: pointer !important;
     min-height: 48px !important;
@@ -132,176 +44,3 @@ input, textarea, select {
   }
 }
 
-/* Card content should be white text */
-.card, [data-testid="card"] {
-  color: var(--color-card-foreground);
-}
-
-/* Force dark theme globally */
-html {
-  color-scheme: dark;
-}
-
-/* Remove all animations and transitions globally - Vercel Static Design */
-*, *::before, *::after {
-  animation-duration: 0s !important;
-  transition-duration: 0s !important;
-  animation-delay: 0s !important;
-  transition-delay: 0s !important;
-  animation: none !important;
-  transition: none !important;
-}
-
-/* Vercel Minimal Typography System */
-.text-display {
-  font-size: clamp(2.5rem, 8vw, 6rem);
-  font-weight: 500;
-  line-height: 1.1;
-  letter-spacing: -0.025em;
-  font-family: ui-monospace, SFMono-Regular, "SF Mono", Consolas, "Liberation Mono", Menlo, monospace;
-}
-
-.text-hero {
-  font-size: clamp(2rem, 6vw, 4.5rem);
-  font-weight: 500;
-  line-height: 1.2;
-  letter-spacing: -0.02em;
-  font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-}
-
-.text-subtitle {
-  font-size: clamp(1rem, 2.5vw, 1.25rem);
-  font-weight: 400;
-  line-height: 1.4;
-  letter-spacing: 0;
-  font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-}
-
-/* Vercel Minimal Design - No Gradients */
-.vercel-bg {
-  background: #0a0a0a;
-}
-
-.vercel-text {
-  color: var(--color-vercel-white);
-}
-
-/* Sharp Minimal Shadows */
-.shadow-minimal {
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
-}
-
-.shadow-minimal-lg {
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
-}
-
-/* No Glass Effects - Sharp Borders */
-.border-sharp {
-  border: 1px solid var(--color-border);
-  background: var(--color-card);
-}
-
-/* No Animations - Vercel Static Design */
-.vercel-static {
-  transform: none;
-  transition: none;
-  animation: none;
-}
-
-/* Minimal Hover States Only */
-.hover-minimal:hover {
-  background-color: var(--color-muted);
-}
-
-.hover-invert:hover {
-  background-color: var(--color-foreground);
-  color: var(--color-background);
-}
-
-/* Vercel Geometric Spacing */
-.space-geometric > * + * {
-  margin-top: 1.5rem;
-}
-
-.space-geometric-lg > * + * {
-  margin-top: 2rem;
-}
-
-/* Sharp Focus States */
-.focus-sharp:focus {
-  outline: 2px solid var(--color-foreground);
-  outline-offset: 0;
-  box-shadow: none;
-}
-
-/* Vercel Grid System */
-.vercel-grid {
-  display: grid;
-  gap: 1px;
-  background-color: var(--color-border);
-}
-
-.vercel-card {
-  background: #0a0a0a;
-  padding: 1.5rem;
-  border: none;
-}
-
-/* Monospace code styling */
-.vercel-mono {
-  font-family: ui-monospace, SFMono-Regular, "SF Mono", Consolas, "Liberation Mono", Menlo, monospace;
-  font-weight: 400;
-  letter-spacing: 0;
-}
-
-/* Override any remaining rounded corners */
-button, input, textarea, select, div, span, section, nav, header, main, footer {
-  border-radius: 0 !important;
-}
-
-/* Remove all transform and animation classes */
-.animate-spin,
-.animate-ping,
-.animate-pulse,
-.animate-bounce,
-.animate-float,
-.animate-fade-in,
-.animate-fade-in-up,
-.animate-scale-in,
-.animate-fade-in-delay,
-.animate-fade-in-delay-2,
-.animate-fade-in-delay-3,
-.animate-fade-in-testimonial,
-.animate-float-slow,
-.animate-float-delayed {
-  animation: none !important;
-  transform: none !important;
-}
-
-/* Vercel-style button resets */
-.btn-vercel {
-  background: var(--color-foreground);
-  color: var(--color-background);
-  border: 1px solid var(--color-border);
-  padding: 0.75rem 1.5rem;
-  font-weight: 500;
-  border-radius: 0;
-}
-
-.btn-vercel:hover {
-  background: var(--color-muted);
-}
-
-.btn-vercel-outline {
-  background: transparent;
-  color: var(--color-foreground);
-  border: 1px solid var(--color-border);
-  padding: 0.75rem 1.5rem;
-  font-weight: 500;
-  border-radius: 0;
-}
-
-.btn-vercel-outline:hover {
-  background: var(--color-foreground);
-  color: var(--color-background);
-}
