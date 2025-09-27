@@ -1438,5 +1438,77 @@
     "cpuLoad": 0.09990234375,
     "platform": "darwin",
     "uptime": 52283
+  },
+  {
+    "timestamp": 1758982794320,
+    "memoryTotal": 17179869184,
+    "memoryUsed": 16951902208,
+    "memoryFree": 227966976,
+    "memoryUsagePercent": 98.67305755615234,
+    "memoryEfficiency": 1.3269424438476562,
+    "cpuCount": 10,
+    "cpuLoad": 0.080908203125,
+    "platform": "darwin",
+    "uptime": 52313
+  },
+  {
+    "timestamp": 1758982824321,
+    "memoryTotal": 17179869184,
+    "memoryUsed": 17044553728,
+    "memoryFree": 135315456,
+    "memoryUsagePercent": 99.21236038208008,
+    "memoryEfficiency": 0.7876396179199219,
+    "cpuCount": 10,
+    "cpuLoad": 0.110400390625,
+    "platform": "darwin",
+    "uptime": 52343
+  },
+  {
+    "timestamp": 1758982854322,
+    "memoryTotal": 17179869184,
+    "memoryUsed": 17068720128,
+    "memoryFree": 111149056,
+    "memoryUsagePercent": 99.35302734375,
+    "memoryEfficiency": 0.64697265625,
+    "cpuCount": 10,
+    "cpuLoad": 0.097607421875,
+    "platform": "darwin",
+    "uptime": 52373
+  },
+  {
+    "timestamp": 1758982884323,
+    "memoryTotal": 17179869184,
+    "memoryUsed": 17100947456,
+    "memoryFree": 78921728,
+    "memoryUsagePercent": 99.54061508178711,
+    "memoryEfficiency": 0.4593849182128906,
+    "cpuCount": 10,
+    "cpuLoad": 0.103125,
+    "platform": "darwin",
+    "uptime": 52403
+  },
+  {
+    "timestamp": 1758982914325,
+    "memoryTotal": 17179869184,
+    "memoryUsed": 14537375744,
+    "memoryFree": 2642493440,
+    "memoryUsagePercent": 84.6186637878418,
+    "memoryEfficiency": 15.381336212158203,
+    "cpuCount": 10,
+    "cpuLoad": 0.086376953125,
+    "platform": "darwin",
+    "uptime": 52433
+  },
+  {
+    "timestamp": 1758982944326,
+    "memoryTotal": 17179869184,
+    "memoryUsed": 15263154176,
+    "memoryFree": 1916715008,
+    "memoryUsagePercent": 88.8432502746582,
+    "memoryEfficiency": 11.156749725341797,
+    "cpuCount": 10,
+    "cpuLoad": 0.11611328125,
+    "platform": "darwin",
+    "uptime": 52463
   }
 ]

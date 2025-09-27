@@ -24,7 +24,7 @@ const plans = [
       "Doorstep delivery and pickup",
     ],
     popular: true,
-    cta: "Subscribe Now",
+    cta: "Join Waitlist",
     ctaVariant: "default" as const,
   },
 ];
@@ -104,11 +104,11 @@ export default function Pricing() {
               size="lg"
               className="bg-primary text-primary-foreground hover:bg-primary/90 font-bold text-xl px-16 py-6 h-auto shadow-xl"
             >
-              <Link href="/book" className="flex items-center">
+              <button className="flex items-center">
                 <Calendar className="w-7 h-7 mr-4" />
-                Book Your Recovery Session
+                Join Waitlist for Early Access
                 <ArrowRight className="w-6 h-6 ml-4" />
-              </Link>
+              </button>
             </Button>
           </div>
         </div>
@@ -184,11 +184,11 @@ export default function Pricing() {
                   size="lg"
                   className="w-full bg-primary text-primary-foreground hover:bg-primary/90 text-xl font-bold h-16 shadow-lg"
                 >
-                  <Link href="/book" className="inline-flex items-center justify-center">
+                  <button className="inline-flex items-center justify-center">
                     <Calendar className="mr-3 h-6 w-6" />
                     {plan.cta}
                     <ArrowRight className="ml-3 h-6 w-6" />
-                  </Link>
+                  </button>
                 </Button>
 
                 <p className="text-center text-sm text-neutral-500 mt-4">
@@ -294,11 +294,11 @@ export default function Pricing() {
             size="lg"
             className="bg-primary text-primary-foreground hover:bg-primary/90 font-bold text-xl px-16 py-6 h-auto shadow-xl"
           >
-            <Link href="/book" className="inline-flex items-center">
+            <button className="inline-flex items-center">
               <Calendar className="mr-4 h-7 w-7" />
-              Start Your Recovery Journey
+              Join Our Waitlist
               <ArrowRight className="ml-4 h-6 w-6" />
-            </Link>
+            </button>
           </Button>
           <p className="mt-6 text-neutral-500">
             Available 7 days a week • Orange County & Los Angeles

@@ -39,15 +39,15 @@ export default function Hero() {
               weight="bold" 
               className="font-mono tracking-tight leading-none text-6xl md:text-7xl lg:text-8xl"
             >
-              Recovery
+              Coming Soon
             </Heading>
             <Heading 
               as="h1" 
               size="display-2xl" 
               weight="bold" 
-              className="font-mono tracking-tight leading-none text-6xl md:text-7xl lg:text-8xl"
+              className="font-mono tracking-tight leading-none text-4xl md:text-5xl lg:text-6xl text-primary"
             >
-              When You Need It
+              Recovery Machine
             </Heading>
           </Stack>
 
@@ -59,41 +59,51 @@ export default function Hero() {
               align="center" 
               className="max-w-3xl text-2xl leading-relaxed font-medium text-center mx-auto"
             >
-              Cold plunge + infrared sauna. We come to you. Book in 60 seconds.
+              Professional mobile recovery coming to Orange County & Los Angeles. Join our waitlist for early access and exclusive offers.
             </Text>
           </div>
 
-          {/* Primary CTAs - Vercel Style Buttons */}
-          <div className="flex flex-col sm:flex-row gap-6 justify-center items-center w-full">
-            <Link 
-              href="/book" 
-              className="inline-flex items-center justify-center whitespace-nowrap font-bold transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 active:scale-95 bg-primary text-primary-foreground hover:bg-primary/90 hover:shadow-xl text-xl h-14 px-12 rounded-lg shadow-lg border-2 border-primary/20 min-w-[200px] transform hover:scale-105"
-            >
-              <span className="mr-3">Book Now</span>
-              <ArrowRight className="h-5 w-5" />
-            </Link>
+          {/* Primary CTA - Email Collection Focus */}
+          <div className="flex flex-col gap-6 justify-center items-center w-full">
+            <div className="w-full max-w-md">
+              <form className="flex flex-col gap-4">
+                <input
+                  type="email"
+                  placeholder="Enter your email for early access"
+                  className="h-14 px-6 text-lg bg-background border-2 border-primary/20 rounded-lg focus:border-primary focus:outline-none transition-colors"
+                  required
+                />
+                <button
+                  type="submit"
+                  className="inline-flex items-center justify-center whitespace-nowrap font-bold transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 active:scale-95 bg-primary text-primary-foreground hover:bg-primary/90 hover:shadow-xl text-xl h-14 px-12 rounded-lg shadow-lg border-2 border-primary/20 min-w-[200px] transform hover:scale-105"
+                >
+                  <span className="mr-3">Join Waitlist</span>
+                  <ArrowRight className="h-5 w-5" />
+                </button>
+              </form>
+            </div>
             <Button
               onClick={scrollToHowItWorks}
               variant="outline"
-              className="border-2 border-primary text-primary hover:bg-primary/10 text-xl font-semibold h-14 px-12 min-w-[200px]"
+              className="border-2 border-muted-foreground/30 text-muted-foreground hover:bg-muted/10 text-lg font-medium h-12 px-8"
             >
-              How It Works
+              Learn More
             </Button>
           </div>
 
-          {/* Trust Badges - Modern Cards */}
+          {/* Coming Soon Benefits */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-2xl mx-auto">
             <div className="flex items-center justify-center gap-3 text-muted-foreground bg-background/60 backdrop-blur-sm px-4 py-3 rounded-lg border border-border/50 hover:bg-background/80 transition-all duration-200">
               <Shield className="h-4 w-4" />
-              <Caption className="font-medium">Secure Payments</Caption>
+              <Caption className="font-medium">Orange County</Caption>
             </div>
             <div className="flex items-center justify-center gap-3 text-muted-foreground bg-background/60 backdrop-blur-sm px-4 py-3 rounded-lg border border-border/50 hover:bg-background/80 transition-all duration-200">
               <Calendar className="h-4 w-4" />
-              <Caption className="font-medium">Flexible Scheduling</Caption>
+              <Caption className="font-medium">Los Angeles</Caption>
             </div>
             <div className="flex items-center justify-center gap-3 text-primary bg-primary/10 backdrop-blur-sm px-4 py-3 rounded-lg border border-primary/20 hover:bg-primary/20 transition-all duration-200">
               <Star className="h-4 w-4 fill-current" />
-              <Caption className="font-medium">Pro Equipment</Caption>
+              <Caption className="font-medium">Early Access</Caption>
             </div>
           </div>
         </Stack>

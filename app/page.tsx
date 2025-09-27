@@ -3,7 +3,7 @@ import {
   HowItWorks,
   SocialProof,
   Pricing,
-  EmailCollection
+  EmailCapture
 } from "@/components";
 
 export default function Home() {
@@ -13,7 +13,7 @@ export default function Home() {
       <HowItWorks />
       <SocialProof />
       <Pricing />
-      <EmailCollection />
+      <EmailCapture />
     </div>
   );
 }

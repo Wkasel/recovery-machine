@@ -19,29 +19,29 @@ import Link from "next/link";
 const steps = [
   {
     icon: UserPlus,
-    title: "Sign Up",
+    title: "Join Waitlist",
     description:
-      "Create your account and choose your membership plan. Setup takes less than 5 minutes.",
-    duration: "< 5 min",
+      "Sign up for early access and be the first to know when we launch in your area.",
+    duration: "2 min",
+  },
+  {
+    icon: Calendar,
+    title: "We Launch",
+    description:
+      "Get notified when Recovery Machine is available in Orange County and Los Angeles.",
+    duration: "Soon",
   },
   {
     icon: MapPin,
     title: "We Come to You",
-    description:
-      "Our mobile unit arrives at your location with professional cold plunge and infrared sauna.",
-    duration: "Next day",
+    description: "Our mobile unit arrives at your location with professional cold plunge and infrared sauna.",
+    duration: "On-demand",
   },
   {
     icon: CheckCircle,
     title: "Experience Recovery",
-    description: "Enjoy your 45-minute session with guided recovery protocols for optimal results.",
+    description: "Enjoy professional recovery sessions with guided protocols for optimal results.",
     duration: "45 min",
-  },
-  {
-    icon: Repeat,
-    title: "Build Your Routine",
-    description: "Consistent weekly sessions delivered to maintain peak performance and recovery.",
-    duration: "Weekly",
   },
 ];
 
@@ -66,24 +66,28 @@ export default function HowItWorks() {
             <Sparkles className="h-4 w-4 text-white" />
             <span className="text-white">Simple Process</span>
           </div>
-          <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-foreground mb-6 tracking-tight">How It Works</h2>
+          <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-foreground mb-6 tracking-tight">How It Will Work</h2>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed mb-8">
-            Book → We arrive → You recover. Repeat weekly.
+            Join waitlist → We launch → You recover. Professional mobile recovery coming soon.
           </p>
           
-          {/* Big Booking CTA */}
+          {/* Email Collection CTA */}
           <div className="flex justify-center">
-            <Button
-              asChild
-              size="lg"
-              className="bg-primary text-primary-foreground hover:bg-primary/90 font-bold text-xl px-16 py-6 h-auto shadow-xl"
-            >
-              <Link href="/book" className="flex items-center">
-                <Calendar className="w-7 h-7 mr-4" />
-                Book Your Recovery Session
-                <ArrowRight className="w-6 h-6 ml-4" />
-              </Link>
-            </Button>
+            <div className="flex flex-col sm:flex-row gap-4 items-center">
+              <input
+                type="email"
+                placeholder="Enter your email for updates"
+                className="h-14 px-6 text-lg bg-background border-2 border-primary/20 rounded-lg focus:border-primary focus:outline-none transition-colors min-w-[300px]"
+                required
+              />
+              <Button
+                size="lg"
+                className="bg-primary text-primary-foreground hover:bg-primary/90 font-bold text-xl px-12 py-6 h-14 shadow-xl"
+              >
+                <span className="mr-3">Get Early Access</span>
+                <ArrowRight className="w-6 h-6" />
+              </Button>
+            </div>
           </div>
         </div>
 
@@ -234,21 +238,25 @@ export default function HowItWorks() {
 
         {/* Call to Action */}
         <div className="text-center bg-black border border-neutral-800 p-12">
-          <h3 className="text-3xl font-bold text-white mb-4">Ready to Start Your Recovery Journey?</h3>
+          <h3 className="text-3xl font-bold text-white mb-4">Ready to Join the Waitlist?</h3>
           <p className="text-xl text-neutral-400 mb-8 max-w-2xl mx-auto">
-            Book your mobile recovery session today. Available 7 days a week in Orange County and Los Angeles.
+            Be the first to experience professional mobile recovery in Orange County and Los Angeles. Get early access and exclusive offers.
           </p>
-          <Button
-            asChild
-            size="lg"
-            className="bg-white text-black hover:bg-gray-100 font-bold text-xl px-12 py-6 h-auto"
-          >
-            <Link href="/book" className="flex items-center">
-              <Calendar className="w-6 h-6 mr-3" />
-              Book Your Session
-              <ArrowRight className="w-6 h-6 ml-3" />
-            </Link>
-          </Button>
+          <div className="flex flex-col sm:flex-row gap-4 items-center justify-center max-w-md mx-auto">
+            <input
+              type="email"
+              placeholder="Enter your email"
+              className="h-14 px-6 text-lg bg-white text-black border-2 border-white rounded-lg focus:outline-none transition-colors flex-1 min-w-[250px]"
+              required
+            />
+            <Button
+              size="lg"
+              className="bg-white text-black hover:bg-gray-100 font-bold text-xl px-8 py-6 h-14"
+            >
+              <span className="mr-3">Join Waitlist</span>
+              <ArrowRight className="w-6 h-6" />
+            </Button>
+          </div>
         </div>
       </div>
     </section>
