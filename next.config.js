@@ -205,10 +205,10 @@ const nextConfig = (phase) => {
   // Return config with Sentry wrapper for error monitoring
   const configWithBundleAnalyzer = withBundleAnalyzer(config);
   
-  // Only wrap with Sentry in production or when explicitly enabled
-  if (process.env.NODE_ENV === 'production' || process.env.SENTRY_DSN) {
-    return withSentryConfig(configWithBundleAnalyzer, sentryConfig);
-  }
+  // Temporarily disable Sentry wrapping to avoid Rollup dependency issues
+  // if (process.env.NODE_ENV === 'production' || process.env.SENTRY_DSN) {
+  //   return withSentryConfig(configWithBundleAnalyzer, sentryConfig);
+  // }
   
   return configWithBundleAnalyzer;
 };
