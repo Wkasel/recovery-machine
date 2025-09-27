@@ -7,6 +7,8 @@ export interface SiteMetadata {
   locale: string;
   type: string;
   twitterHandle: string;
+  instagramHandle: string;
+  instagramUrl: string;
   author: {
     name: string;
     url: string;
@@ -31,6 +33,9 @@ export const siteMetadata: SiteMetadata = {
   locale: "en_US",
   type: "website",
   twitterHandle: "@therecoverymachine",
+  instagramHandle: "therecoverymachine_",
+  instagramUrl:
+    process.env.NEXT_PUBLIC_INSTAGRAM_URL || "https://www.instagram.com/therecoverymachine_/",
   author: {
     name: "The Recovery Machine",
     url:

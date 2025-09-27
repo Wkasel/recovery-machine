@@ -20,7 +20,7 @@ export const navigationConfig = {
       auth: true,
     },
     {
-      title: "Settings", 
+      title: "Settings",
       href: "/profile",
       auth: true,
     },
@@ -36,8 +36,7 @@ export const navigationConfig = {
     locations: [
       { title: "Beverly Hills", href: "/locations/beverly-hills" },
       { title: "Santa Monica", href: "/locations/santa-monica" },
-      { title: "West Hollywood", href: "/locations/west-hollywood" },
-      { title: "Manhattan Beach", href: "/locations/manhattan-beach" },
+      { title: "Book Service Area", href: "/book" },
     ],
     company: [
       { title: "About", href: "/about" },
@@ -52,14 +51,8 @@ export const navigationConfig = {
     ],
     social: [
       {
-        title: "Twitter",
-        href: (meta: typeof import("@/config/metadata").siteMetadata) =>
-          `https://twitter.com/${meta.twitterHandle}`,
-        external: true,
-      },
-      {
-        title: "GitHub",
-        href: (meta: typeof import("@/config/metadata").siteMetadata) => meta.organization.url,
+        title: "Instagram",
+        href: (meta: typeof import("@/config/metadata").siteMetadata) => meta.instagramUrl,
         external: true,
       },
       {
