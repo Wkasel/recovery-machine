@@ -60,8 +60,14 @@ export async function updateSession(request: NextRequest) {
     request.nextUrl.pathname.startsWith("/_next") ||
     request.nextUrl.pathname.includes("/terms") ||
     request.nextUrl.pathname.includes("/privacy") ||
+    request.nextUrl.pathname.includes("/cookies") ||
     request.nextUrl.pathname.startsWith("/book") ||
     request.nextUrl.pathname.startsWith("/pricing") ||
+    request.nextUrl.pathname.startsWith("/services") ||
+    request.nextUrl.pathname.startsWith("/features") ||
+    request.nextUrl.pathname.startsWith("/docs") ||
+    request.nextUrl.pathname.startsWith("/blog") ||
+    request.nextUrl.pathname.startsWith("/health-disclaimer") ||
     request.nextUrl.pathname.startsWith("/how-it-works") ||
     request.nextUrl.pathname.startsWith("/contact") ||
     request.nextUrl.pathname.startsWith("/about") ||

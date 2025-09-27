@@ -80,15 +80,7 @@ export default function Hero() {
               as="h1"
               size="display-2xl"
               weight="bold"
-              className="font-mono tracking-tight leading-none text-6xl md:text-7xl lg:text-8xl"
-            >
-              The
-            </Heading>
-            <Heading
-              as="h1"
-              size="display-2xl"
-              weight="bold"
-              className="font-mono tracking-tight leading-none text-4xl md:text-5xl lg:text-6xl text-primary"
+              className="font-mono tracking-tight leading-none text-6xl md:text-7xl lg:text-8xl text-primary"
             >
               Recovery Machine
             </Heading>
