@@ -50,14 +50,13 @@ export const navigationConfig = {
       { title: "Corporate Wellness", href: "/corporate-wellness" },
     ],
     locations: [
-      { title: "Orange County", href: "/orange-county" },
-      { title: "Los Angeles", href: "/los-angeles" },
-      { title: "Book Service Area", href: "/book" },
+      { title: "Orange County", href: "/services#orange-county" },
+      { title: "Los Angeles", href: "/services#los-angeles" },
+      { title: "Service Areas", href: "/services" },
     ],
     company: [
       { title: "About", href: "/about" },
       { title: "Pricing", href: "/pricing" },
-      { title: "Book Now", href: "/book" },
       { title: "Contact", href: "/contact" },
     ],
     legal: [

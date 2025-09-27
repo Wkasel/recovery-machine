@@ -74,7 +74,10 @@ export async function updateSession(request: NextRequest) {
     // Landing pages
     request.nextUrl.pathname.startsWith("/cold-plunge-la") ||
     request.nextUrl.pathname.startsWith("/infrared-sauna-delivery") ||
+    request.nextUrl.pathname.startsWith("/athletic-recovery") ||
     request.nextUrl.pathname.startsWith("/corporate-wellness") ||
+    request.nextUrl.pathname.startsWith("/orange-county") ||
+    request.nextUrl.pathname.startsWith("/los-angeles") ||
     // Static assets
     request.nextUrl.pathname.match(/\.(js|css|png|jpg|jpeg|gif|ico|svg|webp|mp4)$/) ||
     // API routes that should be public

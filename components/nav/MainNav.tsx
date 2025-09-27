@@ -51,35 +51,6 @@ function NavContent({
           </NavigationMenuLink>
         </NavigationMenuItem>
       ))}
-      
-      {/* Services Dropdown - Desktop Only */}
-      <NavigationMenuItem className="hidden md:block">
-        <NavigationMenuTrigger className="h-9 px-4 py-2 text-sm font-medium">
-          Services
-        </NavigationMenuTrigger>
-        <NavigationMenuContent>
-          <div className="grid w-[320px] gap-3 p-4 sm:w-[400px] md:w-[600px] md:grid-cols-2">
-            {servicesItems.map((service) => {
-              const IconComponent = service.icon;
-              return (
-                <Link
-                  key={service.href}
-                  href={service.href}
-                  className="group block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
-                >
-                  <div className="flex items-center gap-2 text-sm font-medium leading-none">
-                    <IconComponent className="h-4 w-4" />
-                    {service.title}
-                  </div>
-                  <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
-                    {service.description}
-                  </p>
-                </Link>
-              );
-            })}
-          </div>
-        </NavigationMenuContent>
-      </NavigationMenuItem>
     </NavigationMenuList>
   );
 }
@@ -184,31 +155,6 @@ export function MainNav({ items = navigationConfig.mainNav, children, user }: Ma
                   {item.label}
                 </Link>
               ))}
-              
-              {/* Services Section - Mobile */}
-              <div className="pt-2">
-                <div className="px-3 py-2 text-sm font-medium text-muted-foreground">Services</div>
-                {servicesItems.map((service) => {
-                  const IconComponent = service.icon;
-                  return (
-                    <Link
-                      key={service.href}
-                      href={service.href}
-                      onClick={() => setOpen(false)}
-                      className={cn(
-                        "flex items-center gap-3 px-3 py-2 rounded-md text-base font-medium transition-colors hover:bg-accent hover:text-accent-foreground",
-                        mounted && pathname === service.href && "bg-accent text-accent-foreground"
-                      )}
-                    >
-                      <IconComponent className="h-4 w-4" />
-                      <div>
-                        <div className="font-medium">{service.title}</div>
-                        <div className="text-sm text-muted-foreground">{service.description}</div>
-                      </div>
-                    </Link>
-                  );
-                })}
-              </div>
 
               {!user && (
                 <div className="pt-4 mt-4 border-t space-y-2">
