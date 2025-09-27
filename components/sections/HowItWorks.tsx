@@ -19,17 +19,17 @@ import Link from "next/link";
 const steps = [
   {
     icon: UserPlus,
-    title: "Join Waitlist",
+    title: "Contact Us",
     description:
-      "Sign up for early access and be the first to know when we launch in your area.",
+      "Reach out via Instagram or our contact form to schedule your recovery session.",
     duration: "2 min",
   },
   {
     icon: Calendar,
-    title: "We Launch",
+    title: "Schedule Session",
     description:
-      "Get notified when Recovery Machine is available in Orange County and Los Angeles.",
-    duration: "Soon",
+      "We'll work with you to find the perfect time that fits your schedule.",
+    duration: "Quick",
   },
   {
     icon: MapPin,
@@ -150,9 +150,9 @@ export default function HowItWorks() {
             <Sparkles className="h-4 w-4 text-white" />
             <span className="text-white">Simple Process</span>
           </div>
-          <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-foreground mb-6 tracking-tight">How It Will Work</h2>
+          <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-foreground mb-6 tracking-tight">How It Works</h2>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed mb-8">
-            Join waitlist → We launch → You recover. Professional mobile recovery coming soon.
+            Contact → Schedule → We arrive → You recover. Professional mobile recovery delivered.
           </p>
           
           {/* Email Collection CTA */}
@@ -161,7 +161,7 @@ export default function HowItWorks() {
               <div className="text-center p-6 bg-primary/10 border border-primary/20 rounded-lg">
                 <div className="text-primary mb-2">✓ Success!</div>
                 <p className="text-foreground">
-                  Thanks for joining! We'll keep you updated on our launch.
+                  Thanks for your interest! We'll keep you updated on availability.
                 </p>
               </div>
             ) : (
@@ -343,15 +343,15 @@ export default function HowItWorks() {
 
         {/* Call to Action */}
         <div className="text-center bg-black border border-neutral-800 p-12">
-          <h3 className="text-3xl font-bold text-white mb-4">Ready to Join the Waitlist?</h3>
+          <h3 className="text-3xl font-bold text-white mb-4">Ready to Get Started?</h3>
           <p className="text-xl text-neutral-400 mb-8 max-w-2xl mx-auto">
-            Be the first to experience professional mobile recovery in Orange County and Los Angeles. Get early access and exclusive offers.
+            Experience professional mobile recovery in Orange County and Los Angeles. Get updates on availability and services.
           </p>
           {isSubmitted2 ? (
             <div className="text-center p-6 bg-green-900/20 border border-green-800 rounded-lg max-w-md mx-auto">
               <div className="text-green-400 mb-2">✓ Success!</div>
               <p className="text-white">
-                You're on the waitlist! We'll contact you when we launch.
+                Thanks for your interest! We'll keep you updated on availability.
               </p>
             </div>
           ) : (
@@ -375,7 +375,7 @@ export default function HowItWorks() {
                   <div className="w-5 h-5 border-2 border-black/30 border-t-black rounded-full animate-spin"></div>
                 ) : (
                   <>
-                    <span className="mr-3">Join Waitlist</span>
+                    <span className="mr-3">Get Updates</span>
                     <ArrowRight className="w-6 h-6" />
                   </>
                 )}

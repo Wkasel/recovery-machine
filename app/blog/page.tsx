@@ -15,10 +15,10 @@ export default function BlogPage() {
         </div>
 
         <div className="text-center py-16">
-          <h2 className="text-2xl font-bold mb-4">Coming Soon</h2>
+          <h2 className="text-2xl font-bold mb-4">Content In Development</h2>
           <p className="text-neutral-400 mb-8 max-w-2xl mx-auto">
-            We're working on bringing you the latest research, tips, and insights on cold therapy,
-            infrared sauna benefits, and recovery optimization. Check back soon for expert content
+            We're developing the latest research, tips, and insights on cold therapy,
+            infrared sauna benefits, and recovery optimization. Check back for expert content
             from our certified recovery specialists.
           </p>
 

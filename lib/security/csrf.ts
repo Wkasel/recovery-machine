@@ -50,13 +50,16 @@ export function isSecureOrigin(request: NextRequest): boolean {
     process.env.NEXT_PUBLIC_SITE_URL,
     process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : null,
     "https://recovery-machine.vercel.app", // Production domain
-    "https://therecoverymachine.com", // Production domain
+    "https://therecoverymachine.com", // Production domain (old)
+    "https://therecoverymachine.co", // Production domain (correct)
     "http://localhost:3000", // Development
     "http://localhost:3001", // Development (alternate port)
     "http://localhost:3002", // Development (alternate port)
     "https://localhost:3000", // Development with HTTPS
     "https://localhost:3001", // Development with HTTPS
     "https://localhost:3002", // Development with HTTPS
+    "http://127.0.0.1:3000", // Development (IP)
+    "https://127.0.0.1:3000", // Development (IP with HTTPS)
   ].filter(Boolean);
 
   // Check origin header
@@ -83,8 +86,20 @@ export function requireSecureRequest(request: NextRequest): void {
     return;
   }
 
+  // Skip CSRF for newsletter subscription (public API with CORS)
+  if (request.nextUrl.pathname.startsWith("/api/newsletter/")) {
+    return;
+  }
+
   // Verify origin for state-changing requests
   if (!isSecureOrigin(request)) {
+    console.error("🔒 Security check failed:", {
+      path: request.nextUrl.pathname,
+      origin: request.headers.get("origin"),
+      referer: request.headers.get("referer"),
+      method: request.method,
+      userAgent: request.headers.get("user-agent"),
+    });
     throw new Error("Invalid origin for security-sensitive request");
   }
 }
