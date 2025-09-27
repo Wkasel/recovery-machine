@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { useFirstVisit } from "@/lib/hooks/useFirstVisit";
+import { useFirstVisit } from "@/hooks/useFirstVisit";
 
 export function OfferModalDebug() {
   const { resetFirstVisit } = useFirstVisit();

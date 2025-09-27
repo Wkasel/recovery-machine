@@ -1,7 +1,7 @@
 "use client";
 
 import { OfferModal } from "@/components/modals/OfferModal";
-import { useFirstVisit } from "@/lib/hooks/useFirstVisit";
+import { useFirstVisit } from "@/hooks/useFirstVisit";
 import { useEffect, useState } from "react";
 
 export function HomePageClient() {

@@ -1,7 +1,6 @@
 "use client";
 
 import { ThemeSwitcher } from "@/components/theme-switcher";
-import { HealthcareDisclaimer } from "@/components/seo/HealthcareDisclaimer";
 import { siteMetadata } from "@/config/metadata";
 import { navigationConfig } from "@/config/navigation";
 import { FooterNavItem } from "@/types/nav";
@@ -21,7 +20,7 @@ export function Footer({ items = navigationConfig.footerNav }: FooterProps) {
 
   return (
     <footer className="border-t bg-background">
-      <div className="container mx-auto max-w-7xl px-4 md:px-6">
+      <div className="container px-4 md:px-6">
         <div className="grid grid-cols-1 gap-8 py-8 md:grid-cols-4">
           <div className="flex flex-col gap-2">
             <Link href="/" className="flex items-center gap-2">
@@ -29,26 +28,11 @@ export function Footer({ items = navigationConfig.footerNav }: FooterProps) {
             </Link>
             <p className="text-sm text-muted-foreground">{siteMetadata.description}</p>
           </div>
-          <div className="grid grid-cols-2 gap-4 sm:grid-cols-4 md:col-span-3">
+          <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:col-span-3">
             <div className="flex flex-col gap-2">
-              <h3 className="text-sm font-medium">Services</h3>
+              <h3 className="text-sm font-medium">Product</h3>
               <ul className="flex flex-col gap-2">
-                {items.services.map((item) => (
-                  <li key={item.href}>
-                    <Link
-                      href={item.href}
-                      className="text-sm text-muted-foreground hover:text-foreground transition-colors"
-                    >
-                      {item.title}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
-            <div className="flex flex-col gap-2">
-              <h3 className="text-sm font-medium">Locations</h3>
-              <ul className="flex flex-col gap-2">
-                {items.locations.map((item) => (
+                {items.product.map((item) => (
                   <li key={item.href}>
                     <Link
                       href={item.href}
@@ -117,8 +101,6 @@ export function Footer({ items = navigationConfig.footerNav }: FooterProps) {
             </div>
           </div>
         </div>
-        
-        <HealthcareDisclaimer type="footer" />
       </div>
     </footer>
   );

@@ -1,6 +1,6 @@
 "use client";
 
-import { useSentry } from "@/lib/hooks/use-sentry";
+import { useSentry } from "@/hooks/use-sentry";
 import { useEffect } from "react";
 
 export default function GlobalError({
@@ -41,15 +41,15 @@ export default function GlobalError({
     <html>
       <body>
         <div className="flex flex-col items-center justify-center min-h-screen p-4">
-          <h2 className="text-2xl font-bold text-destructive mb-4">Something went wrong!</h2>
+          <h2 className="text-2xl font-bold text-red-600 mb-4">Something went wrong!</h2>
           {process.env.NODE_ENV === "development" && (
-            <pre className="text-sm bg-muted p-4 rounded mb-4 overflow-auto max-w-full">
+            <pre className="text-sm bg-red-50 p-4 rounded mb-4 overflow-auto max-w-full">
               {error.message}
             </pre>
           )}
           <button
             onClick={reset}
-            className="px-4 py-2 bg-destructive text-destructive-foreground rounded hover:bg-destructive/90 transition-colors"
+            className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 transition-colors"
           >
             Try again
           </button>

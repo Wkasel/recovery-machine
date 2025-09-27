@@ -44,21 +44,21 @@ describe("Hero Component", () => {
       const bookNowButton = screen.getByRole("button", { name: /book now/i });
       fireEvent.click(bookNowButton);
       // Note: Add actual navigation testing when booking flow is implemented
-      expect(bookNowButton).toHaveClass("bg-primary", "text-primary-foreground");
+      expect(bookNowButton).toHaveClass("bg-white", "text-blue-900");
     });
 
     it("allows clicking the Learn More button", () => {
       const learnMoreButton = screen.getByRole("button", { name: /learn more/i });
       fireEvent.click(learnMoreButton);
-      expect(learnMoreButton).toHaveClass("border", "border-primary");
+      expect(learnMoreButton).toHaveClass("border-2", "border-white");
     });
 
     it("shows hover states on buttons", () => {
       const bookNowButton = screen.getByRole("button", { name: /book now/i });
       const learnMoreButton = screen.getByRole("button", { name: /learn more/i });
 
-      expect(bookNowButton).toHaveClass("hover:bg-primary/90");
-      expect(learnMoreButton).toHaveClass("hover:bg-primary/10");
+      expect(bookNowButton).toHaveClass("hover:bg-gray-100");
+      expect(learnMoreButton).toHaveClass("hover:bg-white/10");
     });
   });
 
@@ -83,18 +83,20 @@ describe("Hero Component", () => {
   });
 
   describe("Visual Design", () => {
-    it("has proper background semantic classes", () => {
+    it("has proper background gradient classes", () => {
       const heroSection = screen.getByText(/Recovery When You Need It/i).closest(".min-h-screen");
       expect(heroSection).toHaveClass(
-        "bg-background",
-        "text-foreground"
+        "bg-gradient-to-br",
+        "from-blue-900",
+        "via-blue-700",
+        "to-cyan-600"
       );
     });
 
     it("has proper overlay for readability", () => {
-      const overlay = document.querySelector(".bg-background");
+      const overlay = document.querySelector(".bg-black\\/20");
       expect(overlay).toBeInTheDocument();
-      expect(overlay).toHaveClass("absolute", "inset-0");
+      expect(overlay).toHaveClass("absolute", "inset-0", "z-10");
     });
 
     it("has proper z-index layering", () => {
@@ -133,9 +135,9 @@ describe("Hero Component", () => {
 
     it("has sufficient color contrast (visually confirmed in design)", () => {
       // Note: This would typically be tested with automated tools
-      // The foreground text on background should meet WCAG AA standards
+      // The white text on blue-900 background should meet WCAG AA standards
       const heading = screen.getByRole("heading", { level: 1 });
-      expect(heading).toHaveClass("text-foreground");
+      expect(heading).toHaveClass("text-white");
     });
 
     it("has proper semantic structure", () => {
@@ -173,8 +175,8 @@ describe("Hero Component", () => {
       const learnMoreButton = screen.getByRole("button", { name: /learn more/i });
 
       // Primary CTA should have more prominent styling
-      expect(bookNowButton).toHaveClass("bg-primary", "text-primary-foreground");
-      expect(learnMoreButton).toHaveClass("border", "border-primary", "text-primary");
+      expect(bookNowButton).toHaveClass("bg-white", "text-blue-900");
+      expect(learnMoreButton).toHaveClass("border-2", "border-white", "text-white");
     });
   });
 

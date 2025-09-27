@@ -26,7 +26,7 @@ export interface DevPaymentBypassResult {
  * Check if we're in development environment
  * 
  * 🚨 TEMPORARY: Currently allows production use for testing/demo purposes
- * SECURITY: This dev bypass system must be completely removed before production deployment
+ * TODO: Remove production access before final launch for security
  * SECURITY RISK: This enables free bookings in production - must be disabled for live business
  */
 export function isDevelopmentEnvironment(): boolean {

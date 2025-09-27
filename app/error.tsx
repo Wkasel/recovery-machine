@@ -1,6 +1,6 @@
 "use client";
 
-import { useSentry } from "@/lib/hooks/use-sentry";
+import { useSentry } from "@/hooks/use-sentry";
 import { useEffect } from "react";
 
 export default function Error({

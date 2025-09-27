@@ -32,9 +32,9 @@ export const metadata: Metadata = {
 
 export default function PricingPage() {
   return (
-    <div className="min-h-screen bg-background text-foreground">
+    <div className="min-h-screen bg-black text-white">
       <div className="container mx-auto px-4 py-8">
-        <Link href="/" className="text-muted-foreground hover:text-foreground mb-8 inline-block">
+        <Link href="/" className="text-neutral-400 hover:text-white mb-8 inline-block">
           ← Back to Home
         </Link>
       </div>

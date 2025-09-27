@@ -1,5 +1,5 @@
 /** @type {import('jest').Config} */
-import nextJest from 'next/jest.js';
+const nextJest = require('next/jest');
 
 // Providing the path to your Next.js app which will enable loading next.config.js and .env files
 const createJestConfig = nextJest({ dir: './' });
@@ -11,13 +11,10 @@ const customJestConfig = {
   // Setup files
   setupFilesAfterEnv: ['<rootDir>/tests/setup.ts'],
   
-  // Module name mapping for absolute imports (corrected property name)
-  moduleNameMapper: {
+  // Module name mapping for absolute imports
+  moduleNameMapping: {
     '^@/(.*)$': '<rootDir>/$1',
     '^~/(.*)$': '<rootDir>/$1',
-    '\\.(css|less|scss|sass)$': 'identity-obj-proxy',
-    '\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$':
-      '<rootDir>/__mocks__/fileMock.js',
   },
   
   // Test paths and patterns
@@ -77,8 +74,13 @@ const customJestConfig = {
     'node_modules/(?!(.*\\.mjs$|@supabase|@radix-ui))',
   ],
   
-  // Mock static file imports (removed duplicate property)
-  // Static file mocking is handled by the moduleNameMapper above
+  // Mock static file imports
+  moduleNameMapping: {
+    '^@/(.*)$': '<rootDir>/$1',
+    '\\.(css|less|scss|sass)$': 'identity-obj-proxy',
+    '\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$':
+      '<rootDir>/__mocks__/fileMock.js',
+  },
   
   // Global test timeout
   testTimeout: 10000,
@@ -113,4 +115,4 @@ const customJestConfig = {
 };
 
 // Export the configuration
-export default createJestConfig(customJestConfig);
+module.exports = createJestConfig(customJestConfig);

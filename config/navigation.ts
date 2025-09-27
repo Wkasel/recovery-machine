@@ -27,22 +27,14 @@ export const navigationConfig = {
   ] as NavItem[],
 
   footerNav: {
-    services: [
-      { title: "Cold Plunge LA", href: "/cold-plunge-la" },
-      { title: "Infrared Sauna Delivery", href: "/infrared-sauna-delivery" },
-      { title: "Athletic Recovery", href: "/athletic-recovery" },
-      { title: "Corporate Wellness", href: "/corporate-wellness" },
-    ],
-    locations: [
-      { title: "Beverly Hills", href: "/locations/beverly-hills" },
-      { title: "Santa Monica", href: "/locations/santa-monica" },
-      { title: "West Hollywood", href: "/locations/west-hollywood" },
-      { title: "Manhattan Beach", href: "/locations/manhattan-beach" },
+    product: [
+      { title: "Features", href: "/features" },
+      { title: "Pricing", href: "/pricing" },
+      { title: "Documentation", href: "/docs" },
     ],
     company: [
       { title: "About", href: "/about" },
-      { title: "Pricing", href: "/pricing" },
-      { title: "Book Now", href: "/book" },
+      { title: "Blog", href: "/blog" },
       { title: "Contact", href: "/contact" },
     ],
     legal: [

@@ -65,10 +65,6 @@ export async function updateSession(request: NextRequest) {
     request.nextUrl.pathname.startsWith("/how-it-works") ||
     request.nextUrl.pathname.startsWith("/contact") ||
     request.nextUrl.pathname.startsWith("/about") ||
-    // Landing pages
-    request.nextUrl.pathname.startsWith("/cold-plunge-la") ||
-    request.nextUrl.pathname.startsWith("/infrared-sauna-delivery") ||
-    request.nextUrl.pathname.startsWith("/corporate-wellness") ||
     // Static assets
     request.nextUrl.pathname.match(/\.(js|css|png|jpg|jpeg|gif|ico|svg|webp|mp4)$/) ||
     // API routes that should be public

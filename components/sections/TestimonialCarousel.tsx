@@ -22,7 +22,7 @@ interface TestimonialCarouselProps {
   testimonials: Testimonial[];
 }
 
-export default function TestimonialCarousel({ testimonials }: TestimonialCarouselProps) {
+export function TestimonialCarousel({ testimonials }: TestimonialCarouselProps) {
   const [currentTestimonial, setCurrentTestimonial] = useState(0);
 
   useEffect(() => {
@@ -36,7 +36,7 @@ export default function TestimonialCarousel({ testimonials }: TestimonialCarouse
     <>
       {/* Featured Testimonial */}
       <div className="max-w-4xl mx-auto mb-16">
-        <Card className="bg-background border border-border">
+        <Card className="bg-black border border-neutral-800">
           <CardContent className="p-0">
             <div className="grid md:grid-cols-2 gap-0">
               {/* Real Photo Side */}
@@ -52,7 +52,7 @@ export default function TestimonialCarousel({ testimonials }: TestimonialCarouse
               <div className="p-8 lg:p-12 flex flex-col justify-center">
                 <div className="mb-6">
                   <Quote className="h-12 w-12 text-neutral-600 mb-4" />
-                  <blockquote className="text-xl text-foreground leading-relaxed mb-6 font-medium">
+                  <blockquote className="text-xl text-white leading-relaxed mb-6 font-medium">
                     "{testimonials[currentTestimonial].quote}"
                   </blockquote>
                 </div>

@@ -321,8 +321,8 @@ function InstagramPost({ post, showCaption, showEngagement, onClick }: Instagram
             />
 
             {/* Overlay on hover */}
-            <div className="absolute inset-0 bg-muted/80 backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center justify-center">
-              <ExternalLink className="h-6 w-6 text-foreground" />
+            <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center justify-center">
+              <ExternalLink className="h-6 w-6 text-white" />
             </div>
 
             {/* Media type indicator */}

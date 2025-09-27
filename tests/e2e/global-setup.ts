@@ -1,33 +1,30 @@
-import { chromium, FullConfig } from '@playwright/test';
-import path from 'path';
-import fs from 'fs';
+import { chromium, FullConfig } from "@playwright/test";
 
 async function globalSetup(config: FullConfig) {
-  console.log('🚀 Starting comprehensive testing setup...');
-  
-  // Create screenshots directory
-  const screenshotDir = path.join(process.cwd(), 'test-results', 'screenshots');
-  if (!fs.existsSync(screenshotDir)) {
-    fs.mkdirSync(screenshotDir, { recursive: true });
-  }
-  
-  // Warm up the application
+  // Launch browser for setup tasks
   const browser = await chromium.launch();
   const page = await browser.newPage();
-  
+
   try {
-    // Visit the home page to ensure the app is ready
-    await page.goto('http://localhost:3000');
-    await page.waitForLoadState('networkidle');
-    console.log('✅ Application is ready for testing');
+    // Setup test data, authentication, etc.
+    console.log("🔧 Setting up test environment...");
+
+    // TODO: Setup test database, seed data, etc.
+    // await setupTestDatabase();
+    // await seedTestData();
+
+    // Warm up the application
+    const baseURL = config.projects[0].use.baseURL || "http://localhost:3000";
+    await page.goto(baseURL);
+    await page.waitForLoadState("domcontentloaded");
+
+    console.log("✅ Test environment setup complete");
   } catch (error) {
-    console.error('❌ Failed to warm up application:', error);
+    console.error("❌ Test setup failed:", error);
     throw error;
   } finally {
     await browser.close();
   }
-  
-  console.log('🎯 Setup complete - ready for comprehensive testing');
 }
 
 export default globalSetup;

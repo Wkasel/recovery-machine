@@ -9,8 +9,8 @@ import { ServiceSelection } from "@/components/booking/ServiceSelection";
 import { BoltCheckout } from "@/components/payments/BoltCheckout";
 import { Button } from "@/components/ui/button";
 import { createBookingWithPayment } from "@/core/actions/booking";
-import { useAuth } from "@/lib/hooks/use-auth";
-import { useToast } from "@/lib/hooks/use-toast";
+import { useAuth } from "@/hooks/use-auth";
+import { useToast } from "@/hooks/use-toast";
 import {
   Address,
   BookingState,
@@ -48,8 +48,8 @@ export default function BookingPage(): React.ReactElement {
 
   if (!mounted || authLoading) {
     return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
-        <div className="animate-spin h-8 w-8 border-2 border-primary border-t-transparent rounded-full"></div>
+      <div className="min-h-screen bg-black flex items-center justify-center">
+        <div className="animate-spin h-8 w-8 border-2 border-blue-600 border-t-transparent rounded-full"></div>
       </div>
     );
   }
@@ -297,11 +297,11 @@ export default function BookingPage(): React.ReactElement {
 
   if (showBoltCheckout && checkoutData) {
     return (
-      <div className="min-h-screen bg-background py-12">
+      <div className="min-h-screen bg-black py-12">
         <div className="container mx-auto px-4 max-w-2xl">
           <div className="text-center mb-8">
-            <h1 className="text-3xl font-bold text-foreground mb-2">Complete Your Payment</h1>
-            <p className="text-muted-foreground">Secure payment processing for your recovery session</p>
+            <h1 className="text-3xl font-bold text-white mb-2">Complete Your Payment</h1>
+            <p className="text-neutral-400">Secure payment processing for your recovery session</p>
           </div>
 
           <BoltCheckout
@@ -316,12 +316,12 @@ export default function BookingPage(): React.ReactElement {
   }
 
   return (
-    <div className="min-h-screen bg-background py-8">
+    <div className="min-h-screen bg-black py-8">
       <div className="container mx-auto px-4 max-w-6xl">
         {/* Header */}
         <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-foreground mb-2">Book Your Recovery Session</h1>
-          <p className="text-muted-foreground">
+          <h1 className="text-3xl font-bold text-white mb-2">Book Your Recovery Session</h1>
+          <p className="text-neutral-400">
             Professional cold plunge & infrared sauna delivered to your door
           </p>
         </div>
@@ -341,7 +341,7 @@ export default function BookingPage(): React.ReactElement {
         {/* Step content */}
         <div className="bg-black border border-neutral-800 p-6 md:p-8">
           {isLoading && (
-            <div className="absolute inset-0 bg-muted/80 backdrop-blur-sm flex items-center justify-center z-10">
+            <div className="absolute inset-0 bg-black/50 flex items-center justify-center z-10">
               <div className="flex items-center space-x-2">
                 <Loader2 className="w-6 h-6 animate-spin" />
                 <span>Processing...</span>

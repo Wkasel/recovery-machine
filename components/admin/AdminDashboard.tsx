@@ -11,7 +11,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { useToast } from "@/lib/hooks/use-toast";
+import { useToast } from "@/hooks/use-toast";
 import {
   ArrowDownRight,
   ArrowUpRight,
@@ -251,19 +251,19 @@ export function AdminDashboard() {
             <CardContent className="space-y-3">
               <div className="flex items-center justify-between">
                 <span className="text-sm text-gray-600">Pending</span>
-                <Badge variant="warning">
+                <Badge variant="outline" className="bg-yellow-50">
                   {stats.bookings.pending}
                 </Badge>
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-sm text-gray-600">Confirmed</span>
-                <Badge variant="info">
+                <Badge variant="outline" className="bg-blue-50">
                   {stats.bookings.confirmed}
                 </Badge>
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-sm text-gray-600">Completed</span>
-                <Badge variant="success">
+                <Badge variant="outline" className="bg-green-50">
                   {stats.bookings.completed}
                 </Badge>
               </div>

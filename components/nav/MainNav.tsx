@@ -6,14 +6,12 @@ import {
   NavigationMenuItem,
   NavigationMenuLink,
   NavigationMenuList,
-  NavigationMenuContent,
-  NavigationMenuTrigger,
 } from "@/components/ui/navigation-menu";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { navigationConfig } from "@/config/navigation";
 import type { IUser } from "@/lib/types/auth";
 import { cn } from "@/lib/utils";
-import { Menu, Snowflake, ChevronDown, Snowflake as ColdIcon, Flame, Trophy, Building2 } from "lucide-react";
+import { Menu, Snowflake } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import * as React from "react";
@@ -27,11 +25,9 @@ interface MainNavProps {
 
 function NavContent({
   navItems,
-  servicesItems,
   pathname,
 }: {
   navItems: Array<{ href: string; label: string }>;
-  servicesItems: Array<{ href: string; title: string; description: string; icon: any }>;
   pathname: string | null;
 }) {
   return (
@@ -42,8 +38,8 @@ function NavContent({
             <Link
               href={item.href}
               className={cn(
-                "group inline-flex h-9 w-max items-center justify-center rounded-md px-4 py-2 text-sm font-medium transition-colors text-foreground hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50",
-                pathname === item.href && "bg-accent text-accent-foreground"
+                "group inline-flex h-9 w-max items-center justify-center rounded-md px-4 py-2 text-sm font-medium transition-colors text-white hover:bg-neutral-900 hover:text-white focus:bg-neutral-900 focus:text-white focus:outline-none disabled:pointer-events-none disabled:opacity-50",
+                pathname === item.href && "bg-neutral-900 text-white"
               )}
             >
               {item.label}
@@ -51,35 +47,6 @@ function NavContent({
           </NavigationMenuLink>
         </NavigationMenuItem>
       ))}
-      
-      {/* Services Dropdown - Desktop Only */}
-      <NavigationMenuItem className="hidden md:block">
-        <NavigationMenuTrigger className="h-9 px-4 py-2 text-sm font-medium">
-          Services
-        </NavigationMenuTrigger>
-        <NavigationMenuContent>
-          <div className="grid w-[320px] gap-3 p-4 sm:w-[400px] md:w-[600px] md:grid-cols-2">
-            {servicesItems.map((service) => {
-              const IconComponent = service.icon;
-              return (
-                <Link
-                  key={service.href}
-                  href={service.href}
-                  className="group block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
-                >
-                  <div className="flex items-center gap-2 text-sm font-medium leading-none">
-                    <IconComponent className="h-4 w-4" />
-                    {service.title}
-                  </div>
-                  <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
-                    {service.description}
-                  </p>
-                </Link>
-              );
-            })}
-          </div>
-        </NavigationMenuContent>
-      </NavigationMenuItem>
     </NavigationMenuList>
   );
 }
@@ -90,7 +57,7 @@ export function MainNav({ items = navigationConfig.mainNav, children, user }: Ma
   const [mounted, setMounted] = useState(false);
   React.useEffect(() => setMounted(true), []);
 
-  // Enhanced nav items with Services dropdown
+  // Simplified nav items for Recovery Machine
   const navItems = user
     ? [
         { href: "/", label: "Home" },
@@ -103,44 +70,12 @@ export function MainNav({ items = navigationConfig.mainNav, children, user }: Ma
         { href: "/about", label: "About" },
       ];
 
-  // Services dropdown configuration
-  const servicesItems = [
-    {
-      href: "/cold-plunge-la",
-      title: "Cold Plunge LA",
-      description: "Professional mobile cold water therapy delivered to your door",
-      icon: ColdIcon,
-    },
-    {
-      href: "/infrared-sauna-delivery",
-      title: "Infrared Sauna Delivery",
-      description: "Luxury heat therapy with full-spectrum infrared technology",
-      icon: Flame,
-    },
-    {
-      href: "/athletic-recovery",
-      title: "Athletic Recovery",
-      description: "Elite contrast therapy for serious athletes and competitors",
-      icon: Trophy,
-    },
-    {
-      href: "/corporate-wellness",
-      title: "Corporate Wellness",
-      description: "Employee wellness programs that boost productivity and morale",
-      icon: Building2,
-    },
-  ];
-
   return (
     <div className="flex items-center">
       {/* Desktop Navigation */}
       <div className="hidden md:flex">
         <NavigationMenu>
-          <NavContent 
-            navItems={navItems} 
-            servicesItems={servicesItems}
-            pathname={mounted ? pathname : null} 
-          />
+          <NavContent navItems={navItems} pathname={mounted ? pathname : null} />
         </NavigationMenu>
       </div>
 
@@ -179,31 +114,6 @@ export function MainNav({ items = navigationConfig.mainNav, children, user }: Ma
                   {item.label}
                 </Link>
               ))}
-              
-              {/* Services Section - Mobile */}
-              <div className="pt-2">
-                <div className="px-3 py-2 text-sm font-medium text-muted-foreground">Services</div>
-                {servicesItems.map((service) => {
-                  const IconComponent = service.icon;
-                  return (
-                    <Link
-                      key={service.href}
-                      href={service.href}
-                      onClick={() => setOpen(false)}
-                      className={cn(
-                        "flex items-center gap-3 px-3 py-2 rounded-md text-base font-medium transition-colors hover:bg-accent hover:text-accent-foreground",
-                        mounted && pathname === service.href && "bg-accent text-accent-foreground"
-                      )}
-                    >
-                      <IconComponent className="h-4 w-4" />
-                      <div>
-                        <div className="font-medium">{service.title}</div>
-                        <div className="text-sm text-muted-foreground">{service.description}</div>
-                      </div>
-                    </Link>
-                  );
-                })}
-              </div>
 
               {!user && (
                 <div className="pt-4 mt-4 border-t space-y-2">

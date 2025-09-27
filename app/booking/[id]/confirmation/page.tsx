@@ -65,7 +65,7 @@ export default function BookingConfirmationPage() {
       <div className="min-h-screen bg-black flex items-center justify-center">
         <div className="flex flex-col items-center space-y-4">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
-          <p className="text-muted-foreground">Loading your booking confirmation...</p>
+          <p className="text-neutral-400">Loading your booking confirmation...</p>
         </div>
       </div>
     );
@@ -76,7 +76,7 @@ export default function BookingConfirmationPage() {
       <div className="min-h-screen bg-black flex items-center justify-center">
         <div className="text-center space-y-4">
           <h1 className="text-2xl font-bold text-red-400">Booking Not Found</h1>
-          <p className="text-muted-foreground">{error || "This confirmation link is invalid or has expired."}</p>
+          <p className="text-neutral-400">{error || "This confirmation link is invalid or has expired."}</p>
           <a 
             href="/" 
             className="inline-block px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
@@ -94,7 +94,7 @@ export default function BookingConfirmationPage() {
         <div className="max-w-2xl mx-auto">
           <div className="mb-6 text-center">
             <h1 className="text-3xl font-bold text-green-400 mb-2">Booking Confirmed!</h1>
-            <p className="text-muted-foreground">Your Recovery Machine session has been confirmed.</p>
+            <p className="text-neutral-400">Your Recovery Machine session has been confirmed.</p>
           </div>
           
           <BookingConfirmation
@@ -117,7 +117,7 @@ export default function BookingConfirmationPage() {
             </a>
             <a 
               href="/" 
-              className="inline-block px-6 py-3 border border-neutral-600 text-muted-foreground rounded-md hover:bg-neutral-800"
+              className="inline-block px-6 py-3 border border-neutral-600 text-neutral-300 rounded-md hover:bg-neutral-800"
             >
               Return Home
             </a>

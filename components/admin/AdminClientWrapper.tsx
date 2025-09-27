@@ -9,8 +9,8 @@ import { useEffect, useState } from "react";
 
 interface AdminClientWrapperProps {
   children: React.ReactNode;
-  user?: User;
-  adminData?: {
+  user: User;
+  adminData: {
     role: string;
   } | null;
 }

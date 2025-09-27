@@ -1,23 +1,18 @@
 import { Geist } from "next/font/google";
 import AppProvider from "./providers";
 
-import { 
-  GoogleAnalytics,
-  SearchEngineVerifications,
-  OrganizationJsonLd,
-  WebsiteJsonLd,
-  WellnessBusinessSchema,
-  Footer,
-  Header,
-  WebVitalsTracker
-} from "@/components";
+import { GoogleAnalytics } from "@/components/analytics/GoogleAnalytics";
+import { SearchEngineVerifications } from "@/components/analytics/SearchConsoleVerification";
+import { OrganizationJsonLd, WebsiteJsonLd } from "@/components/JsonLd";
+import { Footer } from "@/components/nav/Footer";
+import { Header } from "@/components/nav/Header";
+import { WebVitalsTracker } from "@/components/performance/WebVitalsTracker";
 import { Analytics } from "@vercel/analytics/react";
 
-import { globalmetadata, viewport } from "./metadata";
+import { globalmetadata } from "./metadata";
 
 import "./globals.css";
 export const metadata = globalmetadata;
-export { viewport };
 
 const geistSans = Geist({
   display: "swap",
@@ -30,29 +25,16 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={geistSans.className} suppressHydrationWarning>
+    <html lang="en" className={`${geistSans.className} dark`} suppressHydrationWarning>
       <head>
         <SearchEngineVerifications />
         <OrganizationJsonLd />
         <WebsiteJsonLd />
-        <WellnessBusinessSchema />
-        
-        {/* Performance Optimizations */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://www.google-analytics.com" />
         <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
-        <link rel="dns-prefetch" href="https://vitals.vercel-insights.com" />
-        
-        {/* Core Web Vitals & Performance */}
-        <link rel="prefetch" href="/api/vitals" />
-        
-        {/* LLMs.txt discovery */}
-        <link rel="alternate" type="text/plain" href="/llms.txt" title="LLMs.txt" />
-        
-        {/* Canonical URL */}
-        <link rel="canonical" href={process.env.NEXT_PUBLIC_APP_URL || "https://therecoverymachine.com"} />
       </head>
-      <body>
+      <body className="bg-black text-white">
         <AppProvider>
           <div className="min-h-screen relative">
             <Header />
@@ -62,7 +44,7 @@ export default function RootLayout({
             <Footer />
           </div>
         </AppProvider>
-        {/* <Analytics /> */}
+        <Analytics />
         <GoogleAnalytics />
         <WebVitalsTracker />
       </body>

@@ -1,9 +1,9 @@
-import { AdminServerWrapper } from "@/components/admin/AdminServerWrapper";
+import { AdminClientWrapper } from "@/components/admin/AdminClientWrapper";
 import { ServiceAreaManager } from "@/components/admin/ServiceAreaManager";
 
 export default function AdminServiceAreasPage() {
   return (
-    <AdminServerWrapper>
+    <AdminClientWrapper>
       <div className="space-y-6">
         <div>
           <h1 className="text-2xl font-bold text-white">Service Areas</h1>
@@ -11,7 +11,7 @@ export default function AdminServiceAreasPage() {
         </div>
         <ServiceAreaManager />
       </div>
-    </AdminServerWrapper>
+    </AdminClientWrapper>
   );
 }
 

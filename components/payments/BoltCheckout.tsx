@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { useToast } from "@/lib/hooks/use-toast";
+import { useToast } from "@/hooks/use-toast";
 import { PRICING, type OrderType } from "@/lib/bolt/config";
 import { CreditCard, Loader2, Shield } from "lucide-react";
 import { useEffect, useRef, useState } from "react";

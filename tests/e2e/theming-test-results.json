@@ -1,6 +1,0 @@
-
-> test:e2e
-> playwright test --grep theming --reporter=json
-
-🔧 Setting up test environment...
-✅ Test environment setup complete

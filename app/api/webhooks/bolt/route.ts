@@ -1,6 +1,6 @@
 // @ts-nocheck
 import { boltClient } from "@/lib/bolt/client";
-import { createServiceSupabaseClient } from "@/lib/supabase/service";
+import { createServiceSupabaseClient } from "@/utils/supabase/service";
 import { NextRequest, NextResponse } from "next/server";
 
 // Webhook event types from Bolt
