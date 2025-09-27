@@ -14,7 +14,7 @@ import { Toaster } from "sonner";
 export default function AppProvider({ children }: { children: ReactNode }) {
   return (
     <QueryClientProvider client={queryClient}>
-      <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
+      <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false} disableTransitionOnChange>
         <RootErrorBoundary>
           <AuthContextProvider>
             <LoadingProvider>

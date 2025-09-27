@@ -24,7 +24,7 @@ const plans = [
       "Doorstep delivery and pickup",
     ],
     popular: true,
-    cta: "Join Waitlist",
+    cta: "Start Membership",
     ctaVariant: "default" as const,
   },
 ];
@@ -106,7 +106,7 @@ export default function Pricing() {
             >
               <button className="flex items-center">
                 <Calendar className="w-7 h-7 mr-4" />
-                Join Waitlist for Early Access
+                Book Your First Session
                 <ArrowRight className="w-6 h-6 ml-4" />
               </button>
             </Button>
@@ -287,7 +287,7 @@ export default function Pricing() {
         <div className="text-center mt-16 bg-black border border-neutral-800 p-12">
           <h3 className="text-3xl font-bold text-white mb-4">Ready to Transform Your Recovery?</h3>
           <p className="text-xl text-neutral-400 mb-8 max-w-2xl mx-auto">
-            Join 500+ members who've transformed their recovery routine with mobile wellness services.
+            Join 500+ members who transform their recovery routine with mobile wellness services.
           </p>
           <Button
             asChild
@@ -296,7 +296,7 @@ export default function Pricing() {
           >
             <button className="inline-flex items-center">
               <Calendar className="mr-4 h-7 w-7" />
-              Join Our Waitlist
+              Start Your Membership
               <ArrowRight className="ml-4 h-6 w-6" />
             </button>
           </Button>

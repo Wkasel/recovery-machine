@@ -90,17 +90,22 @@ export function MainNav({ items = navigationConfig.mainNav, children, user }: Ma
   const [mounted, setMounted] = useState(false);
   React.useEffect(() => setMounted(true), []);
 
-  // Enhanced nav items with Services dropdown
+  // Simplified nav items
   const navItems = user
     ? [
         { href: "/", label: "Home" },
-        { href: "/book", label: "Book Session" },
+        { href: "/services", label: "Services" },
+        { href: "/about", label: "About" },
+        { href: "/pricing", label: "Pricing" },
+        { href: "/contact", label: "Contact" },
         { href: "/profile", label: "Dashboard" },
       ]
     : [
         { href: "/", label: "Home" },
-        { href: "/book", label: "Book Session" },
+        { href: "/services", label: "Services" },
         { href: "/about", label: "About" },
+        { href: "/pricing", label: "Pricing" },
+        { href: "/contact", label: "Contact" },
       ];
 
   // Services dropdown configuration

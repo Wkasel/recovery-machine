@@ -7,6 +7,22 @@ export const navigationConfig = {
       href: "/",
     },
     {
+      title: "Services",
+      href: "/services",
+    },
+    {
+      title: "About",
+      href: "/about",
+    },
+    {
+      title: "Pricing",
+      href: "/pricing",
+    },
+    {
+      title: "Contact",
+      href: "/contact",
+    },
+    {
       title: "Dashboard",
       href: "/profile",
       auth: true,

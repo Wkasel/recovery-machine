@@ -71,7 +71,7 @@ export default function Hero() {
           {/* Trust Indicator - Modern Badge */}
           <div className="inline-flex items-center gap-2 bg-primary/10 px-4 py-2 rounded-full border border-primary/20 backdrop-blur-sm">
             <Star className="h-4 w-4 text-primary fill-current" />
-            <Caption className="text-primary font-medium">Professional mobile recovery</Caption>
+            <Caption className="text-primary font-medium">Now serving OC & LA</Caption>
           </div>
 
           {/* Main Headline - Clean Typography */}
@@ -82,7 +82,7 @@ export default function Hero() {
               weight="bold"
               className="font-mono tracking-tight leading-none text-6xl md:text-7xl lg:text-8xl"
             >
-              Coming Soon
+              The
             </Heading>
             <Heading
               as="h1"
@@ -102,8 +102,8 @@ export default function Hero() {
               align="center"
               className="max-w-3xl text-2xl leading-relaxed font-medium text-center mx-auto"
             >
-              Professional mobile recovery coming to Orange County & Los Angeles. Join our waitlist
-              for early access and exclusive offers.
+              Professional mobile recovery in Orange County & Los Angeles. Experience elite contrast therapy
+              delivered to your doorstep.
             </Text>
           </div>
 
@@ -114,14 +114,14 @@ export default function Hero() {
                 <div className="text-center p-6 bg-primary/10 border border-primary/20 rounded-lg">
                   <div className="text-primary mb-2">✓ Success!</div>
                   <p className="text-foreground">
-                    You're on the waitlist! We'll notify you when we launch.
+                    Thanks for your interest! We'll contact you to schedule your session.
                   </p>
                 </div>
               ) : (
                 <form onSubmit={handleEmailSubmit} className="flex flex-col gap-4">
                   <input
                     type="email"
-                    placeholder="Enter your email for early access"
+                    placeholder="Enter your email to book a session"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     className="h-14 px-6 text-lg bg-background border-2 border-primary/20 rounded-lg focus:border-primary focus:outline-none transition-colors"
@@ -138,7 +138,7 @@ export default function Hero() {
                       <div className="w-5 h-5 border-2 border-primary-foreground/30 border-t-primary-foreground rounded-full animate-spin"></div>
                     ) : (
                       <>
-                        <span className="mr-3">Join Waitlist</span>
+                        <span className="mr-3">Book Session</span>
                         <ArrowRight className="h-5 w-5" />
                       </>
                     )}
@@ -155,7 +155,7 @@ export default function Hero() {
             </Button>
           </div>
 
-          {/* Coming Soon Benefits */}
+          {/* Service Areas */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-2xl mx-auto">
             <div className="flex items-center justify-center gap-3 text-muted-foreground bg-background/60 backdrop-blur-sm px-4 py-3 rounded-lg border border-border/50 hover:bg-background/80 transition-all duration-200">
               <Shield className="h-4 w-4" />
@@ -167,7 +167,7 @@ export default function Hero() {
             </div>
             <div className="flex items-center justify-center gap-3 text-primary bg-primary/10 backdrop-blur-sm px-4 py-3 rounded-lg border border-primary/20 hover:bg-primary/20 transition-all duration-200">
               <Star className="h-4 w-4 fill-current" />
-              <Caption className="font-medium">Early Access</Caption>
+              <Caption className="font-medium">Available Now</Caption>
             </div>
           </div>
         </Stack>
