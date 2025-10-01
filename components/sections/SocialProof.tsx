@@ -4,90 +4,6 @@ import { Button } from "@/components/ui/button";
 import { Instagram, Star, TrendingUp, Users } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useId, useRef } from "react";
-import TestimonialCarousel from "./TestimonialCarousel";
-
-// Enhanced testimonials with professional photos
-export const testimonials = [
-  {
-    id: 1,
-    name: "Sarah Chen",
-    role: "Marathon Runner",
-    avatar:
-      "https://images.unsplash.com/photo-1494790108755-2616b612b789?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80",
-    rating: 5,
-    quote:
-      "Transformed my recovery routine – feel unstoppable after every session! The convenience of professional recovery at home is unmatched.",
-    image:
-      "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
-    location: "New York, NY",
-    verified: true,
-    sessionCount: "25+ sessions",
-  },
-  {
-    id: 2,
-    name: "Marcus Rodriguez",
-    role: "CrossFit Athlete",
-    avatar:
-      "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80",
-    rating: 5,
-    quote:
-      "The convenience of having professional equipment at home is game-changing. My recovery time has improved dramatically.",
-    image:
-      "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
-    location: "Los Angeles, CA",
-    verified: true,
-    sessionCount: "40+ sessions",
-  },
-  {
-    id: 3,
-    name: "Dr. Emily Watson",
-    role: "Physical Therapist",
-    avatar:
-      "https://images.unsplash.com/photo-1559839734-2b71ea197ec2?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80",
-    rating: 5,
-    quote:
-      "My patients see incredible results. The contrast therapy is scientifically proven and this service makes it accessible.",
-    image:
-      "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
-    location: "Miami, FL",
-    verified: true,
-    sessionCount: "Professional Partner",
-  },
-  {
-    id: 4,
-    name: "Alex Thompson",
-    role: "Business Executive",
-    avatar:
-      "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80",
-    rating: 5,
-    quote:
-      "Perfect for busy schedules. Recovery without leaving home is a productivity hack that's transformed my energy levels.",
-    image:
-      "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
-    location: "Chicago, IL",
-    verified: true,
-    sessionCount: "15+ sessions",
-  },
-  {
-    id: 5,
-    name: "Jessica Park",
-    role: "Wellness Coach",
-    avatar:
-      "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80",
-    rating: 5,
-    quote:
-      "The mental clarity and physical benefits are immediate. I recommend this to all my clients seeking peak performance.",
-    image:
-      "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
-    location: "Austin, TX",
-    verified: true,
-    sessionCount: "30+ sessions",
-  },
-];
-
-// Instagram posts now handled by Behold.so widget
-// This eliminates API rate limits and maintenance overhead
-// Configuration is managed through Behold.so dashboard
 
 const benefits = [
   {
@@ -183,22 +99,6 @@ export default function SocialProof() {
               );
             })}
           </div>
-        </div>
-
-        {/* Enhanced Testimonials Section */}
-        <div className="mb-24">
-          <div className="text-center mb-16">
-            <h3 className="text-3xl sm:text-4xl font-bold text-foreground mb-4">
-              Real Stories, Real Results
-            </h3>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Hear from athletes, professionals, and wellness experts who've transformed their
-              recovery routine
-            </p>
-          </div>
-
-          {/* Featured Testimonial */}
-          <TestimonialCarousel testimonials={testimonials} />
         </div>
 
         {/* Instagram Section - Behold.so Integration */}
