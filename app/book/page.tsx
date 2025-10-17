@@ -217,6 +217,10 @@ export default function BookingPage(): React.ReactElement {
       if (result.requiresPayment && result.checkout) {
         setCheckoutData({
           ...result.checkout,
+          metadata: {
+            bookingId: result.booking?.id,
+            orderId: result.order?.id,
+          },
           prefetchedSession: {
             checkoutId: result.checkout.checkoutId,
             checkoutUrl: result.checkout.checkoutUrl,
