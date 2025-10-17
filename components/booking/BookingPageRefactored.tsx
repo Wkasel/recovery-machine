@@ -198,7 +198,10 @@ export default function BookingPageRefactored(): React.ReactElement {
     return basePrice + setupFee + addOnsCost;
   };
 
-  const handlePayment = async (guestData?: { email: string; phone: string }) => {
+  const handlePayment = async (
+    guestData?: { email: string; phone: string },
+    _options?: { devBypass?: boolean }
+  ) => {
     if (!bookingState.serviceType || !bookingState.dateTime || !bookingState.address) {
       toast({
         title: "Missing Information",

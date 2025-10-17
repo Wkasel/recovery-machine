@@ -6,7 +6,7 @@ import { NextRequest, NextResponse } from "next/server";
 // Process a refund
 export async function POST(request: NextRequest) {
   try {
-    const supabase = createServerSupabaseClient();
+    const supabase = await createServerSupabaseClient();
     const {
       data: { user },
       error: authError,
@@ -105,7 +105,7 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: "order_id parameter required" }, { status: 400 });
     }
 
-    const supabase = createServerSupabaseClient();
+    const supabase = await createServerSupabaseClient();
     const {
       data: { user },
       error: authError,

@@ -75,6 +75,12 @@ export default {
           'Arial',
           'sans-serif',
         ],
+        serif: [
+          'var(--font-playfair)',
+          'Playfair Display',
+          'Georgia',
+          'serif',
+        ],
         mono: [
           'ui-monospace',
           'SFMono-Regular',

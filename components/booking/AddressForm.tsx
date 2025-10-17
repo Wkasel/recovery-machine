@@ -162,34 +162,34 @@ export function AddressForm({
   return (
     <div className="space-y-6">
       <div className="text-center">
-        <h2 className="text-2xl font-bold text-white mb-2">Where should we set up?</h2>
-        <p className="text-neutral-400">We'll bring the recovery experience right to your location</p>
+        <h2 className="text-2xl font-serif font-bold text-foreground mb-2">Where should we set up?</h2>
+        <p className="text-muted-foreground font-light">We'll bring the recovery experience right to your location</p>
       </div>
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 pb-20 md:pb-6">
         {/* Google Places Autocomplete */}
         <div className="space-y-2">
-          <Label htmlFor="autocomplete-address" className="text-white">Search Address</Label>
+          <Label htmlFor="autocomplete-address" className="text-foreground">Search Address</Label>
           <div className="relative">
-            <MapPin className="absolute left-3 top-3 h-4 w-4 text-neutral-500" />
+            <MapPin className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
             <Input
               ref={inputRef}
               placeholder="Start typing your address..."
-              className="pl-10 bg-neutral-900 border border-neutral-800 text-white placeholder:text-neutral-500"
+              className="pl-10 bg-background border-input text-foreground placeholder:text-muted-foreground"
             />
           </div>
-          <p className="text-sm text-neutral-500">Start typing to see address suggestions</p>
+          <p className="text-sm text-muted-foreground font-light">Start typing to see address suggestions</p>
         </div>
 
         {/* Manual address fields */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="space-y-2">
-            <Label htmlFor={streetId} className="text-white">Street Address *</Label>
+            <Label htmlFor={streetId} className="text-foreground">Street Address *</Label>
             <Input
               {...register("street")}
               id={streetId}
               placeholder="123 Main St"
-              className="bg-neutral-900 border border-neutral-800 text-white placeholder:text-neutral-500 min-h-[44px]"
+              className="bg-background border-input text-foreground placeholder:text-muted-foreground min-h-[44px]"
               onChange={async (e) => {
                 setValue("street", e.target.value, { shouldValidate: true });
                 await trigger();
@@ -199,12 +199,12 @@ export function AddressForm({
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor={cityId} className="text-white">City *</Label>
+            <Label htmlFor={cityId} className="text-foreground">City *</Label>
             <Input
               {...register("city")}
               id={cityId}
               placeholder="Orange County / Los Angeles"
-              className="bg-neutral-900 border border-neutral-800 text-white placeholder:text-neutral-500 min-h-[44px]"
+              className="bg-background border-input text-foreground placeholder:text-muted-foreground min-h-[44px]"
               onChange={async (e) => {
                 setValue("city", e.target.value, { shouldValidate: true });
                 await trigger();
@@ -214,13 +214,13 @@ export function AddressForm({
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor={stateId} className="text-white">State *</Label>
+            <Label htmlFor={stateId} className="text-foreground">State *</Label>
             <Input
               {...register("state")}
               id={stateId}
               placeholder="CA"
               maxLength={2}
-              className="bg-neutral-900 border border-neutral-800 text-white placeholder:text-neutral-500 min-h-[44px]"
+              className="bg-background border-input text-foreground placeholder:text-muted-foreground min-h-[44px]"
               onChange={async (e) => {
                 setValue("state", e.target.value, { shouldValidate: true });
                 await trigger();
@@ -230,13 +230,13 @@ export function AddressForm({
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor={zipId} className="text-white">ZIP Code *</Label>
+            <Label htmlFor={zipId} className="text-foreground">ZIP Code *</Label>
             <Input
               {...register("zipCode")}
               id={zipId}
               placeholder="90210"
               maxLength={10}
-              className="bg-neutral-900 border border-neutral-800 text-white placeholder:text-neutral-500 min-h-[44px]"
+              className="bg-background border-input text-foreground placeholder:text-muted-foreground min-h-[44px]"
               onChange={async (e) => {
                 setValue("zipCode", e.target.value, { shouldValidate: true });
                 // Trigger validation for all fields to ensure form validity
@@ -255,8 +255,8 @@ export function AddressForm({
 
         {/* Setup fee calculation */}
         {isCalculatingFee && (
-          <Card className="bg-black border border-neutral-800">
-            <CardContent className="flex items-center justify-center py-6 text-white">
+          <Card className="bg-white/70 backdrop-blur-sm border-border rounded-3xl shadow-lg">
+            <CardContent className="flex items-center justify-center py-6 text-foreground">
               <Loader2 className="w-6 h-6 animate-spin mr-2" />
               <span>Calculating setup fee...</span>
             </CardContent>
@@ -264,30 +264,30 @@ export function AddressForm({
         )}
 
         {setupFee && (
-          <Card className="bg-black border border-neutral-800">
+          <Card className="bg-white/70 backdrop-blur-sm border-border rounded-3xl shadow-lg">
             <CardHeader>
-              <CardTitle className="flex items-center space-x-2 text-white">
-                <DollarSign className="w-5 h-5 text-white" />
+              <CardTitle className="flex items-center space-x-2 text-foreground font-serif">
+                <DollarSign className="w-5 h-5 text-foreground" />
                 <span>Setup Fee Calculation</span>
               </CardTitle>
-              <CardDescription className="text-neutral-400">One-time fee for equipment delivery and setup</CardDescription>
+              <CardDescription className="text-muted-foreground font-light">One-time fee for equipment delivery and setup</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <div className="flex justify-between">
-                    <span className="text-sm text-neutral-400">Base setup fee:</span>
-                    <span className="font-medium text-white">{formatPrice(setupFee.baseSetupFee)}</span>
+                    <span className="text-sm text-muted-foreground font-light">Base setup fee:</span>
+                    <span className="font-medium text-foreground">{formatPrice(setupFee.baseSetupFee)}</span>
                   </div>
                   {setupFee.distanceFee > 0 && (
                     <div className="flex justify-between">
-                      <span className="text-sm text-neutral-400">Distance fee:</span>
-                      <span className="font-medium text-white">{formatPrice(setupFee.distanceFee)}</span>
+                      <span className="text-sm text-muted-foreground font-light">Distance fee:</span>
+                      <span className="font-medium text-foreground">{formatPrice(setupFee.distanceFee)}</span>
                     </div>
                   )}
                   <div className="flex justify-between border-t pt-2">
-                    <span className="font-semibold text-white">Total setup fee:</span>
-                    <span className="font-semibold text-lg text-white">
+                    <span className="font-semibold text-foreground">Total setup fee:</span>
+                    <span className="font-semibold text-lg text-foreground">
                       {formatPrice(setupFee.totalSetupFee)}
                     </span>
                   </div>
@@ -295,14 +295,14 @@ export function AddressForm({
 
                 <div className="space-y-2">
                   <div className="flex items-center space-x-2">
-                    <MapPin className="w-4 h-4 text-white" />
-                    <span className="text-sm text-neutral-400">
+                    <MapPin className="w-4 h-4 text-foreground" />
+                    <span className="text-sm text-muted-foreground font-light">
                       Distance: {setupFee.distance} miles
                     </span>
                   </div>
                   <div className="flex items-center space-x-2">
-                    <Clock className="w-4 h-4 text-white" />
-                    <span className="text-sm text-neutral-400">
+                    <Clock className="w-4 h-4 text-foreground" />
+                    <span className="text-sm text-muted-foreground font-light">
                       Est. travel time: {setupFee.estimatedTravelTime} min
                     </span>
                   </div>
@@ -310,9 +310,9 @@ export function AddressForm({
               </div>
 
               {setupFee.totalSetupFee >= 40000 && (
-                <Alert className="bg-black border border-neutral-800">
+                <Alert className="bg-white border-border">
                   <AlertCircle className="h-4 w-4" />
-                  <AlertDescription className="text-neutral-300">
+                  <AlertDescription className="text-foreground font-light">
                     This location has a higher setup fee due to distance. Consider choosing a
                     location closer to our service area to reduce costs.
                   </AlertDescription>
@@ -323,27 +323,27 @@ export function AddressForm({
         )}
 
         {/* Service area info */}
-        <Card className="bg-black border border-neutral-800">
+        <Card className="bg-white/70 backdrop-blur-sm border-border rounded-3xl shadow-lg">
           <CardContent className="py-4">
             <div className="flex items-start space-x-3">
-              <MapPin className="w-5 h-5 text-white mt-0.5" />
+              <MapPin className="w-5 h-5 text-foreground mt-0.5" />
               <div>
-                <h3 className="font-medium text-white">Service Area</h3>
-                <p className="text-sm text-neutral-400">
+                <h3 className="font-serif font-medium text-foreground">Service Area</h3>
+                <p className="text-sm text-muted-foreground font-light">
                   We currently serve Orange County and Los Angeles areas. Setup fees vary based
                   on distance from our facility.
                 </p>
                 <div className="mt-2 flex flex-wrap gap-2">
-                  <Badge variant="secondary" className="bg-neutral-900 text-white border border-neutral-800">
+                  <Badge variant="secondary" className="bg-card text-foreground border border-border">
                     Newport Beach
                   </Badge>
-                  <Badge variant="secondary" className="bg-neutral-900 text-white border border-neutral-800">
+                  <Badge variant="secondary" className="bg-card text-foreground border border-border">
                     Irvine
                   </Badge>
-                  <Badge variant="secondary" className="bg-neutral-900 text-white border border-neutral-800">
+                  <Badge variant="secondary" className="bg-card text-foreground border border-border">
                     Huntington Beach
                   </Badge>
-                  <Badge variant="secondary" className="bg-neutral-900 text-white border border-neutral-800">
+                  <Badge variant="secondary" className="bg-card text-foreground border border-border">
                     Los Angeles
                   </Badge>
                 </div>

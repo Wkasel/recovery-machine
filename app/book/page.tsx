@@ -41,6 +41,8 @@ export default function BookingPage(): React.ReactElement {
   const [orderAmount, setOrderAmount] = useState(0);
   const [showBoltCheckout, setShowBoltCheckout] = useState(false);
   const [checkoutData, setCheckoutData] = useState<any>(null);
+  const [pendingConfirmationUrl, setPendingConfirmationUrl] = useState<string | null>(null);
+  const [pendingBookingId, setPendingBookingId] = useState<string | null>(null);
 
   useEffect(() => {
     setMounted(true);
@@ -147,7 +149,10 @@ export default function BookingPage(): React.ReactElement {
     return basePrice + setupFee + addOnsCost;
   };
 
-  const handlePayment = async (guestData?: { email: string; phone: string }) => {
+  const handlePayment = async (
+    guestData?: { email: string; phone: string },
+    options?: { devBypass?: boolean }
+  ) => {
     if (!bookingState.serviceType || !bookingState.dateTime || !bookingState.address) {
       toast({
         title: "Missing Information",
@@ -160,6 +165,9 @@ export default function BookingPage(): React.ReactElement {
     // No auth check - allow guest bookings
     // Email will be collected in payment step for auto-account creation
 
+    setCheckoutData(null);
+    setPendingConfirmationUrl(null);
+    setPendingBookingId(null);
     setIsLoading(true);
 
     try {
@@ -183,6 +191,7 @@ export default function BookingPage(): React.ReactElement {
         userEmail: user?.email || null,
         guestEmail: guestData?.email || null,
         guestPhone: guestData?.phone || null,
+        devBypass: options?.devBypass ?? false,
       };
 
       // Call our bookings API to create the booking and order
@@ -201,37 +210,59 @@ export default function BookingPage(): React.ReactElement {
 
       const result = await response.json();
       
-      if (result.success) {
+      if (!result.success) {
+        throw new Error(result.error || "Failed to create booking");
+      }
+
+      if (result.requiresPayment && result.checkout) {
+        setCheckoutData({
+          ...result.checkout,
+          prefetchedSession: {
+            checkoutId: result.checkout.checkoutId,
+            checkoutUrl: result.checkout.checkoutUrl,
+          },
+        });
+        setPendingConfirmationUrl(result.confirmationUrl || null);
+        setPendingBookingId(result.booking?.id || null);
+        setShowBoltCheckout(true);
+        toast({
+          title: "Secure Payment",
+          description: "Complete checkout to confirm your booking.",
+        });
+        return;
+      }
+
+      if (result.confirmationUrl) {
         toast({
           title: "Booking Confirmed!",
           description: "Redirecting to your confirmation page...",
         });
+        window.location.href = result.confirmationUrl;
+        return;
+      }
 
-        // Redirect to public confirmation page with token
-        if (result.confirmationUrl) {
-          window.location.href = result.confirmationUrl;
-        } else {
-          // Fallback to old confirmation step if no URL
-          const confirmedBooking: DatabaseBooking = {
-            id: result.booking.id,
-            user_id: result.booking.user_id,
-            order_id: result.booking.order_id,
-            date_time: result.booking.date_time,
-            duration: result.booking.duration,
-            add_ons: result.booking.add_ons,
-            status: result.booking.status,
-            location_address: result.booking.address || result.booking.location_address,
-            special_instructions: result.booking.notes || result.booking.special_instructions,
-            created_at: result.booking.created_at,
-            updated_at: result.booking.updated_at,
-          };
+      if (result.booking) {
+        const confirmedBooking: DatabaseBooking = {
+          id: result.booking.id,
+          user_id: result.booking.user_id,
+          order_id: result.booking.order_id,
+          date_time: result.booking.date_time,
+          duration: result.booking.duration,
+          add_ons: result.booking.add_ons,
+          status: result.booking.status,
+          location_address: result.booking.address || result.booking.location_address,
+          special_instructions: result.booking.notes || result.booking.special_instructions,
+          created_at: result.booking.created_at,
+          updated_at: result.booking.updated_at,
+        };
 
-          setFinalBooking(confirmedBooking);
-          markStepCompleted("payment");
-          moveToStep("confirmation");
-        }
-      } else {
-        throw new Error(result.error || "Failed to create booking");
+        setFinalBooking(confirmedBooking);
+        markStepCompleted("payment");
+        moveToStep("confirmation");
+        toast({
+          title: "Booking Confirmed!",
+          description: "Your booking has been confirmed.",
+        });
       }
     } catch (error) {
       console.error("Booking error:", error);
@@ -247,38 +278,28 @@ export default function BookingPage(): React.ReactElement {
 
   const handlePaymentSuccess = (paymentResult: any) => {
     setShowBoltCheckout(false);
-    markStepCompleted("payment");
-    moveToStep("confirmation");
-
-    // You would typically fetch the updated booking here
-    // For now, we'll create a mock booking for the confirmation
-    const mockBooking: DatabaseBooking = {
-      id: paymentResult.transaction_id || "booking_123",
-      user_id: user?.id || "temp-user-id",
-      order_id: checkoutData?.metadata?.orderId || "order_123",
-      date_time: bookingState.dateTime!,
-      duration: services.find((s) => s.id === bookingState.serviceType)?.duration || 30,
-      add_ons: {
-        serviceType: bookingState.serviceType,
-        ...bookingState.addOns,
-      },
-      status: "confirmed",
-      location_address: bookingState.address!,
-      special_instructions: bookingState.specialInstructions,
-      created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString(),
-    };
-
-    setFinalBooking(mockBooking);
+    const redirectUrl = pendingConfirmationUrl;
 
     toast({
       title: "Payment Successful!",
-      description: "Your booking has been confirmed.",
+      description: "Finalizing your booking...",
     });
+
+    if (redirectUrl) {
+      window.location.href = redirectUrl;
+      return;
+    }
+
+    if (pendingBookingId) {
+      window.location.href = `/booking/${pendingBookingId}/confirmation`;
+    }
   };
 
   const handlePaymentError = (error: any) => {
     setShowBoltCheckout(false);
+    setCheckoutData(null);
+    setPendingConfirmationUrl(null);
+    setPendingBookingId(null);
     toast({
       title: "Payment Failed",
       description: error.message || "Payment could not be processed.",
@@ -293,9 +314,12 @@ export default function BookingPage(): React.ReactElement {
     setFinalBooking(null);
     setShowBoltCheckout(false);
     setCheckoutData(null);
+    setPendingConfirmationUrl(null);
+    setPendingBookingId(null);
   };
 
   if (showBoltCheckout && checkoutData) {
+    const { prefetchedSession, ...boltCheckoutProps } = checkoutData;
     return (
       <div className="min-h-screen bg-background py-12">
         <div className="container mx-auto px-4 max-w-2xl">
@@ -305,7 +329,8 @@ export default function BookingPage(): React.ReactElement {
           </div>
 
           <BoltCheckout
-            {...checkoutData}
+            {...boltCheckoutProps}
+            prefetchedSession={prefetchedSession}
             onSuccess={handlePaymentSuccess}
             onError={handlePaymentError}
             onCancel={() => setShowBoltCheckout(false)}
@@ -320,8 +345,8 @@ export default function BookingPage(): React.ReactElement {
       <div className="container mx-auto px-4 max-w-6xl">
         {/* Header */}
         <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-foreground mb-2">Book Your Recovery Session</h1>
-          <p className="text-muted-foreground">
+          <h1 className="text-3xl font-serif font-bold text-foreground mb-2 tracking-tight">Book Your Recovery Session</h1>
+          <p className="text-muted-foreground font-light">
             Professional cold plunge & infrared sauna delivered to your door
           </p>
         </div>
@@ -339,12 +364,12 @@ export default function BookingPage(): React.ReactElement {
         </div>
 
         {/* Step content */}
-        <div className="bg-black border border-neutral-800 p-6 md:p-8">
+        <div className="bg-white/70 backdrop-blur-sm border border-border rounded-3xl p-6 md:p-8 shadow-lg">
           {isLoading && (
-            <div className="absolute inset-0 bg-muted/80 backdrop-blur-sm flex items-center justify-center z-10">
+            <div className="absolute inset-0 bg-muted/80 backdrop-blur-sm flex items-center justify-center z-10 rounded-3xl">
               <div className="flex items-center space-x-2">
-                <Loader2 className="w-6 h-6 animate-spin" />
-                <span>Processing...</span>
+                <Loader2 className="w-6 h-6 animate-spin text-primary" />
+                <span className="text-foreground">Processing...</span>
               </div>
             </div>
           )}

@@ -54,8 +54,16 @@ export async function createBookingWithPayment(
     error: userError,
   } = await supabase.auth.getUser();
 
+  const {
+    data: { session },
+  } = await supabase.auth.getSession();
+
   if (userError || !user) {
     throw new Error("Not authenticated");
+  }
+
+  if (!session?.access_token) {
+    throw new Error("Missing access token");
   }
 
   // Create order first via payment API
@@ -81,7 +89,7 @@ export async function createBookingWithPayment(
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${user.access_token}`,
+      Authorization: `Bearer ${session.access_token}`,
     },
     body: JSON.stringify(orderData),
   });

@@ -71,14 +71,11 @@ export default function FeaturesPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-black text-white">
+    <div className="min-h-screen bg-gradient-to-b from-background to-muted/30 text-foreground">
       <div className="container mx-auto px-4 py-16 max-w-6xl">
         <div className="mb-16 text-center">
-          <Link href="/" className="text-neutral-400 hover:text-white mb-8 inline-block">
-            ← Back to Home
-          </Link>
-          <h1 className="text-4xl font-bold mb-4">Features & Benefits</h1>
-          <p className="text-xl text-neutral-400 max-w-2xl mx-auto">
+          <h1 className="text-4xl font-bold font-serif tracking-tight mb-4">Features & Benefits</h1>
+          <p className="text-xl font-light text-muted-foreground max-w-2xl mx-auto">
             Professional recovery therapy delivered with commercial-grade equipment and expert
             guidance
           </p>
@@ -88,26 +85,26 @@ export default function FeaturesPage() {
           {features.map((feature, index) => {
             const IconComponent = feature.icon;
             return (
-              <div key={index} className="bg-black border border-neutral-800 p-8 text-center">
-                <div className="w-16 h-16 bg-neutral-900 border border-neutral-800 flex items-center justify-center mx-auto mb-6">
-                  <IconComponent className="h-8 w-8 text-white" />
+              <div key={index} className="bg-white/70 backdrop-blur-sm border border-border rounded-3xl shadow-lg p-8 text-center">
+                <div className="w-16 h-16 bg-primary/10 border border-border rounded-2xl flex items-center justify-center mx-auto mb-6">
+                  <IconComponent className="h-8 w-8 text-foreground" />
                 </div>
-                <h3 className="text-xl font-bold mb-4">{feature.title}</h3>
-                <p className="text-neutral-400 leading-relaxed">{feature.description}</p>
+                <h3 className="text-xl font-bold font-serif tracking-tight mb-4">{feature.title}</h3>
+                <p className="text-muted-foreground font-light leading-relaxed">{feature.description}</p>
               </div>
             );
           })}
         </div>
 
-        <div className="bg-black border border-neutral-800 p-12 text-center">
-          <h2 className="text-3xl font-bold mb-6">Ready to Experience Professional Recovery?</h2>
-          <p className="text-neutral-400 mb-8 max-w-2xl mx-auto">
+        <div className="bg-white/70 backdrop-blur-sm border border-border rounded-3xl shadow-lg p-12 text-center">
+          <h2 className="text-3xl font-bold font-serif tracking-tight mb-6">Ready to Experience Professional Recovery?</h2>
+          <p className="text-muted-foreground font-light mb-8 max-w-2xl mx-auto">
             Join hundreds of professionals, athletes, and wellness enthusiasts who have transformed
             their recovery routine with Recovery Machine.
           </p>
           <Link
             href="/book"
-            className="inline-block bg-neutral-900 border border-neutral-800 text-white px-12 py-4 text-lg font-semibold hover:bg-neutral-800 transition-colors"
+            className="inline-block bg-primary text-primary-foreground px-12 py-4 text-lg font-semibold rounded-full hover:bg-primary/90 hover:scale-105 transition-all duration-300 shadow-md"
           >
             Book Your First Session
           </Link>

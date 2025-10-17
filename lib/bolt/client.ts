@@ -40,6 +40,14 @@ export class BoltClient {
 
   // Create a checkout session
   async createCheckout(orderData: BoltOrderData) {
+    const successUrl =
+      (orderData.metadata?.confirmation_url as string | undefined) ||
+      `${process.env.NEXT_PUBLIC_APP_URL}/payment/success`;
+
+    const cancelUrl =
+      (orderData.metadata?.cancel_url as string | undefined) ||
+      `${process.env.NEXT_PUBLIC_APP_URL}/payment/cancel`;
+
     const checkoutData = {
       cart: {
         total_amount: orderData.amount,
@@ -60,8 +68,8 @@ export class BoltClient {
         email: orderData.customer_email,
         phone: orderData.customer_phone,
       },
-      success_url: `${process.env.NEXT_PUBLIC_APP_URL}/payment/success`,
-      cancel_url: `${process.env.NEXT_PUBLIC_APP_URL}/payment/cancel`,
+      success_url: successUrl,
+      cancel_url: cancelUrl,
       webhook_url: `${process.env.NEXT_PUBLIC_APP_URL}/api/webhooks/bolt`,
       metadata: {
         order_type: orderData.order_type,

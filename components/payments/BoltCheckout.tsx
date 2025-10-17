@@ -14,6 +14,10 @@ interface BoltCheckoutProps {
   customerEmail: string;
   customerPhone?: string;
   metadata?: Record<string, any>;
+  prefetchedSession?: {
+    checkoutId: string;
+    checkoutUrl: string;
+  };
   onSuccess?: (result: any) => void;
   onError?: (error: any) => void;
   onCancel?: () => void;
@@ -33,6 +37,7 @@ export function BoltCheckout({
   customerEmail,
   customerPhone,
   metadata = {},
+  prefetchedSession,
   onSuccess,
   onError,
   onCancel,
@@ -42,6 +47,14 @@ export function BoltCheckout({
   const [error, setError] = useState<string | null>(null);
   const iframeRef = useRef<HTMLIFrameElement>(null);
   const { toast } = useToast();
+
+  useEffect(() => {
+    if (prefetchedSession?.checkoutUrl) {
+      setCheckoutUrl(prefetchedSession.checkoutUrl);
+      setLoading(false);
+      setError(null);
+    }
+  }, [prefetchedSession]);
 
   // Initialize Bolt checkout
   const initializeCheckout = async () => {
@@ -178,7 +191,7 @@ export function BoltCheckout({
           </div>
 
           {/* Checkout Action */}
-          {!checkoutUrl && !loading && !error && (
+          {!checkoutUrl && !loading && !error && !prefetchedSession && (
             <Button onClick={initializeCheckout} className="w-full" size="lg">
               Continue to Payment
             </Button>

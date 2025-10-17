@@ -56,33 +56,33 @@ export default function Hero() {
   };
 
   return (
-    <section className="relative min-h-screen flex flex-col justify-center items-center bg-background text-foreground overflow-hidden">
+    <section className="relative min-h-screen flex flex-col justify-center items-center bg-gradient-to-b from-background via-muted/20 to-background text-foreground overflow-hidden">
       {/* Background Video */}
       <div className="absolute inset-0">
-        <video autoPlay muted loop playsInline className="w-full h-full object-cover opacity-30">
+        <video autoPlay muted loop playsInline className="w-full h-full object-cover opacity-20">
           <source src="/promo-video.mp4" type="video/mp4" />
         </video>
-        <div className="absolute inset-0 bg-background/90" />
+        <div className="absolute inset-0 bg-gradient-to-b from-background/95 via-background/90 to-background/95" />
       </div>
 
       {/* Main Content - Centered and Minimal */}
       <Container size="xl" className="relative z-10 text-center">
         <Stack space="16" align="center" className="max-w-5xl mx-auto">
           {/* Trust Indicator - Modern Badge */}
-          <div className="inline-flex items-center gap-2 bg-primary/10 px-4 py-2 rounded-full border border-primary/20 backdrop-blur-sm">
+          <div className="inline-flex items-center gap-2 bg-primary/10 px-5 py-2.5 rounded-full border border-primary/30 shadow-sm">
             <Star className="h-4 w-4 text-primary fill-current" />
-            <Caption className="text-primary font-medium">Now serving OC & LA</Caption>
+            <Caption className="text-primary font-semibold">Based in Newport Beach • Serving Southern California</Caption>
           </div>
 
-          {/* Main Headline - Clean Typography */}
+          {/* Main Headline - Elegant Serif */}
           <Stack space="6" align="center">
             <Heading
               as="h1"
               size="display-2xl"
               weight="bold"
-              className="font-mono tracking-tight leading-none text-6xl md:text-7xl lg:text-8xl text-primary"
+              className="font-serif tracking-tight leading-none text-6xl md:text-7xl lg:text-8xl text-foreground"
             >
-              Recovery Machine
+              Recovery Made Mobile
             </Heading>
           </Stack>
 
@@ -92,10 +92,9 @@ export default function Hero() {
               size="xl"
               color="muted"
               align="center"
-              className="max-w-3xl text-2xl leading-relaxed font-medium text-center mx-auto"
+              className="max-w-3xl text-xl md:text-2xl leading-relaxed font-light text-center mx-auto"
             >
-              Professional mobile recovery in Orange County & Los Angeles. Experience elite contrast therapy
-              delivered to your doorstep.
+              Cold plunge + infrared sauna delivered to your door. Professional equipment. Expert guidance. Zero commute.
             </Text>
           </div>
 
@@ -149,17 +148,17 @@ export default function Hero() {
 
           {/* Service Areas */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-2xl mx-auto">
-            <div className="flex items-center justify-center gap-3 text-muted-foreground bg-background/60 backdrop-blur-sm px-4 py-3 rounded-lg border border-border/50 hover:bg-background/80 transition-all duration-200">
-              <Shield className="h-4 w-4" />
-              <Caption className="font-medium">Orange County</Caption>
+            <div className="flex items-center justify-center gap-3 text-foreground bg-white/80 backdrop-blur-sm px-5 py-4 rounded-2xl border border-border shadow-sm hover:shadow-md hover:border-primary/30 transition-all duration-300">
+              <Shield className="h-5 w-5 text-primary" />
+              <Caption className="font-semibold">Newport Beach</Caption>
             </div>
-            <div className="flex items-center justify-center gap-3 text-muted-foreground bg-background/60 backdrop-blur-sm px-4 py-3 rounded-lg border border-border/50 hover:bg-background/80 transition-all duration-200">
-              <Calendar className="h-4 w-4" />
-              <Caption className="font-medium">Los Angeles</Caption>
+            <div className="flex items-center justify-center gap-3 text-foreground bg-white/80 backdrop-blur-sm px-5 py-4 rounded-2xl border border-border shadow-sm hover:shadow-md hover:border-primary/30 transition-all duration-300">
+              <Calendar className="h-5 w-5 text-primary" />
+              <Caption className="font-semibold">Expanding Coverage</Caption>
             </div>
-            <div className="flex items-center justify-center gap-3 text-primary bg-primary/10 backdrop-blur-sm px-4 py-3 rounded-lg border border-primary/20 hover:bg-primary/20 transition-all duration-200">
-              <Star className="h-4 w-4 fill-current" />
-              <Caption className="font-medium">Available Now</Caption>
+            <div className="flex items-center justify-center gap-3 text-primary-foreground bg-primary backdrop-blur-sm px-5 py-4 rounded-2xl border border-primary shadow-md hover:shadow-lg hover:scale-105 transition-all duration-300">
+              <Star className="h-5 w-5 fill-current" />
+              <Caption className="font-bold text-white">Available Now</Caption>
             </div>
           </div>
         </Stack>

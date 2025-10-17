@@ -2,6 +2,82 @@
 @import 'tailwindcss/components';
 @import 'tailwindcss/utilities';
 
+/* ============================================
+   LIGHT WELLNESS THEME
+   Inspired by Cymbiotika, Ject, Milk & Honey
+   ============================================ */
+
+@layer base {
+  :root {
+    /* Light Theme - Warm Spa Aesthetic */
+    --background: 48 40% 98%;           /* Warm cream #FDFCFA */
+    --foreground: 0 0% 18%;             /* Charcoal #2D2D2D */
+
+    --card: 48 30% 97%;                 /* Soft cream card #F9F8F6 */
+    --card-foreground: 0 0% 18%;        /* Charcoal text */
+
+    --popover: 48 30% 97%;              /* Soft cream */
+    --popover-foreground: 0 0% 18%;     /* Charcoal */
+
+    --primary: 196 100% 45%;            /* Ice Blue #00A8E8 */
+    --primary-foreground: 0 0% 100%;    /* White text */
+
+    --secondary: 22 100% 63%;           /* Warm Amber #FF8C42 */
+    --secondary-foreground: 0 0% 100%;  /* White text */
+
+    --muted: 40 20% 92%;                /* Soft beige #EDE9E4 */
+    --muted-foreground: 0 0% 45%;       /* Medium gray */
+
+    --accent: 196 100% 45%;             /* Ice Blue accent */
+    --accent-foreground: 0 0% 100%;     /* White */
+
+    --destructive: 0 84% 60%;           /* Soft red */
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 40 15% 88%;               /* Light beige border #E8E6E3 */
+    --input: 40 15% 88%;                /* Light beige input */
+    --ring: 196 100% 45%;               /* Ice Blue focus ring */
+
+    --radius: 0.5rem;                   /* Subtle rounded corners */
+  }
+
+  .dark {
+    /* Dark Theme (fallback, but we're focusing on light) */
+    --background: 0 0% 7%;              /* Near black */
+    --foreground: 0 0% 98%;             /* Off white */
+
+    --card: 0 0% 10%;
+    --card-foreground: 0 0% 98%;
+
+    --popover: 0 0% 10%;
+    --popover-foreground: 0 0% 98%;
+
+    --primary: 196 100% 45%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 22 100% 63%;
+    --secondary-foreground: 0 0% 100%;
+
+    --muted: 0 0% 15%;
+    --muted-foreground: 0 0% 65%;
+
+    --accent: 196 100% 45%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 0 0% 20%;
+    --input: 0 0% 20%;
+    --ring: 196 100% 45%;
+  }
+}
+
+/* Smooth body background */
+body {
+  background: linear-gradient(135deg, hsl(var(--background)) 0%, hsl(48 30% 96%) 100%);
+}
+
 /* Mobile input zoom prevention */
 input[type="text"],
 input[type="email"],

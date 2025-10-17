@@ -69,7 +69,7 @@ export function BookingStepper({ currentStep, completedSteps, onStepClick }: Boo
                     <div
                       className={cn(
                         "flex-1 h-0.5 mx-2",
-                        isCompleted || index <= currentStepIndex ? "bg-white" : "bg-neutral-800"
+                        isCompleted || index <= currentStepIndex ? "bg-primary" : "bg-border"
                       )}
                     />
                   )}
@@ -82,12 +82,12 @@ export function BookingStepper({ currentStep, completedSteps, onStepClick }: Boo
                     className={cn(
                       "flex items-center justify-center w-10 h-10 rounded-full border-2 transition-all duration-200",
                       isCompleted
-                        ? "bg-white border-white text-black"
+                        ? "bg-primary border-primary text-primary-foreground"
                         : isCurrent
-                          ? "border-white bg-white text-black ring-4 ring-white/20"
-                          : "border-neutral-700 bg-black text-neutral-500",
+                          ? "border-primary bg-primary text-primary-foreground ring-4 ring-primary/20"
+                          : "border-border bg-background text-muted-foreground",
                       isClickable && !isCompleted && !isCurrent
-                        ? "hover:border-white hover:text-black cursor-pointer"
+                        ? "hover:border-primary hover:bg-primary/10 cursor-pointer"
                         : !isClickable
                           ? "cursor-not-allowed"
                           : "cursor-pointer"
@@ -105,7 +105,7 @@ export function BookingStepper({ currentStep, completedSteps, onStepClick }: Boo
                     <div
                       className={cn(
                         "flex-1 h-0.5 mx-2",
-                        isCompleted || index < currentStepIndex ? "bg-white" : "bg-neutral-800"
+                        isCompleted || index < currentStepIndex ? "bg-primary" : "bg-border"
                       )}
                     />
                   )}
@@ -116,12 +116,12 @@ export function BookingStepper({ currentStep, completedSteps, onStepClick }: Boo
                   <p
                     className={cn(
                       "text-sm font-medium",
-                      isCurrent ? "text-white" : isCompleted ? "text-white" : "text-neutral-500"
+                      isCurrent ? "text-foreground" : isCompleted ? "text-foreground" : "text-muted-foreground"
                     )}
                   >
                     {step.name}
                   </p>
-                  <p className="text-xs text-neutral-400 mt-1">{step.description}</p>
+                  <p className="text-xs text-muted-foreground mt-1 font-light">{step.description}</p>
                 </div>
               </li>
             );
@@ -137,32 +137,32 @@ export function MobileBookingStepper({ currentStep, completedSteps }: BookingSte
   const currentStepData = steps[currentStepIndex];
 
   return (
-    <div className="md:hidden bg-black border-b border-neutral-800 px-4 py-3">
+    <div className="md:hidden bg-white/70 backdrop-blur-sm border-b border-border px-4 py-3 shadow-sm">
       <div className="flex items-center justify-between">
         <div className="flex items-center">
           <div
             className={cn(
               "flex items-center justify-center w-8 h-8 rounded-full border-2",
-              "border-blue-600 bg-blue-600 text-white"
+              "border-primary bg-primary text-primary-foreground shadow-sm"
             )}
           >
             <currentStepData.icon className="w-4 h-4" />
           </div>
           <div className="ml-3">
-            <p className="text-sm font-medium text-white">{currentStepData.name}</p>
-            <p className="text-xs text-neutral-500">{currentStepData.description}</p>
+            <p className="text-sm font-medium text-foreground">{currentStepData.name}</p>
+            <p className="text-xs text-muted-foreground font-light">{currentStepData.description}</p>
           </div>
         </div>
 
-        <div className="text-sm text-neutral-500">
+        <div className="text-sm text-muted-foreground font-medium">
           {currentStepIndex + 1} of {steps.length}
         </div>
       </div>
 
       {/* Progress bar */}
-      <div className="mt-3 w-full bg-neutral-800 rounded-full h-2">
+      <div className="mt-3 w-full bg-muted rounded-full h-2">
         <div
-          className="bg-blue-600 h-2 rounded-full transition-all duration-300"
+          className="bg-primary h-2 rounded-full transition-all duration-300 shadow-sm"
           style={{
             width: `${((currentStepIndex + 1) / steps.length) * 100}%`,
           }}

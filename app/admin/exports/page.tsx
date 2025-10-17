@@ -6,8 +6,8 @@ export default function AdminExportsPage() {
     <AdminServerWrapper>
       <div className="space-y-6">
         <div>
-          <h1 className="text-2xl font-bold text-white">Data Exports</h1>
-          <p className="text-neutral-400">Export business data for analysis and reporting</p>
+          <h1 className="text-2xl font-serif font-bold text-foreground tracking-tight">Data Exports</h1>
+          <p className="text-muted-foreground font-light">Export business data for analysis and reporting</p>
         </div>
         <ExportsManager />
       </div>

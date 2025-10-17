@@ -32,18 +32,18 @@ export function EmailCapture() {
 
   if (isSubscribed) {
     return (
-      <section className="py-20 bg-black">
+      <section className="py-20 bg-gradient-to-b from-background to-muted/30">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-4xl">
-          <Card className="bg-black border-2 border-neutral-800">
+          <Card className="bg-white/70 backdrop-blur-sm border-2 border-border rounded-3xl shadow-lg">
             <CardContent className="p-12 text-center">
-              <div className="w-16 h-16 bg-neutral-900 border border-neutral-800 flex items-center justify-center mx-auto mb-6">
-                <Mail className="h-8 w-8 text-white" />
+              <div className="w-20 h-20 bg-primary/10 border-2 border-primary/20 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-md">
+                <Mail className="h-10 w-10 text-primary" />
               </div>
-              <h3 className="text-2xl font-bold text-white mb-4">Welcome to Recovery Machine!</h3>
-              <p className="text-neutral-400 mb-6">
+              <h3 className="text-2xl font-serif font-bold text-foreground mb-4">Welcome to Recovery Machine!</h3>
+              <p className="text-muted-foreground mb-6 font-light">
                 Thank you for subscribing! You'll now receive exclusive recovery tips and updates.
               </p>
-              <Badge className="bg-neutral-900 text-white border border-neutral-800 px-4 py-2">
+              <Badge className="bg-primary/15 text-primary border border-primary/30 px-4 py-2 rounded-full shadow-sm">
                 <Mail className="h-4 w-4 mr-2" />
                 Successfully Subscribed
               </Badge>
@@ -55,19 +55,19 @@ export function EmailCapture() {
   }
 
   return (
-    <section className="py-20 bg-black relative overflow-hidden">
+    <section className="py-20 bg-gradient-to-b from-muted/30 to-background relative overflow-hidden">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-4xl relative z-10">
-        <Card className="bg-black border border-neutral-800">
+        <Card className="bg-white/70 backdrop-blur-sm border border-border rounded-3xl shadow-lg">
           <CardContent className="p-8 sm:p-12">
             <div className="text-center mb-8">
               {/* Newsletter Badge */}
-              <Badge className="bg-neutral-900 text-white border border-neutral-800 px-6 py-2 mb-6 text-sm font-semibold">
+              <Badge className="bg-primary/15 text-primary border border-primary/30 rounded-full px-6 py-2 mb-6 text-sm font-semibold shadow-sm">
                 <Mail className="h-4 w-4 mr-2" />
                 Newsletter
               </Badge>
 
-              <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4">Get recovery tips that work</h2>
-              <p className="text-lg sm:text-xl text-neutral-400 mb-8">Short, actionable emails. One click to unsubscribe.</p>
+              <h2 className="text-3xl sm:text-4xl font-serif font-bold text-foreground mb-4 tracking-tight">Get recovery tips that work</h2>
+              <p className="text-lg sm:text-xl text-muted-foreground mb-8 font-light">Short, actionable emails. One click to unsubscribe.</p>
             </div>
 
             {/* Email Form */}
@@ -80,7 +80,7 @@ export function EmailCapture() {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     required
-                    className="h-12 px-4 text-lg bg-neutral-900 border-2 border-neutral-800 focus:border-white text-white placeholder:text-neutral-500"
+                    className="h-12 px-4 text-lg bg-white border-2 border-primary/20 focus:border-primary text-foreground placeholder:text-muted-foreground rounded-2xl shadow-sm"
                     disabled={isLoading}
                   />
                 </div>
@@ -88,10 +88,10 @@ export function EmailCapture() {
                   type="submit"
                   size="lg"
                   disabled={isLoading || !email}
-                  className="h-12 px-8 bg-brand text-black hover:bg-brand/90 font-semibold disabled:opacity-50"
+                  className="h-12 px-8 bg-primary text-primary-foreground hover:bg-primary/90 hover:scale-105 font-semibold disabled:opacity-50 rounded-full shadow-md transition-all duration-300"
                 >
                   {isLoading ? (
-                    <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                    <div className="w-5 h-5 border-2 border-primary-foreground/30 border-t-primary-foreground rounded-full animate-spin"></div>
                   ) : (
                     <>
                       Subscribe
@@ -103,37 +103,37 @@ export function EmailCapture() {
             </form>
 
             {/* Benefits List */}
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mt-10 pt-8 border-t border-neutral-800">
-              <div className="text-center">
-                <div className="w-12 h-12 bg-neutral-900 border border-neutral-800 flex items-center justify-center mx-auto mb-3">
-                  <Mail className="h-6 w-6 text-white" />
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mt-10 pt-8 border-t border-border">
+              <div className="text-center group">
+                <div className="w-16 h-16 bg-primary/10 border-2 border-primary/20 rounded-2xl flex items-center justify-center mx-auto mb-3 shadow-sm group-hover:shadow-md group-hover:scale-110 transition-all duration-300">
+                  <Mail className="h-8 w-8 text-primary" />
                 </div>
-                <h4 className="font-semibold text-white mb-2">Expert Tips</h4>
-                <p className="text-sm text-neutral-400">
+                <h4 className="font-semibold text-foreground mb-2">Expert Tips</h4>
+                <p className="text-sm text-muted-foreground font-light">
                   Weekly recovery protocols from professionals
                 </p>
               </div>
 
-              <div className="text-center">
-                <div className="w-12 h-12 bg-neutral-900 border border-neutral-800 flex items-center justify-center mx-auto mb-3">
-                  <Gift className="h-6 w-6 text-white" />
+              <div className="text-center group">
+                <div className="w-16 h-16 bg-secondary/10 border-2 border-secondary/20 rounded-2xl flex items-center justify-center mx-auto mb-3 shadow-sm group-hover:shadow-md group-hover:scale-110 transition-all duration-300">
+                  <Gift className="h-8 w-8 text-secondary" />
                 </div>
-                <h4 className="font-semibold text-white mb-2">Exclusive Offers</h4>
-                <p className="text-sm text-neutral-400">Member-only discounts and early access</p>
+                <h4 className="font-semibold text-foreground mb-2">Exclusive Offers</h4>
+                <p className="text-sm text-muted-foreground font-light">Member-only discounts and early access</p>
               </div>
 
-              <div className="text-center">
-                <div className="w-12 h-12 bg-neutral-900 border border-neutral-800 flex items-center justify-center mx-auto mb-3">
-                  <Star className="h-6 w-6 text-white" />
+              <div className="text-center group">
+                <div className="w-16 h-16 bg-primary/10 border-2 border-primary/20 rounded-2xl flex items-center justify-center mx-auto mb-3 shadow-sm group-hover:shadow-md group-hover:scale-110 transition-all duration-300">
+                  <Star className="h-8 w-8 text-primary" />
                 </div>
-                <h4 className="font-semibold text-white mb-2">Success Stories</h4>
-                <p className="text-sm text-neutral-400">Real results from our community</p>
+                <h4 className="font-semibold text-foreground mb-2">Success Stories</h4>
+                <p className="text-sm text-muted-foreground font-light">Real results from our community</p>
               </div>
             </div>
 
             {/* Trust Indicators */}
-            <div className="text-center mt-8 pt-6 border-t border-neutral-800">
-              <p className="text-sm text-neutral-500">🔒 We won’t spam you. Unsubscribe anytime.</p>
+            <div className="text-center mt-8 pt-6 border-t border-border">
+              <p className="text-sm text-muted-foreground">🔒 We won't spam you. Unsubscribe anytime.</p>
             </div>
           </CardContent>
         </Card>

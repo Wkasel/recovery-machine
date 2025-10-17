@@ -39,7 +39,7 @@ export async function createUserProfile(
   profileData: Omit<Profile, "id" | "created_at" | "updated_at" | "referral_code">
 ): Promise<ApiResponse<Profile>> {
   try {
-    const supabase = getSupabaseClient("server");
+    const supabase = await getSupabaseClient("server");
 
     const { data, error } = await supabase
       .from("profiles")
@@ -62,7 +62,7 @@ export async function createUserProfile(
 
 export async function getUserProfile(userId: string): Promise<ApiResponse<Profile>> {
   try {
-    const supabase = getSupabaseClient();
+    const supabase = await getSupabaseClient();
 
     const { data, error } = await supabase.from("profiles").select("*").eq("id", userId).single();
 
@@ -84,7 +84,7 @@ export async function updateUserProfile(
   updates: UpdateProfileData
 ): Promise<ApiResponse<Profile>> {
   try {
-    const supabase = getSupabaseClient();
+    const supabase = await getSupabaseClient();
 
     const { data, error } = await supabase
       .from("profiles")
@@ -112,7 +112,7 @@ export async function updateUserProfile(
 
 export async function createOrder(orderData: CreateOrderData): Promise<ApiResponse<Order>> {
   try {
-    const supabase = getSupabaseClient("server");
+    const supabase = await getSupabaseClient("server");
 
     const { data, error } = await supabase.from("orders").insert([orderData]).select().single();
 
@@ -131,7 +131,7 @@ export async function createOrder(orderData: CreateOrderData): Promise<ApiRespon
 
 export async function getUserOrders(userId: string): Promise<ApiResponse<Order[]>> {
   try {
-    const supabase = getSupabaseClient();
+    const supabase = await getSupabaseClient();
 
     const { data, error } = await supabase
       .from("orders")
@@ -158,7 +158,7 @@ export async function updateOrderStatus(
   boltCheckoutId?: string
 ): Promise<ApiResponse<Order>> {
   try {
-    const supabase = getSupabaseClient("server");
+    const supabase = await getSupabaseClient("server");
 
     const updates: Partial<Order> = { status };
     if (boltCheckoutId) {
@@ -191,7 +191,7 @@ export async function updateOrderStatus(
 
 export async function createBooking(bookingData: CreateBookingData): Promise<ApiResponse<Booking>> {
   try {
-    const supabase = getSupabaseClient("server");
+    const supabase = await getSupabaseClient("server");
 
     const { data, error } = await supabase.from("bookings").insert([bookingData]).select().single();
 
@@ -210,7 +210,7 @@ export async function createBooking(bookingData: CreateBookingData): Promise<Api
 
 export async function getUserBookings(userId: string): Promise<ApiResponse<Booking[]>> {
   try {
-    const supabase = getSupabaseClient();
+    const supabase = await getSupabaseClient();
 
     const { data, error } = await supabase
       .from("bookings")
@@ -236,7 +236,7 @@ export async function updateBookingStatus(
   status: Booking["status"]
 ): Promise<ApiResponse<Booking>> {
   try {
-    const supabase = getSupabaseClient();
+    const supabase = await getSupabaseClient();
 
     const { data, error } = await supabase
       .from("bookings")
@@ -266,7 +266,7 @@ export async function createReferral(
   referralData: CreateReferralData
 ): Promise<ApiResponse<Referral>> {
   try {
-    const supabase = getSupabaseClient("server");
+    const supabase = await getSupabaseClient("server");
 
     const { data, error } = await supabase
       .from("referrals")
@@ -289,7 +289,7 @@ export async function createReferral(
 
 export async function getUserReferrals(userId: string): Promise<ApiResponse<Referral[]>> {
   try {
-    const supabase = getSupabaseClient();
+    const supabase = await getSupabaseClient();
 
     const { data, error } = await supabase
       .from("referrals")
@@ -312,7 +312,7 @@ export async function getUserReferrals(userId: string): Promise<ApiResponse<Refe
 
 export async function findReferralByCode(referralCode: string): Promise<ApiResponse<Profile>> {
   try {
-    const supabase = getSupabaseClient();
+    const supabase = await getSupabaseClient();
 
     const { data, error } = await supabase
       .from("profiles")
@@ -339,7 +339,7 @@ export async function findReferralByCode(referralCode: string): Promise<ApiRespo
 
 export async function createReview(reviewData: CreateReviewData): Promise<ApiResponse<Review>> {
   try {
-    const supabase = getSupabaseClient();
+    const supabase = await getSupabaseClient();
 
     const { data, error } = await supabase.from("reviews").insert([reviewData]).select().single();
 
@@ -358,7 +358,7 @@ export async function createReview(reviewData: CreateReviewData): Promise<ApiRes
 
 export async function getFeaturedReviews(): Promise<ApiResponse<Review[]>> {
   try {
-    const supabase = getSupabaseClient();
+    const supabase = await getSupabaseClient();
 
     const { data, error } = await supabase
       .from("reviews")
@@ -389,7 +389,7 @@ export async function getAvailableSlots(
   endDate: string
 ): Promise<ApiResponse<AvailabilitySlot[]>> {
   try {
-    const supabase = getSupabaseClient();
+    const supabase = await getSupabaseClient();
 
     const { data, error } = await supabase
       .from("availability_slots")
@@ -415,7 +415,7 @@ export async function getAvailableSlots(
 
 export async function markSlotUnavailable(slotId: string): Promise<ApiResponse<AvailabilitySlot>> {
   try {
-    const supabase = getSupabaseClient("server");
+    const supabase = await getSupabaseClient("server");
 
     const { data, error } = await supabase
       .from("availability_slots")
@@ -449,7 +449,7 @@ export async function addCredits(
   referralId?: string
 ): Promise<ApiResponse<CreditTransaction>> {
   try {
-    const supabase = getSupabaseClient("server");
+    const supabase = await getSupabaseClient("server");
 
     const { data, error } = await supabase
       .from("credit_transactions")
@@ -482,7 +482,7 @@ export async function getUserCreditTransactions(
   userId: string
 ): Promise<ApiResponse<CreditTransaction[]>> {
   try {
-    const supabase = getSupabaseClient();
+    const supabase = await getSupabaseClient();
 
     const { data, error } = await supabase
       .from("credit_transactions")
@@ -509,7 +509,7 @@ export async function getUserCreditTransactions(
 
 export async function testDatabaseConnection(): Promise<ApiResponse<boolean>> {
   try {
-    const supabase = getSupabaseClient();
+    const supabase = await getSupabaseClient();
 
     // Simple test query
     const { data, error } = await supabase
@@ -531,7 +531,7 @@ export async function testDatabaseConnection(): Promise<ApiResponse<boolean>> {
 
 export async function getTableCounts(): Promise<ApiResponse<Record<string, number>>> {
   try {
-    const supabase = getSupabaseClient("server");
+    const supabase = await getSupabaseClient("server");
 
     const tables = ["profiles", "orders", "bookings", "referrals", "reviews", "availability_slots"];
     const counts: Record<string, number> = {};

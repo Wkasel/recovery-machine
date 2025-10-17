@@ -6,8 +6,8 @@ export default function AdminServiceAreasPage() {
     <AdminServerWrapper>
       <div className="space-y-6">
         <div>
-          <h1 className="text-2xl font-bold text-white">Service Areas</h1>
-          <p className="text-neutral-400">Manage service locations and coverage areas</p>
+          <h1 className="text-2xl font-serif font-bold text-foreground tracking-tight">Service Areas</h1>
+          <p className="text-muted-foreground font-light">Manage service locations and coverage areas</p>
         </div>
         <ServiceAreaManager />
       </div>
