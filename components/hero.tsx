@@ -130,7 +130,7 @@ export default function Hero() {
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-2xl mx-auto">
             <div className="flex items-center justify-center gap-3 text-foreground bg-white/80 backdrop-blur-sm px-5 py-4 rounded-2xl border border-border shadow-sm hover:shadow-md hover:border-primary/30 transition-all duration-300">
               <Shield className="h-5 w-5 text-primary" />
-              <Caption className="font-semibold">Newport Beach</Caption>
+              <Caption className="font-semibold">Orange County</Caption>
             </div>
             <div className="flex items-center justify-center gap-3 text-foreground bg-white/80 backdrop-blur-sm px-5 py-4 rounded-2xl border border-border shadow-sm hover:shadow-md hover:border-primary/30 transition-all duration-300">
               <Calendar className="h-5 w-5 text-primary" />
