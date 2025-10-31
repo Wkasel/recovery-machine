@@ -309,11 +309,11 @@ const EMAIL_TEMPLATES = {
           <p><strong>Date:</strong> {{bookingDate}}</p>
           <p><strong>Time:</strong> {{bookingTime}}</p>
           {{#if cancellationReason}}<p><strong>Reason:</strong> {{cancellationReason}}</p>{{/if}}
-          {{#if refundAmount}}<p><strong>Refund Amount:</strong> ${{refundAmount}}</p>{{/if}}
+          {{#if refundAmount}}<p><strong>Refund Amount:</strong> ` + '$' + `{{refundAmount}}</p>{{/if}}
         </div>
 
         {{#if refundAmount}}
-        <p>Your refund of <strong>${{refundAmount}}</strong> will be processed within 5-7 business days to your original payment method.</p>
+        <p>Your refund of <strong>` + '$' + `{{refundAmount}}</strong> will be processed within 5-7 business days to your original payment method.</p>
         {{/if}}
 
         <div style="text-align: center; margin: 30px 0;">
