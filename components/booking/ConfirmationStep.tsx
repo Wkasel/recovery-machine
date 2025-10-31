@@ -98,7 +98,7 @@ export function ConfirmationStep({
     calendarUrl.searchParams.set("location", formatAddress(address));
     calendarUrl.searchParams.set(
       "details",
-      `Your ${selectedService?.name} session with Recovery Machine.\n\nBooking ID: ${bookingId}\n\nSpecial Instructions: ${specialInstructions || "None"}\n\nQuestions? Call us at (555) 123-4567`
+      `Your ${selectedService?.name} session with Recovery Machine.\n\nBooking ID: ${bookingId}\n\nSpecial Instructions: ${specialInstructions || "None"}`
     );
 
     return calendarUrl.toString();
@@ -342,11 +342,7 @@ export function ConfirmationStep({
         <CardContent className="pt-6">
           <div className="text-center space-y-4">
             <h3 className="font-semibold text-gray-900">Need Help?</h3>
-            <div className="flex flex-col sm:flex-row items-center justify-center space-y-2 sm:space-y-0 sm:space-x-6">
-              <div className="flex items-center space-x-2">
-                <Phone className="w-4 h-4 text-gray-600" />
-                <span className="text-sm text-gray-600">(555) 123-4567</span>
-              </div>
+            <div className="flex items-center justify-center">
               <div className="flex items-center space-x-2">
                 <Mail className="w-4 h-4 text-gray-600" />
                 <span className="text-sm text-gray-600">support@recoverymachine.com</span>

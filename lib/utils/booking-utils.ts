@@ -93,7 +93,7 @@ export class BookingUtils {
     calendarUrl.searchParams.set("location", this.formatAddress(address));
     calendarUrl.searchParams.set(
       "details",
-      `Your ${service?.name} session with Recovery Machine.\n\nBooking ID: ${bookingId}\n\nSpecial Instructions: ${specialInstructions || "None"}\n\nQuestions? Call us at (555) 123-4567`
+      `Your ${service?.name} session with Recovery Machine.\n\nBooking ID: ${bookingId}\n\nSpecial Instructions: ${specialInstructions || "None"}`
     );
 
     return calendarUrl.toString();

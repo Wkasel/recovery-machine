@@ -11,12 +11,17 @@ export const navigationConfig = {
       href: "/services",
     },
     {
-      title: "About",
-      href: "/about",
+      title: "Book Now",
+      href: "/book",
+      highlight: true,
     },
     {
       title: "Pricing",
       href: "/pricing",
+    },
+    {
+      title: "About",
+      href: "/about",
     },
     {
       title: "Contact",

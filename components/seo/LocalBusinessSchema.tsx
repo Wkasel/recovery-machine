@@ -10,7 +10,6 @@ export function LocalBusinessSchema(): React.ReactElement {
     description:
       "Mobile cold plunge and infrared sauna services delivered to your location. Professional recovery therapy with commercial-grade equipment and certified specialists.",
     url: "https://therecoverymachine.com",
-    telephone: "(555) 123-4567",
     email: "hello@recoverymachine.com",
     address: {
       "@type": "PostalAddress",

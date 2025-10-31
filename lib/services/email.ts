@@ -161,7 +161,7 @@ const EMAIL_TEMPLATES = {
           <a href="{{siteUrl}}/dashboard/bookings" style="background: #3b82f6; color: white; padding: 12px 30px; text-decoration: none; border-radius: 6px; display: inline-block;">Manage Booking</a>
         </div>
         
-        <p>Questions? Reply to this email or call us at (555) 123-4567.</p>
+        <p>Questions? Reply to this email and we'll be happy to help.</p>
         
         <p>See you tomorrow!<br>The Recovery Machine Team</p>
       </div>

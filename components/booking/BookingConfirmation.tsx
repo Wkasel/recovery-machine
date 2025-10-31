@@ -288,7 +288,7 @@ export function BookingConfirmation({
         <AlertCircle className="h-4 w-4" />
         <AlertDescription>
           <strong>Cancellation Policy:</strong> Free cancellation up to 24 hours before your
-          appointment. Please contact us at (555) 123-4567 if you need to reschedule.
+          appointment. Please contact us via email if you need to reschedule.
         </AlertDescription>
       </Alert>
 
@@ -310,11 +310,7 @@ export function BookingConfirmation({
 
       {/* Contact information */}
       <div className="text-center text-sm text-gray-600 space-y-2">
-        <div className="flex items-center justify-center space-x-4">
-          <div className="flex items-center space-x-1">
-            <Phone className="w-4 h-4" />
-            <span>(555) 123-4567</span>
-          </div>
+        <div className="flex items-center justify-center">
           <div className="flex items-center space-x-1">
             <Mail className="w-4 h-4" />
             <span>support@therecoverymachine.com</span>
