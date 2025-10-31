@@ -86,6 +86,7 @@ async function handleCheckoutCompleted(
     paid_at: new Date().toISOString(),
     webhook_last_event: "checkout.session.completed",
     stripe_customer_id: session.customer as string,
+    stripe_subscription_id: session.subscription as string | null,
   };
 
   const { error: updateError } = await supabase
@@ -93,6 +94,7 @@ async function handleCheckoutCompleted(
     .update({
       status: "paid",
       metadata: updatedMetadata,
+      stripe_subscription_id: session.subscription as string | null,
     })
     .eq("id", orderRecord.id);
 
