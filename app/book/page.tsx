@@ -6,7 +6,7 @@ import { BookingConfirmation } from "@/components/booking/BookingConfirmation";
 import { BookingStepper, MobileBookingStepper } from "@/components/booking/BookingStepper";
 import { PaymentStep } from "@/components/booking/PaymentStep";
 import { ServiceSelection } from "@/components/booking/ServiceSelection";
-import { BoltCheckout } from "@/components/payments/BoltCheckout";
+import { StripeCheckout } from "@/components/payments/StripeCheckout";
 import { Button } from "@/components/ui/button";
 import { createBookingWithPayment } from "@/core/actions/booking";
 import { useAuth } from "@/lib/hooks/use-auth";
@@ -39,7 +39,7 @@ export default function BookingPage(): React.ReactElement {
   const [isLoading, setIsLoading] = useState(false);
   const [finalBooking, setFinalBooking] = useState<DatabaseBooking | null>(null);
   const [orderAmount, setOrderAmount] = useState(0);
-  const [showBoltCheckout, setShowBoltCheckout] = useState(false);
+  const [showStripeCheckout, setShowStripeCheckout] = useState(false);
   const [checkoutData, setCheckoutData] = useState<any>(null);
   const [pendingConfirmationUrl, setPendingConfirmationUrl] = useState<string | null>(null);
   const [pendingBookingId, setPendingBookingId] = useState<string | null>(null);
@@ -218,17 +218,14 @@ export default function BookingPage(): React.ReactElement {
         setCheckoutData({
           ...result.checkout,
           metadata: {
+            ...(result.checkout.metadata || {}),
             bookingId: result.booking?.id,
             orderId: result.order?.id,
-          },
-          prefetchedSession: {
-            checkoutId: result.checkout.checkoutId,
-            checkoutUrl: result.checkout.checkoutUrl,
           },
         });
         setPendingConfirmationUrl(result.confirmationUrl || null);
         setPendingBookingId(result.booking?.id || null);
-        setShowBoltCheckout(true);
+        setShowStripeCheckout(true);
         toast({
           title: "Secure Payment",
           description: "Complete checkout to confirm your booking.",
@@ -281,7 +278,7 @@ export default function BookingPage(): React.ReactElement {
   };
 
   const handlePaymentSuccess = (paymentResult: any) => {
-    setShowBoltCheckout(false);
+    setShowStripeCheckout(false);
     const redirectUrl = pendingConfirmationUrl;
 
     toast({
@@ -300,7 +297,7 @@ export default function BookingPage(): React.ReactElement {
   };
 
   const handlePaymentError = (error: any) => {
-    setShowBoltCheckout(false);
+    setShowStripeCheckout(false);
     setCheckoutData(null);
     setPendingConfirmationUrl(null);
     setPendingBookingId(null);
@@ -316,13 +313,13 @@ export default function BookingPage(): React.ReactElement {
     setCompletedSteps([]);
     setBookingState({ currentStep: "service" });
     setFinalBooking(null);
-    setShowBoltCheckout(false);
+    setShowStripeCheckout(false);
     setCheckoutData(null);
     setPendingConfirmationUrl(null);
     setPendingBookingId(null);
   };
 
-  if (showBoltCheckout && checkoutData) {
+  if (showStripeCheckout && checkoutData) {
     const { prefetchedSession, ...boltCheckoutProps } = checkoutData;
     return (
       <div className="min-h-screen bg-background py-12">
@@ -332,12 +329,12 @@ export default function BookingPage(): React.ReactElement {
             <p className="text-muted-foreground">Secure payment processing for your recovery session</p>
           </div>
 
-          <BoltCheckout
+          <StripeCheckout
             {...boltCheckoutProps}
             prefetchedSession={prefetchedSession}
             onSuccess={handlePaymentSuccess}
             onError={handlePaymentError}
-            onCancel={() => setShowBoltCheckout(false)}
+            onCancel={() => setShowStripeCheckout(false)}
           />
         </div>
       </div>

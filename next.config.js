@@ -53,6 +53,10 @@ const nextConfig = (phase) => {
           protocol: 'https',
           hostname: 'res.cloudinary.com',
         },
+        {
+          protocol: 'https',
+          hostname: '**.dropbox.com',
+        },
       ],
     },
     // Compression and caching

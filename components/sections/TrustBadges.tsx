@@ -16,7 +16,7 @@ const badges = [
   {
     icon: MapPin,
     title: "Southern California Coverage",
-    description: "Based in Newport Beach, expanding service area",
+    description: "Serving all of Orange County and beyond",
   },
   {
     icon: Award,

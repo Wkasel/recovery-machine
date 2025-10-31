@@ -39,7 +39,7 @@ export interface Booking {
   add_ons: Record<string, any>; // JSONB: {extra_visits: 2, family: true, sauna_time: 15}
   status: "scheduled" | "confirmed" | "in_progress" | "completed" | "cancelled" | "no_show";
   address: Record<string, any>; // JSONB for delivery address
-  notes: string | null; // Column is 'notes' not 'special_instructions'
+  special_instructions: string | null;
   created_at: string;
   updated_at: string;
 }

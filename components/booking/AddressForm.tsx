@@ -330,21 +330,12 @@ export function AddressForm({
               <div>
                 <h3 className="font-serif font-medium text-foreground">Service Area</h3>
                 <p className="text-sm text-muted-foreground font-light">
-                  We currently serve Orange County and Los Angeles areas. Setup fees vary based
+                  Based in Orange County, we proudly serve all of Southern California. Setup fees vary based
                   on distance from our facility.
                 </p>
-                <div className="mt-2 flex flex-wrap gap-2">
-                  <Badge variant="secondary" className="bg-card text-foreground border border-border">
-                    Newport Beach
-                  </Badge>
-                  <Badge variant="secondary" className="bg-card text-foreground border border-border">
-                    Irvine
-                  </Badge>
-                  <Badge variant="secondary" className="bg-card text-foreground border border-border">
-                    Huntington Beach
-                  </Badge>
-                  <Badge variant="secondary" className="bg-card text-foreground border border-border">
-                    Los Angeles
+                <div className="mt-2">
+                  <Badge variant="secondary" className="bg-primary/10 text-primary border border-primary/30 font-medium">
+                    Serving All of Southern California
                   </Badge>
                 </div>
               </div>

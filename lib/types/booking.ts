@@ -16,28 +16,29 @@ export interface ServiceOption {
 export const services: ServiceOption[] = [
   {
     id: "cold_plunge",
-    name: "Cold Plunge",
-    description: "30-minute cold therapy session for recovery and wellness",
-    duration: 30,
-    basePrice: 8000, // $80.00
-    features: ["30-minute session", "Professional setup", "Post-session consultation"],
+    name: "Cold Plunge Session",
+    description: "Professional cold therapy for recovery and wellness",
+    duration: 60,
+    basePrice: 17500, // $175.00 (household session base)
+    features: ["Up to 4 people", "60-minute session", "Professional setup", "Post-session consultation"],
   },
   {
     id: "infrared_sauna",
-    name: "Infrared Sauna",
-    description: "30-minute infrared sauna session for detox and relaxation",
-    duration: 30,
-    basePrice: 7500, // $75.00
-    features: ["30-minute session", "Temperature control", "Towels included"],
+    name: "Infrared Sauna Session",
+    description: "Full-spectrum infrared therapy for detox and relaxation",
+    duration: 60,
+    basePrice: 17500, // $175.00 (household session base)
+    features: ["Up to 4 people", "60-minute session", "Temperature control", "Towels included"],
   },
   {
     id: "combo_package",
-    name: "Ultimate Recovery Combo",
-    description: "60-minute session combining cold plunge and infrared sauna",
+    name: "Complete Recovery Experience",
+    description: "Combined cold plunge and infrared sauna session",
     duration: 60,
-    basePrice: 12000, // $120.00
+    basePrice: 20000, // $200.00 (household session upper range)
     features: [
-      "Cold plunge session",
+      "Up to 4 people",
+      "Cold plunge therapy",
       "Infrared sauna session",
       "Extended recovery time",
       "Professional guidance",

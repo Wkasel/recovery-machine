@@ -131,17 +131,16 @@ export default function Pricing() {
     <section className="py-20 lg:py-32 bg-muted/30">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
         {/* Section Header */}
-        <div className="text-center mb-16">
-          <div className="inline-flex items-center gap-2 bg-primary/15 px-5 py-2.5 rounded-full border border-primary/30 text-sm font-bold mb-6 shadow-sm">
+        <div className="text-center mb-20">
+          <div className="inline-flex items-center gap-2 bg-primary/15 px-5 py-2.5 rounded-full border border-primary/30 text-sm font-bold mb-8 shadow-sm">
             <Star className="h-5 w-5 text-primary fill-current" />
-            <span className="text-primary">Transparent Pricing</span>
+            <span className="text-primary text-wide">Transparent Pricing</span>
           </div>
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-serif font-bold text-foreground mb-6 tracking-tight">
-            Simple, Transparent Pricing
+          <h2 className="text-4xl sm:text-5xl lg:text-6xl font-sans font-bold text-foreground mb-8 heading-condensed uppercase">
+            Simple,<br className="md:hidden" /> Transparent<br className="md:hidden" /> Pricing
           </h2>
-          <p className="text-lg sm:text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed mb-8 font-light">
-            Professional recovery at a fraction of the cost. No hidden fees, no long-term contracts,
-            maximum flexibility.
+          <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed mb-12" style={{ letterSpacing: '0.01em' }}>
+            Professional recovery at a fraction of the cost.<br className="hidden md:block" /> No hidden fees, no long-term contracts, maximum flexibility.
           </p>
           
           {/* Big Booking CTA */}
@@ -151,7 +150,7 @@ export default function Pricing() {
               size="lg"
               className="bg-primary text-primary-foreground hover:bg-primary/90 hover:scale-105 font-bold text-xl px-16 py-6 h-auto rounded-full shadow-lg transition-all duration-300"
             >
-              <Link href="/contact" className="flex items-center">
+              <Link href="/book" className="flex items-center">
                 <Calendar className="w-7 h-7 mr-4" />
                 Book Your First Session
                 <ArrowRight className="w-6 h-6 ml-4" />
@@ -179,8 +178,12 @@ export default function Pricing() {
         </div>
 
         {/* Membership Plans */}
-        <div className="mb-20">
-          <h3 className="text-3xl font-serif font-bold text-foreground text-center mb-12">Membership & Subscription</h3>
+        <div className="mb-24">
+          <div className="flex items-center justify-center gap-3 mb-14">
+            <div className="h-px w-12 bg-primary/30"></div>
+            <h3 className="section-header text-2xl text-primary">Membership & Subscription</h3>
+            <div className="h-px w-12 bg-primary/30"></div>
+          </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
             {plans.map((plan, index) => (
               <Card key={index} className={`relative bg-white/70 backdrop-blur-sm border-2 rounded-3xl shadow-lg hover:shadow-xl transition-all duration-300 ${plan.popular ? 'border-primary' : 'border-border'}`}>
@@ -194,17 +197,17 @@ export default function Pricing() {
                 )}
 
                 <CardHeader className="text-center pb-6 pt-12">
-                  <CardTitle className="text-2xl font-serif font-bold text-foreground mb-2">{plan.name}</CardTitle>
-                  <p className="text-muted-foreground mb-6 font-light">{plan.subtitle}</p>
+                  <CardTitle className="text-2xl font-bold text-foreground mb-1 uppercase tracking-tight">{plan.name}</CardTitle>
+                  <p className="text-muted-foreground mb-8 text-sm" style={{ letterSpacing: '0.05em' }}>{plan.subtitle.toUpperCase()}</p>
 
-                  <div className="mb-4">
-                    <div className="flex items-center justify-center mb-2">
-                      <span className="text-4xl font-bold text-foreground">{plan.price}</span>
-                      <span className="text-muted-foreground ml-2 text-sm">{plan.period}</span>
+                  <div className="mb-6">
+                    <div className="flex items-baseline justify-center gap-1 mb-2">
+                      <span className="text-5xl font-bold text-foreground price-display">{plan.price}</span>
                     </div>
+                    <span className="text-muted-foreground text-sm" style={{ letterSpacing: '0.02em' }}>{plan.period}</span>
                   </div>
 
-                  <p className="text-muted-foreground text-sm font-light">{plan.description}</p>
+                  <p className="text-muted-foreground text-sm leading-relaxed">{plan.description}</p>
                 </CardHeader>
 
                 <CardContent className="px-6 pb-8">
@@ -222,7 +225,7 @@ export default function Pricing() {
                     size="lg"
                     className="w-full bg-primary text-primary-foreground hover:bg-primary/90 hover:scale-105 font-bold h-14 rounded-full shadow-lg transition-all duration-300"
                   >
-                    <Link href="/contact" className="inline-flex items-center justify-center">
+                    <Link href="/book" className="inline-flex items-center justify-center">
                       <Calendar className="mr-2 h-5 w-5" />
                       {plan.cta}
                       <ArrowRight className="ml-2 h-5 w-5" />
@@ -238,11 +241,14 @@ export default function Pricing() {
         </div>
 
         {/* Single Sessions & Corporate Packages */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-16">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-20">
           {/* Single Sessions */}
           <Card className="bg-white/70 backdrop-blur-sm border border-border rounded-2xl shadow-md hover:shadow-lg transition-all duration-300">
             <CardHeader>
-              <CardTitle className="text-2xl font-serif font-bold text-foreground mb-4">Household & Team Sessions</CardTitle>
+              <div className="flex items-center gap-2 mb-4">
+                <Star className="h-4 w-4 text-primary" />
+                <CardTitle className="section-header text-lg text-primary">Household & Team Recovery Sessions</CardTitle>
+              </div>
             </CardHeader>
             <CardContent>
               <div className="space-y-6">
@@ -252,10 +258,10 @@ export default function Pricing() {
                     className="border-b border-border last:border-b-0 pb-4 last:pb-0"
                   >
                     <div className="flex justify-between items-start mb-2">
-                      <h4 className="font-semibold text-foreground">{session.name}</h4>
-                      <span className="font-bold text-foreground">{session.price}</span>
+                      <h4 className="font-bold text-foreground uppercase tracking-tight text-sm">{session.name}</h4>
+                      <span className="font-bold text-foreground price-display text-lg">{session.price}</span>
                     </div>
-                    <p className="text-muted-foreground text-sm font-light">{session.description}</p>
+                    <p className="text-muted-foreground text-sm" style={{ letterSpacing: '0.01em' }}>{session.description}</p>
                   </div>
                 ))}
               </div>
@@ -265,7 +271,10 @@ export default function Pricing() {
           {/* Corporate Packages */}
           <Card className="bg-white/70 backdrop-blur-sm border border-border rounded-2xl shadow-md hover:shadow-lg transition-all duration-300">
             <CardHeader>
-              <CardTitle className="text-2xl font-serif font-bold text-foreground mb-4">Corporate & Gym Packages</CardTitle>
+              <div className="flex items-center gap-2 mb-4">
+                <Star className="h-4 w-4 text-primary" />
+                <CardTitle className="section-header text-lg text-primary">Corporate & Gym Packages</CardTitle>
+              </div>
             </CardHeader>
             <CardContent>
               <div className="space-y-6">
@@ -275,10 +284,10 @@ export default function Pricing() {
                     className="border-b border-border last:border-b-0 pb-4 last:pb-0"
                   >
                     <div className="flex justify-between items-start mb-2">
-                      <h4 className="font-semibold text-foreground">{pkg.name}</h4>
-                      <span className="font-bold text-foreground text-right">{pkg.price}</span>
+                      <h4 className="font-bold text-foreground uppercase tracking-tight text-sm">{pkg.name}</h4>
+                      <span className="font-bold text-foreground text-right price-display text-lg">{pkg.price}</span>
                     </div>
-                    <p className="text-muted-foreground text-sm font-light">{pkg.description}</p>
+                    <p className="text-muted-foreground text-sm" style={{ letterSpacing: '0.01em' }}>{pkg.description}</p>
                   </div>
                 ))}
               </div>
@@ -346,7 +355,7 @@ export default function Pricing() {
             size="lg"
             className="bg-primary text-primary-foreground hover:bg-primary/90 hover:scale-105 font-bold text-xl px-16 py-6 h-auto rounded-full shadow-lg transition-all duration-300"
           >
-            <Link href="/contact" className="inline-flex items-center">
+            <Link href="/book" className="inline-flex items-center">
               <Calendar className="mr-4 h-7 w-7" />
               Book Your Session
               <ArrowRight className="ml-4 h-6 w-6" />

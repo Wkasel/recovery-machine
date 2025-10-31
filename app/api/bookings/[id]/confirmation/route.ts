@@ -67,7 +67,7 @@ export async function GET(
       add_ons: booking.add_ons,
       status: booking.status,
       address: booking.address,
-      notes: booking.notes,
+      special_instructions: booking.special_instructions,
       created_at: booking.created_at,
       updated_at: booking.updated_at,
       orders: booking.orders,

@@ -18,30 +18,30 @@ import Link from "next/link";
 
 const steps = [
   {
-    icon: UserPlus,
-    title: "Contact Us",
+    icon: Calendar,
+    title: "Book Online",
     description:
-      "Reach out via Instagram or our contact form to schedule your recovery session.",
+      "Select your preferred date and time using our online booking system. Instant confirmation.",
     duration: "2 min",
   },
   {
-    icon: Calendar,
-    title: "Schedule Session",
+    icon: CheckCircle,
+    title: "Get Confirmed",
     description:
-      "We'll work with you to find the perfect time that fits your schedule.",
-    duration: "Quick",
+      "Receive immediate booking confirmation and details via email. No waiting.",
+    duration: "Instant",
   },
   {
     icon: MapPin,
     title: "We Come to You",
     description: "Our mobile unit arrives at your location with professional cold plunge and infrared sauna.",
-    duration: "On-demand",
+    duration: "On-time",
   },
   {
-    icon: CheckCircle,
+    icon: Award,
     title: "Experience Recovery",
     description: "Enjoy professional recovery sessions with guided protocols for optimal results.",
-    duration: "45 min",
+    duration: "60-90 min",
   },
 ];
 
@@ -145,54 +145,28 @@ export default function HowItWorks() {
     <section ref={sectionRef} id={sectionId} className="py-24 lg:py-32 bg-muted/30">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl relative">
         {/* Header */}
-        <div className="text-center mb-20">
-          <div className="inline-flex items-center gap-2 bg-secondary/20 px-5 py-2.5 rounded-full border border-secondary/30 text-sm font-bold mb-6 shadow-sm">
+        <div className="text-center mb-24">
+          <div className="inline-flex items-center gap-2 bg-secondary/20 px-5 py-2.5 rounded-full border border-secondary/30 text-sm font-bold mb-10 shadow-sm">
             <Sparkles className="h-5 w-5 text-secondary" />
-            <span className="text-secondary">Simple Process</span>
+            <span className="text-secondary text-wide">Simple Process</span>
           </div>
-          <h2 className="text-4xl sm:text-5xl lg:text-6xl font-serif font-bold text-foreground mb-6 tracking-tight">How It Works</h2>
-          <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed mb-8">
-            Contact → Schedule → We arrive → You recover. Professional mobile recovery delivered.
+          <h2 className="text-4xl sm:text-5xl lg:text-6xl font-sans font-bold text-foreground mb-10 heading-condensed uppercase">How It Works</h2>
+          <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed mb-12" style={{ letterSpacing: '0.01em' }}>
+            Book online → Instant confirmation → We arrive → You recover.<br className="hidden md:block" /> Professional mobile recovery delivered.
           </p>
-          
-          {/* Email Collection CTA */}
+
+          {/* Book Now CTA */}
           <div className="flex justify-center">
-            {isSubmitted ? (
-              <div className="text-center p-6 bg-primary/10 border border-primary/20 rounded-lg">
-                <div className="text-primary mb-2">✓ Success!</div>
-                <p className="text-foreground">
-                  Thanks for your interest! We'll keep you updated on availability.
-                </p>
-              </div>
-            ) : (
-              <form onSubmit={handleEmailSubmit} className="flex flex-col sm:flex-row gap-4 items-center">
-                <input
-                  type="email"
-                  placeholder="Enter your email for updates"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="h-14 px-6 text-lg bg-background border-2 border-primary/20 rounded-lg focus:border-primary focus:outline-none transition-colors min-w-[300px]"
-                  required
-                  disabled={isLoading}
-                />
-                <Button
-                  type="submit"
-                  size="lg"
-                  disabled={isLoading || !email}
-                  className="bg-primary text-primary-foreground hover:bg-primary/90 font-bold text-xl px-12 py-6 h-14 shadow-xl"
-                >
-                  {isLoading ? (
-                    <div className="w-5 h-5 border-2 border-primary-foreground/30 border-t-primary-foreground rounded-full animate-spin"></div>
-                  ) : (
-                    <>
-                      <span className="mr-3">Get Early Access</span>
-                      <ArrowRight className="w-6 h-6" />
-                    </>
-                  )}
-                </Button>
-                {error && <p className="text-destructive text-sm mt-2">{error}</p>}
-              </form>
-            )}
+            <Button
+              asChild
+              size="lg"
+              className="bg-primary text-primary-foreground hover:bg-primary/90 font-bold text-xl px-12 py-6 h-14 shadow-xl transform hover:scale-105 transition-transform"
+            >
+              <Link href="/book">
+                <span className="mr-3">Book Your Session</span>
+                <Calendar className="w-6 h-6" />
+              </Link>
+            </Button>
           </div>
         </div>
 

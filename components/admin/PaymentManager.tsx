@@ -42,7 +42,10 @@ import { useEffect, useState } from "react";
 interface Order {
   id: string;
   user_id: string;
-  bolt_checkout_id: string;
+  bolt_checkout_id: string | null; // Legacy Bolt field
+  stripe_session_id: string | null; // Stripe Checkout Session ID
+  stripe_subscription_id: string | null; // Stripe Subscription ID
+  stripe_payment_intent_id: string | null; // Stripe Payment Intent ID
   amount: number;
   setup_fee_applied: number;
   status: "pending" | "processing" | "paid" | "refunded" | "failed";

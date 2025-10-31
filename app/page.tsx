@@ -3,7 +3,8 @@ import {
   HowItWorks,
   SocialProof,
   Pricing,
-  EmailCapture
+  EmailCapture,
+  VideoShowcase
 } from "@/components";
 import BrowseByGoal from "@/components/sections/BrowseByGoal";
 import SeasonalBanner from "@/components/sections/SeasonalBanner";
@@ -13,12 +14,13 @@ export default function Home() {
   return (
     <div className="bg-background text-foreground">
       <Hero />
+      <VideoShowcase />
       <SeasonalBanner />
-      <TrustBadges />
-      <BrowseByGoal />
-      <HowItWorks />
-      <SocialProof />
       <Pricing />
+      <TrustBadges />
+      <HowItWorks />
+      <BrowseByGoal />
+      <SocialProof />
       <EmailCapture />
     </div>
   );

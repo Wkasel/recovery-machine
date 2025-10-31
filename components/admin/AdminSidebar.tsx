@@ -73,10 +73,12 @@ export function AdminSidebar({ admin }: AdminSidebarProps) {
   // Super admin only sections
   if (admin?.role === "super_admin") {
     navigation.push(
-      { name: "Admin Users", href: "/admin/admin-users", icon: Shield },
-      { name: "Settings", href: "/admin/settings", icon: Settings },
-      { name: "System", href: "/admin/system", icon: Database },
-      { name: "Backup", href: "/admin/backup", icon: Database }
+      { name: "Admin Users", href: "/admin/admins", icon: Shield },
+      { name: "Settings", href: "/admin/settings", icon: Settings }
+    );
+  } else if (admin?.role === "admin") {
+    navigation.push(
+      { name: "Settings", href: "/admin/settings", icon: Settings }
     );
   }
 

@@ -6,7 +6,7 @@ import { BookingConfirmation } from "@/components/booking/BookingConfirmation";
 import { BookingStepper, MobileBookingStepper } from "@/components/booking/BookingStepper";
 import { PaymentStep } from "@/components/booking/PaymentStep";
 import { ServiceSelection } from "@/components/booking/ServiceSelection";
-import { BoltCheckout } from "@/components/payments/BoltCheckout";
+import { StripeCheckout } from "@/components/payments/StripeCheckout";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Container, Stack, Flex } from "@/components/ui/layout";
@@ -47,7 +47,7 @@ export default function BookingPageRefactored(): React.ReactElement {
   const [isLoading, setIsLoading] = useState(false);
   const [finalBooking, setFinalBooking] = useState<DatabaseBooking | null>(null);
   const [orderAmount, setOrderAmount] = useState(0);
-  const [showBoltCheckout, setShowBoltCheckout] = useState(false);
+  const [showStripeCheckout, setShowStripeCheckout] = useState(false);
   const [checkoutData, setCheckoutData] = useState<any>(null);
 
   useEffect(() => {
@@ -293,7 +293,7 @@ export default function BookingPageRefactored(): React.ReactElement {
   };
 
   const handlePaymentSuccess = (paymentResult: any) => {
-    setShowBoltCheckout(false);
+    setShowStripeCheckout(false);
     markStepCompleted("payment");
     moveToStep("confirmation");
 
@@ -323,7 +323,7 @@ export default function BookingPageRefactored(): React.ReactElement {
   };
 
   const handlePaymentError = (error: any) => {
-    setShowBoltCheckout(false);
+    setShowStripeCheckout(false);
     toast({
       title: "Payment Failed",
       description: error.message || "Payment could not be processed.",
@@ -336,11 +336,11 @@ export default function BookingPageRefactored(): React.ReactElement {
     setCompletedSteps([]);
     setBookingState({ currentStep: "service" });
     setFinalBooking(null);
-    setShowBoltCheckout(false);
+    setShowStripeCheckout(false);
     setCheckoutData(null);
   };
 
-  if (showBoltCheckout && checkoutData) {
+  if (showStripeCheckout && checkoutData) {
     return (
       <Container size="md" className="min-h-screen">
         <Stack spacing="xl" className="py-12">
@@ -353,11 +353,11 @@ export default function BookingPageRefactored(): React.ReactElement {
             </Text>
           </div>
 
-          <BoltCheckout
+          <StripeCheckout
             {...checkoutData}
             onSuccess={handlePaymentSuccess}
             onError={handlePaymentError}
-            onCancel={() => setShowBoltCheckout(false)}
+            onCancel={() => setShowStripeCheckout(false)}
           />
         </Stack>
       </Container>

@@ -71,79 +71,59 @@ export default function Hero() {
           {/* Trust Indicator - Modern Badge */}
           <div className="inline-flex items-center gap-2 bg-primary/10 px-5 py-2.5 rounded-full border border-primary/30 shadow-sm">
             <Star className="h-4 w-4 text-primary fill-current" />
-            <Caption className="text-primary font-semibold">Based in Newport Beach • Serving Southern California</Caption>
+            <Caption className="text-primary font-semibold">Orange County • Serving All of Southern California</Caption>
           </div>
 
-          {/* Main Headline - Elegant Serif */}
-          <Stack space="6" align="center">
+          {/* Main Headline - Bold & Condensed like pricing sheet */}
+          <Stack space="8" align="center">
             <Heading
               as="h1"
               size="display-2xl"
               weight="bold"
-              className="font-serif tracking-tight leading-none text-6xl md:text-7xl lg:text-8xl text-foreground"
+              className="font-sans heading-condensed text-6xl md:text-7xl lg:text-8xl text-foreground uppercase"
             >
-              Recovery Made Mobile
+              Recovery<br />Made Mobile
             </Heading>
           </Stack>
 
-          {/* Subheadline - Clean and Direct */}
+          {/* Subheadline - Wider tracking */}
           <div className="w-full flex justify-center">
             <Text
               size="xl"
               color="muted"
               align="center"
-              className="max-w-3xl text-xl md:text-2xl leading-relaxed font-light text-center mx-auto"
+              className="max-w-3xl text-lg md:text-xl leading-relaxed text-center mx-auto"
+              style={{ letterSpacing: '0.02em' }}
             >
-              Cold plunge + infrared sauna delivered to your door. Professional equipment. Expert guidance. Zero commute.
+              Cold plunge + infrared sauna delivered to your door.<br className="hidden md:block" /> Professional equipment. Expert guidance. Zero commute.
             </Text>
           </div>
 
-          {/* Primary CTA - Email Collection Focus */}
+          {/* Primary CTA - Book Now Focus */}
           <div className="flex flex-col gap-6 justify-center items-center w-full">
-            <div className="w-full max-w-md">
-              {isSubscribed ? (
-                <div className="text-center p-6 bg-primary/10 border border-primary/20 rounded-lg">
-                  <div className="text-primary mb-2">✓ Success!</div>
-                  <p className="text-foreground">
-                    Thanks for your interest! We'll contact you to schedule your session.
-                  </p>
-                </div>
-              ) : (
-                <form onSubmit={handleEmailSubmit} className="flex flex-col gap-4">
-                  <input
-                    type="email"
-                    placeholder="Enter your email for updates"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    className="h-14 px-6 text-lg bg-background border-2 border-primary/20 rounded-lg focus:border-primary focus:outline-none transition-colors"
-                    required
-                    disabled={isLoading}
-                  />
-                  {error && <p className="text-destructive text-sm text-center">{error}</p>}
-                  <button
-                    type="submit"
-                    disabled={isLoading || !email}
-                    className="inline-flex items-center justify-center whitespace-nowrap font-bold transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 active:scale-95 bg-primary text-primary-foreground hover:bg-primary/90 hover:shadow-xl text-xl h-14 px-12 rounded-lg shadow-lg border-2 border-primary/20 min-w-[200px] transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
-                  >
-                    {isLoading ? (
-                      <div className="w-5 h-5 border-2 border-primary-foreground/30 border-t-primary-foreground rounded-full animate-spin"></div>
-                    ) : (
-                      <>
-                        <span className="mr-3">Get Updates</span>
-                        <ArrowRight className="h-5 w-5" />
-                      </>
-                    )}
-                  </button>
-                </form>
-              )}
+            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+              <Button
+                asChild
+                size="lg"
+                className="bg-primary text-primary-foreground hover:bg-primary/90 hover:shadow-xl text-xl h-14 px-12 rounded-lg shadow-lg border-2 border-primary/20 min-w-[200px] transform hover:scale-105"
+              >
+                <a href="/book">
+                  <span className="mr-3">Book Now</span>
+                  <Calendar className="h-5 w-5" />
+                </a>
+              </Button>
+              <Button
+                onClick={scrollToHowItWorks}
+                variant="outline"
+                size="lg"
+                className="border-2 border-muted-foreground/30 text-muted-foreground hover:bg-muted/10 text-lg font-medium h-14 px-8"
+              >
+                Learn More
+              </Button>
             </div>
-            <Button
-              onClick={scrollToHowItWorks}
-              variant="outline"
-              className="border-2 border-muted-foreground/30 text-muted-foreground hover:bg-muted/10 text-lg font-medium h-12 px-8"
-            >
-              Learn More
-            </Button>
+            <p className="text-sm text-muted-foreground">
+              Book your session in minutes • Instant confirmation
+            </p>
           </div>
 
           {/* Service Areas */}

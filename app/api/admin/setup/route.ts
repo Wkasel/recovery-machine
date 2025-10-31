@@ -1,95 +1,85 @@
 import { createServerSupabaseClient } from "@/lib/supabase/server";
 import { NextResponse } from "next/server";
 
-export async function POST() {
+export async function POST(request: Request) {
   try {
-    console.log('Setting up admin user: william@dsco.co');
-    
+    // Require setup token for security
+    const setupToken = process.env.ADMIN_SETUP_TOKEN;
+    const authHeader = request.headers.get('authorization');
+
+    if (!setupToken || authHeader !== `Bearer ${setupToken}`) {
+      return NextResponse.json(
+        { error: 'Invalid setup token. Set ADMIN_SETUP_TOKEN in environment variables.' },
+        { status: 401 }
+      );
+    }
+
+    console.log('Setting up admin users...');
+
     const supabase = await createServerSupabaseClient();
 
-    // Create admins table if it doesn't exist
-    const createTableSQL = `
-      CREATE TABLE IF NOT EXISTS admins (
-        id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-        email TEXT UNIQUE NOT NULL,
-        role TEXT NOT NULL DEFAULT 'admin',
-        is_active BOOLEAN NOT NULL DEFAULT true,
-        created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-        updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+    // Read admin users from environment variables
+    // Format: ADMIN_EMAILS="email1:role1,email2:role2"
+    // Example: ADMIN_EMAILS="wkasel@gmail.com:super_admin,william@dsco.co:admin"
+    const adminEmailsEnv = process.env.ADMIN_EMAILS;
+
+    if (!adminEmailsEnv) {
+      return NextResponse.json(
+        { error: 'ADMIN_EMAILS not set in environment variables' },
+        { status: 400 }
       );
-    `;
+    }
 
-    const { error: createTableError } = await supabase.rpc('exec', { 
-      sql: createTableSQL 
+    const adminUsers = adminEmailsEnv.split(',').map(entry => {
+      const [email, role = 'admin'] = entry.trim().split(':');
+      return { email: email.trim(), role: role.trim() as 'super_admin' | 'admin' | 'operator' };
     });
 
-    if (createTableError && !createTableError.message.includes('already exists')) {
-      console.error('Error creating table:', createTableError);
-      return NextResponse.json({ error: 'Failed to create admins table', details: createTableError }, { status: 500 });
+    const results = [];
+
+    for (const admin of adminUsers) {
+      console.log(`Setting up admin user: ${admin.email}`);
+
+      // Validate role
+      if (!['super_admin', 'admin', 'operator'].includes(admin.role)) {
+        results.push({
+          email: admin.email,
+          success: false,
+          error: `Invalid role: ${admin.role}`
+        });
+        continue;
+      }
+
+      // Insert/update admin user
+      const { data, error } = await supabase
+        .from('admins')
+        .upsert({
+          email: admin.email,
+          role: admin.role,
+          is_active: true,
+          updated_at: new Date().toISOString()
+        }, {
+          onConflict: 'email'
+        })
+        .select();
+
+      if (error) {
+        console.error(`Error creating admin user ${admin.email}:`, error);
+        results.push({ email: admin.email, success: false, error: error.message });
+      } else {
+        console.log(`✅ Admin user ${admin.email} created successfully`);
+        results.push({ email: admin.email, success: true, data });
+      }
     }
 
-    // Enable RLS
-    const { error: rlsError } = await supabase.rpc('exec', { 
-      sql: 'ALTER TABLE admins ENABLE ROW LEVEL SECURITY;' 
-    });
+    const allSuccessful = results.every(r => r.success);
 
-    if (rlsError && !rlsError.message.includes('already enabled')) {
-      console.log('RLS already enabled or error:', rlsError);
-    }
-
-    // Create policy for admins to read their own data
-    const policySQL = `
-      DROP POLICY IF EXISTS "Admins can read own data" ON admins;
-      CREATE POLICY "Admins can read own data" ON admins
-        FOR SELECT USING (auth.jwt() ->> 'email' = email);
-    `;
-
-    const { error: policyError } = await supabase.rpc('exec', { 
-      sql: policySQL 
-    });
-
-    if (policyError) {
-      console.log('Policy creation result:', policyError);
-    }
-
-    // Insert/update admin user
-    const { data, error } = await supabase
-      .from('admins')
-      .upsert({
-        email: 'william@dsco.co',
-        role: 'admin',
-        is_active: true,
-        updated_at: new Date().toISOString()
-      }, {
-        onConflict: 'email'
-      })
-      .select();
-
-    if (error) {
-      console.error('Error creating admin user:', error);
-      return NextResponse.json({ error: 'Failed to create admin user', details: error }, { status: 500 });
-    }
-
-    console.log('✅ Admin user created successfully:', data);
-
-    // Verify the admin user exists
-    const { data: adminUser, error: verifyError } = await supabase
-      .from('admins')
-      .select('*')
-      .eq('email', 'william@dsco.co')
-      .single();
-
-    if (verifyError) {
-      console.error('Error verifying admin user:', verifyError);
-      return NextResponse.json({ error: 'Failed to verify admin user', details: verifyError }, { status: 500 });
-    }
-
-    console.log('✅ Admin user verified:', adminUser);
-
-    return NextResponse.json({ 
-      success: true, 
-      message: 'Admin user william@dsco.co created successfully',
-      adminUser 
+    return NextResponse.json({
+      success: allSuccessful,
+      message: allSuccessful
+        ? 'All admin users created successfully'
+        : 'Some admin users failed to create',
+      results
     });
 
   } catch (error) {

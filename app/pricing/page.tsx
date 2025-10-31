@@ -5,13 +5,13 @@ import Link from "next/link";
 export const metadata: Metadata = {
   title: "Pricing - Recovery Machine Mobile Wellness Services",
   description:
-    "Transparent pricing for mobile cold plunge and infrared sauna services. Weekly memberships starting at $400/month with 75% savings. Professional recovery at your location.",
+    "Transparent pricing for mobile cold plunge and infrared sauna services. Memberships from $275-$850/month. Household sessions from $175. Serving Orange County.",
   keywords:
-    "cold plunge pricing, infrared sauna cost, mobile wellness pricing, recovery membership, Los Angeles wellness services",
+    "cold plunge pricing, infrared sauna cost, mobile wellness pricing, recovery membership, Orange County wellness services",
   openGraph: {
     title: "Recovery Machine Pricing - Mobile Wellness Services",
     description:
-      "Weekly memberships starting at $400/month with 75% savings. Professional cold plunge and infrared sauna delivered to your door.",
+      "Flexible memberships from $275/month. Household sessions from $175. Professional cold plunge and infrared sauna delivered to your door in Orange County.",
     type: "website",
     images: [
       {
@@ -26,18 +26,13 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Recovery Machine Pricing - Mobile Wellness Services",
     description:
-      "Weekly memberships starting at $400/month with 75% savings. Professional recovery at your location.",
+      "Flexible memberships from $275/month. Professional recovery delivered throughout Orange County.",
   },
 };
 
 export default function PricingPage(): JSX.Element {
   return (
     <div className="min-h-screen bg-background text-foreground">
-      <div className="container mx-auto px-4 py-8">
-        <Link href="/" className="text-muted-foreground hover:text-foreground mb-8 inline-block">
-          ← Back to Home
-        </Link>
-      </div>
       <Pricing />
     </div>
   );

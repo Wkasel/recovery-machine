@@ -177,10 +177,10 @@ export function BookingConfirmation({
               <p className="text-gray-600">{formatAddress(booking.address)}</p>
             </div>
 
-            {booking.notes && (
+            {booking.special_instructions && (
               <div>
                 <p className="text-sm text-gray-600">Special Instructions</p>
-                <p className="text-sm bg-gray-50 p-3 rounded-lg">{booking.notes}</p>
+                <p className="text-sm bg-gray-50 p-3 rounded-lg">{booking.special_instructions}</p>
               </div>
             )}
 

@@ -1,10 +1,11 @@
-import { boltClient } from "@/lib/bolt/client";
 import { createServerSupabaseClient } from "@/lib/supabase/server";
 import { createServiceRoleClient } from "@/lib/supabase/service-role";
 import { sendBookingConfirmation } from "@/lib/services/email";
 import { services } from "@/lib/types/booking";
 import { NextRequest, NextResponse } from "next/server";
 import { createHash } from "crypto";
+import { stripeClient } from "@/lib/stripe/client";
+import { type StripeCheckoutData } from "@/lib/stripe/config";
 
 export async function POST(request: NextRequest) {
   try {
@@ -218,7 +219,7 @@ export async function POST(request: NextRequest) {
           extendedTime: addOns?.extendedTime || 0,
         },
         address,
-        notes: specialInstructions,
+        special_instructions: specialInstructions,
         status: devBypass ? "confirmed" : "scheduled",
       })
       .select()
@@ -279,57 +280,71 @@ export async function POST(request: NextRequest) {
       });
     }
 
-    const checkoutResponse = await boltClient.createCheckout({
+    const checkoutMetadata: Record<string, any> = {
+      ...metadataWithConfirmation,
+      booking_id: booking.id,
+      order_id: order.id,
+      user_id: user.id,
+    };
+
+    const checkoutPayload: StripeCheckoutData = {
       amount: totalAmount,
       currency: "USD",
       order_reference: `order_${order.id}`,
       description: orderDescription,
-      customer_email: customerEmail || "",
+      customer_email: customerEmail,
       customer_phone: customerPhone || undefined,
       order_type: orderType,
-      metadata: {
-        ...metadataWithConfirmation,
-        booking_id: booking.id,
-        order_id: order.id,
-        user_id: user.id,
-      },
-    });
-
-    const checkoutMetadata = {
-      ...metadataWithConfirmation,
-      booking_id: booking.id,
-      order_id: order.id,
-      checkout_id: checkoutResponse.checkout_id,
+      metadata: checkoutMetadata,
     };
 
-    await serviceRoleClient
-      .from("orders")
-      .update({
-        bolt_checkout_id: checkoutResponse.checkout_id,
-        metadata: checkoutMetadata,
-      })
-      .eq("id", order.id);
+    try {
+      const checkoutResponse = await stripeClient.createCheckoutSession(checkoutPayload);
 
-    return NextResponse.json({
-      success: true,
-      booking,
-      order: {
-        ...order,
-        bolt_checkout_id: checkoutResponse.checkout_id,
-        metadata: checkoutMetadata,
-      },
-      confirmationUrl,
-      requiresPayment: true,
-      checkout: {
-        checkoutId: checkoutResponse.checkout_id,
-        checkoutUrl: checkoutResponse.checkout_url,
-        amount: totalAmount,
-        orderType,
-        description: orderDescription,
-        customerEmail,
-        customerPhone,
-      },
-    });
+      const updatedMetadata = {
+        ...checkoutMetadata,
+        stripe_session_id: checkoutResponse.session_id,
+      };
+
+      await serviceRoleClient
+        .from("orders")
+        .update({
+          stripe_session_id: checkoutResponse.session_id,
+          status: "processing",
+          metadata: updatedMetadata,
+        })
+        .eq("id", order.id);
+
+      return NextResponse.json({
+        success: true,
+        booking,
+        order: {
+          ...order,
+          stripe_session_id: checkoutResponse.session_id,
+          metadata: updatedMetadata,
+        },
+        confirmationUrl,
+        requiresPayment: true,
+        checkout: {
+          amount: totalAmount,
+          orderType,
+          description: orderDescription,
+          customerEmail,
+          customerPhone,
+          metadata: updatedMetadata,
+          sessionId: checkoutResponse.session_id,
+          checkoutUrl: checkoutResponse.checkout_url,
+          prefetchedSession: {
+            sessionId: checkoutResponse.session_id,
+            checkoutUrl: checkoutResponse.checkout_url,
+          },
+        },
+      });
+    } catch (paymentError) {
+      await serviceRoleClient.from("orders").update({ status: "failed" }).eq("id", order.id);
+      console.error("Stripe checkout error:", paymentError);
+      return NextResponse.json({ error: "Failed to initiate payment" }, { status: 502 });
+    }
   } catch (error) {
     console.error("Booking API error:", error);
     return NextResponse.json({ error: "Internal server error" }, { status: 500 });

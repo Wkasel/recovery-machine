@@ -67,7 +67,7 @@ export default function ContactPage() {
                   </div>
                   <div>
                     <h3 className="font-semibold">Service Area</h3>
-                    <p className="font-light text-muted-foreground">Based in Newport Beach • Serving Southern California</p>
+                    <p className="font-light text-muted-foreground">Orange County • Serving All of Southern California</p>
                   </div>
                 </div>
 
@@ -92,7 +92,7 @@ export default function ContactPage() {
                 <div>
                   <h4 className="font-semibold mb-2">How far do you travel?</h4>
                   <p className="font-light text-muted-foreground text-sm">
-                    Based in Newport Beach, we service Southern California and are expanding our coverage area. Setup fees may vary based on distance.
+                    Based in Orange County, we service all of Southern California. Setup fees may vary based on distance.
                   </p>
                 </div>
 

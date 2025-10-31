@@ -512,13 +512,13 @@ export function PaymentStep({
               <div className="bg-gray-50 p-4 rounded-lg text-center">
                 <CreditCard className="w-12 h-12 text-gray-400 mx-auto mb-2" />
                 <p className="text-sm text-gray-600 mb-2">
-                  Secure payment processing powered by Bolt
+                  Secure payment processing powered by Stripe
                 </p>
                 <div className="flex justify-center space-x-2">
                   <Badge variant="secondary">Visa</Badge>
                   <Badge variant="secondary">Mastercard</Badge>
                   <Badge variant="secondary">Amex</Badge>
-                  <Badge variant="secondary">Apple Pay</Badge>
+                  <Badge variant="secondary">Discover</Badge>
                 </div>
               </div>
 
