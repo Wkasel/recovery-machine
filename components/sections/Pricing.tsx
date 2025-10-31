@@ -313,37 +313,6 @@ export default function Pricing() {
           </CardContent>
         </Card>
 
-        {/* How It Works */}
-        <div className="bg-gradient-to-br from-primary/5 to-secondary/5 border border-border rounded-3xl p-8 md:p-12 shadow-lg">
-          <h3 className="text-2xl font-serif font-bold text-foreground text-center mb-8">How It Works</h3>
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-6 text-center">
-            <div>
-              <div className="w-12 h-12 bg-primary text-primary-foreground flex items-center justify-center text-lg font-bold mx-auto mb-4 rounded-xl shadow-md">
-                1
-              </div>
-              <p className="text-foreground font-medium">Monthly auto-renew</p>
-            </div>
-            <div>
-              <div className="w-12 h-12 bg-primary text-primary-foreground flex items-center justify-center text-lg font-bold mx-auto mb-4 rounded-xl shadow-md">
-                2
-              </div>
-              <p className="text-foreground font-medium">Cancel with 30 days' notice</p>
-            </div>
-            <div>
-              <div className="w-12 h-12 bg-primary text-primary-foreground flex items-center justify-center text-lg font-bold mx-auto mb-4 rounded-xl shadow-md">
-                3
-              </div>
-              <p className="text-foreground font-medium">Flexible scheduling</p>
-            </div>
-            <div>
-              <div className="w-12 h-12 bg-primary text-primary-foreground flex items-center justify-center text-lg font-bold mx-auto mb-4 rounded-xl shadow-md">
-                4
-              </div>
-              <p className="text-foreground font-medium">Doorstep delivery</p>
-            </div>
-          </div>
-        </div>
-
         {/* Final CTA */}
         <div className="text-center bg-white/60 backdrop-blur-sm border border-border rounded-3xl p-12 shadow-lg">
           <h3 className="text-3xl font-serif font-bold text-foreground mb-4">Ready to Start Your Recovery Journey?</h3>
@@ -362,7 +331,7 @@ export default function Pricing() {
             </Link>
           </Button>
           <p className="mt-6 text-muted-foreground">
-            Serving all of Orange County • +1 855-886-2244
+            Serving all of Orange County
           </p>
         </div>
       </div>
