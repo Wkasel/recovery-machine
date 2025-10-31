@@ -184,7 +184,7 @@ export default function BookingPage(): React.ReactElement {
         specialInstructions: bookingState.specialInstructions,
         amount,
         setupFee: bookingState.setupFee?.totalSetupFee || 0,
-        orderType: "one_time" as const,
+        orderType: selectedService?.recurring ? "subscription" : "one_time",
         termsAccepted: true,
         // Include guest booking info if no user
         guestBooking: !user,
