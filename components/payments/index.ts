@@ -5,5 +5,5 @@
  */
 
 // === PAYMENT COMPONENTS ===
-export { BoltCheckout } from './BoltCheckout'
+export { StripeCheckout } from './StripeCheckout'
 export { PaymentSuccess } from './PaymentSuccess'

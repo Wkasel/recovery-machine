@@ -261,30 +261,111 @@ const EMAIL_TEMPLATES = {
     html: `
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
         <h1 style="color: #1f2937;">Recovery Machine Newsletter</h1>
-        
+
         <p>Hi {{firstName}},</p>
-        
+
         <p>Welcome to your weekly dose of recovery tips, success stories, and updates from the Recovery Machine community!</p>
-        
+
         <div style="background: #ecfdf5; border: 1px solid #10b981; padding: 20px; border-radius: 8px; margin: 20px 0;">
           <h3 style="color: #059669; margin-top: 0;">💡 Featured Recovery Tip</h3>
           <p>{{featuredTip}}</p>
         </div>
-        
+
         <div>
           {{content}}
         </div>
-        
+
         <div style="text-align: center; margin: 30px 0;">
           <a href="{{siteUrl}}/book" style="background: #3b82f6; color: white; padding: 12px 30px; text-decoration: none; border-radius: 6px; display: inline-block;">Book a Session</a>
         </div>
-        
+
         <p>Keep recovering strong!</p>
-        
+
         <p>Best regards,<br>The Recovery Machine Team</p>
-        
+
         <hr style="margin: 30px 0; border: none; border-top: 1px solid #e5e7eb;">
         <p style="font-size: 12px; color: #6b7280;">You're receiving this because you subscribed to Recovery Machine updates. <a href="{{unsubscribeUrl}}">Unsubscribe</a> | <a href="{{preferencesUrl}}">Update Preferences</a></p>
+      </div>
+    `,
+  },
+
+  // Booking Cancellation
+  BOOKING_CANCELLATION: {
+    id: "booking-cancellation",
+    name: "Booking Cancellation",
+    subject: "Your Recovery Session Has Been Cancelled",
+    category: "transactional" as const,
+    variables: ["firstName", "bookingDate", "bookingTime", "cancellationReason", "refundAmount"],
+    html: `
+      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+        <h1 style="color: #1f2937;">Session Cancelled</h1>
+
+        <p>Hi {{firstName}},</p>
+
+        <p>Your Recovery Machine session scheduled for <strong>{{bookingDate}}</strong> at <strong>{{bookingTime}}</strong> has been cancelled.</p>
+
+        <div style="background: #fef2f2; border: 1px solid #ef4444; padding: 20px; border-radius: 8px; margin: 20px 0;">
+          <h3 style="color: #991b1b; margin-top: 0;">Cancellation Details</h3>
+          <p><strong>Date:</strong> {{bookingDate}}</p>
+          <p><strong>Time:</strong> {{bookingTime}}</p>
+          {{#if cancellationReason}}<p><strong>Reason:</strong> {{cancellationReason}}</p>{{/if}}
+          {{#if refundAmount}}<p><strong>Refund Amount:</strong> ${{refundAmount}}</p>{{/if}}
+        </div>
+
+        {{#if refundAmount}}
+        <p>Your refund of <strong>${{refundAmount}}</strong> will be processed within 5-7 business days to your original payment method.</p>
+        {{/if}}
+
+        <div style="text-align: center; margin: 30px 0;">
+          <a href="{{siteUrl}}/book" style="background: #3b82f6; color: white; padding: 12px 30px; text-decoration: none; border-radius: 6px; display: inline-block;">Book Another Session</a>
+        </div>
+
+        <p>We're sorry we couldn't accommodate you this time. We hope to see you again soon!</p>
+
+        <p>If you have any questions about this cancellation, please don't hesitate to contact us.</p>
+
+        <p>Best regards,<br>The Recovery Machine Team</p>
+      </div>
+    `,
+  },
+
+  // Booking Rescheduling
+  BOOKING_RESCHEDULED: {
+    id: "booking-rescheduled",
+    name: "Booking Rescheduled",
+    subject: "Your Recovery Session Has Been Rescheduled 📅",
+    category: "transactional" as const,
+    variables: ["firstName", "oldDate", "oldTime", "newDate", "newTime", "address"],
+    html: `
+      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+        <h1 style="color: #1f2937;">Session Rescheduled, {{firstName}}!</h1>
+
+        <p>Your Recovery Machine session has been successfully rescheduled.</p>
+
+        <div style="background: #fef3c7; border: 1px solid #f59e0b; padding: 20px; border-radius: 8px; margin: 20px 0;">
+          <h3 style="color: #92400e; margin-top: 0;">📅 Schedule Update</h3>
+          <div style="margin: 15px 0;">
+            <p style="margin: 5px 0;"><strong>Previous Date:</strong> <span style="text-decoration: line-through;">{{oldDate}} at {{oldTime}}</span></p>
+            <p style="margin: 5px 0; color: #059669;"><strong>New Date:</strong> {{newDate}} at {{newTime}}</p>
+          </div>
+          <p style="margin: 10px 0 0 0;"><strong>Location:</strong> {{address}}</p>
+        </div>
+
+        <div style="background: #ecfdf5; border: 1px solid #10b981; padding: 20px; border-radius: 8px; margin: 20px 0;">
+          <h3 style="color: #059669; margin-top: 0;">✅ You're All Set!</h3>
+          <p style="margin: 5px 0;">Our recovery specialist will arrive at your location on {{newDate}}.</p>
+          <p style="margin: 5px 0;">You'll receive a reminder 24 hours before your session.</p>
+        </div>
+
+        <div style="text-align: center; margin: 30px 0;">
+          <a href="{{siteUrl}}/dashboard/bookings" style="background: #3b82f6; color: white; padding: 12px 30px; text-decoration: none; border-radius: 6px; display: inline-block;">View Booking Details</a>
+        </div>
+
+        <p>Need to make another change? You can reschedule or cancel up to 24 hours before your session.</p>
+
+        <p>Looking forward to seeing you!</p>
+
+        <p>Best regards,<br>The Recovery Machine Team</p>
       </div>
     `,
   },
@@ -534,6 +615,70 @@ export async function sendNewsletter(
     error: null,
     success: successfulIds.length > 0,
   };
+}
+
+export async function sendBookingCancellation(
+  booking: Booking,
+  profile: Profile,
+  cancellationReason?: string,
+  refundAmount?: number
+): Promise<ApiResponse<{ id: string }>> {
+  return sendEmail(
+    profile.email,
+    "BOOKING_CANCELLATION",
+    {
+      user: {
+        firstName: extractFirstName(profile.email),
+      },
+      booking: {
+        bookingDate: new Date(booking.date_time).toLocaleDateString(),
+        bookingTime: new Date(booking.date_time).toLocaleTimeString(),
+        cancellationReason,
+        refundAmount: refundAmount ? (refundAmount / 100).toFixed(2) : undefined,
+      },
+      customData: {
+        bookingId: booking.id,
+      },
+    },
+    {
+      tags: ["booking", "cancellation"],
+    }
+  );
+}
+
+export async function sendBookingRescheduled(
+  booking: Booking,
+  profile: Profile,
+  oldDateTime: Date,
+  newDateTime: Date
+): Promise<ApiResponse<{ id: string }>> {
+  const address =
+    typeof booking.location_address === "object"
+      ? JSON.stringify(booking.location_address)
+      : booking.location_address;
+
+  return sendEmail(
+    profile.email,
+    "BOOKING_RESCHEDULED",
+    {
+      user: {
+        firstName: extractFirstName(profile.email),
+      },
+      booking: {
+        oldDate: oldDateTime.toLocaleDateString(),
+        oldTime: oldDateTime.toLocaleTimeString(),
+        newDate: newDateTime.toLocaleDateString(),
+        newTime: newDateTime.toLocaleTimeString(),
+        address,
+      },
+      customData: {
+        bookingId: booking.id,
+      },
+    },
+    {
+      tags: ["booking", "rescheduled"],
+    }
+  );
 }
 
 // ===========================================================================

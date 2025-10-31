@@ -1,6 +1,6 @@
 "use server";
 
-import { BoltOrderData } from "@/lib/bolt/config";
+import { StripeCheckoutData } from "@/lib/stripe/config";
 import { createServerSupabaseClient } from "@/lib/supabase/server";
 import { BookingFormData } from "@/lib/types/booking";
 import { z } from "zod";
@@ -54,12 +54,20 @@ export async function createBookingWithPayment(
     error: userError,
   } = await supabase.auth.getUser();
 
+  const {
+    data: { session },
+  } = await supabase.auth.getSession();
+
   if (userError || !user) {
     throw new Error("Not authenticated");
   }
 
+  if (!session?.access_token) {
+    throw new Error("Missing access token");
+  }
+
   // Create order first via payment API
-  const orderData: BoltOrderData = {
+  const orderData: StripeCheckoutData = {
     amount: bookingData.amount,
     currency: "USD",
     order_reference: `booking_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
@@ -77,11 +85,11 @@ export async function createBookingWithPayment(
   };
 
   // Call our payment API to create the order and get checkout URL
-  const paymentResponse = await fetch(`${process.env.NEXT_PUBLIC_SITE_URL}/api/payments/checkout`, {
+  const paymentResponse = await fetch(`${process.env.NEXT_PUBLIC_SITE_URL}/api/stripe/checkout`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${user.access_token}`,
+      Authorization: `Bearer ${session.access_token}`,
     },
     body: JSON.stringify(orderData),
   });

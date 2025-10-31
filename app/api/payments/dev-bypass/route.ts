@@ -42,9 +42,10 @@ export async function POST(request: NextRequest) {
       address: bookingData.address,
       addOns: bookingData.addOns,
       specialInstructions: bookingData.specialInstructions,
-      amount: 0, // Free with dev bypass
-      setupFee: 0, // Free with dev bypass
-      orderType: "one_time"
+      amount: bookingData.servicePrice + bookingData.addOnsPrice + (bookingData.setupFee || 0),
+      setupFee: 0,
+      orderType: "one_time",
+      devBypass: true,
     };
 
     // Create a new request for the bookings API

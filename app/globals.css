@@ -2,6 +2,114 @@
 @import 'tailwindcss/components';
 @import 'tailwindcss/utilities';
 
+/* ============================================
+   LIGHT WELLNESS THEME
+   Inspired by Cymbiotika, Ject, Milk & Honey
+   ============================================ */
+
+@layer base {
+  :root {
+    /* Light Theme - Warm Spa Aesthetic */
+    --background: 48 40% 98%;           /* Warm cream #FDFCFA */
+    --foreground: 0 0% 18%;             /* Charcoal #2D2D2D */
+
+    --card: 48 30% 97%;                 /* Soft cream card #F9F8F6 */
+    --card-foreground: 0 0% 18%;        /* Charcoal text */
+
+    --popover: 48 30% 97%;              /* Soft cream */
+    --popover-foreground: 0 0% 18%;     /* Charcoal */
+
+    --primary: 145 36% 73%;             /* Sage Green #A1D4B3 */
+    --primary-foreground: 0 0% 18%;     /* Charcoal text */
+
+    --secondary: 22 100% 63%;           /* Warm Amber #FF8C42 */
+    --secondary-foreground: 0 0% 100%;  /* White text */
+
+    --muted: 40 20% 92%;                /* Soft beige #EDE9E4 */
+    --muted-foreground: 0 0% 45%;       /* Medium gray */
+
+    --accent: 145 36% 73%;              /* Sage Green accent */
+    --accent-foreground: 0 0% 18%;      /* Charcoal */
+
+    --destructive: 0 84% 60%;           /* Soft red */
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 40 15% 88%;               /* Light beige border #E8E6E3 */
+    --input: 40 15% 88%;                /* Light beige input */
+    --ring: 145 36% 73%;                /* Sage Green focus ring */
+
+    --radius: 0.5rem;                   /* Subtle rounded corners */
+  }
+
+  .dark {
+    /* Dark Theme (fallback, but we're focusing on light) */
+    --background: 0 0% 7%;              /* Near black */
+    --foreground: 0 0% 98%;             /* Off white */
+
+    --card: 0 0% 10%;
+    --card-foreground: 0 0% 98%;
+
+    --popover: 0 0% 10%;
+    --popover-foreground: 0 0% 98%;
+
+    --primary: 145 36% 73%;
+    --primary-foreground: 0 0% 18%;
+
+    --secondary: 22 100% 63%;
+    --secondary-foreground: 0 0% 100%;
+
+    --muted: 0 0% 15%;
+    --muted-foreground: 0 0% 65%;
+
+    --accent: 145 36% 73%;
+    --accent-foreground: 0 0% 18%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 0 0% 20%;
+    --input: 0 0% 20%;
+    --ring: 145 36% 73%;
+  }
+}
+
+/* Smooth body background */
+body {
+  background: linear-gradient(135deg, hsl(var(--background)) 0%, hsl(48 30% 96%) 100%);
+  letter-spacing: -0.01em; /* Slight tightening for cleaner look */
+}
+
+/* Typography Utilities - Inspired by Recovery Machine branding */
+@layer utilities {
+  /* Section headers - italic/oblique style like pricing sheet */
+  .section-header {
+    font-style: italic;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-weight: 700;
+    line-height: 1;
+  }
+
+  /* Condensed headings - tight spacing */
+  .heading-condensed {
+    letter-spacing: -0.03em;
+    line-height: 0.95;
+    font-weight: 800;
+  }
+
+  /* Wide tracking for labels */
+  .text-wide {
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  /* Price styling */
+  .price-display {
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.02em;
+  }
+}
+
 /* Mobile input zoom prevention */
 input[type="text"],
 input[type="email"],

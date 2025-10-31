@@ -51,19 +51,19 @@ export function Header({
   };
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-border bg-background">
+    <header className="sticky top-0 z-50 w-full border-b border-border bg-white/80 backdrop-blur-md shadow-sm">
       <div className="container flex h-16 max-w-screen-2xl items-center px-4 sm:px-6 lg:px-8">
         {/* Brand Logo and Name */}
         <div className="mr-8">
-          <Link href="/" className="flex items-center">
+          <Link href="/" className="flex items-center group">
             <Inline space="3" align="center">
-              <div className="flex h-8 w-8 items-center justify-center bg-primary">
-                <Snowflake className="h-4 w-4 text-primary-foreground" />
+              <div className="flex h-10 w-10 items-center justify-center bg-primary rounded-xl shadow-md group-hover:scale-110 group-hover:shadow-lg transition-all duration-300">
+                <Snowflake className="h-5 w-5 text-primary-foreground" />
               </div>
-              <Text 
-                size="lg" 
-                weight="medium" 
-                className="hidden font-mono sm:inline-block"
+              <Text
+                size="lg"
+                weight="medium"
+                className="hidden font-serif sm:inline-block text-foreground group-hover:text-primary transition-colors"
               >
                 Recovery Machine
               </Text>

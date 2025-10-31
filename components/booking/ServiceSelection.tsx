@@ -32,8 +32,8 @@ export function ServiceSelection({
   return (
     <div className="space-y-6">
       <div className="text-center">
-        <h2 className="text-2xl font-bold text-white mb-2">Choose Your Recovery Experience</h2>
-        <p className="text-neutral-400">Select the service that best fits your wellness goals</p>
+        <h2 className="text-2xl font-serif font-bold text-foreground mb-2 tracking-tight">Choose Your Recovery Experience</h2>
+        <p className="text-muted-foreground font-light">Select the service that best fits your wellness goals</p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pb-20 md:pb-6">
@@ -73,8 +73,8 @@ export function ServiceSelection({
               )}
 
               <CardHeader className="pb-4">
-                <CardTitle className="text-xl font-semibold text-white">{service.name}</CardTitle>
-                <CardDescription className="text-sm text-neutral-400">
+                <CardTitle className="text-xl font-serif font-semibold text-foreground">{service.name}</CardTitle>
+                <CardDescription className="text-sm text-muted-foreground font-light">
                   {service.description}
                 </CardDescription>
               </CardHeader>
@@ -83,12 +83,12 @@ export function ServiceSelection({
                 {/* Pricing */}
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-2">
-                    <DollarSign className="w-5 h-5 text-green-600" />
-                    <span className="text-2xl font-bold text-white">
+                    <DollarSign className="w-5 h-5 text-primary" />
+                    <span className="text-2xl font-bold text-foreground">
                       {formatPrice(service.basePrice)}
                     </span>
                   </div>
-                  <div className="flex items-center space-x-1 text-neutral-400">
+                  <div className="flex items-center space-x-1 text-muted-foreground">
                     <Clock className="w-4 h-4" />
                     <span className="text-sm">{service.duration} min</span>
                   </div>
@@ -96,12 +96,12 @@ export function ServiceSelection({
 
                 {/* Features */}
                 <div className="space-y-2">
-                  <p className="text-sm font-medium text-white">Includes:</p>
+                  <p className="text-sm font-medium text-foreground">Includes:</p>
                   <ul className="space-y-1">
                     {service.features.map((feature) => (
                       <li key={feature} className="flex items-start space-x-2">
-                        <Check className="w-4 h-4 text-green-500 mt-0.5 flex-shrink-0" />
-                        <span className="text-sm text-neutral-400">{feature}</span>
+                        <Check className="w-4 h-4 text-primary mt-0.5 flex-shrink-0" />
+                        <span className="text-sm text-muted-foreground font-light">{feature}</span>
                       </li>
                     ))}
                   </ul>
@@ -138,19 +138,19 @@ export function ServiceSelection({
       </div>
 
       {/* Add-on options preview */}
-      <div className="bg-neutral-900 border border-neutral-800 p-4">
-        <h3 className="text-lg font-semibold text-white mb-3">Available Add-ons</h3>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
+      <div className="bg-gradient-to-br from-primary/5 to-secondary/5 border border-border rounded-2xl p-4 shadow-md">
+        <h3 className="text-lg font-serif font-semibold text-foreground mb-3">Available Add-ons</h3>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm text-foreground">
           <div className="flex items-center space-x-2">
-            <Check className="w-4 h-4 text-green-500" />
+            <Check className="w-4 h-4 text-primary" />
             <span>Extra family members (+$25 each)</span>
           </div>
           <div className="flex items-center space-x-2">
-            <Check className="w-4 h-4 text-green-500" />
+            <Check className="w-4 h-4 text-primary" />
             <span>Extended session time (+$2/min)</span>
           </div>
           <div className="flex items-center space-x-2">
-            <Check className="w-4 h-4 text-green-500" />
+            <Check className="w-4 h-4 text-primary" />
             <span>Additional visits this week</span>
           </div>
         </div>

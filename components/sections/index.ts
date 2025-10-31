@@ -11,3 +11,4 @@ export { default as HowItWorks } from "./HowItWorks";
 export { default as Pricing } from "./Pricing";
 export { default as SocialProof } from "./SocialProof";
 export { default as TestimonialCarousel } from "./TestimonialCarousel";
+export { default as VideoShowcase } from "./VideoShowcase";

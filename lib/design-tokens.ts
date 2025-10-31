@@ -8,18 +8,18 @@ export const baseTokens = {
   // Color palette
   colors: {
     // Brand colors
-    teal: {
-      50: '#f0fdfa',
-      100: '#ccfbf1', 
-      200: '#99f6e4',
-      300: '#5eead4',
-      400: '#2dd4bf',
-      500: '#14b8a6', // Primary brand color
-      600: '#0d9488',
-      700: '#0f766e',
-      800: '#115e59',
-      900: '#134e4a',
-      950: '#042f2e',
+    sage: {
+      50: '#f0fdf7',
+      100: '#dcfce9',
+      200: '#c4f4d8',
+      300: '#a1d4b3', // Primary sage green #A1D4B3
+      400: '#7ec199',
+      500: '#5eae80',
+      600: '#4a9968',
+      700: '#3b7d53',
+      800: '#2e6342',
+      900: '#245037',
+      950: '#1a3828',
     },
     
     // Grayscale

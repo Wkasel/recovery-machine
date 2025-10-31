@@ -1,7 +1,8 @@
 import { Geist } from "next/font/google";
+import { Playfair_Display } from "next/font/google";
 import AppProvider from "./providers";
 
-import { 
+import {
   GoogleAnalytics,
   SearchEngineVerifications,
   OrganizationJsonLd,
@@ -24,13 +25,19 @@ const geistSans = Geist({
   subsets: ["latin"],
 });
 
+const playfair = Playfair_Display({
+  display: "swap",
+  subsets: ["latin"],
+  variable: "--font-playfair",
+});
+
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={geistSans.className} suppressHydrationWarning>
+    <html lang="en" className={`${geistSans.className} ${playfair.variable}`} suppressHydrationWarning>
       <head>
         <SearchEngineVerifications />
         <OrganizationJsonLd />

@@ -38,7 +38,10 @@ interface PaymentStepProps {
   setupFee: SetupFeeCalculation;
   addOns: { extraVisits: number; familyMembers: number; extendedTime: number };
   specialInstructions?: string;
-  onPayment: (guestData?: { email: string; phone: string }) => void;
+  onPayment: (
+    guestData?: { email: string; phone: string },
+    options?: { devBypass?: boolean }
+  ) => Promise<void> | void;
   onBack: () => void;
   user?: User | null;
 }
@@ -179,57 +182,10 @@ export function PaymentStep({
     setIsProcessingPayment(true);
 
     try {
-      // If we should bypass payment (dev mode with 100% discount)
-      if (shouldBypassPayment && isDevMode) {
-        const bookingData = {
-          serviceType,
-          dateTime,
-          duration: (selectedService?.duration || 30) + addOns.extendedTime,
-          address,
-          addOns,
-          specialInstructions,
-          servicePrice: selectedService?.basePrice || 0,
-          addOnsPrice: calculateAddOnCost(),
-        };
-
-        const response = await fetch("/api/payments/dev-bypass", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            promoCode: promoCode.toUpperCase().trim(),
-            bookingData,
-            setupFee: setupFee.totalSetupFee,
-          }),
-        });
-
-        if (!response.ok) {
-          throw new Error("Dev payment bypass failed");
-        }
-
-        const result = await response.json();
-        
-        if (result.success) {
-          toast.success("Booking confirmed with dev bypass!");
-          onPayment(isGuestBooking ? { email: guestEmail, phone: guestPhone } : undefined);
-          return;
-        } else {
-          throw new Error(result.error || "Dev payment bypass failed");
-        }
-      }
-
-      // Regular payment processing (simulate for now)
-      await new Promise((resolve) => setTimeout(resolve, 2000));
-
-      // TODO: In a real implementation, you would:
-      // 1. Process payment with Stripe/Bolt
-      // 2. Create booking in database
-      // 3. Send confirmation email
-      // 4. Redirect to confirmation page
-
-      toast.success("Payment processed successfully!");
-      onPayment(isGuestBooking ? { email: guestEmail, phone: guestPhone } : undefined);
+      await onPayment(
+        isGuestBooking ? { email: guestEmail, phone: guestPhone } : undefined,
+        { devBypass: shouldBypassPayment && isDevMode }
+      );
     } catch (error) {
       console.error("Payment failed:", error);
       toast.error(error instanceof Error ? error.message : "Payment failed");
@@ -243,21 +199,21 @@ export function PaymentStep({
   return (
     <div className="space-y-6">
       <div className="text-center">
-        <h2 className="text-2xl font-bold text-white mb-2">Complete Your Booking</h2>
-        <p className="text-neutral-400">Review your details and complete payment</p>
+        <h2 className="text-2xl font-serif font-bold text-foreground mb-2">Complete Your Booking</h2>
+        <p className="text-muted-foreground font-light">Review your details and complete payment</p>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 pb-20 md:pb-6">
         {/* Booking Summary */}
         <div className="space-y-4">
-          <Card>
+          <Card className="bg-white/70 backdrop-blur-sm border-border rounded-3xl shadow-lg">
             <CardHeader>
-              <CardTitle className="text-white">Booking Summary</CardTitle>
+              <CardTitle className="text-foreground font-serif">Booking Summary</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               {/* Service */}
               <div className="flex items-start space-x-3">
-                <Check className="w-5 h-5 text-green-600 mt-0.5" />
+                <Check className="w-5 h-5 text-primary mt-0.5" />
                 <div>
                   <p className="font-medium">{selectedService?.name}</p>
                   <p className="text-sm text-gray-600">
@@ -312,9 +268,9 @@ export function PaymentStep({
           </Card>
 
           {/* Payment method selection */}
-          <Card>
+          <Card className="bg-white/70 backdrop-blur-sm border-border rounded-3xl shadow-lg">
             <CardHeader>
-              <CardTitle className="text-white">Payment Options</CardTitle>
+              <CardTitle className="text-foreground font-serif">Payment Options</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="grid grid-cols-1 gap-3">
@@ -322,8 +278,8 @@ export function PaymentStep({
                   className={cn(
                     "border-2 rounded-lg p-4 cursor-pointer transition-all min-h-[60px] touch-manipulation",
                     paymentMethod === "card"
-                      ? "border-neutral-600 bg-neutral-800 text-white"
-                      : "border-neutral-700 hover:border-neutral-600 bg-neutral-900 text-white"
+                      ? "border-primary bg-card text-foreground"
+                      : "border-border hover:border-primary bg-background text-foreground"
                   )}
                   onClick={() => setPaymentMethod("card")}
                 >
@@ -331,17 +287,17 @@ export function PaymentStep({
                     <div
                       className={cn(
                         "w-4 h-4 rounded-full border-2",
-                        paymentMethod === "card" ? "border-white bg-white" : "border-neutral-500"
+                        paymentMethod === "card" ? "border-primary bg-primary" : "border-muted-foreground"
                       )}
                     >
                       {paymentMethod === "card" && (
-                        <div className="w-2 h-2 bg-black rounded-full mx-auto mt-0.5" />
+                        <div className="w-2 h-2 bg-background rounded-full mx-auto mt-0.5" />
                       )}
                     </div>
-                    <CreditCard className="w-5 h-5 text-gray-600" />
+                    <CreditCard className="w-5 h-5 text-muted-foreground" />
                     <div>
-                      <p className="font-medium text-white">Pay per session</p>
-                      <p className="text-sm text-neutral-400">One-time payment</p>
+                      <p className="font-medium text-foreground">Pay per session</p>
+                      <p className="text-sm text-muted-foreground font-light">One-time payment</p>
                     </div>
                   </div>
                 </div>
@@ -350,8 +306,8 @@ export function PaymentStep({
                   className={cn(
                     "border-2 rounded-lg p-4 cursor-pointer transition-all min-h-[60px] touch-manipulation",
                     paymentMethod === "subscription"
-                      ? "border-neutral-600 bg-neutral-800 text-white"
-                      : "border-neutral-700 hover:border-neutral-600 bg-neutral-900 text-white"
+                      ? "border-primary bg-card text-foreground"
+                      : "border-border hover:border-primary bg-background text-foreground"
                   )}
                   onClick={() => setPaymentMethod("subscription")}
                 >
@@ -360,18 +316,18 @@ export function PaymentStep({
                       className={cn(
                         "w-4 h-4 rounded-full border-2",
                         paymentMethod === "subscription"
-                          ? "border-white bg-white"
-                          : "border-neutral-500"
+                          ? "border-primary bg-primary"
+                          : "border-muted-foreground"
                       )}
                     >
                       {paymentMethod === "subscription" && (
-                        <div className="w-2 h-2 bg-black rounded-full mx-auto mt-0.5" />
+                        <div className="w-2 h-2 bg-background rounded-full mx-auto mt-0.5" />
                       )}
                     </div>
                     <Badge className="bg-green-100 text-green-800">Save 20%</Badge>
                     <div>
-                      <p className="font-medium text-white">Monthly membership</p>
-                      <p className="text-sm text-neutral-400">4 sessions per month</p>
+                      <p className="font-medium text-foreground">Monthly membership</p>
+                      <p className="text-sm text-muted-foreground font-light">4 sessions per month</p>
                     </div>
                   </div>
                 </div>
@@ -383,10 +339,10 @@ export function PaymentStep({
         {/* Payment Details */}
         <div className="space-y-4">
           {/* Pricing breakdown */}
-          <Card>
+          <Card className="bg-white/70 backdrop-blur-sm border-border rounded-3xl shadow-lg">
             <CardHeader>
-              <CardTitle className="flex items-center space-x-2 text-white">
-                <DollarSign className="w-5 h-5 text-white" />
+              <CardTitle className="flex items-center space-x-2 text-foreground font-serif">
+                <DollarSign className="w-5 h-5 text-foreground" />
                 <span>Pricing Breakdown</span>
               </CardTitle>
             </CardHeader>
@@ -446,7 +402,7 @@ export function PaymentStep({
           </Card>
 
           {/* Promo code */}
-          <Card>
+          <Card className="bg-white/70 backdrop-blur-sm border-border rounded-3xl shadow-lg">
             <CardContent className="pt-6">
               {isDevMode && (
                 <div className="mb-4 p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
@@ -502,39 +458,39 @@ export function PaymentStep({
 
           {/* Guest Information - only show for non-authenticated users */}
           {isGuestBooking && (
-            <Card>
+            <Card className="bg-white/70 backdrop-blur-sm border-border rounded-3xl shadow-lg">
               <CardHeader>
-                <CardTitle className="text-white">Contact Information</CardTitle>
-                <CardDescription>We'll create an account for you to manage your bookings</CardDescription>
+                <CardTitle className="text-foreground font-serif">Contact Information</CardTitle>
+                <CardDescription className="font-light">We'll create an account for you to manage your bookings</CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div>
-                  <Label htmlFor="guest-email" className="text-white">Email Address *</Label>
+                  <Label htmlFor="guest-email" className="text-foreground">Email Address *</Label>
                   <Input
                     id="guest-email"
                     type="email"
                     value={guestEmail}
                     onChange={(e) => setGuestEmail(e.target.value)}
                     placeholder="your.email@example.com"
-                    className="bg-neutral-800 border-neutral-600 text-white"
+                    className="bg-background border-input text-foreground"
                     required
                   />
                 </div>
                 <div>
-                  <Label htmlFor="guest-phone" className="text-white">Phone Number *</Label>
+                  <Label htmlFor="guest-phone" className="text-foreground">Phone Number *</Label>
                   <Input
                     id="guest-phone"
                     type="tel"
                     value={guestPhone}
                     onChange={(e) => setGuestPhone(e.target.value)}
                     placeholder="(555) 123-4567"
-                    className="bg-neutral-800 border-neutral-600 text-white"
+                    className="bg-background border-input text-foreground"
                     required
                   />
                 </div>
-                <div className="bg-blue-950 border border-blue-800 p-3 rounded-md">
-                  <p className="text-sm text-blue-200">
-                    <strong>New to Recovery Machine?</strong> We'll automatically create an account for you 
+                <div className="bg-blue-50 border border-blue-200 p-3 rounded-md">
+                  <p className="text-sm text-blue-800 font-light">
+                    <strong className="font-medium">New to Recovery Machine?</strong> We'll automatically create an account for you
                     with this email so you can track your bookings and earn referral credits.
                   </p>
                 </div>
@@ -543,26 +499,26 @@ export function PaymentStep({
           )}
 
           {/* Payment form */}
-          <Card>
+          <Card className="bg-white/70 backdrop-blur-sm border-border rounded-3xl shadow-lg">
             <CardHeader>
-              <CardTitle className="flex items-center space-x-2 text-white">
-                <Lock className="w-5 h-5 text-white" />
+              <CardTitle className="flex items-center space-x-2 text-foreground font-serif">
+                <Lock className="w-5 h-5 text-foreground" />
                 <span>Secure Payment</span>
               </CardTitle>
-              <CardDescription>Your payment information is encrypted and secure</CardDescription>
+              <CardDescription className="font-light">Your payment information is encrypted and secure</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               {/* Mock payment form */}
               <div className="bg-gray-50 p-4 rounded-lg text-center">
                 <CreditCard className="w-12 h-12 text-gray-400 mx-auto mb-2" />
                 <p className="text-sm text-gray-600 mb-2">
-                  Secure payment processing powered by Bolt
+                  Secure payment processing powered by Stripe
                 </p>
                 <div className="flex justify-center space-x-2">
                   <Badge variant="secondary">Visa</Badge>
                   <Badge variant="secondary">Mastercard</Badge>
                   <Badge variant="secondary">Amex</Badge>
-                  <Badge variant="secondary">Apple Pay</Badge>
+                  <Badge variant="secondary">Discover</Badge>
                 </div>
               </div>
 

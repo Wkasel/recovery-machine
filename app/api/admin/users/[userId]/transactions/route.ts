@@ -9,7 +9,7 @@ export async function GET(
 ) {
   try {
     await requireAdminAccess("operator");
-    const supabase = createServerSupabaseClient();
+    const supabase = await createServerSupabaseClient();
     const resolvedParams = await params;
     const userId = resolvedParams.userId;
 

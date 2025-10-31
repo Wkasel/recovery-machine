@@ -44,8 +44,8 @@ const services = [
     longDescription: "Experience the proven benefits of cold water therapy with our professional-grade mobile cold plunge service. Our certified technicians bring state-of-the-art chiller systems maintaining precise temperature control (38-55°F) directly to your location.",
     href: "/cold-plunge-la",
     icon: Snowflake,
-    price: "Starting at $150",
-    duration: "30-minute sessions",
+    price: "Starting at $175",
+    duration: "60-minute sessions",
     highlights: [
       "Same-day availability",
       "Professional setup included",
@@ -75,7 +75,7 @@ const services = [
     href: "/infrared-sauna-delivery",
     icon: Flame,
     price: "Starting at $175",
-    duration: "45-minute sessions",
+    duration: "60-minute sessions",
     highlights: [
       "Full-spectrum infrared",
       "2-4 person capacity",
@@ -104,8 +104,8 @@ const services = [
     longDescription: "Accelerate your performance with professional contrast therapy trusted by elite athletes. Our scientifically-designed hot-cold therapy cycles combine cold plunge and infrared sauna sessions for maximum recovery benefits.",
     href: "/athletic-recovery",
     icon: Trophy,
-    price: "Starting at $200",
-    duration: "60-minute contrast therapy",
+    price: "Starting at $250",
+    duration: "90-minute group sessions",
     highlights: [
       "Elite protocols",
       "Performance tracking",
@@ -134,7 +134,7 @@ const services = [
     longDescription: "Invest in your team with comprehensive workplace wellness programs. Our mobile recovery services provide measurable ROI through improved employee satisfaction, reduced stress, and enhanced productivity.",
     href: "/corporate-wellness",
     icon: Building2,
-    price: "Starting at $2,500/month",
+    price: "Starting at $1,000",
     duration: "Flexible scheduling",
     highlights: [
       "On-site delivery",
@@ -201,7 +201,7 @@ export default function ServicesPage() {
           {/* CTA Buttons */}
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button size="lg" asChild>
-              <Link href="/contact">Contact Us</Link>
+              <Link href="/book">Book Now</Link>
             </Button>
             <Button size="lg" variant="outline" asChild>
               <Link href="/about">Learn More</Link>
@@ -286,8 +286,8 @@ export default function ServicesPage() {
 
                     {/* CTA */}
                     <Button asChild className="w-full group-hover:bg-primary/90">
-                      <Link href={service.href} className="flex items-center justify-center gap-2">
-                        Learn More
+                      <Link href="/book" className="flex items-center justify-center gap-2">
+                        Book Now
                         <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
                       </Link>
                     </Button>
@@ -337,7 +337,7 @@ export default function ServicesPage() {
 
           <div className="mt-12">
             <Button size="lg" asChild>
-              <Link href="/contact">Contact Us</Link>
+              <Link href="/book">Book Your Session</Link>
             </Button>
           </div>
         </div>
@@ -365,7 +365,7 @@ export default function ServicesPage() {
           </div>
 
           <p className="text-sm text-muted-foreground mt-6">
-            Don't see your area? <Link href="/contact" className="text-primary hover:underline">Contact us</Link> to check availability.
+            Don't see your area? <Link href="/book" className="text-primary hover:underline">Book now</Link> to check availability.
           </p>
         </div>
       </section>

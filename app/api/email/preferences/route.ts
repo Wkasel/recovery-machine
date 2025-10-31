@@ -26,7 +26,7 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: "User ID or unsubscribe token required" }, { status: 400 });
     }
 
-    const supabase = createServerSupabaseClient();
+    const supabase = await createServerSupabaseClient();
 
     let targetUserId = userId;
 
@@ -74,7 +74,7 @@ export async function GET(request: NextRequest) {
 
 export async function PUT(request: NextRequest) {
   try {
-    const supabase = createServerSupabaseClient();
+    const supabase = await createServerSupabaseClient();
 
     // Get the authenticated user
     const {
@@ -168,7 +168,7 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const { action, email, preferences, token } = body;
 
-    const supabase = createServerSupabaseClient();
+    const supabase = await createServerSupabaseClient();
 
     if (action === "unsubscribe") {
       if (!email && !token) {

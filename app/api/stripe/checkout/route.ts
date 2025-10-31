@@ -1,12 +1,12 @@
 // @ts-nocheck
-import { boltClient } from "@/lib/bolt/client";
-import { type BoltOrderData } from "@/lib/bolt/config";
+import { stripeClient } from "@/lib/stripe/client";
+import { type StripeCheckoutData } from "@/lib/stripe/config";
 import { createServerSupabaseClient } from "@/lib/supabase/server";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(request: NextRequest) {
   try {
-    const supabase = createServerSupabaseClient();
+    const supabase = await createServerSupabaseClient();
     const {
       data: { user },
       error: authError,
@@ -16,7 +16,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Authentication required" }, { status: 401 });
     }
 
-    const body: BoltOrderData = await request.json();
+    const body: StripeCheckoutData = await request.json();
 
     // Validate required fields
     const requiredFields = [
@@ -67,8 +67,8 @@ export async function POST(request: NextRequest) {
     }
 
     try {
-      // Create Bolt checkout session
-      const checkoutResponse = await boltClient.createCheckout({
+      // Create Stripe checkout session
+      const checkoutResponse = await stripeClient.createCheckoutSession({
         ...body,
         metadata: {
           ...body.metadata,
@@ -77,26 +77,26 @@ export async function POST(request: NextRequest) {
         },
       });
 
-      // Update order with Bolt checkout ID
+      // Update order with Stripe session ID
       await supabase
         .from("orders")
         .update({
-          bolt_checkout_id: checkoutResponse.checkout_id,
+          stripe_session_id: checkoutResponse.session_id,
           status: "processing",
         })
         .eq("id", order.id);
 
       return NextResponse.json({
         success: true,
-        checkout_id: checkoutResponse.checkout_id,
+        session_id: checkoutResponse.session_id,
         checkout_url: checkoutResponse.checkout_url,
         order_id: order.id,
       });
-    } catch (boltError) {
+    } catch (stripeError) {
       // Update order status to failed
       await supabase.from("orders").update({ status: "failed" }).eq("id", order.id);
 
-      console.error("Bolt API error:", boltError);
+      console.error("Stripe API error:", stripeError);
       return NextResponse.json({ error: "Failed to create checkout session" }, { status: 500 });
     }
   } catch (error) {
@@ -105,17 +105,17 @@ export async function POST(request: NextRequest) {
   }
 }
 
-// Get checkout status
+// Get checkout session status
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
-    const checkoutId = searchParams.get("checkout_id");
+    const sessionId = searchParams.get("session_id");
 
-    if (!checkoutId) {
-      return NextResponse.json({ error: "checkout_id parameter required" }, { status: 400 });
+    if (!sessionId) {
+      return NextResponse.json({ error: "session_id parameter required" }, { status: 400 });
     }
 
-    const supabase = createServerSupabaseClient();
+    const supabase = await createServerSupabaseClient();
     const {
       data: { user },
       error: authError,
@@ -129,7 +129,7 @@ export async function GET(request: NextRequest) {
     const { data: order, error: orderError } = await supabase
       .from("orders")
       .select("*")
-      .eq("bolt_checkout_id", checkoutId)
+      .eq("stripe_session_id", sessionId)
       .eq("user_id", user.id)
       .single();
 
@@ -137,26 +137,27 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: "Order not found" }, { status: 404 });
     }
 
-    // Get status from Bolt
+    // Get status from Stripe
     try {
-      const boltStatus = await boltClient.getOrderStatus(checkoutId);
+      const stripeSession = await stripeClient.getCheckoutSession(sessionId);
 
       return NextResponse.json({
         order_id: order.id,
-        checkout_id: checkoutId,
+        session_id: sessionId,
         status: order.status,
         amount: order.amount,
-        bolt_status: boltStatus,
+        stripe_status: stripeSession.status,
+        payment_status: stripeSession.payment_status,
       });
-    } catch (boltError) {
-      console.error("Bolt status error:", boltError);
+    } catch (stripeError) {
+      console.error("Stripe status error:", stripeError);
       return NextResponse.json({
         order_id: order.id,
-        checkout_id: checkoutId,
+        session_id: sessionId,
         status: order.status,
         amount: order.amount,
-        bolt_status: null,
-        error: "Could not fetch Bolt status",
+        stripe_status: null,
+        error: "Could not fetch Stripe status",
       });
     }
   } catch (error) {

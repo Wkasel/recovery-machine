@@ -166,8 +166,8 @@ export function BookingCalendar({
   return (
     <div className="space-y-6">
       <div className="text-center">
-        <h2 className="text-2xl font-bold text-white mb-2">Choose Your Appointment Time</h2>
-        <p className="text-neutral-400">
+        <h2 className="text-2xl font-serif font-bold text-foreground mb-2">Choose Your Appointment Time</h2>
+        <p className="text-muted-foreground font-light">
           Select a date and time that works best for your {selectedService?.name} session
         </p>
       </div>
@@ -175,11 +175,11 @@ export function BookingCalendar({
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 pb-20 md:pb-6">
         {/* Calendar */}
         <div className="lg:col-span-2">
-          <Card>
+          <Card className="bg-white/70 backdrop-blur-sm border-border rounded-3xl shadow-lg">
             <CardHeader>
               <div className="flex items-center justify-between">
-                <CardTitle className="flex items-center space-x-2 text-white">
-                  <Calendar className="w-5 h-5 text-white" />
+                <CardTitle className="flex items-center space-x-2 text-foreground font-serif">
+                  <Calendar className="w-5 h-5 text-foreground" />
                   <span>Select Date</span>
                 </CardTitle>
                 <div className="flex space-x-2">
@@ -259,13 +259,13 @@ export function BookingCalendar({
 
           {/* Time slots */}
           {selectedDate && (
-            <Card className="mt-4">
+            <Card className="mt-4 bg-white/70 backdrop-blur-sm border-border rounded-3xl shadow-lg">
               <CardHeader>
-                <CardTitle className="flex items-center space-x-2 text-white">
-                  <Clock className="w-5 h-5 text-white" />
+                <CardTitle className="flex items-center space-x-2 text-foreground font-serif">
+                  <Clock className="w-5 h-5 text-foreground" />
                   <span>Available Times</span>
                 </CardTitle>
-                <CardDescription>
+                <CardDescription className="font-light">
                   {new Date(selectedDate).toLocaleDateString("en-US", {
                     weekday: "long",
                     year: "numeric",
@@ -314,9 +314,9 @@ export function BookingCalendar({
         {/* Booking summary and add-ons */}
         <div className="space-y-4">
           {/* Booking summary */}
-          <Card>
+          <Card className="bg-white/70 backdrop-blur-sm border-border rounded-3xl shadow-lg">
             <CardHeader>
-              <CardTitle className="text-white">Booking Summary</CardTitle>
+              <CardTitle className="text-foreground font-serif">Booking Summary</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div>
@@ -360,13 +360,13 @@ export function BookingCalendar({
           </Card>
 
           {/* Add-ons */}
-          <Card>
+          <Card className="bg-white/70 backdrop-blur-sm border-border rounded-3xl shadow-lg">
             <CardHeader>
-              <CardTitle className="flex items-center space-x-2 text-white">
-                <Plus className="w-5 h-5 text-white" />
+              <CardTitle className="flex items-center space-x-2 text-foreground font-serif">
+                <Plus className="w-5 h-5 text-foreground" />
                 <span>Add-ons</span>
               </CardTitle>
-              <CardDescription>Customize your experience</CardDescription>
+              <CardDescription className="font-light">Customize your experience</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               {/* Family members */}
@@ -495,9 +495,9 @@ export function BookingCalendar({
           </Card>
 
           {/* Special instructions */}
-          <Card>
+          <Card className="bg-white/70 backdrop-blur-sm border-border rounded-3xl shadow-lg">
             <CardHeader>
-              <CardTitle className="text-white">Special Instructions</CardTitle>
+              <CardTitle className="text-foreground font-serif">Special Instructions</CardTitle>
             </CardHeader>
             <CardContent>
               <Textarea

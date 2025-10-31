@@ -1,143 +1,118 @@
-// @ts-nocheck
-import { boltClient } from "@/lib/bolt/client";
-import { createServerSupabaseClient } from "@/lib/supabase/server";
+import { stripeClient } from "@/lib/stripe/client";
+import { createServiceRoleClient } from "@/lib/supabase/service-role";
+import { requireAdminAccess } from "@/lib/utils/admin/auth";
 import { NextRequest, NextResponse } from "next/server";
 
-// Process a refund
+interface RefundRequestBody {
+  order_id?: string;
+  amount?: number;
+  reason?: string;
+}
+
 export async function POST(request: NextRequest) {
   try {
-    const supabase = createServerSupabaseClient();
-    const {
-      data: { user },
-      error: authError,
-    } = await supabase.auth.getUser();
-
-    if (authError || !user) {
-      return NextResponse.json({ error: "Authentication required" }, { status: 401 });
+    try {
+      await requireAdminAccess(request, "admin");
+    } catch (authError) {
+      const message = authError instanceof Error ? authError.message : "Admin access required";
+      return NextResponse.json({ error: message }, { status: 403 });
     }
 
-    const body = await request.json();
-    const { order_id, amount, reason = "customer_request" } = body;
+    const body = (await request.json()) as RefundRequestBody;
+    const orderId = body.order_id;
+    const requestedAmount = body.amount;
+    const reason = body.reason || "admin_refund";
 
-    if (!order_id) {
+    if (!orderId) {
       return NextResponse.json({ error: "order_id is required" }, { status: 400 });
     }
 
-    // Get order details
+    const supabase = createServiceRoleClient();
+
     const { data: order, error: orderError } = await supabase
       .from("orders")
-      .select("*")
-      .eq("id", order_id)
-      .eq("user_id", user.id)
+      .select(
+        "id, amount, metadata, status, stripe_session_id, stripe_payment_intent_id"
+      )
+      .eq("id", orderId)
       .single();
 
     if (orderError || !order) {
       return NextResponse.json({ error: "Order not found" }, { status: 404 });
     }
 
-    // Check if order is eligible for refund
-    if (order.status !== "paid") {
-      return NextResponse.json({ error: "Order is not eligible for refund" }, { status: 400 });
+    if (order.status === "refunded") {
+      return NextResponse.json({ error: "Order already refunded" }, { status: 400 });
     }
 
-    if (!order.bolt_checkout_id) {
+    const metadata = (order.metadata as Record<string, any>) || {};
+
+    const normalizedAmount =
+      typeof requestedAmount === "number" && Number.isFinite(requestedAmount)
+        ? Math.trunc(requestedAmount)
+        : order.amount;
+
+    if (normalizedAmount <= 0) {
+      return NextResponse.json({ error: "Refund amount must be greater than zero" }, { status: 400 });
+    }
+
+    if (normalizedAmount > order.amount) {
+      return NextResponse.json({ error: "Refund amount exceeds original charge" }, { status: 400 });
+    }
+
+    let paymentIntentId = order.stripe_payment_intent_id as string | null;
+
+    if (!paymentIntentId && typeof metadata.payment_intent_id === "string") {
+      paymentIntentId = metadata.payment_intent_id;
+    }
+
+    if (!paymentIntentId && order.stripe_session_id) {
+      try {
+        const session = await stripeClient.getCheckoutSession(order.stripe_session_id);
+        paymentIntentId = (session.payment_intent as string | null) ?? null;
+
+        if (paymentIntentId) {
+          await supabase
+            .from("orders")
+            .update({ stripe_payment_intent_id: paymentIntentId })
+            .eq("id", order.id);
+        }
+      } catch (sessionError) {
+        console.error("Failed to resolve Stripe checkout session", sessionError);
+      }
+    }
+
+    if (!paymentIntentId) {
       return NextResponse.json(
-        { error: "No payment information found for this order" },
+        { error: "Payment intent not found for this order" },
         { status: 400 }
       );
     }
 
-    // Validate refund amount
-    const refundAmount = amount || order.amount;
-    if (refundAmount > order.amount) {
-      return NextResponse.json(
-        { error: "Refund amount cannot exceed original payment amount" },
-        { status: 400 }
-      );
-    }
+    const refund = await stripeClient.processRefund(paymentIntentId, normalizedAmount);
 
-    try {
-      // Process refund with Bolt
-      const refundResponse = await boltClient.processRefund(order.bolt_checkout_id, refundAmount);
+    const updatedMetadata = {
+      ...metadata,
+      last_refund_id: refund.id,
+      refunded_at: new Date().toISOString(),
+      refund_reason: reason,
+      refund_amount: refund.amount,
+    };
 
-      // Update order status
-      await supabase
-        .from("orders")
-        .update({
-          status: "refunded",
-          metadata: {
-            ...order.metadata,
-            refund_id: refundResponse.refund_id,
-            refund_amount: refundAmount,
-            refund_reason: reason,
-            refunded_at: new Date().toISOString(),
-          },
-        })
-        .eq("id", order_id);
+    const isFullRefund = refund.amount >= order.amount;
 
-      return NextResponse.json({
-        success: true,
-        refund_id: refundResponse.refund_id,
-        refund_amount: refundAmount,
-        original_amount: order.amount,
-        message: "Refund processed successfully",
-      });
-    } catch (boltError) {
-      console.error("Bolt refund error:", boltError);
-      return NextResponse.json(
-        { error: "Failed to process refund with payment provider" },
-        { status: 500 }
-      );
-    }
+    await supabase
+      .from("orders")
+      .update({
+        status: isFullRefund ? "refunded" : order.status,
+        metadata: updatedMetadata,
+      })
+      .eq("id", order.id);
+
+    return NextResponse.json({ success: true, refund });
   } catch (error) {
     console.error("Refund processing error:", error);
-    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
-  }
-}
-
-// Get refund status
-export async function GET(request: NextRequest) {
-  try {
-    const { searchParams } = new URL(request.url);
-    const orderId = searchParams.get("order_id");
-
-    if (!orderId) {
-      return NextResponse.json({ error: "order_id parameter required" }, { status: 400 });
-    }
-
-    const supabase = createServerSupabaseClient();
-    const {
-      data: { user },
-      error: authError,
-    } = await supabase.auth.getUser();
-
-    if (authError || !user) {
-      return NextResponse.json({ error: "Authentication required" }, { status: 401 });
-    }
-
-    // Get order details
-    const { data: order, error: orderError } = await supabase
-      .from("orders")
-      .select("*")
-      .eq("id", orderId)
-      .eq("user_id", user.id)
-      .single();
-
-    if (orderError || !order) {
-      return NextResponse.json({ error: "Order not found" }, { status: 404 });
-    }
-
-    return NextResponse.json({
-      order_id: orderId,
-      status: order.status,
-      original_amount: order.amount,
-      refund_amount: order.metadata?.refund_amount || null,
-      refund_id: order.metadata?.refund_id || null,
-      refunded_at: order.metadata?.refunded_at || null,
-      refund_reason: order.metadata?.refund_reason || null,
-    });
-  } catch (error) {
-    console.error("Refund status error:", error);
-    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+    const message = error instanceof Error ? error.message : "Failed to process refund";
+    return NextResponse.json({ error: message }, { status: 500 });
   }
 }

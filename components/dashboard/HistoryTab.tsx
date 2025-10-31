@@ -187,7 +187,7 @@ export function HistoryTab({ user }: HistoryTabProps) {
 
   const getTotalPaid = (booking: BookingHistoryItem) => {
     if (!booking.order) return 0;
-    return booking.order.amount + booking.order.setup_fee_applied;
+    return booking.order.amount;
   };
 
   const downloadReceipt = async (booking: BookingHistoryItem) => {
@@ -197,6 +197,10 @@ export function HistoryTab({ user }: HistoryTabProps) {
     }
 
     try {
+      const serviceAmount = Math.max(
+        booking.order.amount - (booking.order.setup_fee_applied || 0),
+        0
+      );
       // In a real app, this would generate and download a PDF receipt
       const receiptData = {
         booking_id: booking.id,
@@ -205,7 +209,7 @@ export function HistoryTab({ user }: HistoryTabProps) {
         date: formatDateTime(booking.date_time).date,
         time: formatDateTime(booking.date_time).time,
         duration: booking.duration,
-        amount: formatCurrency(booking.order.amount),
+        amount: formatCurrency(serviceAmount),
         setup_fee: formatCurrency(booking.order.setup_fee_applied),
         total: formatCurrency(getTotalPaid(booking)),
         address: booking.location_address,
@@ -316,7 +320,6 @@ Thank you for choosing Recovery Machine!
           filteredHistory.map((booking) => {
             const dateTime = formatDateTime(booking.date_time);
             const totalPaid = getTotalPaid(booking);
-
             return (
               <Card key={booking.id}>
                 <CardContent className="p-6">
@@ -458,7 +461,15 @@ Thank you for choosing Recovery Machine!
                       <hr className="my-3" />
                       <div className="flex justify-between">
                         <span>Service Fee:</span>
-                        <span>{formatCurrency(selectedBooking.order.amount)}</span>
+                        <span>
+                          {formatCurrency(
+                            Math.max(
+                              selectedBooking.order.amount -
+                                (selectedBooking.order.setup_fee_applied || 0),
+                              0
+                            )
+                          )}
+                        </span>
                       </div>
                       {selectedBooking.order.setup_fee_applied > 0 && (
                         <div className="flex justify-between">

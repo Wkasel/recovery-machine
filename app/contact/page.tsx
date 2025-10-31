@@ -32,30 +32,27 @@ export const metadata: Metadata = {
 
 export default function ContactPage() {
   return (
-    <div className="min-h-screen bg-black text-white">
+    <div className="min-h-screen bg-gradient-to-b from-background to-muted/30">
       <div className="container mx-auto px-4 py-16 max-w-4xl">
         <div className="mb-8">
-          <Link href="/" className="text-muted-foreground hover:text-foreground mb-4 inline-block">
-            ← Back to Home
-          </Link>
-          <h1 className="text-4xl font-bold mb-4">Contact Us</h1>
-          <p className="text-xl text-muted-foreground">Get in touch with our recovery specialists</p>
+          <h1 className="text-4xl font-serif tracking-tight font-bold mb-4">Contact Us</h1>
+          <p className="text-xl font-light text-muted-foreground">Get in touch with our recovery specialists</p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
           <div className="space-y-8">
             <section>
-              <h2 className="text-2xl font-bold mb-6">Get In Touch</h2>
+              <h2 className="text-2xl font-serif tracking-tight font-bold mb-6">Get In Touch</h2>
               <div className="space-y-6">
                 <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 bg-neutral-900 border border-neutral-800 flex items-center justify-center">
+                  <div className="w-12 h-12 bg-primary/10 border border-border rounded-2xl flex items-center justify-center">
                     <Instagram className="h-6 w-6" />
                   </div>
                   <div>
                     <h3 className="font-semibold">Follow Us</h3>
-                    <a 
-                      href="https://www.instagram.com/therecoverymachine_/" 
-                      target="_blank" 
+                    <a
+                      href="https://www.instagram.com/therecoverymachine_/"
+                      target="_blank"
                       rel="noopener noreferrer"
                       className="text-muted-foreground hover:text-primary transition-colors"
                     >
@@ -65,22 +62,22 @@ export default function ContactPage() {
                 </div>
 
                 <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 bg-neutral-900 border border-neutral-800 flex items-center justify-center">
+                  <div className="w-12 h-12 bg-primary/10 border border-border rounded-2xl flex items-center justify-center">
                     <MapPin className="h-6 w-6" />
                   </div>
                   <div>
                     <h3 className="font-semibold">Service Area</h3>
-                    <p className="text-muted-foreground">Orange County & Los Angeles</p>
+                    <p className="font-light text-muted-foreground">Orange County • Serving All of Southern California</p>
                   </div>
                 </div>
 
                 <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 bg-neutral-900 border border-neutral-800 flex items-center justify-center">
+                  <div className="w-12 h-12 bg-primary/10 border border-border rounded-2xl flex items-center justify-center">
                     <Clock className="h-6 w-6" />
                   </div>
                   <div>
                     <h3 className="font-semibold">Hours</h3>
-                    <p className="text-muted-foreground">7 AM - 9 PM, 7 days a week</p>
+                    <p className="font-light text-muted-foreground">7 AM - 9 PM, 7 days a week</p>
                   </div>
                 </div>
               </div>
@@ -90,18 +87,18 @@ export default function ContactPage() {
 
           <div className="space-y-8">
             <section>
-              <h3 className="text-xl font-bold mb-6">Frequently Asked Questions</h3>
+              <h3 className="text-xl font-serif tracking-tight font-bold mb-6">Frequently Asked Questions</h3>
               <div className="space-y-6">
                 <div>
                   <h4 className="font-semibold mb-2">How far do you travel?</h4>
-                  <p className="text-muted-foreground text-sm">
-                    We service Orange County and Los Angeles. Setup fees may vary based on distance.
+                  <p className="font-light text-muted-foreground text-sm">
+                    Based in Orange County, we service all of Southern California. Setup fees may vary based on distance.
                   </p>
                 </div>
 
                 <div>
                   <h4 className="font-semibold mb-2">What's included in a session?</h4>
-                  <p className="text-muted-foreground text-sm">
+                  <p className="font-light text-muted-foreground text-sm">
                     Each 45-minute session includes cold plunge and infrared sauna with professional
                     guidance, setup, cleanup, and premium accessories.
                   </p>
@@ -109,7 +106,7 @@ export default function ContactPage() {
 
                 <div>
                   <h4 className="font-semibold mb-2">Can I cancel my membership?</h4>
-                  <p className="text-muted-foreground text-sm">
+                  <p className="font-light text-muted-foreground text-sm">
                     Yes, you can cancel anytime with 30 days' notice. No long-term contracts
                     required.
                   </p>
@@ -117,7 +114,7 @@ export default function ContactPage() {
 
                 <div>
                   <h4 className="font-semibold mb-2">Is it safe?</h4>
-                  <p className="text-muted-foreground text-sm">
+                  <p className="font-light text-muted-foreground text-sm">
                     All sessions are supervised by certified recovery specialists. We screen for
                     contraindications and maintain comprehensive insurance coverage.
                   </p>
@@ -125,15 +122,15 @@ export default function ContactPage() {
               </div>
             </section>
 
-            <section className="bg-neutral-900 border border-neutral-800 p-6">
-              <h3 className="text-lg font-bold mb-3">Business Inquiries</h3>
-              <p className="text-muted-foreground text-sm mb-4">
+            <section className="bg-white/70 backdrop-blur-sm border border-border rounded-2xl shadow-md p-6">
+              <h3 className="text-lg font-serif tracking-tight font-bold mb-3">Business Inquiries</h3>
+              <p className="font-light text-muted-foreground text-sm mb-4">
                 Interested in corporate wellness programs or partnership opportunities?
               </p>
-              <p className="text-muted-foreground">
-                Contact us via <a 
-                  href="https://www.instagram.com/therecoverymachine_/" 
-                  target="_blank" 
+              <p className="font-light text-muted-foreground">
+                Contact us via <a
+                  href="https://www.instagram.com/therecoverymachine_/"
+                  target="_blank"
                   rel="noopener noreferrer"
                   className="text-primary hover:underline"
                 >
