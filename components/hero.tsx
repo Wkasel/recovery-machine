@@ -1,7 +1,8 @@
 "use client";
 
 import { Button, Caption, Container, Heading, Stack, Text } from "@/components";
-import { ArrowRight, Calendar, Shield, Star } from "lucide-react";
+import { Calendar, Shield, Star } from "lucide-react";
+import Link from "next/link";
 import { useState } from "react";
 
 export default function Hero() {
@@ -71,7 +72,9 @@ export default function Hero() {
           {/* Trust Indicator - Modern Badge */}
           <div className="inline-flex items-center gap-2 bg-primary/10 px-5 py-2.5 rounded-full border border-primary/30 shadow-sm">
             <Star className="h-4 w-4 text-primary fill-current" />
-            <Caption className="text-primary font-semibold">Orange County • Serving All of Southern California</Caption>
+            <Caption className="text-primary font-semibold">
+              Orange County • Serving All of Southern California
+            </Caption>
           </div>
 
           {/* Main Headline - Bold & Condensed like pricing sheet */}
@@ -82,7 +85,9 @@ export default function Hero() {
               weight="bold"
               className="font-sans heading-condensed text-6xl md:text-7xl lg:text-8xl text-foreground uppercase"
             >
-              Recovery<br />Made Mobile
+              Recovery
+              <br />
+              Made Mobile
             </Heading>
           </Stack>
 
@@ -93,25 +98,26 @@ export default function Hero() {
               color="muted"
               align="center"
               className="max-w-3xl text-lg md:text-xl leading-relaxed text-center mx-auto"
-              style={{ letterSpacing: '0.02em' }}
+              style={{ letterSpacing: "0.02em" }}
             >
-              Cold plunge + infrared sauna delivered to your door.<br className="hidden md:block" /> Professional equipment. Expert guidance. Zero commute.
+              Cold plunge + infrared sauna delivered to your door.
+              <br className="hidden md:block" /> Professional equipment. Expert guidance. Zero
+              commute.
             </Text>
           </div>
 
           {/* Primary CTA - Book Now Focus */}
           <div className="flex flex-col gap-6 justify-center items-center w-full">
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-              <Button
-                asChild
-                size="lg"
-                className="bg-primary text-primary-foreground hover:bg-primary/90 hover:shadow-xl text-xl h-14 px-12 rounded-lg shadow-lg border-2 border-primary/20 min-w-[200px] transform hover:scale-105"
-              >
-                <a href="/book">
+              <Link href="/book">
+                <Button
+                  size="lg"
+                  className="bg-primary text-primary-foreground hover:bg-primary/90 hover:shadow-xl text-xl h-14 px-12 rounded-lg shadow-lg border-2 border-primary/20 min-w-[200px] transform hover:scale-105"
+                >
                   <span className="mr-3">Book Now</span>
                   <Calendar className="h-5 w-5" />
-                </a>
-              </Button>
+                </Button>
+              </Link>
               <Button
                 onClick={scrollToHowItWorks}
                 variant="outline"
