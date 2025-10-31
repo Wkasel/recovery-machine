@@ -29,15 +29,27 @@ export function ServiceSelection({
     onServiceSelect(serviceType);
   };
 
+  const oneTimeSessions = services.filter((s) => s.category === "one-time");
+  const memberships = services.filter((s) => s.category === "membership");
+
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       <div className="text-center">
         <h2 className="text-2xl font-serif font-bold text-foreground mb-2 tracking-tight">Choose Your Recovery Experience</h2>
-        <p className="text-muted-foreground font-light">Select the service that best fits your wellness goals</p>
+        <p className="text-muted-foreground font-light">Select between one-time sessions or monthly memberships</p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pb-20 md:pb-6">
-        {services.map((service) => {
+      {/* Monthly Memberships Section */}
+      <div className="space-y-4">
+        <div className="flex items-center justify-center gap-2">
+          <div className="h-px w-12 bg-primary/30"></div>
+          <h3 className="text-lg font-serif font-bold text-primary uppercase tracking-wide">Monthly Memberships</h3>
+          <div className="h-px w-12 bg-primary/30"></div>
+        </div>
+        <p className="text-center text-sm text-muted-foreground mb-4">Best value - Save up to 40% with recurring visits</p>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {memberships.map((service) => {
           const isSelected = selectedService === service.id;
           const isHovered = hoveredService === service.id;
 
@@ -84,9 +96,14 @@ export function ServiceSelection({
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-2">
                     <DollarSign className="w-5 h-5 text-primary" />
-                    <span className="text-2xl font-bold text-foreground">
-                      {formatPrice(service.basePrice)}
-                    </span>
+                    <div>
+                      <span className="text-2xl font-bold text-foreground">
+                        {formatPrice(service.basePrice)}
+                      </span>
+                      {service.recurring && (
+                        <span className="text-sm text-muted-foreground ml-1">/month</span>
+                      )}
+                    </div>
                   </div>
                   <div className="flex items-center space-x-1 text-muted-foreground">
                     <Clock className="w-4 h-4" />
@@ -135,6 +152,108 @@ export function ServiceSelection({
             </Card>
           );
         })}
+        </div>
+      </div>
+
+      {/* One-Time Sessions Section */}
+      <div className="space-y-4">
+        <div className="flex items-center justify-center gap-2">
+          <div className="h-px w-12 bg-muted-foreground/30"></div>
+          <h3 className="text-lg font-serif font-bold text-foreground uppercase tracking-wide">One-Time Sessions</h3>
+          <div className="h-px w-12 bg-muted-foreground/30"></div>
+        </div>
+        <p className="text-center text-sm text-muted-foreground mb-4">Perfect for trying us out or occasional recovery</p>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pb-20 md:pb-6">
+          {oneTimeSessions.map((service) => {
+            const isSelected = selectedService === service.id;
+            const isHovered = hoveredService === service.id;
+
+            return (
+              <Card
+                key={service.id}
+                className={cn(
+                  "relative cursor-pointer transition-all duration-200 border-2 min-h-[44px]",
+                  isSelected
+                    ? "border-blue-500 ring-2 ring-blue-200 shadow-lg"
+                    : "border-gray-200 hover:border-blue-300 hover:shadow-md",
+                  service.popular && "ring-2 ring-amber-200 border-amber-300"
+                )}
+                onMouseEnter={() => setHoveredService(service.id)}
+                onMouseLeave={() => setHoveredService(null)}
+                onClick={() => handleServiceSelect(service.id)}
+              >
+                {/* Selection indicator */}
+                {isSelected && (
+                  <div className="absolute top-4 right-4 w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center">
+                    <Check className="w-4 h-4 text-white" />
+                  </div>
+                )}
+
+                <CardHeader className="pb-4">
+                  <CardTitle className="text-xl font-serif font-semibold text-foreground">{service.name}</CardTitle>
+                  <CardDescription className="text-sm text-muted-foreground font-light">
+                    {service.description}
+                  </CardDescription>
+                </CardHeader>
+
+                <CardContent className="space-y-4">
+                  {/* Pricing */}
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center space-x-2">
+                      <DollarSign className="w-5 h-5 text-primary" />
+                      <span className="text-2xl font-bold text-foreground">
+                        {formatPrice(service.basePrice)}
+                      </span>
+                    </div>
+                    <div className="flex items-center space-x-1 text-muted-foreground">
+                      <Clock className="w-4 h-4" />
+                      <span className="text-sm">{service.duration} min</span>
+                    </div>
+                  </div>
+
+                  {/* Features */}
+                  <div className="space-y-2">
+                    <p className="text-sm font-medium text-foreground">Includes:</p>
+                    <ul className="space-y-1">
+                      {service.features.map((feature) => (
+                        <li key={feature} className="flex items-start space-x-2">
+                          <Check className="w-4 h-4 text-primary mt-0.5 flex-shrink-0" />
+                          <span className="text-sm text-muted-foreground font-light">{feature}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+
+                  {/* Service-specific highlights */}
+                  {service.id === "cold_plunge" && (
+                    <div className="bg-blue-50 p-3 rounded-lg">
+                      <p className="text-xs text-blue-800">
+                        Perfect for post-workout recovery and inflammation reduction
+                      </p>
+                    </div>
+                  )}
+
+                  {service.id === "infrared_sauna" && (
+                    <div className="bg-red-50 p-3 rounded-lg">
+                      <p className="text-xs text-red-800">
+                        Ideal for detoxification and deep relaxation
+                      </p>
+                    </div>
+                  )}
+
+                  {service.id === "combo_package" && (
+                    <div className="bg-purple-50 p-3 rounded-lg">
+                      <p className="text-xs text-purple-800">
+                        Complete recovery experience with maximum benefits
+                      </p>
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+            );
+          })}
+        </div>
       </div>
 
       {/* Add-on options preview */}

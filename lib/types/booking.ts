@@ -1,7 +1,13 @@
 import { z } from "zod";
 
 // Service types and pricing
-export type ServiceType = "cold_plunge" | "infrared_sauna" | "combo_package";
+export type ServiceType =
+  | "cold_plunge"
+  | "infrared_sauna"
+  | "combo_package"
+  | "membership_lite"
+  | "membership_full_spectrum"
+  | "membership_elite";
 
 export interface ServiceOption {
   id: ServiceType;
@@ -11,9 +17,12 @@ export interface ServiceOption {
   basePrice: number; // in cents
   features: string[];
   popular?: boolean;
+  recurring?: boolean; // true for memberships
+  category?: "one-time" | "membership"; // categorize services
 }
 
 export const services: ServiceOption[] = [
+  // One-Time Sessions
   {
     id: "cold_plunge",
     name: "Cold Plunge Session",
@@ -21,6 +30,7 @@ export const services: ServiceOption[] = [
     duration: 60,
     basePrice: 17500, // $175.00 (household session base)
     features: ["Up to 4 people", "60-minute session", "Professional setup", "Post-session consultation"],
+    category: "one-time",
   },
   {
     id: "infrared_sauna",
@@ -29,6 +39,7 @@ export const services: ServiceOption[] = [
     duration: 60,
     basePrice: 17500, // $175.00 (household session base)
     features: ["Up to 4 people", "60-minute session", "Temperature control", "Towels included"],
+    category: "one-time",
   },
   {
     id: "combo_package",
@@ -43,7 +54,59 @@ export const services: ServiceOption[] = [
       "Extended recovery time",
       "Professional guidance",
     ],
+    category: "one-time",
+  },
+  // Monthly Memberships
+  {
+    id: "membership_lite",
+    name: "Recovery Lite",
+    description: "2 visits per month",
+    duration: 60,
+    basePrice: 27500, // $275.00 per month
+    features: [
+      "2 mobile sessions per month",
+      "Choose infrared sauna or cold plunge",
+      "Professional setup and guidance",
+      "Flexible scheduling",
+      "Cancel with 30 days' notice",
+    ],
+    recurring: true,
+    category: "membership",
+  },
+  {
+    id: "membership_full_spectrum",
+    name: "Full Spectrum Contrast",
+    description: "4 visits per month",
+    duration: 60,
+    basePrice: 52500, // $525.00 per month
+    features: [
+      "4 mobile sessions per month (1 per week)",
+      "Full contrast therapy (cold plunge + infrared)",
+      "Professional setup and guidance",
+      "Priority scheduling",
+      "Cancel with 30 days' notice",
+      "Save 10% with 10-session pack",
+    ],
     popular: true,
+    recurring: true,
+    category: "membership",
+  },
+  {
+    id: "membership_elite",
+    name: "Elite Performance",
+    description: "8 visits per month",
+    duration: 60,
+    basePrice: 85000, // $850.00 per month
+    features: [
+      "8 mobile sessions per month (2 per week)",
+      "All recovery modalities included",
+      "Priority scheduling",
+      "Personalized recovery protocols",
+      "Cancel with 30 days' notice",
+      "Maximum flexibility",
+    ],
+    recurring: true,
+    category: "membership",
   },
 ];
 
@@ -62,7 +125,14 @@ export type Address = z.infer<typeof addressSchema>;
 
 // Booking form schema
 export const bookingFormSchema = z.object({
-  serviceType: z.enum(["cold_plunge", "infrared_sauna", "combo_package"]),
+  serviceType: z.enum([
+    "cold_plunge",
+    "infrared_sauna",
+    "combo_package",
+    "membership_lite",
+    "membership_full_spectrum",
+    "membership_elite",
+  ]),
   dateTime: z.string().min(1, "Date and time are required"),
   duration: z.number().min(30).max(120),
   address: addressSchema,

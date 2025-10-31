@@ -62,6 +62,11 @@ export function LocalBusinessSchema(): React.ReactElement {
             description:
               "Professional cold plunge therapy delivered to your location with commercial-grade equipment and certified specialists.",
             serviceType: "Wellness Service",
+            offers: {
+              "@type": "Offer",
+              price: "175",
+              priceCurrency: "USD",
+            },
           },
         },
         {
@@ -72,19 +77,64 @@ export function LocalBusinessSchema(): React.ReactElement {
             description:
               "Full-spectrum infrared sauna sessions delivered to your location for deep tissue healing and recovery.",
             serviceType: "Wellness Service",
+            offers: {
+              "@type": "Offer",
+              price: "175",
+              priceCurrency: "USD",
+            },
           },
         },
         {
           "@type": "Offer",
           itemOffered: {
             "@type": "Service",
-            name: "Weekly Recovery Membership",
+            name: "Recovery Lite Membership",
             description:
-              "Weekly membership including cold plunge and infrared sauna sessions with 75% savings.",
+              "2 mobile sessions per month with personalized infrared or cold plunge sessions.",
             serviceType: "Wellness Service",
             offers: {
               "@type": "Offer",
-              price: "400",
+              price: "275",
+              priceCurrency: "USD",
+              priceSpecification: {
+                "@type": "RecurringCharge",
+                duration: "P1M",
+                frequency: "Monthly",
+              },
+            },
+          },
+        },
+        {
+          "@type": "Offer",
+          itemOffered: {
+            "@type": "Service",
+            name: "Full Spectrum Contrast Membership",
+            description:
+              "4 mobile sessions per month including full contrast therapy with cold plunge and infrared sauna.",
+            serviceType: "Wellness Service",
+            offers: {
+              "@type": "Offer",
+              price: "525",
+              priceCurrency: "USD",
+              priceSpecification: {
+                "@type": "RecurringCharge",
+                duration: "P1M",
+                frequency: "Monthly",
+              },
+            },
+          },
+        },
+        {
+          "@type": "Offer",
+          itemOffered: {
+            "@type": "Service",
+            name: "Elite Performance Membership",
+            description:
+              "8 mobile sessions per month with all recovery modalities and priority scheduling.",
+            serviceType: "Wellness Service",
+            offers: {
+              "@type": "Offer",
+              price: "850",
               priceCurrency: "USD",
               priceSpecification: {
                 "@type": "RecurringCharge",
