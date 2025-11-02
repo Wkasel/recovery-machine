@@ -280,12 +280,12 @@ Thank you for choosing Recovery Machine!
     <div className="space-y-6">
       {/* Header */}
       <div>
-        <h2 className="text-2xl font-bold text-white">Booking History</h2>
-        <p className="text-gray-300 mt-1">View your past recovery sessions and receipts</p>
+        <h2 className="text-2xl font-bold text-charcoal">Booking History</h2>
+        <p className="text-charcoal-light mt-1">View your past recovery sessions and receipts</p>
       </div>
 
       {/* Filters */}
-      <Card>
+      <Card className="bg-mint-accent/20 border-mint-accent/30">
         <CardContent className="p-6">
           <div className="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4">
             <div className="flex-1">
@@ -321,18 +321,18 @@ Thank you for choosing Recovery Machine!
             const dateTime = formatDateTime(booking.date_time);
             const totalPaid = getTotalPaid(booking);
             return (
-              <Card key={booking.id}>
+              <Card key={booking.id} className="bg-mint-accent/10 border-mint-accent/20 hover:scale-105 transition-transform duration-200">
                 <CardContent className="p-6">
                   <div className="flex items-start justify-between">
                     <div className="space-y-3 flex-1">
                       <div className="flex items-center space-x-3">
-                        <h4 className="text-lg font-semibold text-white">
+                        <h4 className="text-lg font-semibold text-charcoal">
                           {getServiceName(booking.add_ons)}
                         </h4>
                         {getStatusBadge(booking.status)}
                       </div>
 
-                      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm text-gray-300">
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm text-charcoal-light">
                         <div className="flex items-center space-x-2">
                           <Calendar className="w-4 h-4" />
                           <span>
@@ -383,6 +383,7 @@ Thank you for choosing Recovery Machine!
                             variant="outline"
                             size="sm"
                             onClick={() => showReceiptDetails(booking)}
+                            className="rounded-full bg-charcoal text-white hover:bg-charcoal-light hover:scale-105 transition-all"
                           >
                             <Eye className="w-4 h-4 mr-2" />
                             View Receipt
@@ -391,6 +392,7 @@ Thank you for choosing Recovery Machine!
                             variant="outline"
                             size="sm"
                             onClick={async () => downloadReceipt(booking)}
+                            className="rounded-full bg-charcoal text-white hover:bg-charcoal-light hover:scale-105 transition-all"
                           >
                             <Download className="w-4 h-4 mr-2" />
                             Download
@@ -404,15 +406,15 @@ Thank you for choosing Recovery Machine!
             );
           })
         ) : (
-          <Card>
+          <Card className="bg-mint-accent/10 border-mint-accent/20">
             <CardContent className="p-8 text-center">
-              <HistoryIcon className="h-12 w-12 mx-auto mb-4 text-gray-300" />
-              <h3 className="text-lg font-medium text-white mb-2">
+              <HistoryIcon className="h-12 w-12 mx-auto mb-4 text-charcoal-light" />
+              <h3 className="text-lg font-medium text-charcoal mb-2">
                 {searchTerm || statusFilter !== "all"
                   ? "No matching bookings"
                   : "No booking history"}
               </h3>
-              <p className="text-gray-300">
+              <p className="text-charcoal-light">
                 {searchTerm || statusFilter !== "all"
                   ? "Try adjusting your search or filter criteria"
                   : "Your completed sessions will appear here"}

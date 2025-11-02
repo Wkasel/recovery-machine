@@ -221,10 +221,10 @@ export function BookingsTab({ user, onRefresh }: BookingsTabProps) {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-2xl font-bold text-white">Your Bookings</h2>
-          <p className="text-gray-300 mt-1">Manage your recovery sessions</p>
+          <h2 className="text-2xl font-bold text-charcoal">Your Bookings</h2>
+          <p className="text-charcoal-light mt-1">Manage your recovery sessions</p>
         </div>
-        <Button asChild>
+        <Button asChild className="rounded-full bg-charcoal text-white hover:bg-charcoal-light hover:scale-105 transition-all">
           <Link href="/book">
             <Plus className="w-4 h-4 mr-2" />
             New Booking
@@ -243,7 +243,7 @@ export function BookingsTab({ user, onRefresh }: BookingsTabProps) {
 
       {/* Upcoming Bookings */}
       <div className="space-y-4">
-        <h3 className="text-lg font-semibold text-white">
+        <h3 className="text-lg font-semibold text-charcoal">
           Upcoming Sessions ({upcomingBookings.length})
         </h3>
 
@@ -255,18 +255,18 @@ export function BookingsTab({ user, onRefresh }: BookingsTabProps) {
               const canReschedule = canRescheduleBooking(booking);
 
               return (
-                <Card key={booking.id} className="border-l-4 border-l-neutral-600">
+                <Card key={booking.id} className="border-l-4 border-l-mint-accent bg-mint-accent/10 hover:scale-105 transition-transform duration-200">
                   <CardContent className="p-6">
                     <div className="flex items-start justify-between">
                       <div className="space-y-3 flex-1">
                         <div className="flex items-center space-x-3">
-                          <h4 className="text-lg font-semibold text-white">
+                          <h4 className="text-lg font-semibold text-charcoal">
                             {getServiceName(booking.add_ons)}
                           </h4>
                           {getStatusBadge(booking.status)}
                         </div>
 
-                        <div className="space-y-2 text-sm text-gray-300">
+                        <div className="space-y-2 text-sm text-charcoal-light">
                           <div className="flex items-center space-x-2">
                             <Calendar className="w-4 h-4" />
                             <span>{dateTime.date}</span>
@@ -296,7 +296,7 @@ export function BookingsTab({ user, onRefresh }: BookingsTabProps) {
 
                       <div className="flex flex-col space-y-2 ml-6">
                         {canReschedule && (
-                          <Button variant="outline" size="sm" asChild>
+                          <Button variant="outline" size="sm" asChild className="rounded-full bg-charcoal text-white hover:bg-charcoal-light hover:scale-105 transition-all">
                             <Link href={`/book?reschedule=${booking.id}`}>
                               <Edit className="w-4 h-4 mr-2" />
                               Reschedule
@@ -312,7 +312,7 @@ export function BookingsTab({ user, onRefresh }: BookingsTabProps) {
                               setSelectedBooking(booking);
                               setCancelDialogOpen(true);
                             }}
-                            className="text-red-600 hover:text-red-700 hover:bg-red-50"
+                            className="rounded-full text-red-600 hover:text-red-700 hover:bg-red-50 hover:scale-105 transition-all"
                           >
                             <Trash2 className="w-4 h-4 mr-2" />
                             Cancel
@@ -332,12 +332,12 @@ export function BookingsTab({ user, onRefresh }: BookingsTabProps) {
             })}
           </div>
         ) : (
-          <Card>
+          <Card className="bg-mint-accent/10 border-mint-accent/20">
             <CardContent className="p-8 text-center">
-              <CalendarX className="h-12 w-12 mx-auto mb-4 text-gray-300" />
-              <h3 className="text-lg font-medium text-white mb-2">No upcoming sessions</h3>
-              <p className="text-gray-300 mb-4">Ready to book your next recovery session?</p>
-              <Button asChild>
+              <CalendarX className="h-12 w-12 mx-auto mb-4 text-charcoal-light" />
+              <h3 className="text-lg font-medium text-charcoal mb-2">No upcoming sessions</h3>
+              <p className="text-charcoal-light mb-4">Ready to book your next recovery session?</p>
+              <Button asChild className="rounded-full bg-charcoal text-white hover:bg-charcoal-light hover:scale-105 transition-all">
                 <Link href="/book">
                   <Plus className="w-4 h-4 mr-2" />
                   Book Session
@@ -351,7 +351,7 @@ export function BookingsTab({ user, onRefresh }: BookingsTabProps) {
       {/* Recent Bookings */}
       {recentBookings.length > 0 && (
         <div className="space-y-4">
-          <h3 className="text-lg font-semibold text-white">
+          <h3 className="text-lg font-semibold text-charcoal" style={{ fontFamily: 'Futura, "Futura PT", "Century Gothic", sans-serif' }}>
             Recent Sessions ({recentBookings.length})
           </h3>
 

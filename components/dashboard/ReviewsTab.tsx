@@ -253,16 +253,16 @@ export function ReviewsTab({ user }: ReviewsTabProps) {
     <div className="space-y-6">
       {/* Header */}
       <div>
-        <h2 className="text-2xl font-bold text-white">Reviews & Feedback</h2>
-        <p className="text-gray-300 mt-1">Rate your recovery sessions and share your experience</p>
+        <h2 className="text-2xl font-bold text-charcoal">Reviews & Feedback</h2>
+        <p className="text-charcoal-light mt-1">Rate your recovery sessions and share your experience</p>
       </div>
 
       {/* Pending Reviews */}
       {pendingBookings.length > 0 && (
-        <Card className="border-neutral-600 bg-neutral-900">
+        <Card className="border-mint-accent/30 bg-mint-accent/20">
           <CardHeader>
-            <CardTitle className="text-neutral-100">Pending Reviews</CardTitle>
-            <CardDescription className="text-neutral-300">
+            <CardTitle className="text-charcoal">Pending Reviews</CardTitle>
+            <CardDescription className="text-charcoal-light">
               Help others by sharing your experience with these completed sessions
             </CardDescription>
           </CardHeader>
@@ -270,11 +270,11 @@ export function ReviewsTab({ user }: ReviewsTabProps) {
             {pendingBookings.map((booking) => (
               <div
                 key={booking.id}
-                className="flex items-center justify-between p-4 bg-white rounded-lg border"
+                className="flex items-center justify-between p-4 bg-mint-accent/10 rounded-lg border border-mint-accent/20 hover:scale-105 transition-transform duration-200"
               >
                 <div className="flex-1">
-                  <h4 className="font-medium text-white">{getServiceName(booking.add_ons)}</h4>
-                  <div className="flex items-center space-x-4 text-sm text-gray-300 mt-1">
+                  <h4 className="font-medium text-charcoal">{getServiceName(booking.add_ons)}</h4>
+                  <div className="flex items-center space-x-4 text-sm text-charcoal-light mt-1">
                     <div className="flex items-center space-x-1">
                       <Calendar className="w-4 h-4" />
                       <span>{formatDate(booking.date_time)}</span>
@@ -282,7 +282,7 @@ export function ReviewsTab({ user }: ReviewsTabProps) {
                     <span>{booking.duration} minutes</span>
                   </div>
                 </div>
-                <Button onClick={() => openReviewDialog(booking)}>
+                <Button onClick={() => openReviewDialog(booking)} className="rounded-full bg-charcoal text-white hover:bg-charcoal-light hover:scale-105 transition-all">
                   <Star className="w-4 h-4 mr-2" />
                   Write Review
                 </Button>
@@ -293,10 +293,10 @@ export function ReviewsTab({ user }: ReviewsTabProps) {
       )}
 
       {/* Existing Reviews */}
-      <Card>
+      <Card className="bg-mint-accent/10 border-mint-accent/20">
         <CardHeader>
-          <CardTitle>Your Reviews</CardTitle>
-          <CardDescription>Your feedback helps improve our service</CardDescription>
+          <CardTitle className="text-charcoal">Your Reviews</CardTitle>
+          <CardDescription className="text-charcoal-light">Your feedback helps improve our service</CardDescription>
         </CardHeader>
         <CardContent>
           {reviews.length > 0 ? (
@@ -306,7 +306,7 @@ export function ReviewsTab({ user }: ReviewsTabProps) {
                   <div className="flex items-start justify-between mb-4">
                     <div className="flex-1">
                       <div className="flex items-center space-x-3 mb-2">
-                        <h4 className="font-medium text-white">
+                        <h4 className="font-medium text-charcoal" style={{ fontFamily: 'Futura, "Futura PT", "Century Gothic", sans-serif' }}>
                           {getServiceName(review.booking?.add_ons)}
                         </h4>
                         {review.is_featured && (
@@ -366,10 +366,10 @@ export function ReviewsTab({ user }: ReviewsTabProps) {
               ))}
             </div>
           ) : (
-            <div className="text-center py-8 text-gray-500">
-              <MessageSquare className="h-12 w-12 mx-auto mb-4 text-gray-300" />
-              <h3 className="text-lg font-medium text-white mb-2">No reviews yet</h3>
-              <p className="text-gray-300">Complete a session to leave your first review</p>
+            <div className="text-center py-8 text-charcoal-light">
+              <MessageSquare className="h-12 w-12 mx-auto mb-4 text-charcoal-light" />
+              <h3 className="text-lg font-medium text-charcoal mb-2" style={{ fontFamily: 'Futura, "Futura PT", "Century Gothic", sans-serif' }}>No reviews yet</h3>
+              <p className="text-charcoal-light" style={{ fontFamily: 'Futura, "Futura PT", "Century Gothic", sans-serif' }}>Complete a session to leave your first review</p>
             </div>
           )}
         </CardContent>
@@ -409,7 +409,8 @@ export function ReviewsTab({ user }: ReviewsTabProps) {
                 value={reviewerName}
                 onChange={(e) => setReviewerName(e.target.value)}
                 placeholder="Your name for the review"
-                className="w-full px-3 py-2 border border-neutral-600 bg-neutral-800 text-neutral-100 rounded-md focus:outline-none focus:ring-2 focus:ring-neutral-500 focus:border-transparent"
+                className="w-full px-3 py-2 border border-mint-accent/30 bg-white text-charcoal rounded-md focus:outline-none focus:ring-2 focus:ring-mint focus:border-mint"
+                style={{ fontFamily: 'Futura, "Futura PT", "Century Gothic", sans-serif' }}
               />
             </div>
 

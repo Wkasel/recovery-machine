@@ -175,18 +175,18 @@ export function ProfileSettings({ user, profileData, onRefresh }: ProfileSetting
     <div className="space-y-6">
       {/* Header */}
       <div>
-        <h2 className="text-2xl font-bold text-white">Account Settings</h2>
-        <p className="text-gray-300 mt-1">Manage your profile and preferences</p>
+        <h2 className="text-2xl font-bold text-charcoal">Account Settings</h2>
+        <p className="text-charcoal-light mt-1">Manage your profile and preferences</p>
       </div>
 
       {/* Personal Information */}
-      <Card>
+      <Card className="bg-mint-accent/10 border-mint-accent/20">
         <CardHeader>
-          <CardTitle className="flex items-center space-x-2">
+          <CardTitle className="flex items-center space-x-2 text-charcoal">
             <UserIcon className="w-5 h-5" />
             <span>Personal Information</span>
           </CardTitle>
-          <CardDescription>Update your personal details and contact information</CardDescription>
+          <CardDescription className="text-charcoal-light">Update your personal details and contact information</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -236,13 +236,13 @@ export function ProfileSettings({ user, profileData, onRefresh }: ProfileSetting
       </Card>
 
       {/* Address Information */}
-      <Card>
+      <Card className="bg-mint-accent/10 border-mint-accent/20">
         <CardHeader>
-          <CardTitle className="flex items-center space-x-2">
+          <CardTitle className="flex items-center space-x-2 text-charcoal">
             <MapPin className="w-5 h-5" />
             <span>Default Address</span>
           </CardTitle>
-          <CardDescription>Your primary address for recovery sessions</CardDescription>
+          <CardDescription className="text-charcoal-light">Your primary address for recovery sessions</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <div>
@@ -287,13 +287,13 @@ export function ProfileSettings({ user, profileData, onRefresh }: ProfileSetting
       </Card>
 
       {/* Notification Preferences */}
-      <Card>
+      <Card className="bg-mint-accent/10 border-mint-accent/20">
         <CardHeader>
-          <CardTitle className="flex items-center space-x-2">
+          <CardTitle className="flex items-center space-x-2 text-charcoal">
             <Bell className="w-5 h-5" />
             <span>Notification Preferences</span>
           </CardTitle>
-          <CardDescription>Choose how you'd like to receive updates and reminders</CardDescription>
+          <CardDescription className="text-charcoal-light">Choose how you'd like to receive updates and reminders</CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
           <div className="flex items-center justify-between">
@@ -347,22 +347,22 @@ export function ProfileSettings({ user, profileData, onRefresh }: ProfileSetting
       </Card>
 
       {/* Account Credits */}
-      <Card>
+      <Card className="bg-mint-accent/10 border-mint-accent/20">
         <CardHeader>
-          <CardTitle className="flex items-center space-x-2">
+          <CardTitle className="flex items-center space-x-2 text-charcoal">
             <CreditCard className="w-5 h-5" />
             <span>Account Balance</span>
           </CardTitle>
-          <CardDescription>Your current credit balance and transaction history</CardDescription>
+          <CardDescription className="text-charcoal-light">Your current credit balance and transaction history</CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="flex items-center justify-between p-4 bg-green-50 rounded-lg">
+          <div className="flex items-center justify-between p-4 bg-mint-accent/20 rounded-lg">
             <div>
-              <p className="text-sm text-green-700">Current Balance</p>
-              <p className="text-2xl font-bold text-green-900">{profileData.credits} Credits</p>
-              <p className="text-sm text-green-600">≈ ${profileData.credits} value</p>
+              <p className="text-sm text-charcoal-light">Current Balance</p>
+              <p className="text-2xl font-bold text-mint">{profileData.credits} Credits</p>
+              <p className="text-sm text-charcoal">≈ ${profileData.credits} value</p>
             </div>
-            <div className="text-green-600">
+            <div className="text-mint">
               <CreditCard className="w-8 h-8" />
             </div>
           </div>
@@ -370,9 +370,9 @@ export function ProfileSettings({ user, profileData, onRefresh }: ProfileSetting
       </Card>
 
       {/* Save Button */}
-      <Card>
+      <Card className="bg-mint-accent/10 border-mint-accent/20">
         <CardContent className="p-6">
-          <Button onClick={updateProfile} disabled={isLoading} className="w-full md:w-auto">
+          <Button onClick={updateProfile} disabled={isLoading} className="w-full md:w-auto rounded-full bg-charcoal text-white hover:bg-charcoal-light hover:scale-105 transition-all">
             {isLoading ? (
               <>
                 <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>

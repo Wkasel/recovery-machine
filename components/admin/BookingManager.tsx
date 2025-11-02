@@ -213,12 +213,12 @@ export function BookingManager() {
 
   const getStatusBadge = (status: string) => {
     const colors = {
-      scheduled: "bg-yellow-100 text-yellow-800",
-      confirmed: "bg-blue-100 text-blue-800",
-      in_progress: "bg-purple-100 text-purple-800",
-      completed: "bg-green-100 text-green-800",
-      cancelled: "bg-red-100 text-red-800",
-      no_show: "bg-gray-100 text-gray-800",
+      scheduled: "bg-secondary/10 text-secondary-foreground border-secondary/20",
+      confirmed: "bg-primary/10 text-primary border-primary/20",
+      in_progress: "bg-secondary/20 text-secondary-foreground border-secondary/30",
+      completed: "bg-primary/10 text-primary border-primary/20",
+      cancelled: "bg-destructive/10 text-destructive border-destructive/20",
+      no_show: "bg-muted text-muted-foreground border-border",
     };
 
     const icons = {
@@ -232,6 +232,7 @@ export function BookingManager() {
 
     return (
       <Badge
+        variant="outline"
         className={`${colors[status as keyof typeof colors] || colors.scheduled} flex items-center gap-1`}
       >
         {icons[status as keyof typeof icons]}
@@ -267,8 +268,8 @@ export function BookingManager() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Booking Management</h1>
-          <p className="text-gray-600">Manage appointments and schedule conflicts</p>
+          <h1 className="text-3xl font-bold text-foreground">Booking Management</h1>
+          <p className="text-muted-foreground">Manage appointments and schedule conflicts</p>
         </div>
       </div>
 
@@ -286,7 +287,7 @@ export function BookingManager() {
             <div className="flex flex-col md:flex-row gap-4 items-center justify-between">
               <div className="flex flex-1 gap-4 items-center">
                 <div className="relative flex-1 max-w-md">
-                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
                   <Input
                     placeholder="Search bookings by email or ID..."
                     value={searchTerm}
@@ -329,9 +330,9 @@ export function BookingManager() {
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
             <Card className="p-4">
               <div className="flex items-center">
-                <Calendar className="h-8 w-8 text-blue-600" />
+                <Calendar className="h-8 w-8 text-primary" />
                 <div className="ml-4">
-                  <p className="text-sm font-medium text-gray-500">Total Bookings</p>
+                  <p className="text-sm font-medium text-muted-foreground">Total Bookings</p>
                   <p className="text-2xl font-bold">{bookings.length}</p>
                 </div>
               </div>
@@ -339,9 +340,9 @@ export function BookingManager() {
 
             <Card className="p-4">
               <div className="flex items-center">
-                <CheckCircle className="h-8 w-8 text-green-600" />
+                <CheckCircle className="h-8 w-8 text-primary" />
                 <div className="ml-4">
-                  <p className="text-sm font-medium text-gray-500">Confirmed</p>
+                  <p className="text-sm font-medium text-muted-foreground">Confirmed</p>
                   <p className="text-2xl font-bold">
                     {bookings.filter((b) => b.status === "confirmed").length}
                   </p>
@@ -353,7 +354,7 @@ export function BookingManager() {
               <div className="flex items-center">
                 <Clock className="h-8 w-8 text-yellow-600" />
                 <div className="ml-4">
-                  <p className="text-sm font-medium text-gray-500">Pending</p>
+                  <p className="text-sm font-medium text-muted-foreground">Pending</p>
                   <p className="text-2xl font-bold">
                     {bookings.filter((b) => b.status === "scheduled").length}
                   </p>
@@ -363,9 +364,9 @@ export function BookingManager() {
 
             <Card className="p-4">
               <div className="flex items-center">
-                <CheckCircle className="h-8 w-8 text-purple-600" />
+                <CheckCircle className="h-8 w-8 text-primary" />
                 <div className="ml-4">
-                  <p className="text-sm font-medium text-gray-500">Completed</p>
+                  <p className="text-sm font-medium text-muted-foreground">Completed</p>
                   <p className="text-2xl font-bold">
                     {bookings.filter((b) => b.status === "completed").length}
                   </p>
@@ -375,16 +376,16 @@ export function BookingManager() {
           </div>
 
           {/* Bookings Table */}
-          <Card>
+          <Card className="border-border bg-card shadow-sm">
             <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Customer</TableHead>
-                  <TableHead>Date & Time</TableHead>
-                  <TableHead>Duration</TableHead>
-                  <TableHead>Status</TableHead>
-                  <TableHead>Location</TableHead>
-                  <TableHead>Actions</TableHead>
+              <TableHeader className="bg-muted/50">
+                <TableRow className="hover:bg-accent/50 transition-colors border-border">
+                  <TableHead className="text-foreground font-semibold">Customer</TableHead>
+                  <TableHead className="text-foreground font-semibold">Date & Time</TableHead>
+                  <TableHead className="text-foreground font-semibold">Duration</TableHead>
+                  <TableHead className="text-foreground font-semibold">Status</TableHead>
+                  <TableHead className="text-foreground font-semibold">Location</TableHead>
+                  <TableHead className="text-foreground font-semibold">Actions</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -394,7 +395,7 @@ export function BookingManager() {
                       <div>
                         <div className="font-medium">{booking.user_email || "Unknown"}</div>
                         {booking.user_phone && (
-                          <div className="text-sm text-gray-500">{booking.user_phone}</div>
+                          <div className="text-sm text-muted-foreground">{booking.user_phone}</div>
                         )}
                       </div>
                     </TableCell>
@@ -477,7 +478,7 @@ export function BookingManager() {
                                 {selectedBooking.location_address && (
                                   <div>
                                     <Label className="text-sm font-medium">Location</Label>
-                                    <div className="bg-gray-50 p-2 rounded text-sm">
+                                    <div className="bg-muted/50 p-2 rounded text-sm">
                                       {selectedBooking.location_address.street && (
                                         <div>{selectedBooking.location_address.street}</div>
                                       )}
@@ -497,7 +498,7 @@ export function BookingManager() {
                                     <Label className="text-sm font-medium">
                                       Special Instructions
                                     </Label>
-                                    <p className="text-sm bg-gray-50 p-2 rounded">
+                                    <p className="text-sm bg-muted/50 p-2 rounded">
                                       {selectedBooking.special_instructions}
                                     </p>
                                   </div>
@@ -560,7 +561,7 @@ export function BookingManager() {
             </Table>
 
             {filteredBookings.length === 0 && (
-              <div className="text-center py-8 text-gray-500">
+              <div className="text-center py-8 text-muted-foreground">
                 No bookings found matching your criteria
               </div>
             )}
@@ -581,7 +582,7 @@ export function BookingManager() {
             </div>
           </Card>
 
-          <Card>
+          <Card className="border-border bg-card shadow-sm">
             <CardHeader>
               <CardTitle>Schedule for {new Date(selectedDate).toLocaleDateString()}</CardTitle>
               <CardDescription>{calendarEvents.length} bookings scheduled</CardDescription>
@@ -618,7 +619,7 @@ export function BookingManager() {
                     ))}
                 </div>
               ) : (
-                <div className="text-center py-8 text-gray-500">
+                <div className="text-center py-8 text-muted-foreground">
                   No bookings scheduled for this date
                 </div>
               )}

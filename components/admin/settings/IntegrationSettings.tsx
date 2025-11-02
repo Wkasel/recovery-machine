@@ -103,7 +103,7 @@ export function IntegrationSettings({
                   onChange={(e) => setValue("bolt_public_key", e.target.value)}
                   placeholder="pk_test_..."
                 />
-                <p className="text-xs text-gray-500">
+                <p className="text-xs text-muted-foreground">
                   {getSetting("bolt_public_key")?.description}
                 </p>
                 {localValues["bolt_public_key"] !== undefined && (
@@ -150,7 +150,7 @@ export function IntegrationSettings({
                     )}
                   </Button>
                 </div>
-                <p className="text-xs text-gray-500">
+                <p className="text-xs text-muted-foreground">
                   {getSetting("bolt_webhook_secret")?.description}
                 </p>
                 {localValues["bolt_webhook_secret"] !== undefined && (
@@ -209,7 +209,7 @@ export function IntegrationSettings({
                     )}
                   </Button>
                 </div>
-                <p className="text-xs text-gray-500">{getSetting("google_api_key")?.description}</p>
+                <p className="text-xs text-muted-foreground">{getSetting("google_api_key")?.description}</p>
                 {localValues["google_api_key"] !== undefined && (
                   <Button
                     size="sm"
@@ -247,7 +247,7 @@ export function IntegrationSettings({
                   onChange={(e) => setValue("twilio_account_sid", e.target.value)}
                   placeholder="AC..."
                 />
-                <p className="text-xs text-gray-500">
+                <p className="text-xs text-muted-foreground">
                   {getSetting("twilio_account_sid")?.description}
                 </p>
                 {localValues["twilio_account_sid"] !== undefined && (
@@ -292,7 +292,7 @@ export function IntegrationSettings({
                     )}
                   </Button>
                 </div>
-                <p className="text-xs text-gray-500">
+                <p className="text-xs text-muted-foreground">
                   {getSetting("twilio_auth_token")?.description}
                 </p>
                 {localValues["twilio_auth_token"] !== undefined && (
@@ -351,7 +351,7 @@ export function IntegrationSettings({
                     )}
                   </Button>
                 </div>
-                <p className="text-xs text-gray-500">
+                <p className="text-xs text-muted-foreground">
                   {getSetting("instagram_access_token")?.description}
                 </p>
                 {localValues["instagram_access_token"] !== undefined && (

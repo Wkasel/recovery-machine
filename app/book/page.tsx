@@ -342,11 +342,11 @@ export default function BookingPage(): React.ReactElement {
   }
 
   return (
-    <div className="min-h-screen bg-background py-8">
-      <div className="container mx-auto px-4 max-w-6xl">
+    <div className="min-h-screen bg-background pt-40 pb-8">
+      <div className="container mx-auto px-4 max-w-6xl font-futura">
         {/* Header */}
         <div className="text-center mb-8">
-          <h1 className="text-3xl font-serif font-bold text-foreground mb-2 tracking-tight">Book Your Recovery Session</h1>
+          <h1 className="text-3xl font-bold text-foreground mb-2 tracking-tight" style={{ fontFamily: 'Futura, "Futura PT", "Century Gothic", sans-serif' }}>Book Your Recovery Session</h1>
           <p className="text-muted-foreground font-light">
             Professional cold plunge & infrared sauna delivered to your door
           </p>

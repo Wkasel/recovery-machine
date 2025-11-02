@@ -90,7 +90,7 @@ export function BookingPolicySettings({
                   step={1}
                   className="w-full"
                 />
-                <div className="flex justify-between text-sm text-gray-500">
+                <div className="flex justify-between text-sm text-muted-foreground">
                   <span>1 day</span>
                   <span className="font-medium">
                     {formatTimeUnit(getValue("booking_advance_days") || 30, "day")}
@@ -98,7 +98,7 @@ export function BookingPolicySettings({
                   <span>365 days</span>
                 </div>
               </div>
-              <p className="text-xs text-gray-500">
+              <p className="text-xs text-muted-foreground">
                 {getSetting("booking_advance_days")?.description}
               </p>
               {localValues["booking_advance_days"] !== undefined && (
@@ -126,7 +126,7 @@ export function BookingPolicySettings({
                   step={5}
                   className="w-full"
                 />
-                <div className="flex justify-between text-sm text-gray-500">
+                <div className="flex justify-between text-sm text-muted-foreground">
                   <span>0 min</span>
                   <span className="font-medium">
                     {formatTimeUnit(getValue("booking_buffer_minutes") || 15, "minute")}
@@ -134,7 +134,7 @@ export function BookingPolicySettings({
                   <span>120 min</span>
                 </div>
               </div>
-              <p className="text-xs text-gray-500">
+              <p className="text-xs text-muted-foreground">
                 {getSetting("booking_buffer_minutes")?.description}
               </p>
               {localValues["booking_buffer_minutes"] !== undefined && (
@@ -179,7 +179,7 @@ export function BookingPolicySettings({
                   step={1}
                   className="w-full"
                 />
-                <div className="flex justify-between text-sm text-gray-500">
+                <div className="flex justify-between text-sm text-muted-foreground">
                   <span>1 hour</span>
                   <span className="font-medium">
                     {getValue("booking_cancellation_hours") >= 24
@@ -192,7 +192,7 @@ export function BookingPolicySettings({
                   <span>7 days</span>
                 </div>
               </div>
-              <p className="text-xs text-gray-500">
+              <p className="text-xs text-muted-foreground">
                 Minimum notice required to cancel without penalty
               </p>
               {localValues["booking_cancellation_hours"] !== undefined && (
@@ -213,7 +213,7 @@ export function BookingPolicySettings({
               <div className="flex items-center justify-between">
                 <div>
                   <Label>Auto-Confirm Bookings</Label>
-                  <p className="text-sm text-gray-500 mt-1">
+                  <p className="text-sm text-muted-foreground mt-1">
                     Automatically confirm bookings or require manual approval
                   </p>
                 </div>
@@ -256,7 +256,7 @@ export function BookingPolicySettings({
                   step={1}
                   className="w-full"
                 />
-                <div className="flex justify-between text-sm text-gray-500">
+                <div className="flex justify-between text-sm text-muted-foreground">
                   <span>1 booking</span>
                   <span className="font-medium">
                     {getValue("booking_max_per_day") || 8} bookings
@@ -264,7 +264,7 @@ export function BookingPolicySettings({
                   <span>50 bookings</span>
                 </div>
               </div>
-              <p className="text-xs text-gray-500">
+              <p className="text-xs text-muted-foreground">
                 {getSetting("booking_max_per_day")?.description}
               </p>
               {localValues["booking_max_per_day"] !== undefined && (

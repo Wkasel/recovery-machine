@@ -69,7 +69,7 @@ export function BookingStepper({ currentStep, completedSteps, onStepClick }: Boo
                     <div
                       className={cn(
                         "flex-1 h-0.5 mx-2",
-                        isCompleted || index <= currentStepIndex ? "bg-primary" : "bg-border"
+                        isCompleted || index <= currentStepIndex ? "bg-mint" : "bg-border"
                       )}
                     />
                   )}
@@ -82,12 +82,12 @@ export function BookingStepper({ currentStep, completedSteps, onStepClick }: Boo
                     className={cn(
                       "flex items-center justify-center w-10 h-10 rounded-full border-2 transition-all duration-200",
                       isCompleted
-                        ? "bg-primary border-primary text-primary-foreground"
+                        ? "bg-mint border-mint text-charcoal"
                         : isCurrent
-                          ? "border-primary bg-primary text-primary-foreground ring-4 ring-primary/20"
+                          ? "border-mint bg-mint text-charcoal ring-4 ring-mint/20"
                           : "border-border bg-background text-muted-foreground",
                       isClickable && !isCompleted && !isCurrent
-                        ? "hover:border-primary hover:bg-primary/10 cursor-pointer"
+                        ? "hover:border-mint hover:bg-mint/10 cursor-pointer"
                         : !isClickable
                           ? "cursor-not-allowed"
                           : "cursor-pointer"
@@ -105,7 +105,7 @@ export function BookingStepper({ currentStep, completedSteps, onStepClick }: Boo
                     <div
                       className={cn(
                         "flex-1 h-0.5 mx-2",
-                        isCompleted || index < currentStepIndex ? "bg-primary" : "bg-border"
+                        isCompleted || index < currentStepIndex ? "bg-mint" : "bg-border"
                       )}
                     />
                   )}
@@ -143,7 +143,7 @@ export function MobileBookingStepper({ currentStep, completedSteps }: BookingSte
           <div
             className={cn(
               "flex items-center justify-center w-8 h-8 rounded-full border-2",
-              "border-primary bg-primary text-primary-foreground shadow-sm"
+              "border-mint bg-mint text-charcoal shadow-sm"
             )}
           >
             <currentStepData.icon className="w-4 h-4" />
@@ -162,7 +162,7 @@ export function MobileBookingStepper({ currentStep, completedSteps }: BookingSte
       {/* Progress bar */}
       <div className="mt-3 w-full bg-muted rounded-full h-2">
         <div
-          className="bg-primary h-2 rounded-full transition-all duration-300 shadow-sm"
+          className="bg-mint h-2 rounded-full transition-all duration-300 shadow-sm"
           style={{
             width: `${((currentStepIndex + 1) / steps.length) * 100}%`,
           }}

@@ -81,7 +81,7 @@ export function PricingSettings({ settings, onUpdateSetting, loading }: PricingS
                 )}
               </Label>
               <div className="relative">
-                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">$</span>
+                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">$</span>
                 <Input
                   id="base_session_price"
                   type="number"
@@ -93,7 +93,7 @@ export function PricingSettings({ settings, onUpdateSetting, loading }: PricingS
                   placeholder="0.00"
                 />
               </div>
-              <p className="text-xs text-gray-500">
+              <p className="text-xs text-muted-foreground">
                 {getSetting("base_session_price")?.description}
               </p>
               {localValues["base_session_price"] !== undefined && (
@@ -127,7 +127,7 @@ export function PricingSettings({ settings, onUpdateSetting, loading }: PricingS
                 {getSetting("travel_fee_per_mile")?.label}
               </Label>
               <div className="relative">
-                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">$</span>
+                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">$</span>
                 <Input
                   id="travel_fee_per_mile"
                   type="number"
@@ -139,7 +139,7 @@ export function PricingSettings({ settings, onUpdateSetting, loading }: PricingS
                   placeholder="0.00"
                 />
               </div>
-              <p className="text-xs text-gray-500">
+              <p className="text-xs text-muted-foreground">
                 {getSetting("travel_fee_per_mile")?.description}
               </p>
               {localValues["travel_fee_per_mile"] !== undefined && (
@@ -173,11 +173,11 @@ export function PricingSettings({ settings, onUpdateSetting, loading }: PricingS
                   onChange={(e) => setValue("max_travel_distance", parseInt(e.target.value))}
                   placeholder="25"
                 />
-                <span className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500">
+                <span className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground">
                   miles
                 </span>
               </div>
-              <p className="text-xs text-gray-500">
+              <p className="text-xs text-muted-foreground">
                 {getSetting("max_travel_distance")?.description}
               </p>
               {localValues["max_travel_distance"] !== undefined && (
@@ -201,14 +201,14 @@ export function PricingSettings({ settings, onUpdateSetting, loading }: PricingS
           <CardDescription>See how your pricing will appear to customers.</CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="bg-gray-50 p-6 rounded-lg">
+          <div className="bg-muted/50 p-6 rounded-lg">
             <h4 className="font-semibold mb-4">Sample Booking Calculation</h4>
             <div className="space-y-2 text-sm">
               <div className="flex justify-between">
                 <span>Base Session (30 min)</span>
                 <span>${formatCurrency(getValue("base_session_price") || 15000)}</span>
               </div>
-              <div className="flex justify-between text-gray-600">
+              <div className="flex justify-between text-muted-foreground">
                 <span>
                   Travel (10 miles × ${formatCurrency(getValue("travel_fee_per_mile") || 200)}/mile)
                 </span>

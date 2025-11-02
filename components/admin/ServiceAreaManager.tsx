@@ -253,8 +253,8 @@ export function ServiceAreaManager() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Service Areas</h1>
-          <p className="text-gray-600">Manage service locations and coverage areas</p>
+          <h1 className="text-3xl font-bold text-foreground">Service Areas</h1>
+          <p className="text-muted-foreground">Manage service locations and coverage areas</p>
         </div>
 
         <Button onClick={openCreateDialog}>
@@ -267,7 +267,7 @@ export function ServiceAreaManager() {
       <Card className="p-4">
         <div className="flex flex-col md:flex-row gap-4 items-center justify-between">
           <div className="relative flex-1 max-w-md">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
             <Input
               placeholder="Search service areas..."
               value={searchTerm}
@@ -287,9 +287,9 @@ export function ServiceAreaManager() {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <Card className="p-4">
           <div className="flex items-center">
-            <MapPin className="h-8 w-8 text-blue-600" />
+            <MapPin className="h-8 w-8 text-primary" />
             <div className="ml-4">
-              <p className="text-sm font-medium text-gray-500">Total Areas</p>
+              <p className="text-sm font-medium text-muted-foreground">Total Areas</p>
               <p className="text-2xl font-bold">{serviceAreas.length}</p>
             </div>
           </div>
@@ -297,9 +297,9 @@ export function ServiceAreaManager() {
 
         <Card className="p-4">
           <div className="flex items-center">
-            <MapPin className="h-8 w-8 text-green-600" />
+            <MapPin className="h-8 w-8 text-primary" />
             <div className="ml-4">
-              <p className="text-sm font-medium text-gray-500">Active Areas</p>
+              <p className="text-sm font-medium text-muted-foreground">Active Areas</p>
               <p className="text-2xl font-bold">
                 {serviceAreas.filter((area) => area.is_active).length}
               </p>
@@ -311,7 +311,7 @@ export function ServiceAreaManager() {
           <div className="flex items-center">
             <MapPin className="h-8 w-8 text-orange-600" />
             <div className="ml-4">
-              <p className="text-sm font-medium text-gray-500">Total Coverage</p>
+              <p className="text-sm font-medium text-muted-foreground">Total Coverage</p>
               <p className="text-2xl font-bold">
                 {serviceAreas.reduce((sum, area) => sum + area.cities.length, 0)} cities
               </p>
@@ -321,15 +321,15 @@ export function ServiceAreaManager() {
       </div>
 
       {/* Service Areas Table */}
-      <Card>
+      <Card className="border-border bg-card shadow-sm">
         <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>Name</TableHead>
-              <TableHead>Coverage</TableHead>
-              <TableHead>Pricing</TableHead>
-              <TableHead>Status</TableHead>
-              <TableHead>Actions</TableHead>
+          <TableHeader className="bg-muted/50">
+            <TableRow className="hover:bg-accent/50 transition-colors border-border">
+              <TableHead className="text-foreground font-semibold">Name</TableHead>
+              <TableHead className="text-foreground font-semibold">Coverage</TableHead>
+              <TableHead className="text-foreground font-semibold">Pricing</TableHead>
+              <TableHead className="text-foreground font-semibold">Status</TableHead>
+              <TableHead className="text-foreground font-semibold">Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -339,7 +339,7 @@ export function ServiceAreaManager() {
                   <div>
                     <div className="font-medium">{area.name}</div>
                     {area.description && (
-                      <div className="text-sm text-gray-500">{area.description}</div>
+                      <div className="text-sm text-muted-foreground">{area.description}</div>
                     )}
                   </div>
                 </TableCell>
@@ -347,7 +347,7 @@ export function ServiceAreaManager() {
                 <TableCell>
                   <div className="text-sm">
                     <div>{area.cities.length} cities</div>
-                    <div className="text-gray-500">
+                    <div className="text-muted-foreground">
                       {area.states.join(", ")} • {area.zip_codes.length} zip codes
                     </div>
                   </div>
@@ -357,7 +357,7 @@ export function ServiceAreaManager() {
                   <div className="text-sm">
                     <div>×{area.pricing_multiplier}</div>
                     {area.travel_fee > 0 && (
-                      <div className="text-gray-500">
+                      <div className="text-muted-foreground">
                         +{formatCurrency(area.travel_fee)} travel
                       </div>
                     )}
@@ -395,7 +395,7 @@ export function ServiceAreaManager() {
         </Table>
 
         {filteredAreas.length === 0 && (
-          <div className="text-center py-8 text-gray-500">
+          <div className="text-center py-8 text-muted-foreground">
             No service areas found matching your criteria
           </div>
         )}

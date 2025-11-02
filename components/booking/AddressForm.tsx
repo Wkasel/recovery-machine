@@ -121,16 +121,23 @@ export function AddressForm({
       inputRef.current.value = place.formatted_address;
     }
 
-    // Update form values
+    // Update form values with shouldDirty to mark fields as touched
     Object.entries(addressData).forEach(([key, value]) => {
       if (value) {
-        setValue(key as keyof Address, value, { shouldValidate: true });
+        setValue(key as keyof Address, value, {
+          shouldValidate: true,
+          shouldDirty: true,
+          shouldTouch: true
+        });
       }
     });
 
-    // Calculate setup fee
-    calculateSetupFee(addressData);
-  }, [setValue, calculateSetupFee]);
+    // Manually trigger validation after all fields are set
+    trigger().then(() => {
+      // Calculate setup fee after validation
+      calculateSetupFee(addressData);
+    });
+  }, [setValue, trigger, calculateSetupFee]);
 
   // Initialize Google Places Autocomplete
   useEffect(() => {
@@ -162,8 +169,8 @@ export function AddressForm({
   return (
     <div className="space-y-6">
       <div className="text-center">
-        <h2 className="text-2xl font-serif font-bold text-foreground mb-2">Where should we set up?</h2>
-        <p className="text-muted-foreground font-light">We'll bring the recovery experience right to your location</p>
+        <h2 className="text-2xl font-bold text-foreground mb-2" style={{ fontFamily: 'Futura, "Futura PT", "Century Gothic", sans-serif' }}>Where should we set up?</h2>
+        <p className="text-muted-foreground font-light" style={{ fontFamily: 'Futura, "Futura PT", "Century Gothic", sans-serif' }}>We'll bring the recovery experience right to your location</p>
       </div>
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 pb-20 md:pb-6">
@@ -175,7 +182,7 @@ export function AddressForm({
             <Input
               ref={inputRef}
               placeholder="Start typing your address..."
-              className="pl-10 bg-background border-input text-foreground placeholder:text-muted-foreground"
+              className="pl-10 bg-background border-input text-foreground placeholder:text-muted-foreground focus:border-mint focus:ring-mint"
             />
           </div>
           <p className="text-sm text-muted-foreground font-light">Start typing to see address suggestions</p>
@@ -186,12 +193,13 @@ export function AddressForm({
           <div className="space-y-2">
             <Label htmlFor={streetId} className="text-foreground">Street Address *</Label>
             <Input
-              {...register("street")}
               id={streetId}
+              name="street"
+              value={watchedAddress.street || ""}
               placeholder="123 Main St"
-              className="bg-background border-input text-foreground placeholder:text-muted-foreground min-h-[44px]"
+              className="bg-background border-input text-foreground placeholder:text-muted-foreground min-h-[44px] focus:border-mint focus:ring-mint"
               onChange={async (e) => {
-                setValue("street", e.target.value, { shouldValidate: true });
+                setValue("street", e.target.value, { shouldValidate: true, shouldDirty: true });
                 await trigger();
               }}
             />
@@ -201,12 +209,13 @@ export function AddressForm({
           <div className="space-y-2">
             <Label htmlFor={cityId} className="text-foreground">City *</Label>
             <Input
-              {...register("city")}
               id={cityId}
+              name="city"
+              value={watchedAddress.city || ""}
               placeholder="Orange County / Los Angeles"
-              className="bg-background border-input text-foreground placeholder:text-muted-foreground min-h-[44px]"
+              className="bg-background border-input text-foreground placeholder:text-muted-foreground min-h-[44px] focus:border-mint focus:ring-mint"
               onChange={async (e) => {
-                setValue("city", e.target.value, { shouldValidate: true });
+                setValue("city", e.target.value, { shouldValidate: true, shouldDirty: true });
                 await trigger();
               }}
             />
@@ -216,13 +225,14 @@ export function AddressForm({
           <div className="space-y-2">
             <Label htmlFor={stateId} className="text-foreground">State *</Label>
             <Input
-              {...register("state")}
               id={stateId}
+              name="state"
+              value={watchedAddress.state || ""}
               placeholder="CA"
               maxLength={2}
-              className="bg-background border-input text-foreground placeholder:text-muted-foreground min-h-[44px]"
+              className="bg-background border-input text-foreground placeholder:text-muted-foreground min-h-[44px] focus:border-mint focus:ring-mint"
               onChange={async (e) => {
-                setValue("state", e.target.value, { shouldValidate: true });
+                setValue("state", e.target.value, { shouldValidate: true, shouldDirty: true });
                 await trigger();
               }}
             />
@@ -232,13 +242,14 @@ export function AddressForm({
           <div className="space-y-2">
             <Label htmlFor={zipId} className="text-foreground">ZIP Code *</Label>
             <Input
-              {...register("zipCode")}
               id={zipId}
+              name="zipCode"
+              value={watchedAddress.zipCode || ""}
               placeholder="90210"
               maxLength={10}
-              className="bg-background border-input text-foreground placeholder:text-muted-foreground min-h-[44px]"
+              className="bg-background border-input text-foreground placeholder:text-muted-foreground min-h-[44px] focus:border-mint focus:ring-mint"
               onChange={async (e) => {
-                setValue("zipCode", e.target.value, { shouldValidate: true });
+                setValue("zipCode", e.target.value, { shouldValidate: true, shouldDirty: true });
                 // Trigger validation for all fields to ensure form validity
                 await trigger();
                 if (e.target.value.length >= 5 && watchedAddress.city && watchedAddress.state) {
@@ -266,11 +277,11 @@ export function AddressForm({
         {setupFee && (
           <Card className="bg-white/70 backdrop-blur-sm border-border rounded-3xl shadow-lg">
             <CardHeader>
-              <CardTitle className="flex items-center space-x-2 text-foreground font-serif">
+              <CardTitle className="flex items-center space-x-2 text-foreground" style={{ fontFamily: 'Futura, "Futura PT", "Century Gothic", sans-serif' }}>
                 <DollarSign className="w-5 h-5 text-foreground" />
                 <span>Setup Fee Calculation</span>
               </CardTitle>
-              <CardDescription className="text-muted-foreground font-light">One-time fee for equipment delivery and setup</CardDescription>
+              <CardDescription className="text-muted-foreground font-light" style={{ fontFamily: 'Futura, "Futura PT", "Century Gothic", sans-serif' }}>One-time fee for equipment delivery and setup</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -328,13 +339,13 @@ export function AddressForm({
             <div className="flex items-start space-x-3">
               <MapPin className="w-5 h-5 text-foreground mt-0.5" />
               <div>
-                <h3 className="font-serif font-medium text-foreground">Service Area</h3>
-                <p className="text-sm text-muted-foreground font-light">
+                <h3 className="font-medium text-foreground" style={{ fontFamily: 'Futura, "Futura PT", "Century Gothic", sans-serif' }}>Service Area</h3>
+                <p className="text-sm text-muted-foreground font-light" style={{ fontFamily: 'Futura, "Futura PT", "Century Gothic", sans-serif' }}>
                   Based in Orange County, we proudly serve all of Southern California. Setup fees vary based
                   on distance from our facility.
                 </p>
                 <div className="mt-2">
-                  <Badge variant="secondary" className="bg-primary/10 text-primary border border-primary/30 font-medium">
+                  <Badge variant="secondary" className="bg-mint-accent/20 text-charcoal border border-mint-accent font-medium" style={{ fontFamily: 'Futura, "Futura PT", "Century Gothic", sans-serif' }}>
                     Serving All of Southern California
                   </Badge>
                 </div>
@@ -346,10 +357,10 @@ export function AddressForm({
         {/* Sticky Mobile Footer */}
         <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 p-4 md:hidden z-50">
           <div className="flex gap-3 max-w-md mx-auto">
-            <Button type="button" variant="outline" onClick={onBack} className="flex-1 min-h-[48px]">
+            <Button type="button" variant="outline" onClick={onBack} className="flex-1 min-h-[48px] rounded-full">
               Back to Service
             </Button>
-            <Button type="submit" disabled={!isValid || !setupFee} className="flex-1 min-h-[48px]">
+            <Button type="submit" disabled={!isValid || !setupFee} variant="ghost" className="flex-1 min-h-[48px] rounded-full !bg-charcoal !text-white hover:!bg-charcoal/90">
               Continue to Calendar
             </Button>
           </div>
@@ -357,11 +368,11 @@ export function AddressForm({
 
         {/* Desktop Navigation buttons */}
         <div className="hidden md:flex justify-between pt-6">
-          <Button type="button" variant="outline" onClick={onBack} size="lg">
+          <Button type="button" variant="outline" onClick={onBack} size="lg" className="rounded-full">
             Back to Service
           </Button>
 
-          <Button type="submit" disabled={!isValid || !setupFee} size="lg" className="px-8">
+          <Button type="submit" disabled={!isValid || !setupFee} size="lg" variant="ghost" className="px-8 rounded-full !bg-charcoal !text-white hover:!bg-charcoal/90 hover:scale-105 transition-transform">
             Continue to Calendar
           </Button>
         </div>

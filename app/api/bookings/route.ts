@@ -35,16 +35,20 @@ export async function POST(request: NextRequest) {
         );
       }
 
-      const { data: existingUser, error: existingUserError } =
-        await serviceRoleClient.auth.admin.getUserByEmail(guestEmail);
+      // Check if user exists by email using listUsers
+      const { data: existingUsers, error: existingUserError } =
+        await serviceRoleClient.auth.admin.listUsers();
 
-      if (existingUserError && existingUserError.message !== "User not found") {
+      if (existingUserError) {
         console.error("Failed to look up user by email:", existingUserError);
         return NextResponse.json({ error: "Failed to verify account" }, { status: 500 });
       }
 
-      if (existingUser?.user) {
-        user = existingUser.user;
+      // Find user with matching email
+      const existingUser = existingUsers?.users?.find((u) => u.email === guestEmail);
+
+      if (existingUser) {
+        user = existingUser;
       } else {
         const { data: newUser, error: createError } =
           await serviceRoleClient.auth.admin.createUser({

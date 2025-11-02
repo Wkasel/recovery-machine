@@ -25,14 +25,14 @@ export function AdminClientWrapper({ children, user, adminData }: AdminClientWra
   // Show loading state during SSR or if data is missing
   if (!isClient || !adminData || !user) {
     return (
-      <div className="min-h-screen bg-black text-white">
+      <div className="min-h-screen bg-background text-charcoal">
         <div className="animate-pulse">
-          <div className="h-16 bg-gray-800 border-b border-gray-700"></div>
+          <div className="h-16 bg-mint-accent/20 border-b border-mint-accent/30"></div>
           <div className="flex">
-            <div className="w-64 h-screen bg-gray-900"></div>
+            <div className="w-64 h-screen bg-white/70 backdrop-blur-sm border-r border-mint-accent/20"></div>
             <div className="flex-1 p-6">
-              <div className="h-8 bg-gray-700 rounded mb-4"></div>
-              <div className="h-32 bg-gray-700 rounded"></div>
+              <div className="h-8 bg-mint-accent/20 rounded mb-4"></div>
+              <div className="h-32 bg-mint-accent/20 rounded"></div>
             </div>
           </div>
         </div>
@@ -41,7 +41,7 @@ export function AdminClientWrapper({ children, user, adminData }: AdminClientWra
   }
 
   return (
-    <div className="min-h-screen bg-black text-white">
+    <div className="min-h-screen bg-background text-charcoal">
       <AdminHeader
         user={user}
         admin={{

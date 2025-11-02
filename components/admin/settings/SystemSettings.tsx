@@ -93,7 +93,7 @@ export function SystemSettings({ settings, onUpdateSetting, loading }: SystemSet
                         {getValue("maintenance_mode") ? "Active" : "Inactive"}
                       </Badge>
                     </Label>
-                    <p className="text-sm text-gray-500 mt-1">
+                    <p className="text-sm text-muted-foreground mt-1">
                       Disable booking system for maintenance or updates
                     </p>
                   </div>
@@ -123,7 +123,7 @@ export function SystemSettings({ settings, onUpdateSetting, loading }: SystemSet
                 <div className="flex items-center justify-between">
                   <div>
                     <Label>Debug Mode</Label>
-                    <p className="text-sm text-gray-500 mt-1">
+                    <p className="text-sm text-muted-foreground mt-1">
                       Enable detailed logging and debug features
                     </p>
                   </div>
@@ -162,7 +162,7 @@ export function SystemSettings({ settings, onUpdateSetting, loading }: SystemSet
                 <div className="flex items-center justify-between">
                   <div>
                     <Label>Analytics Tracking</Label>
-                    <p className="text-sm text-gray-500 mt-1">
+                    <p className="text-sm text-muted-foreground mt-1">
                       Enable Google Analytics and user behavior tracking
                     </p>
                   </div>
@@ -196,7 +196,7 @@ export function SystemSettings({ settings, onUpdateSetting, loading }: SystemSet
                     step={15}
                     className="w-full"
                   />
-                  <div className="flex justify-between text-sm text-gray-500">
+                  <div className="flex justify-between text-sm text-muted-foreground">
                     <span>15 min</span>
                     <span className="font-medium">
                       {formatTimeUnit(getValue("session_timeout_minutes") || 60, "minute")}
@@ -204,7 +204,7 @@ export function SystemSettings({ settings, onUpdateSetting, loading }: SystemSet
                     <span>8 hours</span>
                   </div>
                 </div>
-                <p className="text-xs text-gray-500">
+                <p className="text-xs text-muted-foreground">
                   How long users stay logged in before requiring re-authentication
                 </p>
                 {localValues["session_timeout_minutes"] !== undefined && (
@@ -244,7 +244,7 @@ export function SystemSettings({ settings, onUpdateSetting, loading }: SystemSet
                     step={1}
                     className="w-full"
                   />
-                  <div className="flex justify-between text-sm text-gray-500">
+                  <div className="flex justify-between text-sm text-muted-foreground">
                     <span>1 hour</span>
                     <span className="font-medium">
                       {getValue("backup_frequency_hours") >= 24
@@ -257,7 +257,7 @@ export function SystemSettings({ settings, onUpdateSetting, loading }: SystemSet
                     <span>7 days</span>
                   </div>
                 </div>
-                <p className="text-xs text-gray-500">
+                <p className="text-xs text-muted-foreground">
                   How often to automatically backup business data
                 </p>
                 {localValues["backup_frequency_hours"] !== undefined && (

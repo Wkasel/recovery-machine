@@ -197,15 +197,15 @@ export function PaymentManager() {
 
   const getStatusBadge = (status: string) => {
     const colors = {
-      pending: "bg-yellow-100 text-yellow-800",
-      processing: "bg-blue-100 text-blue-800",
-      paid: "bg-green-100 text-green-800",
-      refunded: "bg-red-100 text-red-800",
-      failed: "bg-gray-100 text-gray-800",
+      pending: "bg-secondary/10 text-secondary-foreground border-secondary/20",
+      processing: "bg-primary/20 text-primary border-primary/30",
+      paid: "bg-primary/10 text-primary border-primary/20",
+      refunded: "bg-destructive/10 text-destructive border-destructive/20",
+      failed: "bg-muted text-muted-foreground border-border",
     };
 
     return (
-      <Badge className={colors[status as keyof typeof colors] || colors.pending}>
+      <Badge variant="outline" className={colors[status as keyof typeof colors] || colors.pending}>
         {status.charAt(0).toUpperCase() + status.slice(1)}
       </Badge>
     );
@@ -213,13 +213,13 @@ export function PaymentManager() {
 
   const getTypeBadge = (type: string) => {
     const colors = {
-      subscription: "bg-purple-100 text-purple-800",
-      one_time: "bg-blue-100 text-blue-800",
-      setup_fee: "bg-orange-100 text-orange-800",
+      subscription: "bg-secondary/10 text-secondary-foreground border-secondary/20",
+      one_time: "bg-primary/10 text-primary border-primary/20",
+      setup_fee: "bg-secondary/20 text-secondary-foreground border-secondary/30",
     };
 
     return (
-      <Badge className={colors[type as keyof typeof colors] || colors.one_time}>
+      <Badge variant="outline" className={colors[type as keyof typeof colors] || colors.one_time}>
         {type.replace("_", " ")}
       </Badge>
     );
@@ -257,9 +257,9 @@ export function PaymentManager() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           <Card className="p-4">
             <div className="flex items-center">
-              <DollarSign className="h-8 w-8 text-green-600" />
+              <DollarSign className="h-8 w-8 text-primary" />
               <div className="ml-4">
-                <p className="text-sm font-medium text-gray-500">Total Revenue</p>
+                <p className="text-sm font-medium text-muted-foreground">Total Revenue</p>
                 <p className="text-2xl font-bold">{formatAmount(stats.totalRevenue)}</p>
               </div>
             </div>
@@ -267,9 +267,9 @@ export function PaymentManager() {
 
           <Card className="p-4">
             <div className="flex items-center">
-              <CreditCard className="h-8 w-8 text-blue-600" />
+              <CreditCard className="h-8 w-8 text-primary" />
               <div className="ml-4">
-                <p className="text-sm font-medium text-gray-500">Total Orders</p>
+                <p className="text-sm font-medium text-muted-foreground">Total Orders</p>
                 <p className="text-2xl font-bold">{stats.totalOrders}</p>
               </div>
             </div>
@@ -277,9 +277,9 @@ export function PaymentManager() {
 
           <Card className="p-4">
             <div className="flex items-center">
-              <Users className="h-8 w-8 text-purple-600" />
+              <Users className="h-8 w-8 text-primary" />
               <div className="ml-4">
-                <p className="text-sm font-medium text-gray-500">Active Subscriptions</p>
+                <p className="text-sm font-medium text-muted-foreground">Active Subscriptions</p>
                 <p className="text-2xl font-bold">{stats.activeSubscriptions}</p>
               </div>
             </div>
@@ -289,7 +289,7 @@ export function PaymentManager() {
             <div className="flex items-center">
               <TrendingUp className="h-8 w-8 text-orange-600" />
               <div className="ml-4">
-                <p className="text-sm font-medium text-gray-500">Monthly Recurring</p>
+                <p className="text-sm font-medium text-muted-foreground">Monthly Recurring</p>
                 <p className="text-2xl font-bold">{formatAmount(stats.monthlyRecurring)}</p>
               </div>
             </div>
@@ -302,7 +302,7 @@ export function PaymentManager() {
         <div className="flex flex-col md:flex-row gap-4 items-center justify-between">
           <div className="flex flex-1 gap-4 items-center">
             <div className="relative flex-1 max-w-md">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
               <Input
                 placeholder="Search orders, emails, or checkout IDs..."
                 value={searchTerm}
@@ -353,17 +353,17 @@ export function PaymentManager() {
       </Card>
 
       {/* Orders Table */}
-      <Card>
+      <Card className="border-border bg-card shadow-sm">
         <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>Order ID</TableHead>
-              <TableHead>Customer</TableHead>
-              <TableHead>Type</TableHead>
-              <TableHead>Amount</TableHead>
-              <TableHead>Status</TableHead>
-              <TableHead>Date</TableHead>
-              <TableHead>Actions</TableHead>
+          <TableHeader className="bg-muted/50">
+            <TableRow className="hover:bg-accent/50 transition-colors border-border">
+              <TableHead className="text-foreground font-semibold">Order ID</TableHead>
+              <TableHead className="text-foreground font-semibold">Customer</TableHead>
+              <TableHead className="text-foreground font-semibold">Type</TableHead>
+              <TableHead className="text-foreground font-semibold">Amount</TableHead>
+              <TableHead className="text-foreground font-semibold">Status</TableHead>
+              <TableHead className="text-foreground font-semibold">Date</TableHead>
+              <TableHead className="text-foreground font-semibold">Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -377,7 +377,7 @@ export function PaymentManager() {
                       {order.customer_email || order.metadata?.customer_email || "N/A"}
                     </div>
                     {order.customer_name && (
-                      <div className="text-sm text-gray-500">{order.customer_name}</div>
+                      <div className="text-sm text-muted-foreground">{order.customer_name}</div>
                     )}
                   </div>
                 </TableCell>
@@ -388,7 +388,7 @@ export function PaymentManager() {
                   <div>
                     <div className="font-medium">{formatAmount(order.amount)}</div>
                     {order.setup_fee_applied > 0 && (
-                      <div className="text-sm text-gray-500">
+                      <div className="text-sm text-muted-foreground">
                         Setup: {formatAmount(order.setup_fee_applied)}
                       </div>
                     )}
@@ -436,7 +436,7 @@ export function PaymentManager() {
 
                             <div>
                               <label className="text-sm font-medium">Metadata</label>
-                              <pre className="bg-gray-50 p-2 rounded text-xs overflow-auto">
+                              <pre className="bg-muted/50 p-2 rounded text-xs overflow-auto">
                                 {JSON.stringify(selectedOrder.metadata, null, 2)}
                               </pre>
                             </div>
@@ -464,7 +464,7 @@ export function PaymentManager() {
         </Table>
 
         {filteredOrders.length === 0 && (
-          <div className="text-center py-8 text-gray-500">
+          <div className="text-center py-8 text-muted-foreground">
             No orders found matching your criteria
           </div>
         )}

@@ -237,33 +237,33 @@ export function UserManager() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">User Management</h1>
-          <p className="text-gray-600">Manage customer profiles and credits</p>
+          <h1 className="text-3xl font-bold text-foreground">User Management</h1>
+          <p className="text-muted-foreground">Manage customer profiles and credits</p>
         </div>
       </div>
 
       {/* Controls */}
-      <Card className="p-4">
+      <Card className="p-4 border-border bg-card shadow-sm">
         <div className="flex flex-col md:flex-row gap-4 items-center justify-between">
           <div className="flex flex-1 gap-4 items-center">
             <div className="relative flex-1 max-w-md">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
               <Input
                 placeholder="Search users by email, phone, or referral code..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-10"
+                className="pl-10 border-input focus:ring-primary focus:border-primary"
               />
             </div>
           </div>
 
           <div className="flex gap-2">
-            <Button onClick={loadUsers} variant="outline" size="sm">
+            <Button onClick={loadUsers} variant="outline" size="sm" className="border-border hover:bg-accent hover:text-primary">
               <RefreshCw className="h-4 w-4 mr-2" />
               Refresh
             </Button>
 
-            <Button onClick={exportUsers} variant="outline" size="sm">
+            <Button onClick={exportUsers} variant="outline" size="sm" className="border-border hover:bg-accent hover:text-primary">
               <Download className="h-4 w-4 mr-2" />
               Export
             </Button>
@@ -273,34 +273,40 @@ export function UserManager() {
 
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <Card className="p-4">
+        <Card className="p-4 border-border bg-card shadow-sm hover:shadow-md transition-shadow">
           <div className="flex items-center">
-            <Users className="h-8 w-8 text-blue-600" />
+            <div className="p-3 bg-primary/10 rounded-lg">
+              <Users className="h-8 w-8 text-primary" />
+            </div>
             <div className="ml-4">
-              <p className="text-sm font-medium text-gray-500">Total Users</p>
-              <p className="text-2xl font-bold">{users.length}</p>
+              <p className="text-sm font-medium text-muted-foreground">Total Users</p>
+              <p className="text-2xl font-bold text-foreground">{users.length}</p>
             </div>
           </div>
         </Card>
 
-        <Card className="p-4">
+        <Card className="p-4 border-border bg-card shadow-sm hover:shadow-md transition-shadow">
           <div className="flex items-center">
-            <CreditCard className="h-8 w-8 text-green-600" />
+            <div className="p-3 bg-primary/10 rounded-lg">
+              <CreditCard className="h-8 w-8 text-primary" />
+            </div>
             <div className="ml-4">
-              <p className="text-sm font-medium text-gray-500">Total Credits</p>
-              <p className="text-2xl font-bold">
+              <p className="text-sm font-medium text-muted-foreground">Total Credits</p>
+              <p className="text-2xl font-bold text-foreground">
                 {users.reduce((sum, user) => sum + user.credits, 0)}
               </p>
             </div>
           </div>
         </Card>
 
-        <Card className="p-4">
+        <Card className="p-4 border-border bg-card shadow-sm hover:shadow-md transition-shadow">
           <div className="flex items-center">
-            <Users className="h-8 w-8 text-purple-600" />
+            <div className="p-3 bg-primary/10 rounded-lg">
+              <Users className="h-8 w-8 text-primary" />
+            </div>
             <div className="ml-4">
-              <p className="text-sm font-medium text-gray-500">Active Users</p>
-              <p className="text-2xl font-bold">
+              <p className="text-sm font-medium text-muted-foreground">Active Users</p>
+              <p className="text-2xl font-bold text-foreground">
                 {users.filter((user) => (user.booking_count || 0) > 0).length}
               </p>
             </div>
@@ -309,32 +315,32 @@ export function UserManager() {
       </div>
 
       {/* Users Table */}
-      <Card>
+      <Card className="border-border bg-card shadow-sm">
         <Table>
           <TableHeader>
-            <TableRow>
-              <TableHead>User</TableHead>
-              <TableHead>Contact</TableHead>
-              <TableHead>Credits</TableHead>
-              <TableHead>Activity</TableHead>
-              <TableHead>Joined</TableHead>
-              <TableHead>Actions</TableHead>
+            <TableRow className="bg-muted/50 hover:bg-muted/50 border-border">
+              <TableHead className="text-foreground font-semibold">User</TableHead>
+              <TableHead className="text-foreground font-semibold">Contact</TableHead>
+              <TableHead className="text-foreground font-semibold">Credits</TableHead>
+              <TableHead className="text-foreground font-semibold">Activity</TableHead>
+              <TableHead className="text-foreground font-semibold">Joined</TableHead>
+              <TableHead className="text-foreground font-semibold">Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {filteredUsers.map((user) => (
-              <TableRow key={user.id}>
+              <TableRow key={user.id} className="hover:bg-accent/50 transition-colors border-border">
                 <TableCell>
                   <div>
-                    <div className="font-medium">{user.email}</div>
-                    <div className="text-sm text-gray-500">Code: {user.referral_code}</div>
+                    <div className="font-medium text-foreground">{user.email}</div>
+                    <div className="text-sm text-muted-foreground">Code: {user.referral_code}</div>
                   </div>
                 </TableCell>
 
                 <TableCell>
                   <div className="text-sm">
-                    <div>{user.phone || "No phone"}</div>
-                    <div className="text-gray-500">
+                    <div className="text-foreground">{user.phone || "No phone"}</div>
+                    <div className="text-muted-foreground">
                       {user.address?.city
                         ? `${user.address.city}, ${user.address.state}`
                         : "No address"}
@@ -343,15 +349,15 @@ export function UserManager() {
                 </TableCell>
 
                 <TableCell>
-                  <Badge variant="outline" className="bg-green-50">
+                  <Badge variant="outline" className="bg-primary/10 text-primary border-primary/20">
                     {user.credits} credits
                   </Badge>
                 </TableCell>
 
                 <TableCell>
                   <div className="text-sm">
-                    <div>{user.booking_count || 0} bookings</div>
-                    <div className="text-gray-500">
+                    <div className="text-foreground">{user.booking_count || 0} bookings</div>
+                    <div className="text-muted-foreground">
                       {user.total_spent ? formatCurrency(user.total_spent) : "$0"} spent
                     </div>
                   </div>
@@ -500,8 +506,8 @@ export function UserManager() {
                                           <span
                                             className={
                                               transaction.amount >= 0
-                                                ? "text-green-600"
-                                                : "text-red-600"
+                                                ? "text-primary font-medium"
+                                                : "text-destructive font-medium"
                                             }
                                           >
                                             {transaction.amount >= 0 ? "+" : ""}
@@ -521,7 +527,7 @@ export function UserManager() {
                                 </Table>
 
                                 {creditTransactions.length === 0 && (
-                                  <div className="text-center py-4 text-gray-500">
+                                  <div className="text-center py-4 text-muted-foreground">
                                     No credit transactions found
                                   </div>
                                 )}
@@ -539,7 +545,7 @@ export function UserManager() {
         </Table>
 
         {filteredUsers.length === 0 && (
-          <div className="text-center py-8 text-gray-500">No users found matching your search</div>
+          <div className="text-center py-8 text-muted-foreground">No users found matching your search</div>
         )}
       </Card>
     </div>

@@ -51,15 +51,15 @@ export default function TestimonialCarousel({ testimonials }: TestimonialCarouse
               {/* Content Side */}
               <div className="p-8 lg:p-12 flex flex-col justify-center">
                 <div className="mb-6">
-                  <Quote className="h-12 w-12 text-neutral-600 mb-4" />
-                  <blockquote className="text-xl text-foreground leading-relaxed mb-6 font-medium">
+                  <Quote className="h-12 w-12 text-mint mb-4" />
+                  <blockquote className="text-xl text-charcoal leading-relaxed mb-6 font-medium" style={{ fontFamily: 'Futura, "Futura PT", "Century Gothic", sans-serif' }}>
                     "{testimonials[currentTestimonial].quote}"
                   </blockquote>
                 </div>
 
                 <div className="flex items-center mb-6">
-                  <Avatar className="h-16 w-16 mr-4 border border-neutral-800">
-                    <AvatarFallback className="text-lg font-semibold bg-neutral-900 text-white">
+                  <Avatar className="h-16 w-16 mr-4 border-2 border-mint-accent/30">
+                    <AvatarFallback className="text-lg font-semibold bg-mint-accent/20 text-charcoal" style={{ fontFamily: 'Futura, "Futura PT", "Century Gothic", sans-serif' }}>
                       {testimonials[currentTestimonial].name
                         .split(" ")
                         .map((n) => n[0])
@@ -68,17 +68,17 @@ export default function TestimonialCarousel({ testimonials }: TestimonialCarouse
                   </Avatar>
                   <div className="flex-1">
                     <div className="flex items-center gap-2 mb-2">
-                      <h4 className="font-bold text-white text-lg">
+                      <h4 className="font-bold text-charcoal text-lg" style={{ fontFamily: 'Futura, "Futura PT", "Century Gothic", sans-serif' }}>
                         {testimonials[currentTestimonial].name}
                       </h4>
                       {testimonials[currentTestimonial].verified && (
-                        <CheckCircle className="h-5 w-5 text-white" />
+                        <CheckCircle className="h-5 w-5 text-mint" />
                       )}
                     </div>
-                    <p className="text-neutral-400 font-medium">
+                    <p className="text-charcoal-light font-medium font-light" style={{ fontFamily: 'Futura, "Futura PT", "Century Gothic", sans-serif' }}>
                       {testimonials[currentTestimonial].role}
                     </p>
-                    <div className="flex items-center gap-4 mt-2 text-sm text-neutral-400">
+                    <div className="flex items-center gap-4 mt-2 text-sm text-charcoal-light font-light" style={{ fontFamily: 'Futura, "Futura PT", "Century Gothic", sans-serif' }}>
                       <span className="flex items-center gap-1">
                         <MapPin className="h-3 w-3" />
                         {testimonials[currentTestimonial].location}
@@ -90,7 +90,7 @@ export default function TestimonialCarousel({ testimonials }: TestimonialCarouse
 
                 <div className="flex mb-4">
                   {[...Array(testimonials[currentTestimonial].rating)].map((_, i) => (
-                    <Star key={i} className="h-5 w-5 text-white fill-current" />
+                    <Star key={i} className="h-5 w-5 text-mint fill-current" />
                   ))}
                 </div>
               </div>
@@ -105,21 +105,21 @@ export default function TestimonialCarousel({ testimonials }: TestimonialCarouse
           .filter((_, index) => index !== currentTestimonial)
           .slice(0, 3)
           .map((testimonial) => (
-            <Card key={testimonial.id} className="bg-black border border-neutral-800">
+            <Card key={testimonial.id} className="bg-mint-accent/10 border-2 border-mint-accent/20 hover:border-mint-accent/30 transition-all">
               <CardContent className="p-6">
                 <div className="flex mb-4">
                   {[...Array(testimonial.rating)].map((_, i) => (
-                    <Star key={i} className="h-4 w-4 text-white fill-current" />
+                    <Star key={i} className="h-4 w-4 text-mint fill-current" />
                   ))}
                 </div>
 
-                <blockquote className="text-neutral-400 mb-6 leading-relaxed line-clamp-3">
+                <blockquote className="text-charcoal-light mb-6 leading-relaxed line-clamp-3 font-light" style={{ fontFamily: 'Futura, "Futura PT", "Century Gothic", sans-serif' }}>
                   "{testimonial.quote}"
                 </blockquote>
 
                 <div className="flex items-center">
-                  <Avatar className="h-12 w-12 mr-3 border border-neutral-800">
-                    <AvatarFallback className="font-semibold bg-neutral-900 text-white">
+                  <Avatar className="h-12 w-12 mr-3 border-2 border-mint-accent/30">
+                    <AvatarFallback className="font-semibold bg-mint-accent/20 text-charcoal" style={{ fontFamily: 'Futura, "Futura PT", "Century Gothic", sans-serif' }}>
                       {testimonial.name
                         .split(" ")
                         .map((n) => n[0])
@@ -128,11 +128,11 @@ export default function TestimonialCarousel({ testimonials }: TestimonialCarouse
                   </Avatar>
                   <div className="flex-1">
                     <div className="flex items-center gap-1 mb-1">
-                      <h4 className="font-semibold text-white">{testimonial.name}</h4>
-                      {testimonial.verified && <CheckCircle className="h-4 w-4 text-white" />}
+                      <h4 className="font-semibold text-charcoal" style={{ fontFamily: 'Futura, "Futura PT", "Century Gothic", sans-serif' }}>{testimonial.name}</h4>
+                      {testimonial.verified && <CheckCircle className="h-4 w-4 text-mint" />}
                     </div>
-                    <p className="text-neutral-400 text-sm">{testimonial.role}</p>
-                    <p className="text-neutral-500 text-xs">{testimonial.location}</p>
+                    <p className="text-charcoal-light text-sm font-light" style={{ fontFamily: 'Futura, "Futura PT", "Century Gothic", sans-serif' }}>{testimonial.role}</p>
+                    <p className="text-charcoal-light/60 text-xs font-light" style={{ fontFamily: 'Futura, "Futura PT", "Century Gothic", sans-serif' }}>{testimonial.location}</p>
                   </div>
                 </div>
               </CardContent>
@@ -146,8 +146,8 @@ export default function TestimonialCarousel({ testimonials }: TestimonialCarouse
           <button
             key={index}
             onClick={() => setCurrentTestimonial(index)}
-            className={`w-3 h-3 ${
-              index === currentTestimonial ? "bg-white w-8" : "bg-neutral-600 hover:bg-white"
+            className={`w-3 h-3 rounded-full transition-all ${
+              index === currentTestimonial ? "bg-mint w-8" : "bg-mint-accent/40 hover:bg-mint"
             }`}
             aria-label={`Select testimonial ${index + 1}`}
           />

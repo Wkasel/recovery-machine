@@ -239,7 +239,7 @@ export function AvailabilityManager() {
               )}
             </Button>
           </div>
-          <div className="mt-4 text-sm text-gray-400">
+          <div className="mt-4 text-sm text-muted-foreground">
             This will create 2-hour time slots from 8 AM to 8 PM for each day in the selected range.
           </div>
         </CardContent>
@@ -280,14 +280,14 @@ export function AvailabilityManager() {
 
           {isLoading ? (
             <div className="text-center py-8">
-              <RefreshCw className="w-8 h-8 animate-spin mx-auto mb-4 text-gray-400" />
-              <p className="text-gray-400">Loading availability slots...</p>
+              <RefreshCw className="w-8 h-8 animate-spin mx-auto mb-4 text-muted-foreground" />
+              <p className="text-muted-foreground">Loading availability slots...</p>
             </div>
           ) : !hasSlots ? (
             <div className="text-center py-8">
-              <AlertCircle className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-              <p className="text-gray-400 mb-2">No availability slots found</p>
-              <p className="text-sm text-gray-500">
+              <AlertCircle className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
+              <p className="text-muted-foreground mb-2">No availability slots found</p>
+              <p className="text-sm text-muted-foreground">
                 Use the "Generate Slots" section above to create default availability
               </p>
             </div>
@@ -308,13 +308,13 @@ export function AvailabilityManager() {
                             key={slot.id}
                             className={`border rounded-lg p-4 ${
                               slot.is_available
-                                ? "border-green-600 bg-green-50/5"
+                                ? "border-green-600 bg-primary/5/5"
                                 : "border-red-600 bg-red-50/5"
                             }`}
                           >
                             <div className="flex items-center justify-between mb-3">
                               <div className="flex items-center space-x-2">
-                                <Clock className="w-4 h-4 text-gray-400" />
+                                <Clock className="w-4 h-4 text-muted-foreground" />
                                 <span className="font-medium text-white">
                                   {formatTime(slot.start_time)} - {formatTime(slot.end_time)}
                                 </span>
@@ -328,7 +328,7 @@ export function AvailabilityManager() {
                             </div>
                             
                             <div className="flex items-center justify-between mb-3">
-                              <Label className="text-sm text-gray-400">Available</Label>
+                              <Label className="text-sm text-muted-foreground">Available</Label>
                               <Switch
                                 checked={slot.is_available}
                                 onCheckedChange={() => 
@@ -338,7 +338,7 @@ export function AvailabilityManager() {
                             </div>
 
                             <div className="flex items-center justify-between">
-                              <Label className="text-sm text-gray-400">Max Bookings</Label>
+                              <Label className="text-sm text-muted-foreground">Max Bookings</Label>
                               <Input
                                 type="number"
                                 min="1"

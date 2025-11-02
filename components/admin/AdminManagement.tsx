@@ -149,13 +149,13 @@ export function AdminManagement() {
   const getRoleBadgeColor = (role: string) => {
     switch (role) {
       case "super_admin":
-        return "bg-red-100 text-red-800 border-red-300";
+        return "bg-destructive/10 text-destructive border-red-300";
       case "admin":
-        return "bg-blue-100 text-blue-800 border-blue-300";
+        return "bg-primary/10 text-blue-800 border-blue-300";
       case "operator":
-        return "bg-green-100 text-green-800 border-green-300";
+        return "bg-primary/10 text-green-800 border-green-300";
       default:
-        return "bg-gray-100 text-gray-800 border-gray-300";
+        return "bg-muted text-foreground border-border";
     }
   };
 
@@ -229,14 +229,14 @@ export function AdminManagement() {
         </Dialog>
       </div>
 
-      <Card>
+      <Card className="border-border bg-card shadow-sm">
         <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>Email</TableHead>
-              <TableHead>Role</TableHead>
-              <TableHead>Status</TableHead>
-              <TableHead>Created</TableHead>
+          <TableHeader className="bg-muted/50">
+            <TableRow className="hover:bg-accent/50 transition-colors border-border">
+              <TableHead className="text-foreground font-semibold">Email</TableHead>
+              <TableHead className="text-foreground font-semibold">Role</TableHead>
+              <TableHead className="text-foreground font-semibold">Status</TableHead>
+              <TableHead className="text-foreground font-semibold">Created</TableHead>
               <TableHead className="text-right">Actions</TableHead>
             </TableRow>
           </TableHeader>

@@ -8,7 +8,11 @@ export async function GET(request: Request) {
     const { searchParams } = new URL(request.url);
     const title = searchParams.get("title") ?? siteMetadata.defaultTitle;
     const type = searchParams.get("type") ?? "default";
-    const description = searchParams.get("description") ?? siteMetadata.description;
+
+    // Fetch the van image and logo
+    const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://therecoverymachine.com";
+    const vanImageUrl = `${baseUrl}/recovery-van.png`;
+    const logoUrl = `${baseUrl}/logo.png`;
 
     return new ImageResponse(
       (
@@ -20,44 +24,96 @@ export async function GET(request: Request) {
             flexDirection: "column",
             alignItems: "center",
             justifyContent: "center",
-            backgroundColor: "#0f172a",
-            backgroundImage: "linear-gradient(45deg, #0f172a 0%, #1e293b 100%)",
-            padding: "40px 60px",
+            backgroundColor: "#f8fffa", // mint background
+            backgroundImage: "linear-gradient(180deg, #f8fffa 0%, #dcfce9 50%, #c4f4d8 100%)", // mint gradient
+            padding: "60px",
           }}
         >
-          {/* Title */}
+          {/* Logo */}
           <div
             style={{
               display: "flex",
-              fontSize: 60,
-              fontWeight: 700,
-              letterSpacing: "-0.05em",
-              color: "white",
-              lineHeight: 1.2,
-              whiteSpace: "pre-wrap",
-              textAlign: "center",
-              marginBottom: 16,
+              position: "absolute",
+              top: "40px",
+              left: "60px",
             }}
           >
-            {title}
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={logoUrl}
+              alt="Logo"
+              width="120"
+              height="120"
+              style={{
+                objectFit: "contain",
+              }}
+            />
           </div>
 
-          {/* Description (if type is not minimal) */}
-          {type !== "minimal" && (
+          {/* Main Title - "WELLNESS THAT COMES TO YOU" */}
+          <div
+            style={{
+              display: "flex",
+              fontSize: 72,
+              fontWeight: 500,
+              letterSpacing: "-0.02em",
+              color: "#292f2a", // charcoal
+              lineHeight: 1.1,
+              textAlign: "center",
+              marginBottom: 40,
+              maxWidth: "900px",
+            }}
+          >
+            WELLNESS THAT COMES TO YOU
+          </div>
+
+          {/* Van Image */}
+          <div
+            style={{
+              display: "flex",
+              width: "600px",
+              height: "auto",
+              marginBottom: 30,
+            }}
+          >
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={vanImageUrl}
+              alt="Recovery Van"
+              width="600"
+              style={{
+                objectFit: "contain",
+              }}
+            />
+          </div>
+
+          {/* Subtitle/Page Title (if provided and different from default) */}
+          {title !== siteMetadata.defaultTitle && (
             <div
               style={{
                 display: "flex",
-                fontSize: 28,
+                fontSize: 32,
                 fontWeight: 400,
-                color: "#94a3b8",
-                lineHeight: 1.4,
-                whiteSpace: "pre-wrap",
+                color: "#292f2a", // charcoal
+                lineHeight: 1.3,
                 textAlign: "center",
+                marginTop: 20,
               }}
             >
-              {description}
+              {title}
             </div>
           )}
+
+          {/* Accent Line */}
+          <div
+            style={{
+              display: "flex",
+              width: "100px",
+              height: "3px",
+              backgroundColor: "#a0e5b3", // mint-accent
+              marginTop: 20,
+            }}
+          />
         </div>
       ),
       {

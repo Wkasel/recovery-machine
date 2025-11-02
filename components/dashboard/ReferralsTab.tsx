@@ -278,10 +278,10 @@ Check it out: ${getReferralLink()}`;
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-2xl font-bold text-white">Referral Program</h2>
-          <p className="text-gray-300 mt-1">Earn $50 for every friend you refer</p>
+          <h2 className="text-2xl font-bold text-charcoal">Referral Program</h2>
+          <p className="text-charcoal-light mt-1">Earn $50 for every friend you refer</p>
         </div>
-        <Button onClick={() => setInviteDialogOpen(true)}>
+        <Button onClick={() => setInviteDialogOpen(true)} className="rounded-full bg-charcoal text-white hover:bg-charcoal-light hover:scale-105 transition-all">
           <Plus className="w-4 h-4 mr-2" />
           Invite Friend
         </Button>
@@ -289,43 +289,43 @@ Check it out: ${getReferralLink()}`;
 
       {/* Stats Grid */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <Card>
+        <Card className="bg-mint-accent/20 border-mint-accent/30 hover:scale-105 transition-transform duration-200">
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-300">Total Referrals</p>
-                <p className="text-2xl font-bold text-neutral-100">{referrals.length}</p>
+                <p className="text-sm font-medium text-charcoal-light">Total Referrals</p>
+                <p className="text-2xl font-bold text-charcoal">{referrals.length}</p>
               </div>
-              <div className="h-12 w-12 bg-neutral-800 rounded-lg flex items-center justify-center">
-                <Users className="h-6 w-6 text-neutral-300" />
+              <div className="h-12 w-12 bg-mint-accent/30 rounded-full flex items-center justify-center">
+                <Users className="h-6 w-6 text-charcoal" />
               </div>
             </div>
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="bg-mint-accent/20 border-mint-accent/30 hover:scale-105 transition-transform duration-200">
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-300">Credits Earned</p>
-                <p className="text-2xl font-bold text-green-600">{getTotalEarned()}</p>
+                <p className="text-sm font-medium text-charcoal-light">Credits Earned</p>
+                <p className="text-2xl font-bold text-mint">{getTotalEarned()}</p>
               </div>
-              <div className="h-12 w-12 bg-green-100 rounded-lg flex items-center justify-center">
-                <DollarSign className="h-6 w-6 text-green-600" />
+              <div className="h-12 w-12 bg-mint-accent/30 rounded-full flex items-center justify-center">
+                <DollarSign className="h-6 w-6 text-mint" />
               </div>
             </div>
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="bg-mint-accent/20 border-mint-accent/30 hover:scale-105 transition-transform duration-200">
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-300">Pending Earnings</p>
-                <p className="text-2xl font-bold text-orange-600">{getPendingEarnings()}</p>
+                <p className="text-sm font-medium text-charcoal-light">Pending Earnings</p>
+                <p className="text-2xl font-bold text-charcoal">{getPendingEarnings()}</p>
               </div>
-              <div className="h-12 w-12 bg-orange-100 rounded-lg flex items-center justify-center">
-                <Clock className="h-6 w-6 text-orange-600" />
+              <div className="h-12 w-12 bg-mint-accent/30 rounded-full flex items-center justify-center">
+                <Clock className="h-6 w-6 text-charcoal" />
               </div>
             </div>
           </CardContent>
@@ -333,10 +333,10 @@ Check it out: ${getReferralLink()}`;
       </div>
 
       {/* Referral Code Section */}
-      <Card>
+      <Card className="bg-mint-accent/10 border-mint-accent/20">
         <CardHeader>
-          <CardTitle>Your Referral Code</CardTitle>
-          <CardDescription>Share this code or link with friends to earn rewards</CardDescription>
+          <CardTitle className="text-charcoal">Your Referral Code</CardTitle>
+          <CardDescription className="text-charcoal-light">Share this code or link with friends to earn rewards</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="flex items-center space-x-4">
@@ -367,11 +367,11 @@ Check it out: ${getReferralLink()}`;
           </div>
 
           <div className="flex space-x-2 pt-2">
-            <Button variant="outline" onClick={() => setShareDialogOpen(true)} className="flex-1">
+            <Button variant="outline" onClick={() => setShareDialogOpen(true)} className="flex-1 rounded-full bg-charcoal text-white hover:bg-charcoal-light hover:scale-105 transition-all">
               <Share2 className="w-4 h-4 mr-2" />
               Share
             </Button>
-            <Button variant="outline" onClick={shareViaEmail} className="flex-1">
+            <Button variant="outline" onClick={shareViaEmail} className="flex-1 rounded-full bg-charcoal text-white hover:bg-charcoal-light hover:scale-105 transition-all">
               <Mail className="w-4 h-4 mr-2" />
               Email
             </Button>
@@ -387,29 +387,29 @@ Check it out: ${getReferralLink()}`;
         <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div className="text-center">
-              <div className="h-12 w-12 bg-neutral-800 rounded-lg flex items-center justify-center mx-auto mb-3">
-                <Share2 className="h-6 w-6 text-neutral-300" />
+              <div className="h-12 w-12 bg-mint-accent/20 rounded-lg flex items-center justify-center mx-auto mb-3">
+                <Share2 className="h-6 w-6 text-mint" />
               </div>
-              <h3 className="font-semibold text-white mb-2">1. Share Your Code</h3>
-              <p className="text-sm text-gray-300">
+              <h3 className="font-semibold text-charcoal mb-2" style={{ fontFamily: 'Futura, "Futura PT", "Century Gothic", sans-serif' }}>1. Share Your Code</h3>
+              <p className="text-sm text-charcoal-light" style={{ fontFamily: 'Futura, "Futura PT", "Century Gothic", sans-serif' }}>
                 Send your referral code or link to friends and family
               </p>
             </div>
             <div className="text-center">
-              <div className="h-12 w-12 bg-green-100 rounded-lg flex items-center justify-center mx-auto mb-3">
-                <UserPlus className="h-6 w-6 text-green-600" />
+              <div className="h-12 w-12 bg-mint-accent/20 rounded-lg flex items-center justify-center mx-auto mb-3">
+                <UserPlus className="h-6 w-6 text-mint" />
               </div>
-              <h3 className="font-semibold text-white mb-2">2. They Sign Up</h3>
-              <p className="text-sm text-gray-300">
+              <h3 className="font-semibold text-charcoal mb-2" style={{ fontFamily: 'Futura, "Futura PT", "Century Gothic", sans-serif' }}>2. They Sign Up</h3>
+              <p className="text-sm text-charcoal-light" style={{ fontFamily: 'Futura, "Futura PT", "Century Gothic", sans-serif' }}>
                 Your friend creates an account using your referral code
               </p>
             </div>
             <div className="text-center">
-              <div className="h-12 w-12 bg-purple-100 rounded-lg flex items-center justify-center mx-auto mb-3">
-                <Gift className="h-6 w-6 text-purple-600" />
+              <div className="h-12 w-12 bg-mint-accent/20 rounded-lg flex items-center justify-center mx-auto mb-3">
+                <Gift className="h-6 w-6 text-mint" />
               </div>
-              <h3 className="font-semibold text-white mb-2">3. Earn Rewards</h3>
-              <p className="text-sm text-gray-300">
+              <h3 className="font-semibold text-charcoal mb-2" style={{ fontFamily: 'Futura, "Futura PT", "Century Gothic", sans-serif' }}>3. Earn Rewards</h3>
+              <p className="text-sm text-charcoal-light" style={{ fontFamily: 'Futura, "Futura PT", "Century Gothic", sans-serif' }}>
                 Get $50 in credits when they book their first session
               </p>
             </div>
@@ -429,11 +429,11 @@ Check it out: ${getReferralLink()}`;
               {referrals.map((referral) => (
                 <div
                   key={referral.id}
-                  className="flex items-center justify-between p-4 bg-gray-50 rounded-lg"
+                  className="flex items-center justify-between p-4 bg-mint-accent/10 rounded-lg"
                 >
                   <div className="flex-1">
-                    <p className="font-medium text-white">{referral.invitee_email}</p>
-                    <p className="text-sm text-gray-300">
+                    <p className="font-medium text-charcoal" style={{ fontFamily: 'Futura, "Futura PT", "Century Gothic", sans-serif' }}>{referral.invitee_email}</p>
+                    <p className="text-sm text-charcoal-light" style={{ fontFamily: 'Futura, "Futura PT", "Century Gothic", sans-serif' }}>
                       Sent {formatDate(referral.created_at)}
                       {referral.expires_at && ` • Expires ${formatDate(referral.expires_at)}`}
                     </p>
@@ -458,10 +458,10 @@ Check it out: ${getReferralLink()}`;
               ))}
             </div>
           ) : (
-            <div className="text-center py-8 text-gray-500">
-              <Users className="h-12 w-12 mx-auto mb-4 text-gray-300" />
-              <h3 className="text-lg font-medium text-white mb-2">No referrals yet</h3>
-              <p className="text-gray-300 mb-4">Start inviting friends to earn rewards!</p>
+            <div className="text-center py-8 text-charcoal-light">
+              <Users className="h-12 w-12 mx-auto mb-4 text-charcoal-light" />
+              <h3 className="text-lg font-medium text-charcoal mb-2" style={{ fontFamily: 'Futura, "Futura PT", "Century Gothic", sans-serif' }}>No referrals yet</h3>
+              <p className="text-charcoal-light mb-4" style={{ fontFamily: 'Futura, "Futura PT", "Century Gothic", sans-serif' }}>Start inviting friends to earn rewards!</p>
               <Button onClick={() => setInviteDialogOpen(true)}>
                 <Plus className="w-4 h-4 mr-2" />
                 Send Your First Invite

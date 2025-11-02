@@ -41,13 +41,13 @@ export function AdminHeader({ admin, user }: AdminHeaderProps) {
   // Early return with loading state for any missing props or during hydration
   if (!isHydrated || !admin?.role || !user?.email) {
     return (
-      <header className="bg-white shadow-sm border-b border-gray-200">
+      <header className="bg-white/90 backdrop-blur-sm shadow-sm border-b border-border">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex h-16 justify-between items-center">
             <div className="flex items-center">
-              <h1 className="text-2xl font-bold text-gray-900">Admin Panel</h1>
+              <h1 className="text-2xl font-bold text-foreground">Admin Panel</h1>
             </div>
-            <div className="animate-pulse bg-gray-200 h-8 w-32 rounded"></div>
+            <div className="animate-pulse bg-muted h-8 w-32 rounded"></div>
           </div>
         </div>
       </header>
@@ -60,44 +60,44 @@ export function AdminHeader({ admin, user }: AdminHeaderProps) {
   };
 
   const getRoleBadgeColor = (role: string | undefined | null) => {
-    if (!role) return "bg-gray-100 text-gray-800";
-    
+    if (!role) return "bg-muted text-muted-foreground";
+
     switch (role) {
       case "super_admin":
-        return "bg-red-100 text-red-800";
+        return "bg-destructive/10 text-destructive border-destructive/20";
       case "admin":
-        return "bg-blue-100 text-blue-800";
+        return "bg-primary/20 text-primary-foreground border-primary/30";
       case "operator":
-        return "bg-green-100 text-green-800";
+        return "bg-primary/10 text-primary-foreground border-primary/20";
       default:
-        return "bg-gray-100 text-gray-800";
+        return "bg-muted text-muted-foreground";
     }
   };
 
   return (
-    <header className="bg-black border-b border-neutral-800">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-white">
+    <header className="bg-white/90 backdrop-blur-sm border-b border-border shadow-sm">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex h-16 justify-between items-center">
           <div className="flex items-center">
             <Button
               variant="ghost"
               size="sm"
-              className="lg:hidden"
+              className="lg:hidden text-foreground hover:text-primary hover:bg-accent"
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             >
               <Menu className="h-6 w-6" />
             </Button>
 
             <div className="hidden lg:block">
-              <h1 className="text-2xl font-bold text-white">Admin Panel</h1>
+              <h1 className="text-2xl font-bold text-foreground" style={{ fontFamily: 'Futura, "Futura PT", "Century Gothic", sans-serif' }}>Admin Panel</h1>
             </div>
           </div>
 
           <div className="flex items-center gap-4">
             {/* Notifications */}
-            <Button variant="ghost" size="sm" className="relative text-white">
+            <Button variant="ghost" size="sm" className="relative text-foreground hover:text-primary hover:bg-accent">
               <Bell className="h-5 w-5" />
-              <span className="absolute -top-1 -right-1 h-4 w-4 bg-red-500 rounded-full text-xs text-white flex items-center justify-center">
+              <span className="absolute -top-1 -right-1 h-4 w-4 bg-primary rounded-full text-xs text-primary-foreground flex items-center justify-center">
                 3
               </span>
             </Button>
@@ -105,40 +105,40 @@ export function AdminHeader({ admin, user }: AdminHeaderProps) {
             {/* User Menu */}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" className="flex items-center gap-3 h-auto py-2 text-white">
-                  <Avatar className="h-8 w-8">
+                <Button variant="ghost" className="flex items-center gap-3 h-auto py-2 text-foreground hover:text-primary hover:bg-accent">
+                  <Avatar className="h-8 w-8 border-2 border-primary/20">
                     <AvatarImage src={user?.user_metadata?.avatar_url} />
-                    <AvatarFallback>{user?.email?.slice(0, 2).toUpperCase() || "AD"}</AvatarFallback>
+                    <AvatarFallback className="bg-primary/10 text-primary-foreground">{user?.email?.slice(0, 2).toUpperCase() || "AD"}</AvatarFallback>
                   </Avatar>
 
                   <div className="flex flex-col items-start">
-                    <span className="text-sm font-medium text-white">
+                    <span className="text-sm font-medium text-foreground" style={{ fontFamily: 'Futura, "Futura PT", "Century Gothic", sans-serif' }}>
                       {user?.user_metadata?.full_name || user?.email || "Admin User"}
                     </span>
-                    <Badge className={getRoleBadgeColor(admin?.role)} variant="secondary">
+                    <Badge className={getRoleBadgeColor(admin?.role)} variant="secondary" style={{ fontFamily: 'Futura, "Futura PT", "Century Gothic", sans-serif' }}>
                       {admin?.role?.replace("_", " ") || "Loading..."}
                     </Badge>
                   </div>
                 </Button>
               </DropdownMenuTrigger>
 
-              <DropdownMenuContent align="end" className="w-56">
-                <DropdownMenuLabel>My Account</DropdownMenuLabel>
-                <DropdownMenuSeparator />
+              <DropdownMenuContent align="end" className="w-56 bg-card border-border">
+                <DropdownMenuLabel className="text-foreground">My Account</DropdownMenuLabel>
+                <DropdownMenuSeparator className="bg-border" />
 
-                <DropdownMenuItem>
+                <DropdownMenuItem className="text-foreground hover:bg-accent hover:text-primary cursor-pointer">
                   <User className="mr-2 h-4 w-4" />
                   <span>Profile</span>
                 </DropdownMenuItem>
 
-                <DropdownMenuItem>
+                <DropdownMenuItem className="text-foreground hover:bg-accent hover:text-primary cursor-pointer">
                   <Settings className="mr-2 h-4 w-4" />
                   <span>Settings</span>
                 </DropdownMenuItem>
 
-                <DropdownMenuSeparator />
+                <DropdownMenuSeparator className="bg-border" />
 
-                <DropdownMenuItem onClick={handleSignOut}>
+                <DropdownMenuItem onClick={handleSignOut} className="text-destructive hover:bg-destructive/10 cursor-pointer">
                   <LogOut className="mr-2 h-4 w-4" />
                   <span>Sign out</span>
                 </DropdownMenuItem>

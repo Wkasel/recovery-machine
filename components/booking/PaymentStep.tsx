@@ -69,6 +69,26 @@ export function PaymentStep({
   const [guestPhone, setGuestPhone] = useState("");
 
   const isGuestBooking = !user;
+
+  // Format phone number as user types
+  const formatPhoneNumber = (value: string) => {
+    // Remove all non-digit characters
+    const phoneNumber = value.replace(/\D/g, '');
+
+    // Format as (XXX) XXX-XXXX
+    if (phoneNumber.length <= 3) {
+      return phoneNumber;
+    } else if (phoneNumber.length <= 6) {
+      return `(${phoneNumber.slice(0, 3)}) ${phoneNumber.slice(3)}`;
+    } else {
+      return `(${phoneNumber.slice(0, 3)}) ${phoneNumber.slice(3, 6)}-${phoneNumber.slice(6, 10)}`;
+    }
+  };
+
+  const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const formatted = formatPhoneNumber(e.target.value);
+    setGuestPhone(formatted);
+  };
   const [paymentMethod, setPaymentMethod] = useState<"card" | "subscription">("card");
   
   const isDevMode = isDevelopmentEnvironment();
@@ -85,7 +105,14 @@ export function PaymentStep({
   };
 
   const calculateSubtotal = () => {
-    return (selectedService?.basePrice || 0) + calculateAddOnCost();
+    let basePrice = selectedService?.basePrice || 0;
+
+    // Apply 20% discount for subscription payment method
+    if (paymentMethod === "subscription") {
+      basePrice = basePrice * 0.8; // 20% discount
+    }
+
+    return basePrice + calculateAddOnCost();
   };
 
   const calculateTotal = () => {
@@ -199,8 +226,8 @@ export function PaymentStep({
   return (
     <div className="space-y-6">
       <div className="text-center">
-        <h2 className="text-2xl font-serif font-bold text-foreground mb-2">Complete Your Booking</h2>
-        <p className="text-muted-foreground font-light">Review your details and complete payment</p>
+        <h2 className="text-2xl font-bold text-foreground mb-2" style={{ fontFamily: 'Futura, "Futura PT", "Century Gothic", sans-serif' }}>Complete Your Booking</h2>
+        <p className="text-muted-foreground font-light" style={{ fontFamily: 'Futura, "Futura PT", "Century Gothic", sans-serif' }}>Review your details and complete payment</p>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 pb-20 md:pb-6">
@@ -208,12 +235,12 @@ export function PaymentStep({
         <div className="space-y-4">
           <Card className="bg-white/70 backdrop-blur-sm border-border rounded-3xl shadow-lg">
             <CardHeader>
-              <CardTitle className="text-foreground font-serif">Booking Summary</CardTitle>
+              <CardTitle className="text-foreground" style={{ fontFamily: 'Futura, "Futura PT", "Century Gothic", sans-serif' }}>Booking Summary</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               {/* Service */}
               <div className="flex items-start space-x-3">
-                <Check className="w-5 h-5 text-primary mt-0.5" />
+                <Check className="w-5 h-5 text-mint mt-0.5" />
                 <div>
                   <p className="font-medium">{selectedService?.name}</p>
                   <p className="text-sm text-gray-600">
@@ -270,16 +297,16 @@ export function PaymentStep({
           {/* Payment method selection */}
           <Card className="bg-white/70 backdrop-blur-sm border-border rounded-3xl shadow-lg">
             <CardHeader>
-              <CardTitle className="text-foreground font-serif">Payment Options</CardTitle>
+              <CardTitle className="text-foreground" style={{ fontFamily: 'Futura, "Futura PT", "Century Gothic", sans-serif' }}>Payment Options</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="grid grid-cols-1 gap-3">
                 <div
                   className={cn(
-                    "border-2 rounded-lg p-4 cursor-pointer transition-all min-h-[60px] touch-manipulation",
+                    "border-2 rounded-lg p-4 cursor-pointer transition-all min-h-[60px] touch-manipulation hover:scale-105",
                     paymentMethod === "card"
-                      ? "border-primary bg-card text-foreground"
-                      : "border-border hover:border-primary bg-background text-foreground"
+                      ? "border-mint bg-mint-accent/20 text-foreground"
+                      : "border-border hover:border-mint bg-background text-foreground"
                   )}
                   onClick={() => setPaymentMethod("card")}
                 >
@@ -287,11 +314,11 @@ export function PaymentStep({
                     <div
                       className={cn(
                         "w-4 h-4 rounded-full border-2",
-                        paymentMethod === "card" ? "border-primary bg-primary" : "border-muted-foreground"
+                        paymentMethod === "card" ? "border-mint bg-mint" : "border-muted-foreground"
                       )}
                     >
                       {paymentMethod === "card" && (
-                        <div className="w-2 h-2 bg-background rounded-full mx-auto mt-0.5" />
+                        <div className="w-2 h-2 bg-charcoal rounded-full mx-auto mt-0.5" />
                       )}
                     </div>
                     <CreditCard className="w-5 h-5 text-muted-foreground" />
@@ -304,10 +331,10 @@ export function PaymentStep({
 
                 <div
                   className={cn(
-                    "border-2 rounded-lg p-4 cursor-pointer transition-all min-h-[60px] touch-manipulation",
+                    "border-2 rounded-lg p-4 cursor-pointer transition-all min-h-[60px] touch-manipulation hover:scale-105",
                     paymentMethod === "subscription"
-                      ? "border-primary bg-card text-foreground"
-                      : "border-border hover:border-primary bg-background text-foreground"
+                      ? "border-mint bg-mint-accent/20 text-foreground"
+                      : "border-border hover:border-mint bg-background text-foreground"
                   )}
                   onClick={() => setPaymentMethod("subscription")}
                 >
@@ -316,12 +343,12 @@ export function PaymentStep({
                       className={cn(
                         "w-4 h-4 rounded-full border-2",
                         paymentMethod === "subscription"
-                          ? "border-primary bg-primary"
+                          ? "border-mint bg-mint"
                           : "border-muted-foreground"
                       )}
                     >
                       {paymentMethod === "subscription" && (
-                        <div className="w-2 h-2 bg-background rounded-full mx-auto mt-0.5" />
+                        <div className="w-2 h-2 bg-charcoal rounded-full mx-auto mt-0.5" />
                       )}
                     </div>
                     <Badge className="bg-green-100 text-green-800">Save 20%</Badge>
@@ -341,7 +368,7 @@ export function PaymentStep({
           {/* Pricing breakdown */}
           <Card className="bg-white/70 backdrop-blur-sm border-border rounded-3xl shadow-lg">
             <CardHeader>
-              <CardTitle className="flex items-center space-x-2 text-foreground font-serif">
+              <CardTitle className="flex items-center space-x-2 text-foreground" style={{ fontFamily: 'Futura, "Futura PT", "Century Gothic", sans-serif' }}>
                 <DollarSign className="w-5 h-5 text-foreground" />
                 <span>Pricing Breakdown</span>
               </CardTitle>
@@ -351,6 +378,13 @@ export function PaymentStep({
                 <span>{selectedService?.name}</span>
                 <span>{formatPrice(selectedService?.basePrice || 0)}</span>
               </div>
+
+              {paymentMethod === "subscription" && (
+                <div className="flex justify-between text-green-600 text-sm">
+                  <span>Monthly membership discount (20%)</span>
+                  <span>-{formatPrice((selectedService?.basePrice || 0) * 0.2)}</span>
+                </div>
+              )}
 
               {addOns.familyMembers > 0 && (
                 <div className="flex justify-between text-sm">
@@ -433,9 +467,9 @@ export function PaymentStep({
                   placeholder="Promo code"
                   value={promoCode}
                   onChange={(e) => setPromoCode(e.target.value)}
-                  className="flex-1 min-h-[44px]"
+                  className="flex-1 min-h-[44px] focus:border-mint focus:ring-mint"
                 />
-                <Button variant="outline" onClick={handlePromoCodeApply} disabled={!promoCode} className="min-h-[44px] min-w-[70px]">
+                <Button variant="outline" onClick={handlePromoCodeApply} disabled={!promoCode} className="min-h-[44px] min-w-[70px] rounded-full hover:scale-105 transition-transform">
                   Apply
                 </Button>
               </div>
@@ -460,8 +494,8 @@ export function PaymentStep({
           {isGuestBooking && (
             <Card className="bg-white/70 backdrop-blur-sm border-border rounded-3xl shadow-lg">
               <CardHeader>
-                <CardTitle className="text-foreground font-serif">Contact Information</CardTitle>
-                <CardDescription className="font-light">We'll create an account for you to manage your bookings</CardDescription>
+                <CardTitle className="text-foreground" style={{ fontFamily: 'Futura, "Futura PT", "Century Gothic", sans-serif' }}>Contact Information</CardTitle>
+                <CardDescription className="font-light" style={{ fontFamily: 'Futura, "Futura PT", "Century Gothic", sans-serif' }}>We'll create an account for you to manage your bookings</CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div>
@@ -472,7 +506,7 @@ export function PaymentStep({
                     value={guestEmail}
                     onChange={(e) => setGuestEmail(e.target.value)}
                     placeholder="your.email@example.com"
-                    className="bg-background border-input text-foreground"
+                    className="bg-background border-input text-foreground focus:border-mint focus:ring-mint"
                     required
                   />
                 </div>
@@ -482,16 +516,24 @@ export function PaymentStep({
                     id="guest-phone"
                     type="tel"
                     value={guestPhone}
-                    onChange={(e) => setGuestPhone(e.target.value)}
+                    onChange={handlePhoneChange}
                     placeholder="(555) 123-4567"
-                    className="bg-background border-input text-foreground"
+                    maxLength={14}
+                    className="bg-background border-input text-foreground focus:border-mint focus:ring-mint"
                     required
                   />
                 </div>
-                <div className="bg-blue-50 border border-blue-200 p-3 rounded-md">
+                <div className="bg-blue-50 border border-blue-200 p-3 rounded-md space-y-2">
                   <p className="text-sm text-blue-800 font-light">
                     <strong className="font-medium">New to Recovery Machine?</strong> We'll automatically create an account for you
                     with this email so you can track your bookings and earn referral credits.
+                  </p>
+                  <p className="text-xs text-blue-700 font-light">
+                    <strong className="font-medium">Already have an account?</strong>{" "}
+                    <a href="/sign-in" className="underline hover:text-blue-900">
+                      Sign in first
+                    </a>{" "}
+                    to access your booking history and manage your sessions.
                   </p>
                 </div>
               </CardContent>
@@ -501,11 +543,11 @@ export function PaymentStep({
           {/* Payment form */}
           <Card className="bg-white/70 backdrop-blur-sm border-border rounded-3xl shadow-lg">
             <CardHeader>
-              <CardTitle className="flex items-center space-x-2 text-foreground font-serif">
+              <CardTitle className="flex items-center space-x-2 text-foreground" style={{ fontFamily: 'Futura, "Futura PT", "Century Gothic", sans-serif' }}>
                 <Lock className="w-5 h-5 text-foreground" />
                 <span>Secure Payment</span>
               </CardTitle>
-              <CardDescription className="font-light">Your payment information is encrypted and secure</CardDescription>
+              <CardDescription className="font-light" style={{ fontFamily: 'Futura, "Futura PT", "Century Gothic", sans-serif' }}>Your payment information is encrypted and secure</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               {/* Mock payment form */}
@@ -565,13 +607,14 @@ export function PaymentStep({
       {/* Sticky Mobile Footer */}
       <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 p-4 md:hidden z-50">
         <div className="flex gap-3 max-w-md mx-auto">
-          <Button variant="outline" onClick={onBack} disabled={isProcessingPayment} className="flex-1 min-h-[48px]">
+          <Button variant="outline" onClick={onBack} disabled={isProcessingPayment} className="flex-1 min-h-[48px] rounded-full">
             Back to Calendar
           </Button>
           <Button
             onClick={handlePayment}
             disabled={!termsAccepted || isProcessingPayment}
-            className="flex-1 min-h-[48px] text-sm"
+            variant="ghost"
+            className="flex-1 min-h-[48px] text-sm rounded-full !bg-charcoal !text-white hover:!bg-charcoal/90"
           >
             {isProcessingPayment ? (
               <>
@@ -587,7 +630,7 @@ export function PaymentStep({
 
       {/* Desktop Navigation buttons */}
       <div className="hidden md:flex justify-between pt-6">
-        <Button variant="outline" onClick={onBack} size="lg" disabled={isProcessingPayment}>
+        <Button variant="outline" onClick={onBack} size="lg" disabled={isProcessingPayment} className="rounded-full">
           Back to Calendar
         </Button>
 
@@ -595,7 +638,8 @@ export function PaymentStep({
           onClick={handlePayment}
           disabled={!termsAccepted || isProcessingPayment}
           size="lg"
-          className="px-8"
+          variant="ghost"
+          className="px-8 rounded-full !bg-charcoal !text-white hover:!bg-charcoal/90 hover:scale-105 transition-transform"
         >
           {isProcessingPayment ? (
             <>

@@ -201,12 +201,12 @@ export function Overview({ user, profileData, onRefresh }: OverviewProps) {
       {/* Welcome Section */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-white">
+          <h1 className="text-2xl font-bold text-charcoal">
             Welcome back, {user.user_metadata?.full_name || "Recovery Member"}!
           </h1>
-          <p className="text-gray-300 mt-1">Here's your recovery journey overview</p>
+          <p className="text-charcoal-light mt-1">Here's your recovery journey overview</p>
         </div>
-        <Button asChild>
+        <Button asChild className="rounded-full bg-charcoal text-white hover:bg-charcoal-light hover:scale-105 transition-all">
           <Link href="/book">
             <Plus className="w-4 h-4 mr-2" />
             Book Session
@@ -216,59 +216,59 @@ export function Overview({ user, profileData, onRefresh }: OverviewProps) {
 
       {/* Stats Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <Card>
+        <Card className="bg-mint-accent/20 border-mint-accent/30 hover:scale-105 transition-transform duration-200">
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-300">Total Credits</p>
-                <p className="text-2xl font-bold text-green-600">{profileData.credits}</p>
+                <p className="text-sm font-medium text-charcoal-light">Total Credits</p>
+                <p className="text-2xl font-bold text-mint">{profileData.credits}</p>
               </div>
-              <div className="h-12 w-12 bg-green-100 rounded-lg flex items-center justify-center">
-                <Coins className="h-6 w-6 text-green-600" />
+              <div className="h-12 w-12 bg-mint-accent/30 rounded-full flex items-center justify-center">
+                <Coins className="h-6 w-6 text-mint" />
               </div>
             </div>
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="bg-mint-accent/20 border-mint-accent/30 hover:scale-105 transition-transform duration-200">
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-300">Upcoming Sessions</p>
-                <p className="text-2xl font-bold text-neutral-100">{stats?.upcomingBookings || 0}</p>
+                <p className="text-sm font-medium text-charcoal-light">Upcoming Sessions</p>
+                <p className="text-2xl font-bold text-charcoal">{stats?.upcomingBookings || 0}</p>
               </div>
-              <div className="h-12 w-12 bg-neutral-800 rounded-lg flex items-center justify-center">
-                <Calendar className="h-6 w-6 text-neutral-300" />
+              <div className="h-12 w-12 bg-mint-accent/30 rounded-full flex items-center justify-center">
+                <Calendar className="h-6 w-6 text-charcoal" />
               </div>
             </div>
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="bg-mint-accent/20 border-mint-accent/30 hover:scale-105 transition-transform duration-200">
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-300">Completed Sessions</p>
-                <p className="text-2xl font-bold text-purple-600">
+                <p className="text-sm font-medium text-charcoal-light">Completed Sessions</p>
+                <p className="text-2xl font-bold text-charcoal">
                   {stats?.completedSessions || 0}
                 </p>
               </div>
-              <div className="h-12 w-12 bg-purple-100 rounded-lg flex items-center justify-center">
-                <TrendingUp className="h-6 w-6 text-purple-600" />
+              <div className="h-12 w-12 bg-mint-accent/30 rounded-full flex items-center justify-center">
+                <TrendingUp className="h-6 w-6 text-charcoal" />
               </div>
             </div>
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="bg-mint-accent/20 border-mint-accent/30 hover:scale-105 transition-transform duration-200">
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-300">Total Referrals</p>
-                <p className="text-2xl font-bold text-orange-600">{stats?.totalReferrals || 0}</p>
+                <p className="text-sm font-medium text-charcoal-light">Total Referrals</p>
+                <p className="text-2xl font-bold text-charcoal">{stats?.totalReferrals || 0}</p>
               </div>
-              <div className="h-12 w-12 bg-orange-100 rounded-lg flex items-center justify-center">
-                <Users className="h-6 w-6 text-orange-600" />
+              <div className="h-12 w-12 bg-mint-accent/30 rounded-full flex items-center justify-center">
+                <Users className="h-6 w-6 text-charcoal" />
               </div>
             </div>
           </CardContent>
@@ -278,13 +278,13 @@ export function Overview({ user, profileData, onRefresh }: OverviewProps) {
       {/* Quick Actions & Progress */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Quick Actions */}
-        <Card>
+        <Card className="bg-mint-accent/10 border-mint-accent/20">
           <CardHeader>
-            <CardTitle>Quick Actions</CardTitle>
-            <CardDescription>Common tasks for your recovery journey</CardDescription>
+            <CardTitle className="text-charcoal">Quick Actions</CardTitle>
+            <CardDescription className="text-charcoal-light">Common tasks for your recovery journey</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
-            <Button asChild className="w-full justify-start">
+            <Button asChild className="w-full justify-start rounded-full bg-charcoal text-white hover:bg-charcoal-light hover:scale-105 transition-all">
               <Link href="/book">
                 <Calendar className="w-4 h-4 mr-2" />
                 Book New Session
@@ -292,7 +292,7 @@ export function Overview({ user, profileData, onRefresh }: OverviewProps) {
               </Link>
             </Button>
 
-            <Button variant="outline" asChild className="w-full justify-start">
+            <Button variant="outline" asChild className="w-full justify-start rounded-full bg-mint-accent/20 text-charcoal hover:bg-mint-accent/30 hover:scale-105 transition-all">
               <Link href="/profile?tab=referrals">
                 <Gift className="w-4 h-4 mr-2" />
                 Invite Friends (Earn $50)
@@ -301,7 +301,7 @@ export function Overview({ user, profileData, onRefresh }: OverviewProps) {
             </Button>
 
             {stats && stats.pendingReviews > 0 && (
-              <Button variant="outline" asChild className="w-full justify-start">
+              <Button variant="outline" asChild className="w-full justify-start rounded-full bg-mint-accent/20 text-charcoal hover:bg-mint-accent/30 hover:scale-105 transition-all">
                 <Link href="/profile?tab=reviews">
                   <Star className="w-4 h-4 mr-2" />
                   Rate Sessions ({stats.pendingReviews})
@@ -313,10 +313,10 @@ export function Overview({ user, profileData, onRefresh }: OverviewProps) {
         </Card>
 
         {/* Loyalty Progress */}
-        <Card>
+        <Card className="bg-mint-accent/10 border-mint-accent/20">
           <CardHeader>
-            <CardTitle>Loyalty Rewards</CardTitle>
-            <CardDescription>Progress to your next reward milestone</CardDescription>
+            <CardTitle className="text-charcoal">Loyalty Rewards</CardTitle>
+            <CardDescription className="text-charcoal-light">Progress to your next reward milestone</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="flex items-center justify-between text-sm">
@@ -337,10 +337,10 @@ export function Overview({ user, profileData, onRefresh }: OverviewProps) {
       </div>
 
       {/* Recent Activity */}
-      <Card>
+      <Card className="bg-mint-accent/10 border-mint-accent/20">
         <CardHeader>
-          <CardTitle>Recent Activity</CardTitle>
-          <CardDescription>Your latest recovery journey updates</CardDescription>
+          <CardTitle className="text-charcoal">Recent Activity</CardTitle>
+          <CardDescription className="text-charcoal-light">Your latest recovery journey updates</CardDescription>
         </CardHeader>
         <CardContent>
           {stats?.recentActivity.length ? (
@@ -350,17 +350,17 @@ export function Overview({ user, profileData, onRefresh }: OverviewProps) {
                 return (
                   <div
                     key={activity.id}
-                    className="flex items-center space-x-4 p-3 bg-gray-700 rounded-lg"
+                    className="flex items-center space-x-4 p-3 bg-mint-accent/20 rounded-lg hover:scale-105 transition-transform duration-200"
                   >
-                    <div className="h-10 w-10 bg-gray-600 rounded-lg flex items-center justify-center">
-                      <Icon className="h-5 w-5 text-gray-300" />
+                    <div className="h-10 w-10 bg-mint-accent/30 rounded-full flex items-center justify-center">
+                      <Icon className="h-5 w-5 text-charcoal" />
                     </div>
                     <div className="flex-1">
-                      <p className="text-sm font-medium text-white">{activity.description}</p>
-                      <p className="text-xs text-gray-400">{formatDate(activity.date)}</p>
+                      <p className="text-sm font-medium text-charcoal">{activity.description}</p>
+                      <p className="text-xs text-charcoal-light">{formatDate(activity.date)}</p>
                     </div>
                     {activity.amount && (
-                      <Badge variant="secondary" className="bg-green-100 text-green-800">
+                      <Badge variant="secondary" className="bg-mint-accent/30 text-mint">
                         +{activity.amount} credits
                       </Badge>
                     )}

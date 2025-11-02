@@ -82,6 +82,7 @@
     "crypto": "^1.0.1",
     "embla-carousel-react": "^8.6.0",
     "google-one-tap": "^1.0.6",
+    "gsap": "^3.13.0",
     "input-otp": "^1.4.2",
     "lightningcss": "^1.27.0",
     "lucide-react": "^0.488.0",

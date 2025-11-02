@@ -89,8 +89,8 @@ export function BookingConfirmation({
     <div className="space-y-6">
       {/* Success header */}
       <div className="text-center space-y-4">
-        <div className="mx-auto w-20 h-20 bg-green-100 rounded-full flex items-center justify-center">
-          <Check className="w-10 h-10 text-green-600" />
+        <div className="mx-auto w-20 h-20 bg-mint-accent/20 rounded-full flex items-center justify-center">
+          <Check className="w-10 h-10 text-mint" />
         </div>
         <div>
           <h2 className="text-3xl font-bold text-gray-900 mb-2">Booking Confirmed!</h2>
@@ -294,16 +294,16 @@ export function BookingConfirmation({
 
       {/* Action buttons */}
       <div className="flex flex-col sm:flex-row gap-4">
-        <Button onClick={() => setShowDetails(!showDetails)} variant="outline" className="flex-1">
+        <Button onClick={() => setShowDetails(!showDetails)} variant="outline" className="flex-1 rounded-full hover:scale-105 transition-transform">
           {showDetails ? "Hide" : "Show"} Payment Details
         </Button>
 
-        <Button onClick={handleShare} variant="outline" className="flex-1">
+        <Button onClick={handleShare} variant="outline" className="flex-1 rounded-full hover:scale-105 transition-transform">
           <Share2 className="w-4 h-4 mr-2" />
           Share Booking
         </Button>
 
-        <Button onClick={onNewBooking} className="flex-1">
+        <Button onClick={onNewBooking} className="flex-1 rounded-full bg-charcoal hover:bg-charcoal/90 hover:scale-105 transition-transform">
           Book Another Session
         </Button>
       </div>

@@ -163,14 +163,14 @@ export function BusinessSettingsManager() {
         <Alert
           className={
             saveStatus === "success"
-              ? "border-green-200 bg-green-50"
+              ? "border-green-200 bg-primary/5"
               : saveStatus === "error"
                 ? "border-red-200 bg-red-50"
-                : "border-blue-200 bg-blue-50"
+                : "border-blue-200 bg-primary/5"
           }
         >
           {saveStatus === "success" ? (
-            <CheckCircle className="h-4 w-4 text-green-600" />
+            <CheckCircle className="h-4 w-4 text-primary" />
           ) : saveStatus === "error" ? (
             <AlertCircle className="h-4 w-4 text-red-600" />
           ) : (
@@ -206,8 +206,8 @@ export function BusinessSettingsManager() {
           <TabsContent key={tab.id} value={tab.id} className="space-y-6">
             <div className="flex items-center justify-between">
               <div>
-                <h3 className="text-lg font-semibold text-gray-900">{tab.label}</h3>
-                <p className="text-sm text-gray-600">{tab.description}</p>
+                <h3 className="text-lg font-semibold text-foreground">{tab.label}</h3>
+                <p className="text-sm text-muted-foreground">{tab.description}</p>
               </div>
               <Badge variant="secondary">{getSettingsByCategory(tab.id).length} settings</Badge>
             </div>
