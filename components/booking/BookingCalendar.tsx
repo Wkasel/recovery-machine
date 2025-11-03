@@ -14,10 +14,7 @@ import timeGridPlugin from "@fullcalendar/timegrid";
 import { AlertCircle, Calendar, Clock, Minus, Plus } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
-// Import FullCalendar CSS - CRITICAL for calendar rendering
-import "@fullcalendar/core/main.css";
-import "@fullcalendar/daygrid/main.css";
-import "@fullcalendar/timegrid/main.css";
+// FullCalendar v6+ includes styles in JS - no separate CSS imports needed
 
 interface BookingCalendarProps {
   serviceType: ServiceType;
