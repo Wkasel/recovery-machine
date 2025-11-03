@@ -211,6 +211,7 @@ const MediaGallery: React.FC = () => {
                   className="w-full h-full object-cover"
                   muted
                   playsInline
+                  preload="none"
                   aria-label={item.label}
                 />
               ) : (
@@ -220,6 +221,8 @@ const MediaGallery: React.FC = () => {
                   fill
                   className="object-cover"
                   sizes="(max-width: 768px) 280px, 400px"
+                  loading="lazy"
+                  quality={85}
                 />
               )}
               <div className="absolute inset-0 bg-gradient-to-t from-charcoal/80 via-charcoal/20 to-transparent opacity-60 group-hover:opacity-80 transition-opacity duration-300" aria-hidden="true" />
@@ -291,6 +294,7 @@ const MediaGallery: React.FC = () => {
                   controls
                   autoPlay
                   playsInline
+                  preload="metadata"
                   className="w-full h-full"
                   aria-label={selectedMedia.label}
                 >
@@ -307,6 +311,8 @@ const MediaGallery: React.FC = () => {
                   fill
                   className="object-contain"
                   sizes="(max-width: 1280px) 100vw, 1280px"
+                  quality={90}
+                  priority
                 />
               )}
             </div>

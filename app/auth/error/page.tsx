@@ -3,7 +3,7 @@ import Link from "next/link";
 
 export default function AuthErrorPage() {
   return (
-    <div className="flex flex-col items-center justify-center min-h-[70vh] p-4 bg-background">
+    <div className="flex flex-col items-center justify-center min-h-[70vh] p-4">
       <div className="max-w-md w-full space-y-4 text-center">
         <h1 className="text-2xl font-bold text-charcoal" style={{ fontFamily: 'Futura, "Futura PT", "Century Gothic", sans-serif' }}>Authentication Error</h1>
         <p className="text-charcoal-light font-light" style={{ fontFamily: 'Futura, "Futura PT", "Century Gothic", sans-serif' }}>

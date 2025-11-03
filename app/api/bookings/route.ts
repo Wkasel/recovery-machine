@@ -35,17 +35,34 @@ export async function POST(request: NextRequest) {
         );
       }
 
-      // Check if user exists by email using listUsers
-      const { data: existingUsers, error: existingUserError } =
-        await serviceRoleClient.auth.admin.listUsers();
+      // Basic email validation
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(guestEmail)) {
+        return NextResponse.json(
+          { error: "Invalid email format" },
+          { status: 400 }
+        );
+      }
 
-      if (existingUserError) {
-        console.error("Failed to look up user by email:", existingUserError);
+      // Check if user exists by email - use Supabase SQL for reliable email lookup
+      const { data: profileData, error: profileLookupError } =
+        await serviceRoleClient
+          .from("profiles")
+          .select("id, email")
+          .eq("email", guestEmail)
+          .maybeSingle();
+
+      if (profileLookupError) {
+        console.error("Failed to look up user by email:", profileLookupError);
         return NextResponse.json({ error: "Failed to verify account" }, { status: 500 });
       }
 
-      // Find user with matching email
-      const existingUser = existingUsers?.users?.find((u) => u.email === guestEmail);
+      // If profile exists, get the full auth user
+      let existingUser = null;
+      if (profileData) {
+        const { data: authUserData } = await serviceRoleClient.auth.admin.getUserById(profileData.id);
+        existingUser = authUserData?.user;
+      }
 
       if (existingUser) {
         user = existingUser;
@@ -104,13 +121,24 @@ export async function POST(request: NextRequest) {
     const bookingDuration = Math.max(1, duration || 30);
 
     const startTime = new Date(dateTime);
+
+    // Validate that dateTime is a valid date
+    if (isNaN(startTime.getTime())) {
+      return NextResponse.json(
+        { error: "Invalid date/time format" },
+        { status: 400 }
+      );
+    }
+
     const endTime = new Date(startTime.getTime() + bookingDuration * 60000);
 
+    // Only check for overlaps with active/upcoming bookings
+    // Exclude: completed, cancelled, no_show (these don't occupy the time slot)
     const { data: existingBookings, error: overlapError } = await serviceRoleClient
       .from("bookings")
-      .select("id, date_time, duration")
+      .select("id, date_time, duration, status")
       .eq("user_id", user.id)
-      .neq("status", "cancelled");
+      .in("status", ["scheduled", "confirmed", "in_progress"]);
 
     if (overlapError) {
       console.error("Error checking overlapping bookings:", overlapError);
@@ -134,7 +162,7 @@ export async function POST(request: NextRequest) {
       .from("profiles")
       .select("id")
       .eq("id", user.id)
-      .single();
+      .maybeSingle();
 
     if (!existingProfile) {
       const { error: profileError } = await serviceRoleClient.from("profiles").insert({
@@ -222,7 +250,7 @@ export async function POST(request: NextRequest) {
           familyMembers: addOns?.familyMembers || 0,
           extendedTime: addOns?.extendedTime || 0,
         },
-        address,
+        location_address: address,
         special_instructions: specialInstructions,
         status: devBypass ? "confirmed" : "scheduled",
       })
@@ -262,11 +290,7 @@ export async function POST(request: NextRequest) {
           .single();
 
         if (profile?.email) {
-          const bookingForEmail = {
-            ...booking,
-            location_address: booking.address || booking.location_address,
-          };
-          await sendBookingConfirmation(bookingForEmail as any, profile);
+          await sendBookingConfirmation(booking as any, profile);
         }
       } catch (emailError) {
         console.error("Failed to send booking confirmation email:", emailError);

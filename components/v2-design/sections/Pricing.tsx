@@ -1,5 +1,7 @@
 'use client';
 
+import { useWellnessTracking } from '@/components/analytics/GoogleAnalytics';
+
 interface Plan {
   name: string;
   visits: string;
@@ -9,6 +11,7 @@ interface Plan {
 }
 
 const Pricing: React.FC = () => {
+  const { trackWellnessEvent, trackServiceInterest } = useWellnessTracking();
 
   const plans: Plan[] = [
     {
@@ -68,6 +71,14 @@ const Pricing: React.FC = () => {
 
                 <a
                   href="/book"
+                  onClick={() => {
+                    trackServiceInterest(plan.name);
+                    trackWellnessEvent('pricing_plan_selected', {
+                      plan: plan.name,
+                      price: plan.price,
+                      location: 'pricing_section'
+                    });
+                  }}
                   className={`block w-full py-2.5 md:py-3 rounded-full font-medium transition-all text-sm hover:scale-105 ${
                     plan.popular
                       ? 'bg-charcoal text-white hover:bg-charcoal/90 shadow-lg'
@@ -84,6 +95,7 @@ const Pricing: React.FC = () => {
         <div className="text-center mt-12">
           <a
             href="#book"
+            onClick={() => trackWellnessEvent('ready_to_book_clicked', { location: 'pricing_section' })}
             className="inline-block bg-charcoal text-white text-sm font-medium px-8 py-3 rounded-full hover:bg-charcoal/90 hover:scale-105 transition-all duration-300 shadow-lg"
           >
             READY TO BOOK? →

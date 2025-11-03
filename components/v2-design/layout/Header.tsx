@@ -7,6 +7,7 @@ import { usePathname, useRouter } from 'next/navigation';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/dist/ScrollTrigger';
 import { ScrollToPlugin } from 'gsap/dist/ScrollToPlugin';
+import { useWellnessTracking } from '@/components/analytics/GoogleAnalytics';
 
 // Register GSAP plugins
 if (typeof window !== 'undefined') {
@@ -18,6 +19,7 @@ const Header: React.FC = () => {
   const pathname = usePathname();
   const router = useRouter();
   const isHomePage = pathname === '/';
+  const { trackWellnessEvent } = useWellnessTracking();
 
   const headerRef = useRef<HTMLElement>(null);
   const navRef = useRef<HTMLElement>(null);
@@ -197,6 +199,7 @@ const Header: React.FC = () => {
             height={40}
             className="h-full w-auto brightness-0 invert"
             priority
+            loading="eager"
           />
         </Link>
 
@@ -204,26 +207,34 @@ const Header: React.FC = () => {
         <div className="hidden md:flex items-center gap-8">
           <a
             href="/#how-it-works"
-            onClick={(e) => handleSectionClick(e, 'how-it-works')}
+            onClick={(e) => {
+              trackWellnessEvent('nav_link_clicked', { section: 'how-it-works', location: 'header' });
+              handleSectionClick(e, 'how-it-works');
+            }}
             className="text-white text-sm font-medium hover:text-mint-accent transition-all duration-300 hover:scale-105"
           >
             HOW IT WORKS
           </a>
           <a
             href="/#pricing"
-            onClick={(e) => handleSectionClick(e, 'pricing')}
+            onClick={(e) => {
+              trackWellnessEvent('nav_link_clicked', { section: 'pricing', location: 'header' });
+              handleSectionClick(e, 'pricing');
+            }}
             className="text-white text-sm font-medium hover:text-mint-accent transition-all duration-300 hover:scale-105"
           >
             PRICING
           </a>
           <Link
             href="/profile"
+            onClick={() => trackWellnessEvent('nav_link_clicked', { section: 'my-account', location: 'header' })}
             className="text-white text-sm font-medium hover:text-mint-accent transition-all duration-300 hover:scale-105"
           >
             MY ACCOUNT
           </Link>
           <Link
             href="/book"
+            onClick={() => trackWellnessEvent('book_now_clicked', { location: 'header' })}
             className="bg-mint-accent text-black text-sm font-medium px-6 py-2 rounded-full hover:bg-opacity-90 transition-all duration-300 hover:scale-110 hover:shadow-lg"
           >
             BOOK NOW
@@ -234,6 +245,7 @@ const Header: React.FC = () => {
         <div className="flex md:hidden items-center gap-3">
           <Link
             href="/book"
+            onClick={() => trackWellnessEvent('book_now_clicked', { location: 'header_mobile' })}
             className="bg-mint-accent text-black text-xs font-medium px-4 py-2 rounded-full hover:bg-opacity-90 transition-all duration-300"
           >
             BOOK NOW
@@ -271,21 +283,30 @@ const Header: React.FC = () => {
           <div className="flex flex-col py-2" role="none">
             <a
               href="/#how-it-works"
-              onClick={(e) => handleSectionClick(e, 'how-it-works')}
+              onClick={(e) => {
+                trackWellnessEvent('nav_link_clicked', { section: 'how-it-works', location: 'mobile_menu' });
+                handleSectionClick(e, 'how-it-works');
+              }}
               className="text-white text-sm font-medium px-6 py-3 hover:bg-mint-accent/10 transition-colors"
             >
               HOW IT WORKS
             </a>
             <a
               href="/#pricing"
-              onClick={(e) => handleSectionClick(e, 'pricing')}
+              onClick={(e) => {
+                trackWellnessEvent('nav_link_clicked', { section: 'pricing', location: 'mobile_menu' });
+                handleSectionClick(e, 'pricing');
+              }}
               className="text-white text-sm font-medium px-6 py-3 hover:bg-mint-accent/10 transition-colors"
             >
               PRICING
             </a>
             <Link
               href="/profile"
-              onClick={closeMobileMenu}
+              onClick={() => {
+                trackWellnessEvent('nav_link_clicked', { section: 'my-account', location: 'mobile_menu' });
+                closeMobileMenu();
+              }}
               className="text-white text-sm font-medium px-6 py-3 hover:bg-mint-accent/10 transition-colors"
             >
               MY ACCOUNT

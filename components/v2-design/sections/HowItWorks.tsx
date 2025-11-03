@@ -1,5 +1,3 @@
-'use client';
-
 import DottedLine from '@/components/v2-design/ui/DottedLine';
 
 interface Step {

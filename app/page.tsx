@@ -42,7 +42,7 @@ export const metadata: Metadata = {
 
 export default function Home() {
   return (
-    <main className="bg-background">
+    <main className="bg-transparent">
       <Hero />
       <HowItWorks />
       <MediaGallery />

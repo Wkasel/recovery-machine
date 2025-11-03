@@ -130,6 +130,16 @@ body.v2-theme {
   font-family: Futura, 'Futura PT', 'Century Gothic', sans-serif;
   color: hsl(var(--charcoal));
   letter-spacing: 0; /* Reset for Futura */
+
+  /* Override card colors for V2 theme - use white instead of tan */
+  --card: 0 0% 100%;                  /* Pure white cards */
+  --card-foreground: 130 7% 18%;       /* Charcoal text */
+
+  --popover: 0 0% 100%;                /* White popovers */
+  --popover-foreground: 130 7% 18%;    /* Charcoal text */
+
+  --border: 145 20% 85%;               /* Light mint border */
+  --input: 145 20% 95%;                /* Very light mint input bg */
 }
 
 /* V2 Theme: Scroll Snap for Section Navigation */

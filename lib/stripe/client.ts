@@ -44,6 +44,13 @@ export class StripeClient {
               description: `${checkoutData.order_type} - ${checkoutData.order_reference}`,
             },
             unit_amount: checkoutData.amount,
+            // Add recurring field for subscription mode
+            ...(checkoutData.order_type === "subscription" && {
+              recurring: {
+                interval: "month",
+                interval_count: 1,
+              },
+            }),
           },
           quantity: 1,
         },

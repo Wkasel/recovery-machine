@@ -59,12 +59,16 @@ export { viewport };
 const geistSans = Geist({
   display: "swap",
   subsets: ["latin"],
+  preload: true,
+  adjustFontFallback: true,
 });
 
 const playfair = Playfair_Display({
   display: "swap",
   subsets: ["latin"],
   variable: "--font-playfair",
+  preload: true,
+  adjustFontFallback: true,
 });
 
 export default function RootLayout({

@@ -70,9 +70,9 @@ export default function ProfilePage() {
     try {
       setIsLoading(true);
 
-      // Load profile data from users table
+      // Load profile data from profiles table
       const { data: profile, error: profileError } = await supabase
-        .from("users")
+        .from("profiles")
         .select("credits, referral_code, address, phone")
         .eq("id", authUser.id)
         .single();
@@ -100,9 +100,9 @@ export default function ProfilePage() {
     // Generate unique referral code if missing
     const referralCode = generateReferralCode();
 
-    // Update user record with referral code if missing
+    // Try to update profile record with referral code if missing
     const { data, error } = await supabase
-      .from("users")
+      .from("profiles")
       .update({
         referral_code: referralCode,
       })
@@ -112,7 +112,36 @@ export default function ProfilePage() {
 
     if (error) {
       console.error("Error updating profile:", error);
-      // Return default values if update fails
+
+      // If update failed because profile doesn't exist, insert a new one
+      if (error.code === 'PGRST116' || error.message?.includes('no rows')) {
+        const { data: insertedData, error: insertError } = await supabase
+          .from("profiles")
+          .insert({
+            id: user.id,
+            email: user.email || "",
+            phone: user.user_metadata?.phone || "",
+            referral_code: referralCode,
+            credits: 0,
+          })
+          .select("credits, referral_code, address, phone")
+          .single();
+
+        if (insertError) {
+          console.error("Error inserting profile:", insertError);
+          // Return default values if insert also fails
+          return {
+            credits: 0,
+            referral_code: referralCode,
+            address: null,
+            phone: "",
+          };
+        }
+
+        return insertedData;
+      }
+
+      // Return default values for other errors
       return {
         credits: 0,
         referral_code: referralCode,
@@ -137,7 +166,7 @@ export default function ProfilePage() {
     if (!authUser) return;
 
     const { data: profile } = await supabase
-      .from("users")
+      .from("profiles")
       .select("credits, referral_code, address, phone")
       .eq("id", authUser.id)
       .single();
@@ -149,7 +178,7 @@ export default function ProfilePage() {
 
   if (authLoading || isLoading) {
     return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center">
         <div className="flex flex-col items-center space-y-4">
           <Loader2 className="w-8 h-8 animate-spin text-mint" />
           <p className="text-charcoal-light font-light" style={{ fontFamily: 'Futura, "Futura PT", "Century Gothic", sans-serif' }}>Loading your dashboard...</p>
@@ -160,7 +189,7 @@ export default function ProfilePage() {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-background flex items-center justify-center p-4">
+      <div className="min-h-screen flex items-center justify-center p-4">
         <div className="max-w-md w-full">
           <Alert className="border-red-500 bg-red-50">
             <AlertCircle className="h-4 w-4 text-red-600" />
@@ -191,15 +220,15 @@ export default function ProfilePage() {
       case "overview":
         return <Overview user={authUser} profileData={profileData} onRefresh={refreshProfileData} />;
       case "bookings":
-        return <BookingsTab userId={authUser.id} onRefresh={refreshProfileData} />;
+        return <BookingsTab user={authUser} onRefresh={refreshProfileData} />;
       case "history":
-        return <HistoryTab userId={authUser.id} />;
+        return <HistoryTab user={authUser} />;
       case "referrals":
         return (
-          <ReferralsTab userId={authUser.id} referralCode={profileData.referral_code} onRefresh={refreshProfileData} />
+          <ReferralsTab user={authUser} profileData={profileData} onRefresh={refreshProfileData} />
         );
       case "reviews":
-        return <ReviewsTab userId={authUser.id} />;
+        return <ReviewsTab user={authUser} />;
       case "settings":
         return (
           <ProfileSettings user={authUser} profileData={profileData} onUpdate={refreshProfileData} />

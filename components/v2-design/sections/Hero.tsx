@@ -5,6 +5,7 @@ import Image from 'next/image';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/dist/ScrollTrigger';
 import DottedLine from '@/components/v2-design/ui/DottedLine';
+import { useWellnessTracking } from '@/components/analytics/GoogleAnalytics';
 
 // Register GSAP plugins
 if (typeof window !== 'undefined') {
@@ -18,6 +19,7 @@ const Hero: React.FC = () => {
   const buttonsRef = useRef<HTMLDivElement>(null);
   const line2Ref = useRef<HTMLDivElement>(null);
   const sectionRef = useRef<HTMLElement>(null);
+  const { trackWellnessEvent } = useWellnessTracking();
 
   useEffect(() => {
     if (!titleRef.current) return;
@@ -187,18 +189,26 @@ const Hero: React.FC = () => {
           height={600}
           className="w-full h-auto"
           priority
+          quality={85}
+          placeholder="blur"
+          blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mN8/5+hHgAHggJ/PchI7wAAAABJRU5ErkJggg=="
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 90vw, 1200px"
         />
       </div>
 
       <div ref={buttonsRef} className="flex flex-col sm:flex-row gap-3 md:gap-4 mb-6 md:mb-8 px-4">
         <button
-          onClick={scrollToHowItWorks}
+          onClick={() => {
+            trackWellnessEvent('hero_learn_more_clicked', { location: 'hero' });
+            scrollToHowItWorks();
+          }}
           className="bg-transparent border-2 border-charcoal text-charcoal text-xs md:text-sm font-medium px-6 md:px-8 py-2.5 md:py-3 rounded-full hover:bg-charcoal hover:text-white transition-all duration-300 hover:scale-105 whitespace-nowrap"
         >
           LEARN MORE
         </button>
         <a
-          href="/book"
+          href="/book/service"
+          onClick={() => trackWellnessEvent('book_now_clicked', { location: 'hero' })}
           className="bg-charcoal text-white text-xs md:text-sm font-medium px-6 md:px-8 py-2.5 md:py-3 rounded-full hover:bg-charcoal/90 hover:scale-110 transition-all duration-300 shadow-xl hover:shadow-2xl text-center whitespace-nowrap"
         >
           BOOK NOW

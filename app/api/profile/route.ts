@@ -25,7 +25,7 @@ export async function GET() {
 
     // Fetch user profile data
     const { data: profileData, error: profileError } = await supabase
-      .from("users")
+      .from("profiles")
       .select("credits, referral_code, address, phone")
       .eq("id", user.id)
       .single();
@@ -33,12 +33,12 @@ export async function GET() {
     if (profileError) {
       console.error("Error fetching profile:", profileError);
 
-      // If user doesn't exist in users table, create referral code
+      // If user doesn't exist in profiles table, create referral code
       const referralCode = generateReferralCode();
 
       // Try to update user with referral code
       const { data: updatedData, error: updateError } = await supabase
-        .from("users")
+        .from("profiles")
         .update({ referral_code: referralCode })
         .eq("id", user.id)
         .select("credits, referral_code, address, phone")
@@ -62,7 +62,7 @@ export async function GET() {
       const referralCode = generateReferralCode();
 
       const { data: updatedData, error: updateError } = await supabase
-        .from("users")
+        .from("profiles")
         .update({ referral_code: referralCode })
         .eq("id", user.id)
         .select("credits, referral_code, address, phone")
@@ -100,7 +100,7 @@ export async function PATCH(request: Request) {
 
     // Update user profile
     const { data, error } = await supabase
-      .from("users")
+      .from("profiles")
       .update(updates)
       .eq("id", user.id)
       .select()

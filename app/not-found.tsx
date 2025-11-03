@@ -3,7 +3,7 @@ import { Home, ArrowLeft } from "lucide-react";
 
 export default function NotFound() {
   return (
-    <div className="min-h-screen bg-background text-charcoal flex items-center justify-center">
+    <div className="min-h-screen text-charcoal flex items-center justify-center">
       <div className="container mx-auto px-4 py-16 max-w-2xl text-center">
         <div className="mb-8">
           <h1 className="text-8xl font-bold mb-4 text-mint-accent" style={{ fontFamily: 'Futura, "Futura PT", "Century Gothic", sans-serif' }}>404</h1>

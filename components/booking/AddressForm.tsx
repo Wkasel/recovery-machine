@@ -9,8 +9,9 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { BookingService } from "@/lib/services/booking-service";
 import { Address, addressSchema, SetupFeeCalculation } from "@/lib/types/booking";
+import { SavedAddress, UserProfile } from "@/lib/hooks/use-user-profile";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { AlertCircle, Clock, DollarSign, Loader2, MapPin } from "lucide-react";
+import { AlertCircle, Clock, DollarSign, Loader2, MapPin, Home } from "lucide-react";
 import { useEffect, useId, useRef, useState, useCallback } from "react";
 import { useForm } from "react-hook-form";
 
@@ -20,6 +21,8 @@ interface AddressFormProps {
   onSetupFeeCalculated: (setupFee: SetupFeeCalculation) => void;
   onNext: () => void;
   onBack: () => void;
+  savedAddresses?: SavedAddress[];
+  profile?: UserProfile | null;
 }
 
 declare global {
@@ -35,6 +38,8 @@ export function AddressForm({
   onSetupFeeCalculated,
   onNext,
   onBack,
+  savedAddresses = [],
+  profile,
 }: AddressFormProps) {
   const [isCalculatingFee, setIsCalculatingFee] = useState(false);
   const [setupFee, setSetupFee] = useState<SetupFeeCalculation | null>(null);
@@ -166,6 +171,36 @@ export function AddressForm({
     return `$${(priceInCents / 100).toFixed(2)}`;
   };
 
+  const handleSavedAddressSelect = useCallback((savedAddress: SavedAddress) => {
+    const addressData: Address = {
+      street: savedAddress.street,
+      city: savedAddress.city,
+      state: savedAddress.state,
+      zipCode: savedAddress.zip,
+    };
+
+    // Update form values
+    Object.entries(addressData).forEach(([key, value]) => {
+      if (value) {
+        setValue(key as keyof Address, value, {
+          shouldValidate: true,
+          shouldDirty: true,
+          shouldTouch: true
+        });
+      }
+    });
+
+    // Update autocomplete input display
+    if (inputRef.current) {
+      inputRef.current.value = savedAddress.formatted;
+    }
+
+    // Trigger validation and calculate setup fee
+    trigger().then(() => {
+      calculateSetupFee(addressData);
+    });
+  }, [setValue, trigger, calculateSetupFee]);
+
   return (
     <div className="space-y-6">
       <div className="text-center">
@@ -173,7 +208,61 @@ export function AddressForm({
         <p className="text-muted-foreground font-light" style={{ fontFamily: 'Futura, "Futura PT", "Century Gothic", sans-serif' }}>We'll bring the recovery experience right to your location</p>
       </div>
 
+      {/* Saved Addresses Section */}
+      {savedAddresses.length > 0 && (
+        <Card className="bg-white/70 backdrop-blur-sm border-border rounded-3xl shadow-lg">
+          <CardHeader>
+            <CardTitle className="flex items-center space-x-2 text-foreground text-lg" style={{ fontFamily: 'Futura, "Futura PT", "Century Gothic", sans-serif' }}>
+              <Home className="w-5 h-5" />
+              <span>Your Saved Addresses</span>
+            </CardTitle>
+            <CardDescription className="text-muted-foreground font-light" style={{ fontFamily: 'Futura, "Futura PT", "Century Gothic", sans-serif' }}>
+              Select a previously used address
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-2">
+            {savedAddresses.map((saved, index) => (
+              <Button
+                key={index}
+                type="button"
+                variant="outline"
+                onClick={() => handleSavedAddressSelect(saved)}
+                className="w-full justify-start text-left h-auto py-3 px-4 rounded-2xl hover:bg-mint-accent/10 hover:border-mint-accent transition-colors"
+              >
+                <div className="flex items-start space-x-3 w-full">
+                  <MapPin className="w-4 h-4 mt-0.5 text-mint-accent flex-shrink-0" />
+                  <div className="flex-1 min-w-0">
+                    <div className="font-medium text-foreground flex items-center gap-2">
+                      {saved.label}
+                      {saved.is_default && (
+                        <Badge variant="secondary" className="bg-mint-accent/20 text-charcoal text-xs">
+                          Default
+                        </Badge>
+                      )}
+                    </div>
+                    <div className="text-sm text-muted-foreground truncate">
+                      {saved.formatted || `${saved.street}, ${saved.city}, ${saved.state} ${saved.zip}`}
+                    </div>
+                  </div>
+                </div>
+              </Button>
+            ))}
+          </CardContent>
+        </Card>
+      )}
+
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 pb-20 md:pb-6">
+        {savedAddresses.length > 0 && (
+          <div className="relative">
+            <div className="absolute inset-0 flex items-center">
+              <span className="w-full border-t border-border" />
+            </div>
+            <div className="relative flex justify-center text-xs uppercase">
+              <span className="bg-white px-2 text-muted-foreground font-light">Or enter a new address</span>
+            </div>
+          </div>
+        )}
+
         {/* Google Places Autocomplete */}
         <div className="space-y-2">
           <Label htmlFor="autocomplete-address" className="text-foreground">Search Address</Label>

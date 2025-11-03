@@ -174,7 +174,7 @@ export function BookingConfirmation({
           <CardContent className="space-y-4">
             <div>
               <p className="font-medium">Delivery Address</p>
-              <p className="text-gray-600">{formatAddress(booking.address)}</p>
+              <p className="text-gray-600">{formatAddress(booking.location_address)}</p>
             </div>
 
             {booking.special_instructions && (

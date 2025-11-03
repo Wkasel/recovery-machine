@@ -10,11 +10,12 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Address, ServiceType, SetupFeeCalculation, services } from "@/lib/types/booking";
 import { User } from "@supabase/supabase-js";
+import { UserProfile } from "@/lib/hooks/use-user-profile";
 import { cn } from "@/lib/utils";
-import { 
-  validateDevPromoCode, 
+import {
+  validateDevPromoCode,
   isDevelopmentEnvironment,
-  getAvailableDevPromoCodes 
+  getAvailableDevPromoCodes
 } from "@/lib/payment/dev-bypass";
 import {
   AlertCircle,
@@ -27,8 +28,9 @@ import {
   MapPin,
   Users,
   Code,
+  UserCheck,
 } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { toast } from "sonner";
 
 interface PaymentStepProps {
@@ -44,6 +46,8 @@ interface PaymentStepProps {
   ) => Promise<void> | void;
   onBack: () => void;
   user?: User | null;
+  userProfile?: UserProfile | null;
+  onPaymentMethodChange?: (method: "card" | "subscription") => void;
 }
 
 export function PaymentStep({
@@ -56,6 +60,8 @@ export function PaymentStep({
   onPayment,
   onBack,
   user,
+  userProfile,
+  onPaymentMethodChange,
 }: PaymentStepProps) {
   const [isProcessingPayment, setIsProcessingPayment] = useState(false);
   const [termsAccepted, setTermsAccepted] = useState(false);
@@ -64,9 +70,9 @@ export function PaymentStep({
   const [promoApplied, setPromoApplied] = useState(false);
   const [shouldBypassPayment, setShouldBypassPayment] = useState(false);
 
-  // Guest booking fields
-  const [guestEmail, setGuestEmail] = useState("");
-  const [guestPhone, setGuestPhone] = useState("");
+  // Guest booking fields - pre-filled for logged-in users
+  const [guestEmail, setGuestEmail] = useState(user?.email || "");
+  const [guestPhone, setGuestPhone] = useState(userProfile?.phone || "");
 
   const isGuestBooking = !user;
 
@@ -89,12 +95,22 @@ export function PaymentStep({
     const formatted = formatPhoneNumber(e.target.value);
     setGuestPhone(formatted);
   };
-  const [paymentMethod, setPaymentMethod] = useState<"card" | "subscription">("card");
-  
+
+  const selectedService = services.find((s) => s.id === serviceType);
+
+  // Initialize payment method based on service type
+  const initialPaymentMethod: "card" | "subscription" = selectedService?.recurring ? "subscription" : "card";
+  const [paymentMethod, setPaymentMethod] = useState<"card" | "subscription">(initialPaymentMethod);
+
   const isDevMode = isDevelopmentEnvironment();
   const availableDevCodes = getAvailableDevPromoCodes();
 
-  const selectedService = services.find((s) => s.id === serviceType);
+  // Notify parent on mount if service is recurring
+  useEffect(() => {
+    if (initialPaymentMethod === "subscription") {
+      onPaymentMethodChange?.("subscription");
+    }
+  }, []); // Only run once on mount
 
   const calculateAddOnCost = () => {
     const familyMemberCost = addOns.familyMembers * 2500; // $25 per family member
@@ -308,7 +324,10 @@ export function PaymentStep({
                       ? "border-mint bg-mint-accent/20 text-foreground"
                       : "border-border hover:border-mint bg-background text-foreground"
                   )}
-                  onClick={() => setPaymentMethod("card")}
+                  onClick={() => {
+                    setPaymentMethod("card");
+                    onPaymentMethodChange?.("card");
+                  }}
                 >
                   <div className="flex items-center space-x-3">
                     <div
@@ -336,7 +355,10 @@ export function PaymentStep({
                       ? "border-mint bg-mint-accent/20 text-foreground"
                       : "border-border hover:border-mint bg-background text-foreground"
                   )}
-                  onClick={() => setPaymentMethod("subscription")}
+                  onClick={() => {
+                    setPaymentMethod("subscription");
+                    onPaymentMethodChange?.("subscription");
+                  }}
                 >
                   <div className="flex items-center space-x-3">
                     <div
@@ -490,8 +512,8 @@ export function PaymentStep({
             </CardContent>
           </Card>
 
-          {/* Guest Information - only show for non-authenticated users */}
-          {isGuestBooking && (
+          {/* Contact Information */}
+          {isGuestBooking ? (
             <Card className="bg-white/70 backdrop-blur-sm border-border rounded-3xl shadow-lg">
               <CardHeader>
                 <CardTitle className="text-foreground" style={{ fontFamily: 'Futura, "Futura PT", "Century Gothic", sans-serif' }}>Contact Information</CardTitle>
@@ -534,6 +556,42 @@ export function PaymentStep({
                       Sign in first
                     </a>{" "}
                     to access your booking history and manage your sessions.
+                  </p>
+                </div>
+              </CardContent>
+            </Card>
+          ) : (
+            <Card className="bg-white/70 backdrop-blur-sm border-mint border-2 rounded-3xl shadow-lg">
+              <CardHeader>
+                <CardTitle className="flex items-center space-x-2 text-foreground" style={{ fontFamily: 'Futura, "Futura PT", "Century Gothic", sans-serif' }}>
+                  <UserCheck className="w-5 h-5 text-mint-accent" />
+                  <span>Account Verified</span>
+                </CardTitle>
+                <CardDescription className="font-light" style={{ fontFamily: 'Futura, "Futura PT", "Century Gothic", sans-serif' }}>
+                  Booking with your account
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-3">
+                <div className="flex items-center justify-between p-3 bg-mint-accent/10 rounded-lg">
+                  <div>
+                    <p className="text-sm text-muted-foreground font-light">Email</p>
+                    <p className="font-medium text-foreground">{user?.email}</p>
+                  </div>
+                  <Badge variant="secondary" className="bg-mint-accent/20 text-charcoal">
+                    Verified
+                  </Badge>
+                </div>
+                {userProfile?.phone && (
+                  <div className="flex items-center justify-between p-3 bg-mint-accent/10 rounded-lg">
+                    <div>
+                      <p className="text-sm text-muted-foreground font-light">Phone</p>
+                      <p className="font-medium text-foreground">{userProfile.phone}</p>
+                    </div>
+                  </div>
+                )}
+                <div className="bg-mint-accent/10 border border-mint-accent/30 p-3 rounded-md">
+                  <p className="text-sm text-charcoal font-light">
+                    ✓ Your booking will be saved to your account for easy management
                   </p>
                 </div>
               </CardContent>

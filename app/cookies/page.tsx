@@ -2,7 +2,7 @@ import Link from "next/link";
 
 export default function CookiesPage() {
   return (
-    <div className="min-h-screen bg-background text-foreground">
+    <div className="min-h-screen text-foreground">
       <div className="container mx-auto px-4 py-16 max-w-4xl">
         <div className="mb-8">
           <Link href="/" className="text-muted-foreground hover:text-foreground mb-4 inline-block">

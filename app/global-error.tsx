@@ -39,8 +39,8 @@ export default function GlobalError({
 
   return (
     <html>
-      <body>
-        <div className="flex flex-col items-center justify-center min-h-screen p-4 bg-background">
+      <body className="v2-theme">
+        <div className="flex flex-col items-center justify-center min-h-screen p-4">
           <h2 className="text-2xl font-bold text-charcoal mb-4" style={{ fontFamily: 'Futura, "Futura PT", "Century Gothic", sans-serif' }}>Something went wrong!</h2>
           {process.env.NODE_ENV === "development" && (
             <pre className="text-sm bg-mint-accent/10 border border-mint-accent/30 p-4 rounded-lg mb-4 overflow-auto max-w-full text-charcoal font-mono">

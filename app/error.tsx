@@ -17,7 +17,7 @@ export default function Error({
   }, [error]);
 
   return (
-    <div className="min-h-screen bg-background text-charcoal flex items-center justify-center">
+    <div className="min-h-screen text-charcoal flex items-center justify-center">
       <div className="container mx-auto px-4 py-16 max-w-2xl text-center">
         <div className="mb-8">
           <div className="w-20 h-20 bg-amber-50 border-2 border-amber-200 rounded-lg flex items-center justify-center mx-auto mb-6">

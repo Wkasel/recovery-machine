@@ -155,14 +155,18 @@ export async function getUserOrders(userId: string): Promise<ApiResponse<Order[]
 export async function updateOrderStatus(
   orderId: string,
   status: Order["status"],
-  boltCheckoutId?: string
+  stripeSessionId?: string,
+  stripeSubscriptionId?: string
 ): Promise<ApiResponse<Order>> {
   try {
     const supabase = await getSupabaseClient("server");
 
     const updates: Partial<Order> = { status };
-    if (boltCheckoutId) {
-      updates.bolt_checkout_id = boltCheckoutId;
+    if (stripeSessionId) {
+      updates.stripe_session_id = stripeSessionId;
+    }
+    if (stripeSubscriptionId) {
+      updates.stripe_subscription_id = stripeSubscriptionId;
     }
 
     const { data, error } = await supabase
