@@ -41,36 +41,10 @@ export async function updateSession(request: NextRequest) {
     error: authError,
   } = await supabase.auth.getUser();
 
-  // Debug logging for authentication
-  console.log("🔍 Middleware auth check:", {
-    path: request.nextUrl.pathname,
-    hasUser: !!user,
-    userEmail: user?.email,
-    authError: authError?.message,
-    cookies: request.cookies.getAll().map((c) => ({ name: c.name, hasValue: !!c.value })),
-  });
-
-  // ALLOWLIST APPROACH: Only protect specific paths that require authentication
-  // Everything else is public by default - much simpler and less error-prone
-  const protectedPaths = [
-    "/profile",
-    "/dashboard",
-    "/admin",
-    "/account",
-    "/settings",
-  ];
-
-  const requiresAuth = protectedPaths.some((path) =>
-    request.nextUrl.pathname.startsWith(path)
-  );
-
-  if (requiresAuth && !user) {
-    // Protected path requires authentication, redirect to sign-in
-    const url = request.nextUrl.clone();
-    url.pathname = "/sign-in";
-    url.searchParams.set("redirectTo", request.nextUrl.pathname);
-    return NextResponse.redirect(url);
-  }
+  // NO MIDDLEWARE AUTH PROTECTION
+  // Middleware only updates Supabase session cookies
+  // Individual pages handle their own auth checks using server-side getUser()
+  // This prevents ANY false positives where legitimate public pages get blocked
 
   // IMPORTANT: You *must* return the supabaseResponse object as it is.
   // If you're creating a new response object with NextResponse.next() make sure to:
