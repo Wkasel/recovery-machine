@@ -142,15 +142,13 @@ body.v2-theme {
   --input: 145 20% 95%;                /* Very light mint input bg */
 }
 
-/* V2 Theme: Scroll Snap for Section Navigation */
+/* V2 Theme: Smooth scrolling without snap (scroll-snap was causing jerky behavior) */
 body.v2-theme main {
-  scroll-snap-type: y proximity;
   overflow-y: auto;
 }
 
 body.v2-theme section {
-  scroll-snap-align: start;
-  scroll-snap-stop: normal;
+  /* Removed scroll-snap for smoother scrolling experience */
 }
 
 /* Typography Utilities - Inspired by Recovery Machine branding */

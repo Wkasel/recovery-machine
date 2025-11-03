@@ -15,6 +15,7 @@ function SignInForm(): React.ReactElement {
   const [isLoading, setIsLoading] = useState(false);
   const [magicLinkSent, setMagicLinkSent] = useState(false);
   const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const searchParams = useSearchParams();
 
@@ -24,6 +25,30 @@ function SignInForm(): React.ReactElement {
       setError("Magic link authentication failed. Please try again.");
     }
   }, [searchParams]);
+
+  const handlePasswordSignIn = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (!email || !password) {
+      setError("Please enter both email and password");
+      return;
+    }
+
+    setIsLoading(true);
+    setError("");
+    try {
+      const formData = new FormData();
+      formData.append("email", email);
+      formData.append("password", password);
+      await signIn(formData);
+      // If successful, signIn will redirect to /profile
+    } catch (err: any) {
+      console.error("Password sign-in error:", err);
+      setError(err.message || "Invalid login credentials");
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const handleMagicLink = async () => {
     if (!email) {
@@ -36,12 +61,15 @@ function SignInForm(): React.ReactElement {
     try {
       const formData = new FormData();
       formData.append("email", email);
-      await sendMagicLink(formData);
+      const result = await sendMagicLink(formData);
+      console.log("Magic link result:", result);
       setMagicLinkSent(true);
     } catch (err: any) {
-      setError(err.message || "Failed to send magic link");
+      console.error("Magic link error:", err);
+      setError(err.message || "Failed to send magic link. Please try again.");
+    } finally {
+      setIsLoading(false);
     }
-    setIsLoading(false);
   };
 
   if (magicLinkSent) {
@@ -83,7 +111,7 @@ function SignInForm(): React.ReactElement {
           </Alert>
         )}
 
-        <form action={signIn} className="space-y-4">
+        <form onSubmit={handlePasswordSignIn} className="space-y-4">
           <div className="space-y-2">
             <Label htmlFor="email" className="text-charcoal" style={{ fontFamily: 'Futura, "Futura PT", "Century Gothic", sans-serif' }}>
               Email
@@ -96,6 +124,7 @@ function SignInForm(): React.ReactElement {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
+              disabled={isLoading}
               className="bg-white border-mint-accent/30 text-charcoal placeholder:text-charcoal-light/50"
               style={{ fontFamily: 'Futura, "Futura PT", "Century Gothic", sans-serif' }}
             />
@@ -110,6 +139,10 @@ function SignInForm(): React.ReactElement {
               name="password"
               type="password"
               placeholder="Enter your password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              disabled={isLoading}
               className="bg-white border-mint-accent/30 text-charcoal placeholder:text-charcoal-light/50"
               style={{ fontFamily: 'Futura, "Futura PT", "Century Gothic", sans-serif' }}
             />
@@ -118,11 +151,12 @@ function SignInForm(): React.ReactElement {
           <div className="space-y-3">
             <Button
               type="submit"
-              className="w-full bg-charcoal text-white hover:bg-charcoal/90 rounded-full"
+              disabled={isLoading}
+              className="w-full bg-charcoal text-white hover:bg-charcoal/90 rounded-full disabled:opacity-50"
               style={{ fontFamily: 'Futura, "Futura PT", "Century Gothic", sans-serif' }}
             >
               <Lock className="mr-2 h-4 w-4" />
-              Sign in with Password
+              {isLoading ? "Signing in..." : "Sign in with Password"}
             </Button>
 
             <div className="relative">

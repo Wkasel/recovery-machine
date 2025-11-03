@@ -50,48 +50,25 @@ export async function updateSession(request: NextRequest) {
     cookies: request.cookies.getAll().map((c) => ({ name: c.name, hasValue: !!c.value })),
   });
 
-  // Check if the current path is a public path
-  const isPublicPath =
-    request.nextUrl.pathname === "/" ||
-    request.nextUrl.pathname.startsWith("/sign-in") ||
-    request.nextUrl.pathname.startsWith("/sign-up") ||
-    request.nextUrl.pathname.startsWith("/auth") ||
-    request.nextUrl.pathname.startsWith("/api/auth") ||
-    request.nextUrl.pathname.startsWith("/api/bookings") ||
-    request.nextUrl.pathname.startsWith("/_next") ||
-    request.nextUrl.pathname.includes("/terms") ||
-    request.nextUrl.pathname.includes("/privacy") ||
-    request.nextUrl.pathname.includes("/cookies") ||
-    request.nextUrl.pathname.startsWith("/book") ||
-    request.nextUrl.pathname.startsWith("/pricing") ||
-    request.nextUrl.pathname.startsWith("/services") ||
-    request.nextUrl.pathname.startsWith("/features") ||
-    request.nextUrl.pathname.startsWith("/docs") ||
-    request.nextUrl.pathname.startsWith("/blog") ||
-    request.nextUrl.pathname.startsWith("/health-disclaimer") ||
-    request.nextUrl.pathname.startsWith("/how-it-works") ||
-    request.nextUrl.pathname.startsWith("/contact") ||
-    request.nextUrl.pathname.startsWith("/about") ||
-    // Landing pages
-    request.nextUrl.pathname.startsWith("/cold-plunge-la") ||
-    request.nextUrl.pathname.startsWith("/infrared-sauna-delivery") ||
-    request.nextUrl.pathname.startsWith("/athletic-recovery") ||
-    request.nextUrl.pathname.startsWith("/corporate-wellness") ||
-    request.nextUrl.pathname.startsWith("/orange-county") ||
-    request.nextUrl.pathname.startsWith("/los-angeles") ||
-    // Static assets
-    request.nextUrl.pathname.match(/\.(js|css|png|jpg|jpeg|gif|ico|svg|webp|mp4)$/) ||
-    // API routes that should be public
-    request.nextUrl.pathname.startsWith("/api/og") ||
-    request.nextUrl.pathname.startsWith("/api/sitemap") ||
-    request.nextUrl.pathname.startsWith("/api/newsletter") ||
-    request.nextUrl.pathname.startsWith("/sitemap") ||
-    request.nextUrl.pathname.startsWith("/robots");
+  // ALLOWLIST APPROACH: Only protect specific paths that require authentication
+  // Everything else is public by default - much simpler and less error-prone
+  const protectedPaths = [
+    "/profile",
+    "/dashboard",
+    "/admin",
+    "/account",
+    "/settings",
+  ];
 
-  if (!user && !isPublicPath) {
-    // No user and not a public path, redirect to sign-in
+  const requiresAuth = protectedPaths.some((path) =>
+    request.nextUrl.pathname.startsWith(path)
+  );
+
+  if (requiresAuth && !user) {
+    // Protected path requires authentication, redirect to sign-in
     const url = request.nextUrl.clone();
     url.pathname = "/sign-in";
+    url.searchParams.set("redirectTo", request.nextUrl.pathname);
     return NextResponse.redirect(url);
   }
 
