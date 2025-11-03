@@ -128,7 +128,7 @@ export function BusinessHoursEditor({
                       </Button>
                     </>
                   ) : (
-                    <div className="text-gray-500 italic flex-1">Closed</div>
+                    <div className="text-muted-foreground italic flex-1">Closed</div>
                   )}
                 </div>
 

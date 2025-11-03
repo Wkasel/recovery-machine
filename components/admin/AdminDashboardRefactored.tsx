@@ -127,15 +127,15 @@ export function AdminDashboard() {
   const getActivityIcon = (type: string) => {
     switch (type) {
       case "booking":
-        return <Calendar className="h-4 w-4 text-blue-600" />;
+        return <Calendar className="h-4 w-4 text-primary" />;
       case "payment":
-        return <DollarSign className="h-4 w-4 text-green-600" />;
+        return <DollarSign className="h-4 w-4 text-primary" />;
       case "review":
         return <Star className="h-4 w-4 text-yellow-600" />;
       case "referral":
-        return <UserPlus className="h-4 w-4 text-purple-600" />;
+        return <UserPlus className="h-4 w-4 text-primary" />;
       default:
-        return <Clock className="h-4 w-4 text-gray-600" />;
+        return <Clock className="h-4 w-4 text-muted-foreground" />;
     }
   };
 
@@ -145,7 +145,7 @@ export function AdminDashboard() {
       <Flex 
         align="center" 
         gap="xs" 
-        className={isPositive ? "text-green-600" : "text-red-600"}
+        className={isPositive ? "text-primary" : "text-red-600"}
       >
         {isPositive ? <ArrowUpRight className="h-4 w-4" /> : <ArrowDownRight className="h-4 w-4" />}
         <Text size="sm" weight="medium">{Math.abs(growth)}%</Text>

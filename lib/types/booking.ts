@@ -175,6 +175,7 @@ export interface BookingState {
   };
   setupFee?: SetupFeeCalculation;
   specialInstructions?: string;
+  paymentMethod?: "card" | "subscription";
 }
 
 // Calendar availability

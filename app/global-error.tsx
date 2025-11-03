@@ -39,17 +39,18 @@ export default function GlobalError({
 
   return (
     <html>
-      <body>
+      <body className="v2-theme">
         <div className="flex flex-col items-center justify-center min-h-screen p-4">
-          <h2 className="text-2xl font-bold text-destructive mb-4">Something went wrong!</h2>
+          <h2 className="text-2xl font-bold text-charcoal mb-4" style={{ fontFamily: 'Futura, "Futura PT", "Century Gothic", sans-serif' }}>Something went wrong!</h2>
           {process.env.NODE_ENV === "development" && (
-            <pre className="text-sm bg-muted p-4 rounded mb-4 overflow-auto max-w-full">
+            <pre className="text-sm bg-mint-accent/10 border border-mint-accent/30 p-4 rounded-lg mb-4 overflow-auto max-w-full text-charcoal font-mono">
               {error.message}
             </pre>
           )}
           <button
             onClick={reset}
-            className="px-4 py-2 bg-destructive text-destructive-foreground rounded hover:bg-destructive/90 transition-colors"
+            className="px-6 py-3 bg-charcoal text-white rounded-full hover:bg-charcoal/90 transition-all hover:scale-105 font-medium"
+            style={{ fontFamily: 'Futura, "Futura PT", "Century Gothic", sans-serif' }}
           >
             Try again
           </button>

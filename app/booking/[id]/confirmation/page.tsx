@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useParams, useSearchParams } from "next/navigation";
+import { useParams, useSearchParams, useRouter } from "next/navigation";
 import { BookingConfirmation } from "@/components/booking/BookingConfirmation";
 
 interface BookingData {
@@ -26,9 +26,10 @@ interface BookingData {
 export default function BookingConfirmationPage() {
   const params = useParams();
   const searchParams = useSearchParams();
+  const router = useRouter();
   const bookingId = params.id;
   const token = searchParams.get("token");
-  
+
   const [booking, setBooking] = useState<BookingData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -62,7 +63,7 @@ export default function BookingConfirmationPage() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-background to-muted/30 flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center">
         <div className="flex flex-col items-center space-y-4">
           <div className="animate-spin rounded-full h-12 w-12 border-2 border-primary border-t-transparent"></div>
           <p className="text-muted-foreground font-light">Loading your booking confirmation...</p>
@@ -73,7 +74,7 @@ export default function BookingConfirmationPage() {
 
   if (error || !booking) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-background to-muted/30 flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center">
         <div className="text-center space-y-4 bg-white/70 backdrop-blur-sm border border-border rounded-3xl p-12 shadow-lg max-w-md mx-4">
           <h1 className="text-2xl font-serif font-bold text-foreground">Booking Not Found</h1>
           <p className="text-muted-foreground font-light">{error || "This confirmation link is invalid or has expired."}</p>
@@ -89,7 +90,7 @@ export default function BookingConfirmationPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-background to-muted/30">
+    <div className="min-h-screen">
       <div className="container mx-auto px-4 py-8">
         <div className="max-w-2xl mx-auto">
           <div className="mb-6 text-center">
@@ -101,6 +102,7 @@ export default function BookingConfirmationPage() {
             booking={booking}
             orderAmount={booking.orders?.amount || 0}
             setupFee={0}
+            onNewBooking={() => router.push("/book/service")}
             onShare={() => {
               // Copy current URL to clipboard
               navigator.clipboard.writeText(window.location.href);

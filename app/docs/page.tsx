@@ -2,7 +2,7 @@ import Link from "next/link";
 
 export default function DocsPage() {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-background to-muted/30 text-foreground">
+    <div className="min-h-screen text-foreground">
       <div className="container mx-auto px-4 py-16 max-w-4xl">
         <div className="mb-8">
           <h1 className="text-4xl font-bold font-serif tracking-tight mb-4">Documentation</h1>

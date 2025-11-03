@@ -166,8 +166,8 @@ export function BookingCalendar({
   return (
     <div className="space-y-6">
       <div className="text-center">
-        <h2 className="text-2xl font-serif font-bold text-foreground mb-2">Choose Your Appointment Time</h2>
-        <p className="text-muted-foreground font-light">
+        <h2 className="text-2xl font-bold text-foreground mb-2" style={{ fontFamily: 'Futura, "Futura PT", "Century Gothic", sans-serif' }}>Choose Your Appointment Time</h2>
+        <p className="text-muted-foreground font-light" style={{ fontFamily: 'Futura, "Futura PT", "Century Gothic", sans-serif' }}>
           Select a date and time that works best for your {selectedService?.name} session
         </p>
       </div>
@@ -178,7 +178,7 @@ export function BookingCalendar({
           <Card className="bg-white/70 backdrop-blur-sm border-border rounded-3xl shadow-lg">
             <CardHeader>
               <div className="flex items-center justify-between">
-                <CardTitle className="flex items-center space-x-2 text-foreground font-serif">
+                <CardTitle className="flex items-center space-x-2 text-foreground" style={{ fontFamily: 'Futura, "Futura PT", "Century Gothic", sans-serif' }}>
                   <Calendar className="w-5 h-5 text-foreground" />
                   <span>Select Date</span>
                 </CardTitle>
@@ -233,7 +233,7 @@ export function BookingCalendar({
                 }}
                 dayCellClassNames={(arg) => {
                   if (arg.dateStr === selectedDate) {
-                    return "bg-blue-50 border-blue-300";
+                    return "bg-mint-accent/20 border-mint";
                   }
                   return "";
                 }}
@@ -261,11 +261,11 @@ export function BookingCalendar({
           {selectedDate && (
             <Card className="mt-4 bg-white/70 backdrop-blur-sm border-border rounded-3xl shadow-lg">
               <CardHeader>
-                <CardTitle className="flex items-center space-x-2 text-foreground font-serif">
+                <CardTitle className="flex items-center space-x-2 text-foreground" style={{ fontFamily: 'Futura, "Futura PT", "Century Gothic", sans-serif' }}>
                   <Clock className="w-5 h-5 text-foreground" />
                   <span>Available Times</span>
                 </CardTitle>
-                <CardDescription className="font-light">
+                <CardDescription className="font-light" style={{ fontFamily: 'Futura, "Futura PT", "Century Gothic", sans-serif' }}>
                   {new Date(selectedDate).toLocaleDateString("en-US", {
                     weekday: "long",
                     year: "numeric",
@@ -277,7 +277,7 @@ export function BookingCalendar({
               <CardContent>
                 {isLoading ? (
                   <div className="text-center py-8">
-                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
+                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-mint mx-auto"></div>
                     <p className="mt-2 text-gray-600">Loading available times...</p>
                   </div>
                 ) : timeSlots.length > 0 ? (
@@ -290,8 +290,8 @@ export function BookingCalendar({
                         disabled={!slot.available}
                         onClick={() => handleTimeSelect(slot.time)}
                         className={cn(
-                          "h-12 min-h-[44px] text-sm",
-                          slot.selected && "ring-2 ring-blue-500",
+                          "h-12 min-h-[44px] text-sm rounded-full hover:scale-105 transition-transform",
+                          slot.selected && "ring-2 ring-mint/20 bg-mint text-charcoal",
                           !slot.available && "opacity-50 cursor-not-allowed"
                         )}
                       >
@@ -316,7 +316,7 @@ export function BookingCalendar({
           {/* Booking summary */}
           <Card className="bg-white/70 backdrop-blur-sm border-border rounded-3xl shadow-lg">
             <CardHeader>
-              <CardTitle className="text-foreground font-serif">Booking Summary</CardTitle>
+              <CardTitle className="text-foreground" style={{ fontFamily: 'Futura, "Futura PT", "Century Gothic", sans-serif' }}>Booking Summary</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div>
@@ -362,11 +362,11 @@ export function BookingCalendar({
           {/* Add-ons */}
           <Card className="bg-white/70 backdrop-blur-sm border-border rounded-3xl shadow-lg">
             <CardHeader>
-              <CardTitle className="flex items-center space-x-2 text-foreground font-serif">
+              <CardTitle className="flex items-center space-x-2 text-foreground" style={{ fontFamily: 'Futura, "Futura PT", "Century Gothic", sans-serif' }}>
                 <Plus className="w-5 h-5 text-foreground" />
                 <span>Add-ons</span>
               </CardTitle>
-              <CardDescription className="font-light">Customize your experience</CardDescription>
+              <CardDescription className="font-light" style={{ fontFamily: 'Futura, "Futura PT", "Century Gothic", sans-serif' }}>Customize your experience</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               {/* Family members */}
@@ -497,7 +497,7 @@ export function BookingCalendar({
           {/* Special instructions */}
           <Card className="bg-white/70 backdrop-blur-sm border-border rounded-3xl shadow-lg">
             <CardHeader>
-              <CardTitle className="text-foreground font-serif">Special Instructions</CardTitle>
+              <CardTitle className="text-foreground" style={{ fontFamily: 'Futura, "Futura PT", "Century Gothic", sans-serif' }}>Special Instructions</CardTitle>
             </CardHeader>
             <CardContent>
               <Textarea
@@ -514,10 +514,10 @@ export function BookingCalendar({
       {/* Sticky Mobile Footer */}
       <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 p-4 md:hidden z-50">
         <div className="flex gap-3 max-w-md mx-auto">
-          <Button variant="outline" onClick={onBack} className="flex-1">
+          <Button variant="outline" onClick={onBack} className="flex-1 rounded-full">
             Back
           </Button>
-          <Button onClick={onNext} disabled={!isNextEnabled} className="flex-1">
+          <Button onClick={onNext} disabled={!isNextEnabled} variant="ghost" className="flex-1 rounded-full !bg-charcoal !text-white hover:!bg-charcoal/90">
             Continue to Address
           </Button>
         </div>
@@ -525,11 +525,11 @@ export function BookingCalendar({
 
       {/* Desktop Navigation buttons */}
       <div className="hidden md:flex justify-between pt-6">
-        <Button variant="outline" onClick={onBack} size="lg">
+        <Button variant="outline" onClick={onBack} size="lg" className="rounded-full">
           Back to Address
         </Button>
 
-        <Button onClick={onNext} disabled={!isNextEnabled} size="lg" className="px-8">
+        <Button onClick={onNext} disabled={!isNextEnabled} size="lg" variant="ghost" className="px-8 rounded-full !bg-charcoal !text-white hover:!bg-charcoal/90 hover:scale-105 transition-transform">
           Continue to Payment
         </Button>
       </div>

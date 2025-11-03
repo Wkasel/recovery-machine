@@ -167,14 +167,14 @@ export function ReferralManager() {
 
   const getStatusBadge = (status: string) => {
     const colors = {
-      pending: "bg-yellow-100 text-yellow-800",
-      signed_up: "bg-blue-100 text-blue-800",
-      first_booking: "bg-green-100 text-green-800",
-      expired: "bg-red-100 text-red-800",
+      pending: "bg-secondary/10 text-secondary-foreground border-secondary/20",
+      signed_up: "bg-primary/20 text-primary border-primary/30",
+      first_booking: "bg-primary/10 text-primary border-primary/20",
+      expired: "bg-destructive/10 text-destructive border-destructive/20",
     };
 
     return (
-      <Badge className={colors[status as keyof typeof colors] || colors.pending}>
+      <Badge variant="outline" className={colors[status as keyof typeof colors] || colors.pending}>
         {status.replace("_", " ")}
       </Badge>
     );
@@ -207,8 +207,8 @@ export function ReferralManager() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Referral Management</h1>
-          <p className="text-gray-600">Track referral program performance and top referrers</p>
+          <h1 className="text-3xl font-bold text-foreground">Referral Management</h1>
+          <p className="text-muted-foreground">Track referral program performance and top referrers</p>
         </div>
       </div>
 
@@ -217,9 +217,9 @@ export function ReferralManager() {
         <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-4">
           <Card className="p-4">
             <div className="flex items-center">
-              <UserPlus className="h-8 w-8 text-blue-600" />
+              <UserPlus className="h-8 w-8 text-primary" />
               <div className="ml-4">
-                <p className="text-sm font-medium text-gray-500">Total Referrals</p>
+                <p className="text-sm font-medium text-muted-foreground">Total Referrals</p>
                 <p className="text-2xl font-bold">{stats.total_referrals}</p>
               </div>
             </div>
@@ -229,7 +229,7 @@ export function ReferralManager() {
             <div className="flex items-center">
               <Users className="h-8 w-8 text-yellow-600" />
               <div className="ml-4">
-                <p className="text-sm font-medium text-gray-500">Active</p>
+                <p className="text-sm font-medium text-muted-foreground">Active</p>
                 <p className="text-2xl font-bold">{stats.active_referrals}</p>
               </div>
             </div>
@@ -237,9 +237,9 @@ export function ReferralManager() {
 
           <Card className="p-4">
             <div className="flex items-center">
-              <Trophy className="h-8 w-8 text-green-600" />
+              <Trophy className="h-8 w-8 text-primary" />
               <div className="ml-4">
-                <p className="text-sm font-medium text-gray-500">Successful</p>
+                <p className="text-sm font-medium text-muted-foreground">Successful</p>
                 <p className="text-2xl font-bold">{stats.successful_referrals}</p>
               </div>
             </div>
@@ -247,9 +247,9 @@ export function ReferralManager() {
 
           <Card className="p-4">
             <div className="flex items-center">
-              <DollarSign className="h-8 w-8 text-purple-600" />
+              <DollarSign className="h-8 w-8 text-primary" />
               <div className="ml-4">
-                <p className="text-sm font-medium text-gray-500">Credits Awarded</p>
+                <p className="text-sm font-medium text-muted-foreground">Credits Awarded</p>
                 <p className="text-2xl font-bold">{stats.total_credits_awarded}</p>
               </div>
             </div>
@@ -259,7 +259,7 @@ export function ReferralManager() {
             <div className="flex items-center">
               <TrendingUp className="h-8 w-8 text-orange-600" />
               <div className="ml-4">
-                <p className="text-sm font-medium text-gray-500">Conversion Rate</p>
+                <p className="text-sm font-medium text-muted-foreground">Conversion Rate</p>
                 <p className="text-2xl font-bold">{stats.average_conversion_rate.toFixed(1)}%</p>
               </div>
             </div>
@@ -269,7 +269,7 @@ export function ReferralManager() {
             <div className="flex items-center">
               <Users className="h-8 w-8 text-red-600" />
               <div className="ml-4">
-                <p className="text-sm font-medium text-gray-500">Expired</p>
+                <p className="text-sm font-medium text-muted-foreground">Expired</p>
                 <p className="text-2xl font-bold">{stats.expired_referrals}</p>
               </div>
             </div>
@@ -278,20 +278,20 @@ export function ReferralManager() {
       )}
 
       {/* Top Referrers */}
-      <Card>
+      <Card className="border-border bg-card shadow-sm">
         <CardHeader>
           <CardTitle>Top Referrers</CardTitle>
           <CardDescription>Most successful referral program participants</CardDescription>
         </CardHeader>
         <CardContent>
           <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Referrer</TableHead>
-                <TableHead>Total Referrals</TableHead>
-                <TableHead>Successful</TableHead>
-                <TableHead>Conversion Rate</TableHead>
-                <TableHead>Credits Earned</TableHead>
+            <TableHeader className="bg-muted/50">
+              <TableRow className="hover:bg-accent/50 transition-colors border-border">
+                <TableHead className="text-foreground font-semibold">Referrer</TableHead>
+                <TableHead className="text-foreground font-semibold">Total Referrals</TableHead>
+                <TableHead className="text-foreground font-semibold">Successful</TableHead>
+                <TableHead className="text-foreground font-semibold">Conversion Rate</TableHead>
+                <TableHead className="text-foreground font-semibold">Credits Earned</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -305,7 +305,7 @@ export function ReferralManager() {
                             index === 0
                               ? "text-yellow-500"
                               : index === 1
-                                ? "text-gray-400"
+                                ? "text-muted-foreground"
                                 : "text-orange-600"
                           }`}
                         />
@@ -317,7 +317,7 @@ export function ReferralManager() {
                   <TableCell>{referrer.successful_referrals}</TableCell>
                   <TableCell>{referrer.conversion_rate.toFixed(1)}%</TableCell>
                   <TableCell>
-                    <Badge variant="outline" className="bg-green-50">
+                    <Badge variant="outline" className="bg-primary/5">
                       {referrer.total_credits_earned} credits
                     </Badge>
                   </TableCell>
@@ -327,7 +327,7 @@ export function ReferralManager() {
           </Table>
 
           {topReferrers.length === 0 && (
-            <div className="text-center py-8 text-gray-500">No referrer data available</div>
+            <div className="text-center py-8 text-muted-foreground">No referrer data available</div>
           )}
         </CardContent>
       </Card>
@@ -337,7 +337,7 @@ export function ReferralManager() {
         <div className="flex flex-col md:flex-row gap-4 items-center justify-between">
           <div className="flex flex-1 gap-4 items-center">
             <div className="relative flex-1 max-w-md">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
               <Input
                 placeholder="Search referrals by email..."
                 value={searchTerm}
@@ -375,17 +375,17 @@ export function ReferralManager() {
       </Card>
 
       {/* Referrals Table */}
-      <Card>
+      <Card className="border-border bg-card shadow-sm">
         <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>Referrer</TableHead>
-              <TableHead>Invitee</TableHead>
-              <TableHead>Status</TableHead>
-              <TableHead>Credits</TableHead>
-              <TableHead>Created</TableHead>
-              <TableHead>Expires</TableHead>
-              <TableHead>Actions</TableHead>
+          <TableHeader className="bg-muted/50">
+            <TableRow className="hover:bg-accent/50 transition-colors border-border">
+              <TableHead className="text-foreground font-semibold">Referrer</TableHead>
+              <TableHead className="text-foreground font-semibold">Invitee</TableHead>
+              <TableHead className="text-foreground font-semibold">Status</TableHead>
+              <TableHead className="text-foreground font-semibold">Credits</TableHead>
+              <TableHead className="text-foreground font-semibold">Created</TableHead>
+              <TableHead className="text-foreground font-semibold">Expires</TableHead>
+              <TableHead className="text-foreground font-semibold">Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -399,7 +399,7 @@ export function ReferralManager() {
                   <div>
                     <div className="font-medium">{referral.invitee_email}</div>
                     {referral.invitee_name && (
-                      <div className="text-sm text-gray-500">{referral.invitee_name}</div>
+                      <div className="text-sm text-muted-foreground">{referral.invitee_name}</div>
                     )}
                   </div>
                 </TableCell>
@@ -410,7 +410,7 @@ export function ReferralManager() {
                   <div className="flex items-center gap-2">
                     <span>{referral.reward_credits}</span>
                     {referral.credits_awarded_at && (
-                      <Badge variant="outline" className="bg-green-50 text-xs">
+                      <Badge variant="outline" className="bg-primary/5 text-xs">
                         Awarded
                       </Badge>
                     )}
@@ -494,7 +494,7 @@ export function ReferralManager() {
         </Table>
 
         {filteredReferrals.length === 0 && (
-          <div className="text-center py-8 text-gray-500">
+          <div className="text-center py-8 text-muted-foreground">
             No referrals found matching your criteria
           </div>
         )}

@@ -8,8 +8,8 @@ export default function manifest(): MetadataRoute.Manifest {
       "Mobile cold plunge & infrared sauna delivered to your door. Weekly wellness sessions for peak performance and recovery.",
     start_url: "/",
     display: "standalone",
-    background_color: "#ffffff",
-    theme_color: "#0066cc",
+    background_color: "#f8fffa", // Mint background from v2-design
+    theme_color: "#B8D4CD", // Mint accent color for browser UI
     categories: ["health", "wellness", "lifestyle", "fitness"],
     lang: "en-US",
     scope: "/",

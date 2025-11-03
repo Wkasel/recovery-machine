@@ -11,6 +11,7 @@ export interface Profile {
   phone: string | null;
   address: Record<string, any> | null; // JSONB for address data
   referral_code: string | null; // Auto-generated unique code
+  stripe_customer_id: string | null; // Stripe customer ID for payment integration
   credits: number;
   created_at: string;
   updated_at: string;
@@ -19,10 +20,12 @@ export interface Profile {
 export interface Order {
   id: string;
   user_id: string;
-  bolt_checkout_id: string | null;
+  bolt_checkout_id: string | null; // Legacy Bolt field - deprecated
+  stripe_session_id: string | null; // Stripe checkout session ID
+  stripe_subscription_id: string | null; // Stripe subscription ID for recurring payments
   amount: number; // in cents
   setup_fee_applied: number; // in cents
-  status: "pending" | "processing" | "paid" | "refunded" | "failed";
+  status: "pending" | "processing" | "paid" | "refunded" | "failed" | "cancelled" | "expired";
   order_type: "subscription" | "one_time" | "setup_fee";
   metadata: Record<string, any>; // JSONB for additional payment data
   created_at: string;
@@ -38,7 +41,7 @@ export interface Booking {
   service_type: string; // Required NOT NULL field
   add_ons: Record<string, any>; // JSONB: {extra_visits: 2, family: true, sauna_time: 15}
   status: "scheduled" | "confirmed" | "in_progress" | "completed" | "cancelled" | "no_show";
-  address: Record<string, any>; // JSONB for delivery address
+  location_address: Record<string, any>; // JSONB for delivery address
   special_instructions: string | null;
   created_at: string;
   updated_at: string;
@@ -111,7 +114,7 @@ export interface Database {
     Tables: {
       profiles: {
         Row: Profile;
-        Insert: Omit<Profile, "id" | "created_at" | "updated_at" | "referral_code">;
+        Insert: Omit<Profile, "id" | "created_at" | "updated_at" | "referral_code" | "stripe_customer_id">;
         Update: Partial<Omit<Profile, "id" | "created_at" | "updated_at" | "referral_code">>;
       };
       orders: {

@@ -104,10 +104,14 @@ async function handleCheckoutCompleted(
 
   // Update customer ID in profile if available
   if (session.customer && orderRecord.user_id) {
-    await supabase
+    const { error: profileError } = await supabase
       .from("profiles")
       .update({ stripe_customer_id: session.customer as string })
       .eq("id", orderRecord.user_id);
+
+    if (profileError) {
+      console.error("Failed to update stripe_customer_id for user", orderRecord.user_id, profileError);
+    }
   }
 
   if (!bookingId) {
@@ -146,13 +150,8 @@ async function handleCheckoutCompleted(
   const confirmationAlreadySent = Boolean(updatedMetadata.confirmation_email_sent_at);
 
   if (profile?.email && !confirmationAlreadySent) {
-    const bookingForEmail = {
-      ...bookingRecord,
-      location_address: bookingRecord.address || bookingRecord.location_address,
-    };
-
     try {
-      await sendBookingConfirmation(bookingForEmail as any, profile);
+      await sendBookingConfirmation(bookingRecord as any, profile);
       const stampedMetadata = {
         ...updatedMetadata,
         confirmation_email_sent_at: new Date().toISOString(),
@@ -182,9 +181,10 @@ async function handleCheckoutExpired(
     .from("orders")
     .select("id, metadata")
     .eq("stripe_session_id", sessionId)
-    .single();
+    .maybeSingle();
 
   if (!orderRecord) {
+    console.warn("No order found for expired checkout session:", sessionId);
     return;
   }
 
@@ -194,7 +194,7 @@ async function handleCheckoutExpired(
     expired_at: new Date().toISOString(),
   };
 
-  await supabase
+  const { error: orderUpdateError } = await supabase
     .from("orders")
     .update({
       status: "expired",
@@ -202,16 +202,24 @@ async function handleCheckoutExpired(
     })
     .eq("id", orderRecord.id);
 
+  if (orderUpdateError) {
+    console.error("Failed to mark order as expired", orderRecord.id, orderUpdateError);
+  }
+
   const bookingId = metadata.booking_id || metadata.bookingId;
 
   if (bookingId) {
-    await supabase
+    const { error: bookingUpdateError } = await supabase
       .from("bookings")
       .update({
         status: "cancelled",
         updated_at: new Date().toISOString(),
       })
       .eq("id", bookingId);
+
+    if (bookingUpdateError) {
+      console.error("Failed to cancel booking for expired checkout", bookingId, bookingUpdateError);
+    }
   }
 }
 
@@ -230,34 +238,71 @@ async function handleSubscriptionUpdate(
     .from("profiles")
     .select("id")
     .eq("stripe_customer_id", customerId)
-    .single();
+    .maybeSingle();
 
   if (!profile) {
+    console.error("No profile found for Stripe customer:", customerId);
     return;
   }
 
-  // Update or create subscription record
+  // Check for existing order with this subscription ID
   const { data: existingOrder } = await supabase
     .from("orders")
-    .select("id")
+    .select("id, metadata")
     .eq("stripe_subscription_id", subscription.id)
-    .single();
+    .maybeSingle();
 
   const metadata = {
     subscription_status: subscription.status,
     current_period_start: new Date(subscription.current_period_start * 1000).toISOString(),
     current_period_end: new Date(subscription.current_period_end * 1000).toISOString(),
     cancel_at_period_end: subscription.cancel_at_period_end,
+    webhook_last_event: "customer.subscription.updated",
   };
 
   if (existingOrder) {
-    await supabase
+    // Map Stripe subscription status to order status
+    let orderStatus: "paid" | "pending" | "processing" | "cancelled" | "failed" | "expired";
+    switch (subscription.status) {
+      case "active":
+      case "trialing":
+        orderStatus = "paid";
+        break;
+      case "past_due":
+      case "incomplete":
+        orderStatus = "processing";
+        break;
+      case "incomplete_expired":
+        orderStatus = "expired";
+        break;
+      case "canceled":
+        orderStatus = "cancelled";
+        break;
+      case "unpaid":
+        orderStatus = "failed";
+        break;
+      default:
+        orderStatus = "pending";
+    }
+
+    // Update existing order status
+    const { error: updateError } = await supabase
       .from("orders")
       .update({
-        status: subscription.status === "active" ? "paid" : "cancelled",
-        metadata,
+        status: orderStatus,
+        metadata: {
+          ...(existingOrder.metadata as Record<string, any> || {}),
+          ...metadata,
+        },
       })
       .eq("id", existingOrder.id);
+
+    if (updateError) {
+      console.error("Failed to update order status for subscription", subscription.id, updateError);
+    }
+  } else {
+    // Create new order for subscription if none exists (shouldn't happen - checkout should create it)
+    console.warn("No order found for subscription update - subscription may have been created outside checkout flow:", subscription.id);
   }
 }
 
@@ -267,21 +312,29 @@ async function handleSubscriptionDeleted(
 ) {
   const { data: order } = await supabase
     .from("orders")
-    .select("id")
+    .select("id, metadata")
     .eq("stripe_subscription_id", subscription.id)
-    .single();
+    .maybeSingle();
 
   if (order) {
-    await supabase
+    const { error: updateError } = await supabase
       .from("orders")
       .update({
         status: "cancelled",
         metadata: {
+          ...(order.metadata as Record<string, any> || {}),
           subscription_status: "deleted",
           cancelled_at: new Date().toISOString(),
+          webhook_last_event: "customer.subscription.deleted",
         },
       })
       .eq("id", order.id);
+
+    if (updateError) {
+      console.error("Failed to cancel order for deleted subscription", subscription.id, updateError);
+    }
+  } else {
+    console.warn("No order found for subscription deletion:", subscription.id);
   }
 }
 

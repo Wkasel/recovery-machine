@@ -34,7 +34,7 @@ export function OfferModal({ isOpen, onClose }: OfferModalProps) {
       await new Promise((resolve) => setTimeout(resolve, 1000));
       setIsSubscribed(true);
       setEmail("");
-      
+
       // Close modal after a brief delay to show success
       setTimeout(() => {
         onClose();
@@ -50,16 +50,16 @@ export function OfferModal({ isOpen, onClose }: OfferModalProps) {
   if (isSubscribed) {
     return (
       <Dialog open={isOpen} onOpenChange={onClose}>
-        <DialogContent className="bg-black border-2 border-neutral-800 text-white max-w-md">
+        <DialogContent className="bg-background border-2 border-mint-accent text-charcoal max-w-md">
           <div className="text-center p-6">
-            <div className="w-16 h-16 bg-neutral-900 border border-neutral-800 flex items-center justify-center mx-auto mb-6">
-              <Mail className="h-8 w-8 text-white" />
+            <div className="w-16 h-16 bg-mint-accent/20 border-2 border-mint-accent rounded-lg flex items-center justify-center mx-auto mb-6">
+              <Mail className="h-8 w-8 text-mint" />
             </div>
-            <h3 className="text-2xl font-bold text-white mb-4">Welcome to Recovery Machine!</h3>
-            <p className="text-neutral-400 mb-6">
+            <h3 className="text-2xl font-bold text-charcoal mb-4" style={{ fontFamily: 'Futura, "Futura PT", "Century Gothic", sans-serif' }}>Welcome to Recovery Machine!</h3>
+            <p className="text-charcoal-light mb-6 font-light" style={{ fontFamily: 'Futura, "Futura PT", "Century Gothic", sans-serif' }}>
               Thank you for subscribing! Check your email for your 10% discount code.
             </p>
-            <Badge className="bg-neutral-900 text-white border border-neutral-800 px-4 py-2">
+            <Badge className="bg-mint-accent/20 text-charcoal border-2 border-mint-accent px-4 py-2" style={{ fontFamily: 'Futura, "Futura PT", "Century Gothic", sans-serif' }}>
               <Gift className="h-4 w-4 mr-2" />
               10% Off Code Sent
             </Badge>
@@ -71,7 +71,7 @@ export function OfferModal({ isOpen, onClose }: OfferModalProps) {
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="bg-black border-2 border-neutral-800 text-white max-w-lg p-0">
+      <DialogContent className="bg-background border-2 border-mint-accent text-charcoal max-w-lg p-0">
         <DialogHeader className="sr-only">
           <DialogTitle>Limited Time Offer</DialogTitle>
           <DialogDescription>
@@ -84,7 +84,7 @@ export function OfferModal({ isOpen, onClose }: OfferModalProps) {
           variant="ghost"
           size="sm"
           onClick={onClose}
-          className="absolute right-4 top-4 text-neutral-400 hover:text-white hover:bg-neutral-800 z-10"
+          className="absolute right-4 top-4 text-charcoal-light hover:text-charcoal hover:bg-mint-accent/10 z-10 rounded-full"
         >
           <X className="h-4 w-4" />
           <span className="sr-only">Close</span>
@@ -93,21 +93,21 @@ export function OfferModal({ isOpen, onClose }: OfferModalProps) {
         <div className="p-8">
           <div className="text-center mb-8">
             {/* Incentive Badge */}
-            <Badge className="bg-neutral-900 text-white border border-neutral-800 px-6 py-2 mb-6 text-sm font-semibold">
+            <Badge className="bg-mint-accent/20 text-charcoal border-2 border-mint-accent px-6 py-2 mb-6 text-sm font-semibold" style={{ fontFamily: 'Futura, "Futura PT", "Century Gothic", sans-serif' }}>
               <Gift className="h-4 w-4 mr-2" />
               Limited Time Offer
             </Badge>
 
-            <h2 className="text-2xl sm:text-3xl font-bold text-white mb-4">
+            <h2 className="text-2xl sm:text-3xl font-bold text-charcoal mb-4" style={{ fontFamily: 'Futura, "Futura PT", "Century Gothic", sans-serif' }}>
               Welcome! Get 10% Off Your First Month
             </h2>
-            <p className="text-neutral-400 mb-4">
+            <p className="text-charcoal-light mb-4 font-light" style={{ fontFamily: 'Futura, "Futura PT", "Century Gothic", sans-serif' }}>
               Join our community of high performers and unlock expert recovery strategies
             </p>
 
             {/* Value Proposition */}
-            <div className="flex items-center justify-center gap-2 text-white font-semibold mb-8">
-              <Star className="h-5 w-5 fill-current" />
+            <div className="flex items-center justify-center gap-2 text-charcoal font-semibold mb-8" style={{ fontFamily: 'Futura, "Futura PT", "Century Gothic", sans-serif' }}>
+              <Star className="h-5 w-5 fill-current text-mint" />
               <span>Plus exclusive recovery tips weekly</span>
             </div>
           </div>
@@ -121,17 +121,19 @@ export function OfferModal({ isOpen, onClose }: OfferModalProps) {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
-                className="h-12 px-4 text-lg bg-neutral-900 border-2 border-neutral-800 focus:border-white text-white placeholder:text-neutral-500"
+                className="h-12 px-4 text-lg bg-white border-2 border-mint-accent/30 focus:border-mint text-charcoal placeholder:text-charcoal-light/50 rounded-lg"
+                style={{ fontFamily: 'Futura, "Futura PT", "Century Gothic", sans-serif' }}
                 disabled={isLoading}
               />
               <Button
                 type="submit"
                 size="lg"
                 disabled={isLoading || !email}
-                className="h-12 px-8 bg-white text-black hover:bg-neutral-200 font-semibold disabled:opacity-50"
+                className="h-12 px-8 bg-charcoal text-white hover:bg-charcoal/90 font-semibold disabled:opacity-50 rounded-full hover:scale-105 transition-all"
+                style={{ fontFamily: 'Futura, "Futura PT", "Century Gothic", sans-serif' }}
               >
                 {isLoading ? (
-                  <div className="w-5 h-5 border-2 border-black/30 border-t-black rounded-full animate-spin"></div>
+                  <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
                 ) : (
                   <>
                     Claim 10% Off
@@ -145,33 +147,33 @@ export function OfferModal({ isOpen, onClose }: OfferModalProps) {
           {/* Benefits Grid */}
           <div className="grid grid-cols-3 gap-4 text-center">
             <div>
-              <div className="w-10 h-10 bg-neutral-900 border border-neutral-800 flex items-center justify-center mx-auto mb-2">
-                <Mail className="h-5 w-5 text-white" />
+              <div className="w-10 h-10 bg-mint-accent/20 border-2 border-mint-accent rounded-lg flex items-center justify-center mx-auto mb-2">
+                <Mail className="h-5 w-5 text-mint" />
               </div>
-              <h4 className="font-semibold text-white text-sm mb-1">Expert Tips</h4>
-              <p className="text-xs text-neutral-400">Weekly protocols</p>
+              <h4 className="font-semibold text-charcoal text-sm mb-1" style={{ fontFamily: 'Futura, "Futura PT", "Century Gothic", sans-serif' }}>Expert Tips</h4>
+              <p className="text-xs text-charcoal-light font-light" style={{ fontFamily: 'Futura, "Futura PT", "Century Gothic", sans-serif' }}>Weekly protocols</p>
             </div>
 
             <div>
-              <div className="w-10 h-10 bg-neutral-900 border border-neutral-800 flex items-center justify-center mx-auto mb-2">
-                <Gift className="h-5 w-5 text-white" />
+              <div className="w-10 h-10 bg-mint-accent/20 border-2 border-mint-accent rounded-lg flex items-center justify-center mx-auto mb-2">
+                <Gift className="h-5 w-5 text-mint" />
               </div>
-              <h4 className="font-semibold text-white text-sm mb-1">Exclusive Offers</h4>
-              <p className="text-xs text-neutral-400">Member discounts</p>
+              <h4 className="font-semibold text-charcoal text-sm mb-1" style={{ fontFamily: 'Futura, "Futura PT", "Century Gothic", sans-serif' }}>Exclusive Offers</h4>
+              <p className="text-xs text-charcoal-light font-light" style={{ fontFamily: 'Futura, "Futura PT", "Century Gothic", sans-serif' }}>Member discounts</p>
             </div>
 
             <div>
-              <div className="w-10 h-10 bg-neutral-900 border border-neutral-800 flex items-center justify-center mx-auto mb-2">
-                <Star className="h-5 w-5 text-white" />
+              <div className="w-10 h-10 bg-mint-accent/20 border-2 border-mint-accent rounded-lg flex items-center justify-center mx-auto mb-2">
+                <Star className="h-5 w-5 text-mint" />
               </div>
-              <h4 className="font-semibold text-white text-sm mb-1">Success Stories</h4>
-              <p className="text-xs text-neutral-400">Real results</p>
+              <h4 className="font-semibold text-charcoal text-sm mb-1" style={{ fontFamily: 'Futura, "Futura PT", "Century Gothic", sans-serif' }}>Success Stories</h4>
+              <p className="text-xs text-charcoal-light font-light" style={{ fontFamily: 'Futura, "Futura PT", "Century Gothic", sans-serif' }}>Real results</p>
             </div>
           </div>
 
           {/* Trust Indicators */}
-          <div className="text-center mt-6 pt-4 border-t border-neutral-800">
-            <p className="text-xs text-neutral-500">
+          <div className="text-center mt-6 pt-4 border-t border-mint-accent/20">
+            <p className="text-xs text-charcoal-light font-light" style={{ fontFamily: 'Futura, "Futura PT", "Century Gothic", sans-serif' }}>
               🔒 No spam, ever. Unsubscribe anytime.
             </p>
           </div>

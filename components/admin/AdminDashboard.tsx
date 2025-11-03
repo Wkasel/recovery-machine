@@ -124,22 +124,22 @@ export function AdminDashboard() {
   const getActivityIcon = (type: string) => {
     switch (type) {
       case "booking":
-        return <Calendar className="h-4 w-4 text-blue-600" />;
+        return <Calendar className="h-4 w-4 text-primary" />;
       case "payment":
-        return <DollarSign className="h-4 w-4 text-green-600" />;
+        return <DollarSign className="h-4 w-4 text-primary" />;
       case "review":
         return <Star className="h-4 w-4 text-yellow-600" />;
       case "referral":
-        return <UserPlus className="h-4 w-4 text-purple-600" />;
+        return <UserPlus className="h-4 w-4 text-primary" />;
       default:
-        return <Clock className="h-4 w-4 text-gray-600" />;
+        return <Clock className="h-4 w-4 text-muted-foreground" />;
     }
   };
 
   const getGrowthIndicator = (growth: number) => {
     const isPositive = growth >= 0;
     return (
-      <div className={`flex items-center gap-1 ${isPositive ? "text-green-600" : "text-red-600"}`}>
+      <div className={`flex items-center gap-1 ${isPositive ? "text-primary" : "text-red-600"}`}>
         {isPositive ? <ArrowUpRight className="h-4 w-4" /> : <ArrowDownRight className="h-4 w-4" />}
         <span className="text-sm font-medium">{Math.abs(growth)}%</span>
       </div>
@@ -162,8 +162,8 @@ export function AdminDashboard() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Dashboard</h1>
-          <p className="text-gray-600">Welcome to your business overview</p>
+          <h1 className="text-3xl font-bold text-foreground">Dashboard</h1>
+          <p className="text-muted-foreground">Welcome to your business overview</p>
         </div>
 
         <Button onClick={loadDashboardData} variant="outline">
@@ -176,7 +176,7 @@ export function AdminDashboard() {
       {stats && (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {/* Revenue */}
-          <Card>
+          <Card className="border-border bg-card shadow-sm">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">Total Revenue</CardTitle>
               <DollarSign className="h-4 w-4 text-muted-foreground" />
@@ -193,7 +193,7 @@ export function AdminDashboard() {
           </Card>
 
           {/* Users */}
-          <Card>
+          <Card className="border-border bg-card shadow-sm">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">Total Users</CardTitle>
               <Users className="h-4 w-4 text-muted-foreground" />
@@ -210,7 +210,7 @@ export function AdminDashboard() {
           </Card>
 
           {/* Bookings */}
-          <Card>
+          <Card className="border-border bg-card shadow-sm">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">Bookings</CardTitle>
               <Calendar className="h-4 w-4 text-muted-foreground" />
@@ -227,7 +227,7 @@ export function AdminDashboard() {
           </Card>
 
           {/* Average Rating */}
-          <Card>
+          <Card className="border-border bg-card shadow-sm">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">Avg Rating</CardTitle>
               <Star className="h-4 w-4 text-muted-foreground" />
@@ -244,25 +244,25 @@ export function AdminDashboard() {
       {stats && (
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {/* Booking Status */}
-          <Card>
+          <Card className="border-border bg-card shadow-sm">
             <CardHeader>
               <CardTitle className="text-lg">Booking Status</CardTitle>
             </CardHeader>
             <CardContent className="space-y-3">
               <div className="flex items-center justify-between">
-                <span className="text-sm text-gray-600">Pending</span>
+                <span className="text-sm text-muted-foreground">Pending</span>
                 <Badge variant="warning">
                   {stats.bookings.pending}
                 </Badge>
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-sm text-gray-600">Confirmed</span>
+                <span className="text-sm text-muted-foreground">Confirmed</span>
                 <Badge variant="info">
                   {stats.bookings.confirmed}
                 </Badge>
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-sm text-gray-600">Completed</span>
+                <span className="text-sm text-muted-foreground">Completed</span>
                 <Badge variant="success">
                   {stats.bookings.completed}
                 </Badge>
@@ -271,42 +271,42 @@ export function AdminDashboard() {
           </Card>
 
           {/* Referral Program */}
-          <Card>
+          <Card className="border-border bg-card shadow-sm">
             <CardHeader>
               <CardTitle className="text-lg">Referral Program</CardTitle>
             </CardHeader>
             <CardContent className="space-y-3">
               <div className="flex items-center justify-between">
-                <span className="text-sm text-gray-600">Active Referrals</span>
+                <span className="text-sm text-muted-foreground">Active Referrals</span>
                 <span className="font-semibold">{stats.referrals.active}</span>
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-sm text-gray-600">Converted</span>
+                <span className="text-sm text-muted-foreground">Converted</span>
                 <span className="font-semibold">{stats.referrals.converted}</span>
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-sm text-gray-600">Conversion Rate</span>
+                <span className="text-sm text-muted-foreground">Conversion Rate</span>
                 <span className="font-semibold">{stats.referrals.conversion_rate}%</span>
               </div>
             </CardContent>
           </Card>
 
           {/* Reviews */}
-          <Card>
+          <Card className="border-border bg-card shadow-sm">
             <CardHeader>
               <CardTitle className="text-lg">Reviews</CardTitle>
             </CardHeader>
             <CardContent className="space-y-3">
               <div className="flex items-center justify-between">
-                <span className="text-sm text-gray-600">Total Reviews</span>
+                <span className="text-sm text-muted-foreground">Total Reviews</span>
                 <span className="font-semibold">{stats.reviews.total}</span>
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-sm text-gray-600">Featured</span>
+                <span className="text-sm text-muted-foreground">Featured</span>
                 <span className="font-semibold">{stats.reviews.featured}</span>
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-sm text-gray-600">Avg Rating</span>
+                <span className="text-sm text-muted-foreground">Avg Rating</span>
                 <div className="flex items-center gap-1">
                   <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
                   <span className="font-semibold">{stats.reviews.average.toFixed(1)}</span>
@@ -318,7 +318,7 @@ export function AdminDashboard() {
       )}
 
       {/* Recent Activity */}
-      <Card>
+      <Card className="border-border bg-card shadow-sm">
         <CardHeader>
           <CardTitle>Recent Activity</CardTitle>
           <CardDescription>Latest business activities and transactions</CardDescription>
@@ -326,12 +326,12 @@ export function AdminDashboard() {
         <CardContent>
           {recentActivity.length > 0 ? (
             <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Activity</TableHead>
-                  <TableHead>User</TableHead>
-                  <TableHead>Amount</TableHead>
-                  <TableHead>Date</TableHead>
+              <TableHeader className="bg-muted/50">
+                <TableRow className="hover:bg-accent/50 transition-colors border-border">
+                  <TableHead className="text-foreground font-semibold">Activity</TableHead>
+                  <TableHead className="text-foreground font-semibold">User</TableHead>
+                  <TableHead className="text-foreground font-semibold">Amount</TableHead>
+                  <TableHead className="text-foreground font-semibold">Date</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -345,7 +345,7 @@ export function AdminDashboard() {
                     </TableCell>
                     <TableCell className="text-sm">{activity.user_email}</TableCell>
                     <TableCell>{activity.amount ? formatCurrency(activity.amount) : "-"}</TableCell>
-                    <TableCell className="text-sm text-gray-500">
+                    <TableCell className="text-sm text-muted-foreground">
                       {formatDate(activity.created_at)}
                     </TableCell>
                   </TableRow>
@@ -353,7 +353,7 @@ export function AdminDashboard() {
               </TableBody>
             </Table>
           ) : (
-            <div className="text-center py-8 text-gray-500">No recent activity found</div>
+            <div className="text-center py-8 text-muted-foreground">No recent activity found</div>
           )}
         </CardContent>
       </Card>

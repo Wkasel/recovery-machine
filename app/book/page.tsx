@@ -1,7 +1,6 @@
 "use client";
 
 import { AddressForm } from "@/components/booking/AddressForm";
-import { BookingCalendar } from "@/components/booking/BookingCalendar";
 import { BookingConfirmation } from "@/components/booking/BookingConfirmation";
 import { BookingStepper, MobileBookingStepper } from "@/components/booking/BookingStepper";
 import { PaymentStep } from "@/components/booking/PaymentStep";
@@ -11,6 +10,7 @@ import { Button } from "@/components/ui/button";
 import { createBookingWithPayment } from "@/core/actions/booking";
 import { useAuth } from "@/lib/hooks/use-auth";
 import { useToast } from "@/lib/hooks/use-toast";
+import { useUserProfile } from "@/lib/hooks/use-user-profile";
 import {
   Address,
   BookingState,
@@ -20,18 +20,44 @@ import {
   ServiceType,
   SetupFeeCalculation,
 } from "@/lib/types/booking";
-import { Loader2 } from "lucide-react";
+import { Loader2, User } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import dynamic from "next/dynamic";
 import { useEffect, useState } from "react";
 
-export default function BookingPage(): React.ReactElement {
+// Dynamic import for BookingCalendar to reduce bundle size
+// FullCalendar is ~200KB and only needed on this page
+const BookingCalendar = dynamic(
+  () => import("@/components/booking/BookingCalendar").then((mod) => ({ default: mod.BookingCalendar })),
+  {
+    loading: () => (
+      <div className="flex items-center justify-center p-12">
+        <Loader2 className="h-8 w-8 animate-spin text-mint-accent" />
+      </div>
+    ),
+    ssr: false, // Calendar requires client-side rendering
+  }
+);
+
+interface BookingPageProps {
+  initialStep?: BookingStep;
+  useUrlNavigation?: boolean;
+}
+
+export default function BookingPage({
+  initialStep = "service",
+  useUrlNavigation = false
+}: BookingPageProps = {}): React.ReactElement {
   const router = useRouter();
   const { user, loading: authLoading } = useAuth();
   const { toast } = useToast();
 
+  // Fetch user profile for saved addresses and account integration
+  const { profile, savedAddresses, loading: profileLoading } = useUserProfile(user);
+
   const [mounted, setMounted] = useState(false);
-  const [currentStep, setCurrentStep] = useState<BookingStep>("service");
+  const [currentStep, setCurrentStep] = useState<BookingStep>(initialStep);
   const [completedSteps, setCompletedSteps] = useState<BookingStep[]>([]);
   const [bookingState, setBookingState] = useState<BookingState>({
     currentStep: "service",
@@ -50,7 +76,7 @@ export default function BookingPage(): React.ReactElement {
 
   if (!mounted || authLoading) {
     return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center">
         <div className="animate-spin h-8 w-8 border-2 border-primary border-t-transparent rounded-full"></div>
       </div>
     );
@@ -76,6 +102,12 @@ export default function BookingPage(): React.ReactElement {
   const moveToStep = (step: BookingStep) => {
     setCurrentStep(step);
     setBookingState((prev) => ({ ...prev, currentStep: step }));
+
+    // Update URL if using stateful navigation
+    if (useUrlNavigation) {
+      router.push(`/book/${step}`, { scroll: false });
+    }
+
     // Scroll to top on mobile when moving between steps
     if (typeof window !== 'undefined') {
       setTimeout(() => {
@@ -135,8 +167,13 @@ export default function BookingPage(): React.ReactElement {
 
   const calculateTotalAmount = () => {
     const selectedService = services.find((s) => s.id === bookingState.serviceType);
-    const basePrice = selectedService?.basePrice || 0;
+    let basePrice = selectedService?.basePrice || 0;
     const setupFee = bookingState.setupFee?.totalSetupFee || 0;
+
+    // Apply 20% discount for subscription payment method
+    if (bookingState.paymentMethod === "subscription") {
+      basePrice = basePrice * 0.8;
+    }
 
     // Calculate add-ons
     const addOns = bookingState.addOns || { extraVisits: 0, familyMembers: 0, extendedTime: 0 };
@@ -184,7 +221,7 @@ export default function BookingPage(): React.ReactElement {
         specialInstructions: bookingState.specialInstructions,
         amount,
         setupFee: bookingState.setupFee?.totalSetupFee || 0,
-        orderType: selectedService?.recurring ? "subscription" : "one_time",
+        orderType: bookingState.paymentMethod === "subscription" ? "subscription" : "one_time",
         termsAccepted: true,
         // Include guest booking info if no user
         guestBooking: !user,
@@ -251,8 +288,8 @@ export default function BookingPage(): React.ReactElement {
           duration: result.booking.duration,
           add_ons: result.booking.add_ons,
           status: result.booking.status,
-          location_address: result.booking.address || result.booking.location_address,
-          special_instructions: result.booking.notes || result.booking.special_instructions,
+          location_address: result.booking.location_address,
+          special_instructions: result.booking.special_instructions,
           created_at: result.booking.created_at,
           updated_at: result.booking.updated_at,
         };
@@ -322,7 +359,7 @@ export default function BookingPage(): React.ReactElement {
   if (showStripeCheckout && checkoutData) {
     const { prefetchedSession, ...boltCheckoutProps } = checkoutData;
     return (
-      <div className="min-h-screen bg-background py-12">
+      <div className="min-h-screen py-12">
         <div className="container mx-auto px-4 max-w-2xl">
           <div className="text-center mb-8">
             <h1 className="text-3xl font-bold text-foreground mb-2">Complete Your Payment</h1>
@@ -342,14 +379,20 @@ export default function BookingPage(): React.ReactElement {
   }
 
   return (
-    <div className="min-h-screen bg-background py-8">
-      <div className="container mx-auto px-4 max-w-6xl">
+    <div className="min-h-screen pt-40 pb-8">
+      <div className="container mx-auto px-4 max-w-6xl font-futura">
         {/* Header */}
         <div className="text-center mb-8">
-          <h1 className="text-3xl font-serif font-bold text-foreground mb-2 tracking-tight">Book Your Recovery Session</h1>
+          <h1 className="text-3xl font-bold text-foreground mb-2 tracking-tight" style={{ fontFamily: 'Futura, "Futura PT", "Century Gothic", sans-serif' }}>Book Your Recovery Session</h1>
           <p className="text-muted-foreground font-light">
             Professional cold plunge & infrared sauna delivered to your door
           </p>
+          {user && !profileLoading && (
+            <div className="mt-2 flex items-center justify-center gap-2 text-sm text-mint-accent">
+              <User className="h-4 w-4" />
+              <span>Welcome back{profile?.full_name ? `, ${profile.full_name.split(' ')[0]}` : ''}</span>
+            </div>
+          )}
         </div>
 
         {/* Progress indicator */}
@@ -390,6 +433,8 @@ export default function BookingPage(): React.ReactElement {
               onSetupFeeCalculated={handleSetupFeeCalculated}
               onNext={handleAddressNext}
               onBack={() => moveToStep("service")}
+              savedAddresses={savedAddresses}
+              profile={profile}
             />
           )}
 
@@ -423,7 +468,11 @@ export default function BookingPage(): React.ReactElement {
                 specialInstructions={bookingState.specialInstructions}
                 onPayment={handlePayment}
                 onBack={() => moveToStep("calendar")}
-                user={user} // Pass user to show email field for guests
+                user={user}
+                userProfile={profile}
+                onPaymentMethodChange={(method) => {
+                  setBookingState((prev) => ({ ...prev, paymentMethod: method }));
+                }}
               />
             )}
 

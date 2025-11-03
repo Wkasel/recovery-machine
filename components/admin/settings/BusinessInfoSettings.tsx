@@ -96,7 +96,7 @@ export function BusinessInfoSettings({
                 placeholder="Enter business name"
                 required={businessName.is_required}
               />
-              <p className="text-xs text-gray-500">{businessName.description}</p>
+              <p className="text-xs text-muted-foreground">{businessName.description}</p>
               {localValues["business_name"] !== undefined && (
                 <Button
                   size="sm"
@@ -124,7 +124,7 @@ export function BusinessInfoSettings({
                 placeholder="Enter business email"
                 required={businessEmail.is_required}
               />
-              <p className="text-xs text-gray-500">{businessEmail.description}</p>
+              <p className="text-xs text-muted-foreground">{businessEmail.description}</p>
               {localValues["business_email"] !== undefined && (
                 <Button
                   size="sm"
@@ -152,7 +152,7 @@ export function BusinessInfoSettings({
                 placeholder="Enter business phone"
                 required={businessPhone.is_required}
               />
-              <p className="text-xs text-gray-500">{businessPhone.description}</p>
+              <p className="text-xs text-muted-foreground">{businessPhone.description}</p>
               {localValues["business_phone"] !== undefined && (
                 <Button
                   size="sm"

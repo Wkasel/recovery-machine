@@ -5,7 +5,7 @@
 
 ## Site Information
 Site Name: The Recovery Machine
-URL: https://therecoverymachine.com
+URL: https://therecoverymachine.co
 Type: Mobile Wellness & Recovery Services Business
 Industry: Healthcare & Wellness
 Primary Services: Mobile Cold Plunge Therapy, Infrared Sauna Services
@@ -96,7 +96,7 @@ Content is updated regularly with:
 ## Contact Information
 Business Email: info@therecoverymachine.com
 Support: support@therecoverymachine.com
-Website: https://therecoverymachine.com
+Website: https://therecoverymachine.co
 Social Media: @therecoverymachine
 
 ## Compliance Notes

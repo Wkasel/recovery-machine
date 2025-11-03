@@ -66,7 +66,7 @@ export async function GET(
       service_type: booking.service_type,
       add_ons: booking.add_ons,
       status: booking.status,
-      address: booking.address,
+      location_address: booking.location_address,
       special_instructions: booking.special_instructions,
       created_at: booking.created_at,
       updated_at: booking.updated_at,

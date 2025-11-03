@@ -44,7 +44,12 @@ export default {
         border: 'hsl(var(--border))',
         input: 'hsl(var(--input))',
         ring: 'hsl(var(--ring))',
-        // Brand colors
+        // V2 Minimal Design - Mint/Charcoal Palette
+        mint: '#f8fffa',
+        'mint-accent': '#a0e5b3',
+        charcoal: '#292f2a',
+        'charcoal-dark': '#3E443F',
+        // Brand colors (legacy support)
         brand: {
           50: '#f0fdf7',
           100: '#dcfce9',
@@ -90,11 +95,20 @@ export default {
           'Menlo',
           'monospace',
         ],
+        futura: [
+          'Futura',
+          'Futura PT',
+          'Century Gothic',
+          'CenturyGothic',
+          'AppleGothic',
+          'sans-serif',
+        ],
       },
       animation: {
         'fade-in': 'fadeIn 0.2s ease-in-out',
         'slide-in': 'slideIn 0.3s ease-out',
         'bounce-subtle': 'bounceSubtle 0.6s ease-in-out',
+        'radar-pulse': 'radarPulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
       },
       keyframes: {
         fadeIn: {
@@ -108,6 +122,16 @@ export default {
         bounceSubtle: {
           '0%, 100%': { transform: 'translateY(0)' },
           '50%': { transform: 'translateY(-5px)' },
+        },
+        radarPulse: {
+          '0%, 100%': {
+            opacity: '1',
+            transform: 'scale(1)',
+          },
+          '50%': {
+            opacity: '0.5',
+            transform: 'scale(1.05)',
+          },
         },
       },
     },

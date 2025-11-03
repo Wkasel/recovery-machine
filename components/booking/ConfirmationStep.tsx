@@ -130,8 +130,8 @@ export function ConfirmationStep({
     <div className="space-y-6">
       {/* Success header */}
       <div className="text-center">
-        <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-          <CheckCircle className="w-10 h-10 text-green-600" />
+        <div className="w-16 h-16 bg-mint-accent/20 rounded-full flex items-center justify-center mx-auto mb-4">
+          <CheckCircle className="w-10 h-10 text-mint" />
         </div>
         <h2 className="text-2xl font-bold text-gray-900 mb-2">Booking Confirmed!</h2>
         <p className="text-gray-600">We're excited to bring the recovery experience to you</p>
@@ -298,7 +298,7 @@ export function ConfirmationStep({
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         <Button
           variant="outline"
-          className="w-full"
+          className="w-full rounded-full hover:scale-105 transition-transform"
           onClick={() => {
             window.open(generateCalendarEvent(), "_blank");
             setCalendarAdded(true);
@@ -308,17 +308,17 @@ export function ConfirmationStep({
           {calendarAdded ? "Added to Calendar" : "Add to Calendar"}
         </Button>
 
-        <Button variant="outline" className="w-full" onClick={() => window.print()}>
+        <Button variant="outline" className="w-full rounded-full hover:scale-105 transition-transform" onClick={() => window.print()}>
           <Download className="w-4 h-4 mr-2" />
           Download Receipt
         </Button>
 
-        <Button variant="outline" className="w-full" onClick={shareBooking}>
+        <Button variant="outline" className="w-full rounded-full hover:scale-105 transition-transform" onClick={shareBooking}>
           <Share2 className="w-4 h-4 mr-2" />
           Share
         </Button>
 
-        <Button className="w-full" onClick={onNewBooking}>
+        <Button className="w-full rounded-full bg-charcoal hover:bg-charcoal/90 hover:scale-105 transition-transform" onClick={onNewBooking}>
           Book Another Session
         </Button>
       </div>

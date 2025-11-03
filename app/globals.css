@@ -3,13 +3,30 @@
 @import 'tailwindcss/utilities';
 
 /* ============================================
-   LIGHT WELLNESS THEME
-   Inspired by Cymbiotika, Ject, Milk & Honey
+   RECOVERY MACHINE THEME SYSTEM V2
+   ============================================
+
+   MIGRATION STRATEGY:
+   - V1 Theme: Warm spa aesthetic (sage green, cream, amber)
+   - V2 Theme: Minimal design (mint, charcoal, Futura font)
+
+   BACKWARD COMPATIBILITY:
+   - Existing CSS variables preserved for V1 components
+   - New --mint-* and --charcoal-* variables for V2 components
+   - Both themes coexist during gradual migration
+   - Use .v2-theme class to opt-in to new design system
+
+   MIGRATION PATH:
+   1. New components use mint/charcoal + Futura
+   2. Existing components continue using V1 variables
+   3. Gradual component-by-component updates
+   4. Eventually consolidate to single theme system
+
    ============================================ */
 
 @layer base {
   :root {
-    /* Light Theme - Warm Spa Aesthetic */
+    /* ===== V1 THEME (LEGACY) - Warm Spa Aesthetic ===== */
     --background: 48 40% 98%;           /* Warm cream #FDFCFA */
     --foreground: 0 0% 18%;             /* Charcoal #2D2D2D */
 
@@ -39,10 +56,22 @@
     --ring: 145 36% 73%;                /* Sage Green focus ring */
 
     --radius: 0.5rem;                   /* Subtle rounded corners */
+
+    /* ===== V2 THEME - Minimal Mint/Charcoal Design ===== */
+    --mint: 150 100% 98%;               /* #f8fffa */
+    --mint-accent: 145 61% 76%;         /* #a0e5b3 */
+    --charcoal: 130 7% 18%;             /* #292f2a */
+    --charcoal-dark: 130 7% 25%;        /* #3E443F */
+
+    /* V2 semantic mappings for gradual migration */
+    --v2-background: var(--mint);
+    --v2-foreground: var(--charcoal);
+    --v2-accent: var(--mint-accent);
+    --v2-surface: var(--charcoal-dark);
   }
 
   .dark {
-    /* Dark Theme (fallback, but we're focusing on light) */
+    /* ===== V1 DARK THEME (LEGACY) ===== */
     --background: 0 0% 7%;              /* Near black */
     --foreground: 0 0% 98%;             /* Off white */
 
@@ -70,17 +99,63 @@
     --border: 0 0% 20%;
     --input: 0 0% 20%;
     --ring: 145 36% 73%;
+
+    /* ===== V2 DARK THEME - Inverted Mint/Charcoal ===== */
+    --mint: 130 7% 12%;                 /* Dark mode inverted */
+    --mint-accent: 145 61% 76%;         /* Keep accent bright */
+    --charcoal: 150 100% 98%;           /* Inverted to light */
+    --charcoal-dark: 150 50% 95%;       /* Slightly darker */
+
+    --v2-background: var(--charcoal-dark);
+    --v2-foreground: var(--mint);
+    --v2-accent: var(--mint-accent);
+    --v2-surface: var(--charcoal);
   }
 }
 
 /* Smooth body background */
+html {
+  scroll-behavior: smooth; /* Enable smooth scrolling for better UX */
+  scroll-padding-top: 8rem; /* Offset for fixed header (announcement bar + nav) */
+}
+
 body {
   background: linear-gradient(135deg, hsl(var(--background)) 0%, hsl(48 30% 96%) 100%);
   letter-spacing: -0.01em; /* Slight tightening for cleaner look */
 }
 
+/* V2 Theme Body Variant */
+body.v2-theme {
+  background: hsl(var(--mint));
+  font-family: Futura, 'Futura PT', 'Century Gothic', sans-serif;
+  color: hsl(var(--charcoal));
+  letter-spacing: 0; /* Reset for Futura */
+
+  /* Override card colors for V2 theme - use white instead of tan */
+  --card: 0 0% 100%;                  /* Pure white cards */
+  --card-foreground: 130 7% 18%;       /* Charcoal text */
+
+  --popover: 0 0% 100%;                /* White popovers */
+  --popover-foreground: 130 7% 18%;    /* Charcoal text */
+
+  --border: 145 20% 85%;               /* Light mint border */
+  --input: 145 20% 95%;                /* Very light mint input bg */
+}
+
+/* V2 Theme: Scroll Snap for Section Navigation */
+body.v2-theme main {
+  scroll-snap-type: y proximity;
+  overflow-y: auto;
+}
+
+body.v2-theme section {
+  scroll-snap-align: start;
+  scroll-snap-stop: normal;
+}
+
 /* Typography Utilities - Inspired by Recovery Machine branding */
 @layer utilities {
+  /* ===== V1 TYPOGRAPHY ===== */
   /* Section headers - italic/oblique style like pricing sheet */
   .section-header {
     font-style: italic;
@@ -108,6 +183,155 @@ body {
     font-variant-numeric: tabular-nums;
     letter-spacing: -0.02em;
   }
+
+  /* ===== V2 TYPOGRAPHY - Futura Minimal ===== */
+  .v2-heading {
+    font-family: Futura, 'Futura PT', 'Century Gothic', sans-serif;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: hsl(var(--charcoal));
+  }
+
+  .v2-body {
+    font-family: Futura, 'Futura PT', 'Century Gothic', sans-serif;
+    font-weight: 400;
+    letter-spacing: 0;
+    line-height: 1.6;
+    color: hsl(var(--charcoal));
+  }
+
+  .v2-label {
+    font-family: Futura, 'Futura PT', 'Century Gothic', sans-serif;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    font-size: 0.875rem;
+    color: hsl(var(--charcoal));
+  }
+
+  .v2-accent-text {
+    color: hsl(var(--mint-accent));
+  }
+
+  /* CSS Animation Utilities - Replacing GSAP */
+
+  /* Respect user motion preferences - WCAG 2.3.3 */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+
+  /* Fade in animations for sections */
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(40px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes slideInLeft {
+    from {
+      opacity: 0;
+      transform: translateX(-40px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  @keyframes slideInRight {
+    from {
+      opacity: 0;
+      transform: translateX(40px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  @keyframes scaleIn {
+    from {
+      opacity: 0;
+      transform: scale(0.95);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  /* Pulse animation */
+  @keyframes pulse {
+    0%, 100% {
+      opacity: 1;
+      transform: scale(1);
+    }
+    50% {
+      opacity: 0.8;
+      transform: scale(1.02);
+    }
+  }
+
+  /* Apply animations with intersection observer support */
+  .animate-fade-in {
+    animation: fadeIn 0.6s ease-out forwards;
+  }
+
+  .animate-fade-in-up {
+    animation: fadeInUp 0.8s ease-out forwards;
+  }
+
+  .animate-slide-in-left {
+    animation: slideInLeft 0.7s ease-out forwards;
+  }
+
+  .animate-slide-in-right {
+    animation: slideInRight 0.7s ease-out forwards;
+  }
+
+  .animate-scale-in {
+    animation: scaleIn 0.5s ease-out forwards;
+  }
+
+  .animate-pulse {
+    animation: pulse 2s ease-in-out infinite;
+  }
+
+  /* Stagger children animations */
+  .stagger-children > * {
+    opacity: 0;
+    animation: fadeInUp 0.6s ease-out forwards;
+  }
+
+  .stagger-children > *:nth-child(1) { animation-delay: 0.1s; }
+  .stagger-children > *:nth-child(2) { animation-delay: 0.2s; }
+  .stagger-children > *:nth-child(3) { animation-delay: 0.3s; }
+  .stagger-children > *:nth-child(4) { animation-delay: 0.4s; }
+  .stagger-children > *:nth-child(5) { animation-delay: 0.5s; }
+  .stagger-children > *:nth-child(6) { animation-delay: 0.6s; }
 }
 
 /* Mobile input zoom prevention */

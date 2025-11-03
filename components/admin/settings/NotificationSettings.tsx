@@ -70,7 +70,7 @@ export function NotificationSettings({
               <div className="flex items-center justify-between">
                 <div>
                   <Label>Email Notifications</Label>
-                  <p className="text-sm text-gray-500 mt-1">
+                  <p className="text-sm text-muted-foreground mt-1">
                     Send booking confirmations and updates via email
                   </p>
                 </div>
@@ -97,7 +97,7 @@ export function NotificationSettings({
               <div className="flex items-center justify-between">
                 <div>
                   <Label>Booking Confirmation Emails</Label>
-                  <p className="text-sm text-gray-500 mt-1">
+                  <p className="text-sm text-muted-foreground mt-1">
                     Automatically send confirmation emails when bookings are made
                   </p>
                 </div>
@@ -144,7 +144,7 @@ export function NotificationSettings({
                 placeholder="admin@example.com"
                 required={getSetting("admin_notification_email")?.is_required}
               />
-              <p className="text-xs text-gray-500">
+              <p className="text-xs text-muted-foreground">
                 {getSetting("admin_notification_email")?.description}
               </p>
               {localValues["admin_notification_email"] !== undefined && (
@@ -174,15 +174,15 @@ export function NotificationSettings({
             {/* Customer Notifications */}
             <div className="space-y-3">
               <h4 className="font-medium">Customer Notifications</h4>
-              <div className="bg-gray-50 p-4 rounded-lg space-y-2">
+              <div className="bg-muted/50 p-4 rounded-lg space-y-2">
                 <div className="flex items-center justify-between text-sm">
                   <span>Booking Confirmations</span>
                   <span
                     className={
                       getValue("email_notifications_enabled") &&
                       getValue("booking_confirmation_email")
-                        ? "text-green-600"
-                        : "text-gray-400"
+                        ? "text-primary"
+                        : "text-muted-foreground"
                     }
                   >
                     {getValue("email_notifications_enabled") &&
@@ -197,19 +197,19 @@ export function NotificationSettings({
             {/* Admin Notifications */}
             <div className="space-y-3">
               <h4 className="font-medium">Admin Notifications</h4>
-              <div className="bg-gray-50 p-4 rounded-lg space-y-2">
+              <div className="bg-muted/50 p-4 rounded-lg space-y-2">
                 <div className="flex items-center justify-between text-sm">
                   <span>New Bookings</span>
                   <span
                     className={
-                      getValue("admin_notification_email") ? "text-green-600" : "text-gray-400"
+                      getValue("admin_notification_email") ? "text-primary" : "text-muted-foreground"
                     }
                   >
                     {getValue("admin_notification_email") ? "✓ Configured" : "✗ No Email Set"}
                   </span>
                 </div>
                 {getValue("admin_notification_email") && (
-                  <div className="text-xs text-gray-600">
+                  <div className="text-xs text-muted-foreground">
                     Sent to: {getValue("admin_notification_email")}
                   </div>
                 )}

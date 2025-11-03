@@ -200,9 +200,9 @@ export function EmailTemplateManager() {
 
   const getCategoryBadge = (category: string) => {
     const colors = {
-      transactional: "bg-blue-100 text-blue-800",
+      transactional: "bg-primary/10 text-blue-800",
       marketing: "bg-purple-100 text-purple-800",
-      notification: "bg-yellow-100 text-yellow-800",
+      notification: "bg-secondary/10 text-secondary-foreground",
     };
 
     return (
@@ -239,8 +239,8 @@ export function EmailTemplateManager() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Email Templates</h1>
-          <p className="text-gray-600">Manage automated email templates and communications</p>
+          <h1 className="text-3xl font-bold text-foreground">Email Templates</h1>
+          <p className="text-muted-foreground">Manage automated email templates and communications</p>
         </div>
 
         <Button onClick={openCreateEditor}>
@@ -254,7 +254,7 @@ export function EmailTemplateManager() {
         <div className="flex flex-col md:flex-row gap-4 items-center justify-between">
           <div className="flex flex-1 gap-4 items-center">
             <div className="relative flex-1 max-w-md">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
               <Input
                 placeholder="Search templates..."
                 value={searchTerm}
@@ -287,9 +287,9 @@ export function EmailTemplateManager() {
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         <Card className="p-4">
           <div className="flex items-center">
-            <Mail className="h-8 w-8 text-blue-600" />
+            <Mail className="h-8 w-8 text-primary" />
             <div className="ml-4">
-              <p className="text-sm font-medium text-gray-500">Total Templates</p>
+              <p className="text-sm font-medium text-muted-foreground">Total Templates</p>
               <p className="text-2xl font-bold">{templates.length}</p>
             </div>
           </div>
@@ -297,9 +297,9 @@ export function EmailTemplateManager() {
 
         <Card className="p-4">
           <div className="flex items-center">
-            <Mail className="h-8 w-8 text-green-600" />
+            <Mail className="h-8 w-8 text-primary" />
             <div className="ml-4">
-              <p className="text-sm font-medium text-gray-500">Active</p>
+              <p className="text-sm font-medium text-muted-foreground">Active</p>
               <p className="text-2xl font-bold">
                 {templates.filter((t) => t.active).length}
               </p>
@@ -309,9 +309,9 @@ export function EmailTemplateManager() {
 
         <Card className="p-4">
           <div className="flex items-center">
-            <Mail className="h-8 w-8 text-purple-600" />
+            <Mail className="h-8 w-8 text-primary" />
             <div className="ml-4">
-              <p className="text-sm font-medium text-gray-500">Transactional</p>
+              <p className="text-sm font-medium text-muted-foreground">Transactional</p>
               <p className="text-2xl font-bold">
                 {templates.filter((t) => t.category === "transactional").length}
               </p>
@@ -323,7 +323,7 @@ export function EmailTemplateManager() {
           <div className="flex items-center">
             <Mail className="h-8 w-8 text-orange-600" />
             <div className="ml-4">
-              <p className="text-sm font-medium text-gray-500">Marketing</p>
+              <p className="text-sm font-medium text-muted-foreground">Marketing</p>
               <p className="text-2xl font-bold">
                 {templates.filter((t) => t.category === "marketing").length}
               </p>
@@ -333,16 +333,16 @@ export function EmailTemplateManager() {
       </div>
 
       {/* Templates Table */}
-      <Card>
+      <Card className="border-border bg-card shadow-sm">
         <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>Template</TableHead>
-              <TableHead>Category</TableHead>
-              <TableHead>Variables</TableHead>
-              <TableHead>Status</TableHead>
-              <TableHead>Updated</TableHead>
-              <TableHead>Actions</TableHead>
+          <TableHeader className="bg-muted/50">
+            <TableRow className="hover:bg-accent/50 transition-colors border-border">
+              <TableHead className="text-foreground font-semibold">Template</TableHead>
+              <TableHead className="text-foreground font-semibold">Category</TableHead>
+              <TableHead className="text-foreground font-semibold">Variables</TableHead>
+              <TableHead className="text-foreground font-semibold">Status</TableHead>
+              <TableHead className="text-foreground font-semibold">Updated</TableHead>
+              <TableHead className="text-foreground font-semibold">Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -351,7 +351,7 @@ export function EmailTemplateManager() {
                 <TableCell>
                   <div>
                     <div className="font-medium">{template.name}</div>
-                    <div className="text-sm text-gray-500 truncate max-w-xs">
+                    <div className="text-sm text-muted-foreground truncate max-w-xs">
                       {template.subject}
                     </div>
                   </div>
@@ -370,7 +370,7 @@ export function EmailTemplateManager() {
                 </TableCell>
 
                 <TableCell>
-                  <span className="text-sm text-gray-500">
+                  <span className="text-sm text-muted-foreground">
                     {new Date(template.updated_at).toLocaleDateString()}
                   </span>
                 </TableCell>
@@ -407,7 +407,7 @@ export function EmailTemplateManager() {
         </Table>
 
         {filteredTemplates.length === 0 && (
-          <div className="text-center py-8 text-gray-500">
+          <div className="text-center py-8 text-muted-foreground">
             No email templates found matching your criteria
           </div>
         )}

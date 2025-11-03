@@ -237,7 +237,7 @@ export function BusinessSettingsManager() {
             
             {saveStatus.timestamp && (
               <Flex align="center" gap="sm" className="mt-3">
-                <CheckCircle className="w-4 h-4 text-green-600" />
+                <CheckCircle className="w-4 h-4 text-primary" />
                 <Text size="sm" color="success">
                   Last saved: {saveStatus.timestamp.toLocaleString()}
                 </Text>

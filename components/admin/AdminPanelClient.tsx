@@ -24,14 +24,14 @@ export function AdminPanelClient({ children, user, adminData }: AdminPanelClient
   // Don't render anything until mounted to prevent hydration issues
   if (!mounted) {
     return (
-      <div className="min-h-screen bg-black text-white">
+      <div className="min-h-screen bg-background text-charcoal">
         <div className="animate-pulse">
-          <div className="h-16 bg-gray-800 border-b border-gray-700"></div>
+          <div className="h-16 bg-mint-accent/20 border-b border-mint-accent/30"></div>
           <div className="flex">
-            <div className="w-64 h-screen bg-gray-900"></div>
+            <div className="w-64 h-screen bg-white/70 backdrop-blur-sm border-r border-mint-accent/20"></div>
             <div className="flex-1 p-6">
-              <div className="h-8 bg-gray-700 rounded mb-4"></div>
-              <div className="h-32 bg-gray-700 rounded"></div>
+              <div className="h-8 bg-mint-accent/20 rounded mb-4"></div>
+              <div className="h-32 bg-mint-accent/20 rounded"></div>
             </div>
           </div>
         </div>
@@ -42,17 +42,17 @@ export function AdminPanelClient({ children, user, adminData }: AdminPanelClient
   // Ensure we have all required data
   if (!adminData?.role || !user?.email) {
     return (
-      <div className="min-h-screen bg-black text-white flex items-center justify-center">
+      <div className="min-h-screen bg-background text-charcoal flex items-center justify-center">
         <div className="text-center">
-          <h2 className="text-xl font-bold mb-2">Access Denied</h2>
-          <p>You don't have admin permissions.</p>
+          <h2 className="text-xl font-bold mb-2" style={{ fontFamily: 'Futura, "Futura PT", "Century Gothic", sans-serif' }}>Access Denied</h2>
+          <p className="text-charcoal-light" style={{ fontFamily: 'Futura, "Futura PT", "Century Gothic", sans-serif' }}>You don't have admin permissions.</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-black text-white">
+    <div className="min-h-screen bg-background text-charcoal">
       <AdminHeader
         user={user}
         admin={{

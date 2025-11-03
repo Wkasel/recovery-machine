@@ -140,13 +140,13 @@ export default function ExportsManager() {
   const getStatusColor = (status: ExportJob["status"]) => {
     switch (status) {
       case "completed":
-        return "text-green-400";
+        return "text-primary";
       case "failed":
-        return "text-red-400";
+        return "text-destructive";
       case "pending":
-        return "text-yellow-400";
+        return "text-secondary-foreground";
       default:
-        return "text-neutral-400";
+        return "text-muted-foreground";
     }
   };
 

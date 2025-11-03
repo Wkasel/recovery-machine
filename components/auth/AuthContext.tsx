@@ -1,6 +1,6 @@
 "use client";
 
-import { getUser, signOutWithRedirect } from "../../core/actions/auth";
+import { getUser, signOut as clientSignOut } from "@/lib/auth/client-auth";
 import { IUser } from "@/lib/types/auth";
 import type { User } from "@supabase/supabase-js";
 import { useQueryClient } from "@tanstack/react-query";
@@ -36,12 +36,11 @@ export function AuthContextProvider({ children }: { children: ReactNode }) {
     try {
       setIsLoading(true);
 
-      // Get the user, which will return null if not authenticated (we fixed the server code)
+      // Get the user, which will return null if not authenticated
       const userData = await getUser();
 
-      // Convert and set the user data
-      const convertedUser = convertUserToIUser(userData);
-      setUser(convertedUser);
+      // Set the user data (already in IUser format from API)
+      setUser(userData);
     } catch (error) {
       console.error("Unhandled error in refreshUser:", error);
       setUser(null);
@@ -57,7 +56,7 @@ export function AuthContextProvider({ children }: { children: ReactNode }) {
   const signOut = async () => {
     try {
       setIsLoading(true);
-      await signOutWithRedirect();
+      await clientSignOut();
 
       // Reset cached data
       queryClient.clear();

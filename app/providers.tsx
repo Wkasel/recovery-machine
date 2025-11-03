@@ -6,10 +6,15 @@ import { queryClient } from "@/lib/query/config";
 import { LoadingProvider } from "@/lib/ui/loading/context";
 import { ModalProvider } from "@/lib/ui/modals/context";
 import { QueryClientProvider } from "@tanstack/react-query";
-import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { ThemeProvider } from "next-themes";
 import { ReactNode } from "react";
 import { Toaster } from "sonner";
+
+// Lazy load ReactQueryDevtools only in development
+const ReactQueryDevtools =
+  process.env.NODE_ENV === 'development'
+    ? require('@tanstack/react-query-devtools').ReactQueryDevtools
+    : () => null;
 
 export default function AppProvider({ children }: { children: ReactNode }) {
   return (
@@ -21,7 +26,10 @@ export default function AppProvider({ children }: { children: ReactNode }) {
               <ModalProvider>
                 <Toaster position="top-right" />
                 {children}
-                <ReactQueryDevtools initialIsOpen={false} />
+                {/* ReactQueryDevtools only in development to reduce production bundle */}
+                {process.env.NODE_ENV === 'development' && (
+                  <ReactQueryDevtools initialIsOpen={false} />
+                )}
               </ModalProvider>
             </LoadingProvider>
           </AuthContextProvider>

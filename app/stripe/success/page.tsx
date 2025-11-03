@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { createServerSupabaseClient } from "@/lib/supabase/server";
+import { createServiceRoleClient } from "@/lib/supabase/service-role";
 import { CheckCircle, Calendar, MapPin, Mail, Phone, ArrowRight } from "lucide-react";
 import Link from "next/link";
 import { redirect } from "next/navigation";
@@ -17,27 +18,41 @@ export default async function StripeSuccessPage({ searchParams }: PageProps) {
     redirect("/book");
   }
 
+  // Use regular client to check user auth status
   const supabase = await createServerSupabaseClient();
   const {
     data: { user },
   } = await supabase.auth.getUser();
 
-  // Get order and booking details
-  const { data: order } = await supabase
+  // Use service role client to fetch order/booking (bypasses RLS for guests)
+  const serviceClient = createServiceRoleClient();
+
+  // Get order details using the real FK relationship
+  const { data: order, error: orderError } = await serviceClient
     .from("orders")
     .select(
       `
       *,
-      bookings:metadata->booking_id (
-        *,
-        profiles:profiles!bookings_user_id_fkey(*)
+      bookings!orders_order_id_fkey (
+        id,
+        date_time,
+        duration,
+        location_address,
+        special_instructions,
+        status,
+        add_ons,
+        profiles:profiles!bookings_user_id_fkey (
+          email,
+          phone
+        )
       )
     `
     )
     .eq("stripe_session_id", sessionId)
     .single();
 
-  if (!order) {
+  if (orderError || !order) {
+    console.error("Order lookup error:", orderError);
     return (
       <div className="container max-w-2xl mx-auto px-4 py-16">
         <Card>
@@ -57,21 +72,8 @@ export default async function StripeSuccessPage({ searchParams }: PageProps) {
     );
   }
 
-  const metadata = order.metadata as Record<string, any>;
-  const bookingId = metadata.booking_id || metadata.bookingId;
-
-  const { data: booking } = bookingId
-    ? await supabase
-        .from("bookings")
-        .select(
-          `
-          *,
-          profiles:profiles!bookings_user_id_fkey(*)
-        `
-        )
-        .eq("id", bookingId)
-        .single()
-    : { data: null };
+  // Extract booking from the FK relationship
+  const booking = Array.isArray(order.bookings) ? order.bookings[0] : order.bookings;
 
   const formatDateTime = (dateTimeStr: string) => {
     const date = new Date(dateTimeStr);
@@ -122,20 +124,24 @@ export default async function StripeSuccessPage({ searchParams }: PageProps) {
                 <div>
                   <p className="font-medium">Date & Time</p>
                   <p className="text-sm text-muted-foreground">
-                    {booking.scheduled_date && formatDateTime(booking.scheduled_date).date}
+                    {booking.date_time && formatDateTime(booking.date_time).date}
                   </p>
                   <p className="text-sm text-muted-foreground">
-                    {booking.scheduled_date && formatDateTime(booking.scheduled_date).time}
+                    {booking.date_time && formatDateTime(booking.date_time).time}
                   </p>
                 </div>
               </div>
 
-              {booking.address && (
+              {booking.location_address && (
                 <div className="flex items-start space-x-3">
                   <MapPin className="w-5 h-5 text-primary mt-0.5" />
                   <div>
                     <p className="font-medium">Location</p>
-                    <p className="text-sm text-muted-foreground">{booking.address}</p>
+                    <p className="text-sm text-muted-foreground">
+                      {typeof booking.location_address === 'string'
+                        ? booking.location_address
+                        : `${booking.location_address.street}, ${booking.location_address.city}, ${booking.location_address.state} ${booking.location_address.zipCode}`}
+                    </p>
                   </div>
                 </div>
               )}
@@ -186,7 +192,7 @@ export default async function StripeSuccessPage({ searchParams }: PageProps) {
       <div className="flex flex-col sm:flex-row gap-4">
         {user && (
           <Button asChild className="flex-1">
-            <Link href="/dashboard">
+            <Link href="/profile">
               Go to Dashboard
               <ArrowRight className="ml-2 h-4 w-4" />
             </Link>
