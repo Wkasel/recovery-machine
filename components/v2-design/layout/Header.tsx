@@ -8,6 +8,7 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/dist/ScrollTrigger';
 import { ScrollToPlugin } from 'gsap/dist/ScrollToPlugin';
 import { useWellnessTracking } from '@/components/analytics/GoogleAnalytics';
+import { useAuth } from '@/components/auth/AuthContext';
 
 // Register GSAP plugins
 if (typeof window !== 'undefined') {
@@ -20,6 +21,7 @@ const Header: React.FC = () => {
   const router = useRouter();
   const isHomePage = pathname === '/';
   const { trackWellnessEvent } = useWellnessTracking();
+  const { isAuthenticated, isLoading } = useAuth();
 
   const headerRef = useRef<HTMLElement>(null);
   const navRef = useRef<HTMLElement>(null);
@@ -172,6 +174,24 @@ const Header: React.FC = () => {
     closeMobileMenu();
   };
 
+  /**
+   * Handle MY ACCOUNT click - redirect to sign-in if not authenticated
+   */
+  const handleMyAccountClick = (e: React.MouseEvent<HTMLAnchorElement>): void => {
+    e.preventDefault();
+
+    if (!isAuthenticated && !isLoading) {
+      // Not authenticated - redirect to sign-in
+      router.push('/sign-in');
+    } else if (isAuthenticated) {
+      // Authenticated - go to profile
+      router.push('/profile');
+    }
+    // If loading, do nothing
+
+    closeMobileMenu();
+  };
+
   return (
     <header ref={headerRef} className="fixed top-16 left-1/2 -translate-x-1/2 z-50 w-full max-w-4xl px-3 md:px-6">
       {/* Skip to main content link for keyboard users (WCAG 2.4.1) */}
@@ -225,13 +245,16 @@ const Header: React.FC = () => {
           >
             PRICING
           </a>
-          <Link
+          <a
             href="/profile"
-            onClick={() => trackWellnessEvent('nav_link_clicked', { section: 'my-account', location: 'header' })}
-            className="text-white text-sm font-medium hover:text-mint-accent transition-all duration-300 hover:scale-105"
+            onClick={(e) => {
+              trackWellnessEvent('nav_link_clicked', { section: 'my-account', location: 'header' });
+              handleMyAccountClick(e);
+            }}
+            className="text-white text-sm font-medium hover:text-mint-accent transition-all duration-300 hover:scale-105 cursor-pointer"
           >
             MY ACCOUNT
-          </Link>
+          </a>
           <Link
             href="/book"
             onClick={() => trackWellnessEvent('book_now_clicked', { location: 'header' })}
@@ -301,16 +324,16 @@ const Header: React.FC = () => {
             >
               PRICING
             </a>
-            <Link
+            <a
               href="/profile"
-              onClick={() => {
+              onClick={(e) => {
                 trackWellnessEvent('nav_link_clicked', { section: 'my-account', location: 'mobile_menu' });
-                closeMobileMenu();
+                handleMyAccountClick(e);
               }}
-              className="text-white text-sm font-medium px-6 py-3 hover:bg-mint-accent/10 transition-colors"
+              className="text-white text-sm font-medium px-6 py-3 hover:bg-mint-accent/10 transition-colors cursor-pointer"
             >
               MY ACCOUNT
-            </Link>
+            </a>
           </div>
         </div>
       )}
