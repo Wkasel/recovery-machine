@@ -3,7 +3,6 @@
 import { getUser, signOut as clientSignOut } from "@/lib/auth/client-auth";
 import { IUser } from "@/lib/types/auth";
 import type { User } from "@supabase/supabase-js";
-import { useQueryClient } from "@tanstack/react-query";
 import { createContext, ReactNode, useContext, useEffect, useState } from "react";
 
 interface AuthContextValue {
@@ -30,7 +29,6 @@ function convertUserToIUser(user: User | null): IUser | null {
 export function AuthContextProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<IUser | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const queryClient = useQueryClient();
 
   const refreshUser = async () => {
     try {
@@ -58,14 +56,16 @@ export function AuthContextProvider({ children }: { children: ReactNode }) {
       setIsLoading(true);
       await clientSignOut();
 
-      // Reset cached data
-      queryClient.clear();
-
       // Update local state
       setUser(null);
+
+      // Force a page reload to clear all cached state
+      // This is safer than trying to clear query cache
+      if (typeof window !== 'undefined') {
+        window.location.href = '/';
+      }
     } catch (error) {
       console.error("Error signing out:", error);
-    } finally {
       setIsLoading(false);
     }
   };
