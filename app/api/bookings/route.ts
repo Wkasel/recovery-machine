@@ -257,8 +257,9 @@ export async function POST(request: NextRequest) {
           familyMembers: addOns?.familyMembers || 0,
           extendedTime: addOns?.extendedTime || 0,
         },
-        location_address: address,
-        special_instructions: specialInstructions,
+        address: address,
+        notes: specialInstructions,
+        total_amount: persistedAmount,
         status: devBypass ? "confirmed" : "scheduled",
       })
       .select()
@@ -315,10 +316,24 @@ export async function POST(request: NextRequest) {
       });
     }
 
-    const checkoutMetadata: Record<string, any> = {
-      ...metadataWithConfirmation,
-      booking_id: booking.id,
-      order_id: order.id,
+    // Stripe requires all metadata values to be strings
+    const checkoutMetadata: Record<string, string> = {
+      description: orderDescription,
+      customer_email: customerEmail,
+      customer_phone: customerPhone || "",
+      serviceType,
+      dateTime: String(dateTime),
+      address: JSON.stringify(address),
+      addOns: JSON.stringify(addOns || {}),
+      specialInstructions: specialInstructions || "",
+      setupFee: String(normalizedSetupFee),
+      guest_booking: String(guestBooking),
+      dev_bypass: String(devBypass),
+      original_amount: String(totalAmount),
+      confirmation_token: confirmationToken,
+      confirmation_url: confirmationUrl,
+      booking_id: String(booking.id),
+      order_id: String(order.id),
       user_id: user.id,
     };
 

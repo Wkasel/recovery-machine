@@ -154,7 +154,6 @@ const EMAIL_TEMPLATES = {
           <li>✅ Clear a flat space for the session</li>
           <li>✅ Wear comfortable, moveable clothing</li>
           <li>✅ Stay hydrated before and after</li>
-          <li>✅ Have your phone accessible for our therapist's arrival call</li>
         </ul>
         
         <div style="text-align: center; margin: 30px 0;">

@@ -1,17 +1,7 @@
 "use client";
 
 import { isServer, QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import dynamic from "next/dynamic";
-import { ComponentType, ReactNode, useEffect, useState } from "react";
-
-// Lazy load ReactQueryDevtools only in development
-const ReactQueryDevtools: ComponentType<any> =
-  process.env.NODE_ENV === "development"
-    ? dynamic(
-        () => import("@tanstack/react-query-devtools").then((mod) => mod.ReactQueryDevtools),
-        { ssr: false }
-      )
-    : () => null;
+import { ReactNode } from "react";
 
 function makeQueryClient(): QueryClient {
   return new QueryClient({
@@ -54,18 +44,9 @@ export function QueryProvider({ children }: QueryProviderProps): ReactNode {
   //       render if it suspends and there is no boundary
   const queryClient = getQueryClient();
 
-  const [devtoolsReady, setDevtoolsReady] = useState(false);
-
-  useEffect(() => {
-    setDevtoolsReady(true);
-  }, []);
-
   return (
     <QueryClientProvider client={queryClient}>
       {children}
-      {process.env.NODE_ENV === "development" && !isServer && devtoolsReady && (
-        <ReactQueryDevtools client={queryClient} initialIsOpen={false} />
-      )}
     </QueryClientProvider>
   );
 }

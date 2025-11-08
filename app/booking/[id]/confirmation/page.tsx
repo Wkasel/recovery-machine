@@ -63,10 +63,10 @@ export default function BookingConfirmationPage() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <div className="min-h-screen pt-24 flex items-center justify-center bg-background">
         <div className="flex flex-col items-center space-y-4">
-          <div className="animate-spin rounded-full h-12 w-12 border-2 border-primary border-t-transparent"></div>
-          <p className="text-muted-foreground font-light">Loading your booking confirmation...</p>
+          <div className="animate-spin rounded-full h-12 w-12 border-2 border-mint-accent border-t-transparent"></div>
+          <p className="text-charcoal/70" style={{ fontFamily: 'Futura, "Futura PT", "Century Gothic", sans-serif' }}>Loading your booking confirmation...</p>
         </div>
       </div>
     );
@@ -74,15 +74,16 @@ export default function BookingConfirmationPage() {
 
   if (error || !booking) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center space-y-4 bg-white/70 backdrop-blur-sm border border-border rounded-3xl p-12 shadow-lg max-w-md mx-4">
-          <h1 className="text-2xl font-serif font-bold text-foreground">Booking Not Found</h1>
-          <p className="text-muted-foreground font-light">{error || "This confirmation link is invalid or has expired."}</p>
+      <div className="min-h-screen pt-24 flex items-center justify-center bg-background">
+        <div className="text-center space-y-6 bg-white/50 backdrop-blur-sm border border-charcoal/10 rounded-3xl p-12 shadow-lg max-w-md mx-4">
+          <h1 className="text-3xl font-medium text-charcoal" style={{ fontFamily: 'Futura, "Futura PT", "Century Gothic", sans-serif' }}>BOOKING NOT FOUND</h1>
+          <p className="text-charcoal/70" style={{ fontFamily: 'Futura, "Futura PT", "Century Gothic", sans-serif' }}>{error || "This confirmation link is invalid or has expired."}</p>
           <a
             href="/"
-            className="inline-block px-6 py-3 bg-primary text-primary-foreground rounded-full hover:bg-primary/90 hover:scale-105 transition-all duration-300 shadow-md font-semibold"
+            className="inline-block px-8 py-3 bg-charcoal text-white rounded-full hover:bg-charcoal/90 hover:scale-105 transition-all duration-300 shadow-lg text-sm font-medium"
+            style={{ fontFamily: 'Futura, "Futura PT", "Century Gothic", sans-serif' }}
           >
-            Return Home
+            RETURN HOME
           </a>
         </div>
       </div>
@@ -90,12 +91,12 @@ export default function BookingConfirmationPage() {
   }
 
   return (
-    <div className="min-h-screen">
-      <div className="container mx-auto px-4 py-8">
+    <div className="min-h-screen pt-24 bg-background">
+      <div className="container mx-auto px-4 py-12">
         <div className="max-w-2xl mx-auto">
-          <div className="mb-6 text-center">
-            <h1 className="text-3xl font-serif font-bold text-primary mb-2 tracking-tight">Booking Confirmed!</h1>
-            <p className="text-muted-foreground font-light">Your Recovery Machine session has been confirmed.</p>
+          <div className="mb-8 text-center">
+            <h1 className="text-4xl md:text-5xl font-medium text-charcoal mb-3 tracking-tight" style={{ fontFamily: 'Futura, "Futura PT", "Century Gothic", sans-serif' }}>BOOKING CONFIRMED!</h1>
+            <p className="text-charcoal/70 text-lg" style={{ fontFamily: 'Futura, "Futura PT", "Century Gothic", sans-serif' }}>Your Recovery Machine session is all set.</p>
           </div>
 
           <BookingConfirmation
@@ -110,18 +111,20 @@ export default function BookingConfirmationPage() {
             }}
           />
 
-          <div className="mt-8 text-center space-x-4">
+          <div className="mt-12 text-center flex flex-col sm:flex-row gap-4 justify-center">
             <a
               href="/book"
-              className="inline-block px-6 py-3 bg-primary text-primary-foreground rounded-full hover:bg-primary/90 hover:scale-105 transition-all duration-300 shadow-md font-semibold"
+              className="inline-block px-8 py-3 bg-charcoal text-white rounded-full hover:bg-charcoal/90 hover:scale-105 transition-all duration-300 shadow-lg text-sm font-medium"
+              style={{ fontFamily: 'Futura, "Futura PT", "Century Gothic", sans-serif' }}
             >
-              Book Another Session
+              BOOK ANOTHER SESSION
             </a>
             <a
               href="/"
-              className="inline-block px-6 py-3 border-2 border-border text-foreground rounded-full hover:bg-muted hover:border-primary/30 transition-all duration-300 shadow-sm font-semibold"
+              className="inline-block px-8 py-3 border-2 border-charcoal text-charcoal rounded-full hover:bg-charcoal hover:text-white transition-all duration-300 shadow-sm text-sm font-medium"
+              style={{ fontFamily: 'Futura, "Futura PT", "Century Gothic", sans-serif' }}
             >
-              Return Home
+              RETURN HOME
             </a>
           </div>
         </div>

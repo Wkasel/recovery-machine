@@ -215,8 +215,8 @@ const Hero: React.FC = () => {
         </a>
       </div>
 
-      <div ref={line2Ref} className="transform-origin-top">
-        <DottedLine height={120} />
+      <div ref={line2Ref} className="transform-origin-top mb-8">
+        <DottedLine height={240} />
       </div>
     </section>
   );

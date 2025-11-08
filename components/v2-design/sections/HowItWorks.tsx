@@ -33,7 +33,7 @@ const HowItWorks: React.FC = () => {
   return (
     <section
       id="how-it-works"
-      className="relative min-h-screen py-20 pt-32 px-4 md:px-6 flex items-center snap-start"
+      className="relative min-h-screen py-20 pt-8 px-4 md:px-6 flex items-center snap-start"
       aria-labelledby="how-it-works-heading"
     >
       <div className="max-w-3xl mx-auto w-full">

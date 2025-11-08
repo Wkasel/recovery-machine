@@ -50,8 +50,7 @@ export default function AboutPage() {
               "Certified recovery specialists guide every session",
               "Flexible scheduling that fits your lifestyle",
               "No setup or cleanup required",
-              "Consistent weekly sessions for optimal results",
-              "75% savings compared to individual bookings"
+              "Consistent weekly sessions for optimal results"
             ].map((item, index) => (
               <li key={index} className="flex items-start gap-3 text-charcoal/80 text-lg">
                 <div className="w-2 h-2 bg-mint-accent rounded-full mt-2 flex-shrink-0" />
@@ -64,9 +63,7 @@ export default function AboutPage() {
         <section className="bg-white/50 backdrop-blur-sm rounded-3xl p-8 border border-charcoal/10 animate-scale-in">
           <h2 className="text-2xl md:text-3xl font-medium mb-4">GET STARTED TODAY</h2>
           <p className="text-charcoal/80 leading-relaxed text-lg mb-8">
-            Join hundreds of athletes, professionals, and wellness enthusiasts who have made
-            Recovery Machine part of their routine. Experience the benefits of consistent cold
-            plunge and infrared sauna therapy without leaving your home.
+            Experience the benefits of consistent cold plunge and infrared sauna therapy without leaving your home.
           </p>
           <Link
             href="/book"

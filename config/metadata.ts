@@ -33,9 +33,9 @@ export const siteMetadata: SiteMetadata = {
   locale: "en_US",
   type: "website",
   twitterHandle: "@therecoverymachine",
-  instagramHandle: "therecoverymachine_",
+  instagramHandle: "therecoverymachine.oc",
   instagramUrl:
-    process.env.NEXT_PUBLIC_INSTAGRAM_URL || "https://www.instagram.com/therecoverymachine_/",
+    process.env.NEXT_PUBLIC_INSTAGRAM_URL || "https://www.instagram.com/therecoverymachine.oc/",
   author: {
     name: "The Recovery Machine",
     url:

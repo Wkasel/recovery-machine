@@ -10,7 +10,6 @@ export const seoConfig = {
   twitterHandle: "@therecoverymachine",
 
   // Business Information
-  businessPhone: process.env.BUSINESS_PHONE || "+1-424-XXX-XXXX", // TODO: Update with actual LA business phone
   businessEmail: process.env.BUSINESS_EMAIL || "hello@therecoverymachine.com",
 
   // Performance

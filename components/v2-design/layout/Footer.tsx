@@ -5,32 +5,19 @@ import Link from 'next/link';
 import { Instagram } from 'lucide-react';
 
 const Footer: React.FC = () => {
-  const laCountyCities = [
-    { name: 'Beverly Hills', slug: 'beverly-hills' },
-    { name: 'Santa Monica', slug: 'santa-monica' },
-    { name: 'Manhattan Beach', slug: 'manhattan-beach' },
-    { name: 'Venice', slug: 'venice' },
-    { name: 'Malibu', slug: 'malibu' },
-    { name: 'Culver City', slug: 'culver-city' },
-    { name: 'Pasadena', slug: 'pasadena' },
-    { name: 'Long Beach', slug: 'long-beach' }
-  ];
-
   const orangeCountyCities = [
     { name: 'Irvine', slug: 'irvine' },
     { name: 'Newport Beach', slug: 'newport-beach' },
     { name: 'Huntington Beach', slug: 'huntington-beach' },
     { name: 'Costa Mesa', slug: 'costa-mesa' },
     { name: 'Laguna Beach', slug: 'laguna-beach' },
-    { name: 'Anaheim', slug: 'anaheim' },
-    { name: 'Mission Viejo', slug: 'mission-viejo' },
-    { name: 'Dana Point', slug: 'dana-point' }
+    { name: 'Anaheim', slug: 'anaheim' }
   ];
 
   return (
     <footer className="py-16 px-6 snap-start bg-charcoal">
       <div className="max-w-7xl mx-auto w-full">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 mb-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 mb-12">
           {/* Company */}
           <div>
             <h3 className="text-white text-sm font-bold mb-4 tracking-wide">COMPANY</h3>
@@ -55,23 +42,6 @@ const Footer: React.FC = () => {
                   Book Now
                 </Link>
               </li>
-            </ul>
-          </div>
-
-          {/* LA County Service Areas */}
-          <div>
-            <h3 className="text-white text-sm font-bold mb-4 tracking-wide">LOS ANGELES COUNTY</h3>
-            <ul className="text-mint/80 text-sm space-y-3">
-              {laCountyCities.map((city) => (
-                <li key={city.slug}>
-                  <Link
-                    href={`/locations/${city.slug}`}
-                    className="hover:text-mint-accent transition-colors"
-                  >
-                    {city.name}
-                  </Link>
-                </li>
-              ))}
             </ul>
           </div>
 
@@ -128,13 +98,13 @@ const Footer: React.FC = () => {
 
             <h3 className="text-white text-sm font-bold mb-4 tracking-wide">FOLLOW US</h3>
             <a
-              href="https://www.instagram.com/therecoverymachine_/"
+              href="https://www.instagram.com/therecoverymachine.oc/"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2 text-mint/80 text-sm hover:text-mint-accent transition-colors"
             >
               <Instagram className="h-5 w-5" />
-              <span>@therecoverymachine_</span>
+              <span>@therecoverymachine.oc</span>
             </a>
           </div>
         </div>
