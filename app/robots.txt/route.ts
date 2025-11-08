@@ -36,8 +36,8 @@ Allow: /infrared-sauna
 Crawl-delay: 1
 
 # Sitemap location
-Sitemap: ${process.env.NEXT_PUBLIC_APP_URL || "https://therecoverymachine.com"}/sitemap.xml
-Sitemap: ${process.env.NEXT_PUBLIC_APP_URL || "https://therecoverymachine.com"}/server-sitemap.xml
+Sitemap: ${process.env.NEXT_PUBLIC_APP_URL || "https://therecoverymachine.co"}/sitemap.xml
+Sitemap: ${process.env.NEXT_PUBLIC_APP_URL || "https://therecoverymachine.co"}/server-sitemap.xml
 
 # Special instructions for major search engines
 User-agent: Googlebot

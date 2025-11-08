@@ -143,8 +143,8 @@ export default function HealthDisclaimerPage() {
             <p>
               If you have any questions about our wellness services, safety protocols, or health 
               considerations, please contact us at{" "}
-              <a href="mailto:safety@therecoverymachine.com" className="text-primary hover:underline">
-                safety@therecoverymachine.com
+              <a href="mailto:safety@therecoverymachine.co" className="text-primary hover:underline">
+                safety@therecoverymachine.co
               </a>{" "}
               before booking your session.
             </p>

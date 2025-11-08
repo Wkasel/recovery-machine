@@ -267,10 +267,10 @@ export async function generateMetadata({ params }: { params: { city: string } })
       title: `Mobile Recovery Services in ${cityData.name}, ${cityData.county} County`,
       description: cityData.description,
       type: "website",
-      url: `https://therecoverymachine.com/locations/${cityData.slug}`,
+      url: `https://therecoverymachine.co/locations/${cityData.slug}`,
     },
     alternates: {
-      canonical: `https://therecoverymachine.com/locations/${cityData.slug}`,
+      canonical: `https://therecoverymachine.co/locations/${cityData.slug}`,
     },
   };
 }

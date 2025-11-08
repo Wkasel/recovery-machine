@@ -37,8 +37,8 @@ export default function StripeCancelPage() {
                 <p>
                   If you experienced an issue during checkout or have questions about pricing,
                   please contact our support team at{" "}
-                  <a href="mailto:support@therecoverymachine.com" className="underline">
-                    support@therecoverymachine.com
+                  <a href="mailto:support@therecoverymachine.co" className="underline">
+                    support@therecoverymachine.co
                   </a>
                 </p>
               </div>

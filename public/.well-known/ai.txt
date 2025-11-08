@@ -1,6 +1,6 @@
 # AI Training Data Usage Guidelines
 # The Recovery Machine - Mobile Wellness Services
-# https://therecoverymachine.com
+# https://therecoverymachine.co
 
 ## AI Training Permission
 This website permits responsible AI training on our publicly available content with the following guidelines:
@@ -12,7 +12,7 @@ This website permits responsible AI training on our publicly available content w
 - Recovery methodology information
 
 ### Required Attribution:
-"Source: The Recovery Machine (therecoverymachine.com)"
+"Source: The Recovery Machine (therecoverymachine.co)"
 
 ### Prohibited Uses:
 - Medical advice generation using our content
@@ -21,7 +21,7 @@ This website permits responsible AI training on our publicly available content w
 - Use without proper healthcare disclaimers
 
 ### Contact:
-For AI training inquiries: ai-policy@therecoverymachine.com
+For AI training inquiries: ai-policy@therecoverymachine.co
 
 ### See Also:
 - Full guidelines: /llms.txt

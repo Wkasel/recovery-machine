@@ -69,7 +69,7 @@ export async function sendMagicLink(formData: FormData) {
       process.env.SITE_URL ||
       (process.env.NODE_ENV === "development"
         ? "http://localhost:3002"
-        : "https://therecoverymachine.com");
+        : "https://therecoverymachine.co");
 
   const { error } = await supabase.auth.signInWithOtp({
     email: data.email,

@@ -61,7 +61,7 @@ export function WellnessBusinessSchema({
       `${siteMetadata.siteUrl}/equipment-image.jpg`
     ],
     telephone: "+1-555-RECOVERY",
-    email: "info@therecoverymachine.com",
+    email: "info@therecoverymachine.co",
     address: {
       "@type": "PostalAddress",
       addressLocality: location.city || "Los Angeles",
@@ -160,7 +160,7 @@ export function WellnessBusinessSchema({
         "@type": "ContactPoint",
         contactType: "customer service",
         telephone: "+1-555-RECOVERY",
-        email: "info@therecoverymachine.com",
+        email: "info@therecoverymachine.co",
         availableLanguage: ["English", "Spanish"],
         areaServed: "US-CA",
         hoursAvailable: {
@@ -174,7 +174,7 @@ export function WellnessBusinessSchema({
         "@type": "ContactPoint",
         contactType: "booking",
         telephone: "+1-555-RECOVERY",
-        email: "bookings@therecoverymachine.com",
+        email: "bookings@therecoverymachine.co",
         availableLanguage: ["English"],
         areaServed: "US-CA"
       }

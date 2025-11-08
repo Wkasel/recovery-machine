@@ -10,7 +10,7 @@ export async function GET(request: Request) {
     const type = searchParams.get("type") ?? "default";
 
     // Fetch the van image and logo
-    const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://therecoverymachine.com";
+    const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://therecoverymachine.co";
     const vanImageUrl = `${baseUrl}/recovery-van.png`;
     const logoUrl = `${baseUrl}/logo.png`;
 

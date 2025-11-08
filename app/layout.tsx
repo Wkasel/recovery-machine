@@ -98,7 +98,7 @@ export default function RootLayout({
         <link rel="alternate" type="text/plain" href="/llms.txt" title="LLMs.txt" />
 
         {/* Canonical URL */}
-        <link rel="canonical" href={process.env.NEXT_PUBLIC_APP_URL || "https://therecoverymachine.com"} />
+        <link rel="canonical" href={process.env.NEXT_PUBLIC_APP_URL || "https://therecoverymachine.co"} />
       </head>
 
       {/*

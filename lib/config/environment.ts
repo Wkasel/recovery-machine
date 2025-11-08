@@ -10,7 +10,7 @@ export const seoConfig = {
   twitterHandle: "@therecoverymachine",
 
   // Business Information
-  businessEmail: process.env.BUSINESS_EMAIL || "hello@therecoverymachine.com",
+  businessEmail: process.env.BUSINESS_EMAIL || "hello@therecoverymachine.co",
 
   // Performance
   enableWebVitals: process.env.ENABLE_WEB_VITALS !== "false",

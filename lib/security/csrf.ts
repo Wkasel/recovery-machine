@@ -51,6 +51,7 @@ export function isSecureOrigin(request: NextRequest): boolean {
     process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : null,
     "https://recovery-machine.vercel.app", // Production domain
     "https://therecoverymachine.co", // Production domain
+    "https://www.therecoverymachine.co", // Production domain with www
     "http://localhost:3000", // Development
     "http://localhost:3001", // Development (alternate port)
     "http://localhost:3002", // Development (alternate port)

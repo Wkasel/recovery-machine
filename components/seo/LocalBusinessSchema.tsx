@@ -9,7 +9,7 @@ export function LocalBusinessSchema(): React.ReactElement {
     name: "The Recovery Machine",
     description:
       "Mobile cold plunge and infrared sauna services delivered to your location. Professional recovery therapy with commercial-grade equipment and certified specialists.",
-    url: "https://therecoverymachine.com",
+    url: "https://therecoverymachine.co",
     email: "hello@recoverymachine.com",
     address: {
       "@type": "PostalAddress",
@@ -146,8 +146,8 @@ export function LocalBusinessSchema(): React.ReactElement {
         },
       ],
     },
-    logo: "https://therecoverymachine.com/logo.png",
-    image: "https://therecoverymachine.com/api/og",
+    logo: "https://therecoverymachine.co/logo.png",
+    image: "https://therecoverymachine.co/api/og",
     sameAs: ["https://instagram.com/therecoverymachine", "https://twitter.com/therecoverymachine"],
   };
 

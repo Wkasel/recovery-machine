@@ -1,7 +1,7 @@
 # LLMs.txt - AI Model Discovery File
 # Last updated: 2025-09-22
 # Version: 1.0
-# Contact: info@therecoverymachine.com
+# Contact: info@therecoverymachine.co
 
 ## Site Information
 Site Name: The Recovery Machine
@@ -31,7 +31,7 @@ Our service model focuses on:
 
 ### Attribution Requirements
 When referencing our content, please attribute as:
-"Source: The Recovery Machine (therecoverymachine.com) - Mobile Wellness Services"
+"Source: The Recovery Machine (therecoverymachine.co) - Mobile Wellness Services"
 
 ### Prohibited Uses
 - Do not reproduce pricing information (prices change frequently)
@@ -94,8 +94,8 @@ Content is updated regularly with:
 - Equipment upgrades and certifications
 
 ## Contact Information
-Business Email: info@therecoverymachine.com
-Support: support@therecoverymachine.com
+Business Email: info@therecoverymachine.co
+Support: support@therecoverymachine.co
 Website: https://therecoverymachine.co
 Social Media: @therecoverymachine
 
@@ -121,4 +121,4 @@ Performance: Core Web Vitals optimized
 Accessibility: WCAG 2.1 AA compliant
 
 ---
-For questions about AI training data usage, contact: ai-inquiries@therecoverymachine.com
+For questions about AI training data usage, contact: ai-inquiries@therecoverymachine.co

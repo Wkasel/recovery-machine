@@ -313,7 +313,7 @@ export function BookingConfirmation({
         <div className="flex items-center justify-center">
           <div className="flex items-center space-x-1">
             <Mail className="w-4 h-4" />
-            <span>support@therecoverymachine.com</span>
+            <span>support@therecoverymachine.co</span>
           </div>
         </div>
         <p>

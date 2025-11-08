@@ -68,7 +68,7 @@ const nextConfig = (phase) => {
       remotePatterns: [
         {
           protocol: 'https',
-          hostname: '**.therecoverymachine.com',
+          hostname: '**.therecoverymachine.co',
         },
         {
           protocol: 'https',
