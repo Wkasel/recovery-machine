@@ -1,15 +1,19 @@
 "use client";
 
 import { isServer, QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { ReactNode } from "react";
+import dynamic from "next/dynamic";
+import { ComponentType, ReactNode, useEffect, useState } from "react";
 
 // Lazy load ReactQueryDevtools only in development
-const ReactQueryDevtools =
-  process.env.NODE_ENV === 'development'
-    ? require('@tanstack/react-query-devtools').ReactQueryDevtools
+const ReactQueryDevtools: ComponentType<any> =
+  process.env.NODE_ENV === "development"
+    ? dynamic(
+        () => import("@tanstack/react-query-devtools").then((mod) => mod.ReactQueryDevtools),
+        { ssr: false }
+      )
     : () => null;
 
-function makeQueryClient() {
+function makeQueryClient(): QueryClient {
   return new QueryClient({
     defaultOptions: {
       queries: {
@@ -25,7 +29,7 @@ function makeQueryClient() {
 
 let browserQueryClient: QueryClient | undefined = undefined;
 
-function getQueryClient() {
+function getQueryClient(): QueryClient {
   if (isServer) {
     // Server: always make a new query client
     return makeQueryClient();
@@ -34,22 +38,32 @@ function getQueryClient() {
     // This is very important so we don't re-make a new client if React
     // suspends during the initial render. This may not be needed if we
     // have a suspense boundary BELOW the creation of the query client
-    if (!browserQueryClient) browserQueryClient = makeQueryClient();
+    browserQueryClient ??= makeQueryClient();
     return browserQueryClient;
   }
 }
 
-export function QueryProvider({ children }: { children: ReactNode }) {
+interface QueryProviderProps {
+  children: ReactNode;
+}
+
+export function QueryProvider({ children }: QueryProviderProps): ReactNode {
   // NOTE: Avoid useState when initializing the query client if you don't
   //       have a suspense boundary between this and the code that may
   //       suspend because React will throw away the client on the initial
   //       render if it suspends and there is no boundary
   const queryClient = getQueryClient();
 
+  const [devtoolsReady, setDevtoolsReady] = useState(false);
+
+  useEffect(() => {
+    setDevtoolsReady(true);
+  }, []);
+
   return (
     <QueryClientProvider client={queryClient}>
       {children}
-      {process.env.NODE_ENV === 'development' && !isServer && (
+      {process.env.NODE_ENV === "development" && !isServer && devtoolsReady && (
         <ReactQueryDevtools client={queryClient} initialIsOpen={false} />
       )}
     </QueryClientProvider>

@@ -86,5 +86,9 @@ export function useAuth() {
   if (context === undefined) {
     throw new Error("useAuth must be used within an AuthContextProvider");
   }
-  return context;
+  // Return with both `isLoading` and `loading` for compatibility
+  return {
+    ...context,
+    loading: context.isLoading, // Add alias for compatibility
+  };
 }

@@ -44,44 +44,51 @@ export async function POST(request: NextRequest) {
         );
       }
 
-      // Check if user exists by email - use Supabase SQL for reliable email lookup
-      const { data: profileData, error: profileLookupError } =
-        await serviceRoleClient
-          .from("profiles")
-          .select("id, email")
-          .eq("email", guestEmail)
-          .maybeSingle();
+      // Try to create the user first - Supabase will error if they already exist
+      const { data: newUser, error: createError } =
+        await serviceRoleClient.auth.admin.createUser({
+          email: guestEmail,
+          email_confirm: true,
+          user_metadata: {
+            phone: guestPhone,
+            auto_created: true,
+          },
+        });
 
-      if (profileLookupError) {
-        console.error("Failed to look up user by email:", profileLookupError);
-        return NextResponse.json({ error: "Failed to verify account" }, { status: 500 });
-      }
+      if (createError) {
+        // If user already exists, look them up via profile table
+        if (createError.code === 'email_exists' || createError.message?.includes('already been registered')) {
+          const { data: profileData, error: profileLookupError } =
+            await serviceRoleClient
+              .from("profiles")
+              .select("id")
+              .eq("email", guestEmail)
+              .maybeSingle();
 
-      // If profile exists, get the full auth user
-      let existingUser = null;
-      if (profileData) {
-        const { data: authUserData } = await serviceRoleClient.auth.admin.getUserById(profileData.id);
-        existingUser = authUserData?.user;
-      }
-
-      if (existingUser) {
-        user = existingUser;
-      } else {
-        const { data: newUser, error: createError } =
-          await serviceRoleClient.auth.admin.createUser({
-            email: guestEmail,
-            email_confirm: true,
-            user_metadata: {
-              phone: guestPhone,
-              auto_created: true,
-            },
-          });
-
-        if (createError || !newUser.user) {
+          if (profileData) {
+            // Found profile - get the auth user
+            const { data: authUserData } = await serviceRoleClient.auth.admin.getUserById(profileData.id);
+            if (authUserData?.user) {
+              user = authUserData.user;
+            } else {
+              return NextResponse.json({
+                error: "An account with this email already exists. Please sign in instead."
+              }, { status: 409 });
+            }
+          } else {
+            // Profile doesn't exist but auth user does - orphaned account
+            return NextResponse.json({
+              error: "An account with this email already exists. Please contact support."
+            }, { status: 409 });
+          }
+        } else {
           console.error("Failed to create user:", createError);
           return NextResponse.json({ error: "Failed to create account" }, { status: 500 });
         }
-
+      } else if (!newUser.user) {
+        console.error("User creation returned no user");
+        return NextResponse.json({ error: "Failed to create account" }, { status: 500 });
+      } else {
         user = newUser.user;
       }
     }
@@ -134,11 +141,11 @@ export async function POST(request: NextRequest) {
 
     // Only check for overlaps with active/upcoming bookings
     // Exclude: completed, cancelled, no_show (these don't occupy the time slot)
-    const { data: existingBookings, error: overlapError } = await serviceRoleClient
+    const { data: existingBookings, error: overlapError} = await serviceRoleClient
       .from("bookings")
       .select("id, date_time, duration, status")
       .eq("user_id", user.id)
-      .in("status", ["scheduled", "confirmed", "in_progress"]);
+      .in("status", ["scheduled", "confirmed"]);
 
     if (overlapError) {
       console.error("Error checking overlapping bookings:", overlapError);
