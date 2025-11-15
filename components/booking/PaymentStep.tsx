@@ -13,11 +13,6 @@ import { User } from "@supabase/supabase-js";
 import { UserProfile } from "@/lib/hooks/use-user-profile";
 import { cn } from "@/lib/utils";
 import {
-  validateDevPromoCode,
-  isDevelopmentEnvironment,
-  getAvailableDevPromoCodes
-} from "@/lib/payment/dev-bypass";
-import {
   AlertCircle,
   Calendar,
   Check,
@@ -27,7 +22,6 @@ import {
   Lock,
   MapPin,
   Users,
-  Code,
   UserCheck,
 } from "lucide-react";
 import { useState, useEffect } from "react";
@@ -41,8 +35,7 @@ interface PaymentStepProps {
   addOns: { extraVisits: number; familyMembers: number; extendedTime: number };
   specialInstructions?: string;
   onPayment: (
-    guestData?: { email: string; phone: string },
-    options?: { devBypass?: boolean }
+    guestData?: { email: string; phone: string }
   ) => Promise<void> | void;
   onBack: () => void;
   user?: User | null;
@@ -68,7 +61,6 @@ export function PaymentStep({
   const [promoCode, setPromoCode] = useState("");
   const [promoDiscount, setPromoDiscount] = useState(0);
   const [promoApplied, setPromoApplied] = useState(false);
-  const [shouldBypassPayment, setShouldBypassPayment] = useState(false);
 
   // Guest booking fields - pre-filled for logged-in users
   const [guestEmail, setGuestEmail] = useState(user?.email || "");
@@ -101,9 +93,6 @@ export function PaymentStep({
   // Initialize payment method based on service type
   const initialPaymentMethod: "card" | "subscription" = selectedService?.recurring ? "subscription" : "card";
   const [paymentMethod, setPaymentMethod] = useState<"card" | "subscription">(initialPaymentMethod);
-
-  const isDevMode = isDevelopmentEnvironment();
-  const availableDevCodes = getAvailableDevPromoCodes();
 
   // Notify parent on mount if service is recurring
   useEffect(() => {
@@ -166,19 +155,7 @@ export function PaymentStep({
 
   const handlePromoCodeApply = () => {
     const code = promoCode.toUpperCase().trim();
-    
-    // Check dev bypass codes first (if in dev mode)
-    if (isDevMode) {
-      const devResult = validateDevPromoCode(code);
-      if (devResult.isValid) {
-        setPromoDiscount(devResult.discount === 100 ? calculateTotal() : devResult.discount * 100);
-        setShouldBypassPayment(devResult.shouldBypassPayment);
-        setPromoApplied(true);
-        toast.success(`Dev code applied: ${devResult.description}`);
-        return;
-      }
-    }
-    
+
     // Regular promo codes
     const validPromoCodes: Record<string, number> = {
       FIRST20: 2000, // $20 off
@@ -190,13 +167,11 @@ export function PaymentStep({
     if (discount > 0) {
       setPromoDiscount(discount);
       setPromoApplied(true);
-      setShouldBypassPayment(false);
       toast.success(`Promo code applied! You saved ${formatPrice(discount)}`);
     } else {
       toast.error("Invalid promo code");
       setPromoDiscount(0);
       setPromoApplied(false);
-      setShouldBypassPayment(false);
     }
   };
 
@@ -226,8 +201,7 @@ export function PaymentStep({
 
     try {
       await onPayment(
-        isGuestBooking ? { email: guestEmail, phone: guestPhone } : undefined,
-        { devBypass: shouldBypassPayment && isDevMode }
+        isGuestBooking ? { email: guestEmail, phone: guestPhone } : undefined
       );
     } catch (error) {
       console.error("Payment failed:", error);
@@ -460,30 +434,6 @@ export function PaymentStep({
           {/* Promo code */}
           <Card className="bg-white/70 backdrop-blur-sm border-border rounded-3xl shadow-lg">
             <CardContent className="pt-6">
-              {isDevMode && (
-                <div className="mb-4 p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
-                  <div className="flex items-center space-x-2 mb-2">
-                    <Code className="w-4 h-4 text-yellow-600" />
-                    <span className="text-sm font-medium text-yellow-800">Development Mode</span>
-                  </div>
-                  <p className="text-xs text-yellow-700 mb-2">
-                    Available dev codes for payment bypass:
-                  </p>
-                  <div className="flex flex-wrap gap-1">
-                    {availableDevCodes.map((code) => (
-                      <button
-                        key={code.code}
-                        onClick={() => setPromoCode(code.code)}
-                        className="px-2 py-1 text-xs bg-yellow-100 text-yellow-800 rounded hover:bg-yellow-200 transition-colors min-h-[32px] min-w-[60px] touch-manipulation"
-                        title={code.description}
-                      >
-                        {code.code}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              )}
-              
               <div className="flex space-x-2">
                 <Input
                   placeholder="Promo code"
@@ -495,18 +445,12 @@ export function PaymentStep({
                   Apply
                 </Button>
               </div>
-              
+
               {promoApplied && promoDiscount > 0 && (
                 <div className="mt-2">
-                  {shouldBypassPayment ? (
-                    <p className="text-sm text-blue-600 font-medium">
-                      🔧 DEV MODE: Payment bypassed - booking will be free!
-                    </p>
-                  ) : (
-                    <p className="text-sm text-green-600">
-                      Promo code applied! You saved {formatPrice(promoDiscount)}
-                    </p>
-                  )}
+                  <p className="text-sm text-green-600">
+                    Promo code applied! You saved {formatPrice(promoDiscount)}
+                  </p>
                 </div>
               )}
             </CardContent>

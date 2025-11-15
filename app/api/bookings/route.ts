@@ -10,7 +10,7 @@ import { type StripeCheckoutData } from "@/lib/stripe/config";
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { guestBooking, guestEmail, guestPhone, devBypass = false } = body;
+    const { guestBooking, guestEmail, guestPhone } = body;
 
     const supabase = await createServerSupabaseClient();
     const serviceRoleClient = createServiceRoleClient();
@@ -118,7 +118,7 @@ export async function POST(request: NextRequest) {
         : parseInt(amount, 10);
     const totalAmount = Number.isFinite(rawAmount) ? rawAmount : 0;
 
-    if (!devBypass && totalAmount <= 0) {
+    if (totalAmount <= 0) {
       return NextResponse.json(
         { error: "Payment amount must be greater than zero" },
         { status: 400 }
@@ -214,19 +214,16 @@ export async function POST(request: NextRequest) {
       specialInstructions,
       setupFee: normalizedSetupFee,
       guest_booking: Boolean(guestBooking),
-      dev_bypass: Boolean(devBypass),
       original_amount: totalAmount,
     };
-
-    const persistedAmount = devBypass ? Math.max(totalAmount, 1) : totalAmount;
 
     const { data: order, error: orderError } = await serviceRoleClient
       .from("orders")
       .insert({
         user_id: user.id,
-        amount: persistedAmount,
+        amount: totalAmount,
         setup_fee_applied: normalizedSetupFee,
-        status: devBypass ? "paid" : "pending",
+        status: "pending",
         order_type: orderType,
         metadata: orderMetadata,
       })
@@ -259,8 +256,8 @@ export async function POST(request: NextRequest) {
         },
         address: address,
         notes: specialInstructions,
-        total_amount: persistedAmount,
-        status: devBypass ? "confirmed" : "scheduled",
+        total_amount: totalAmount,
+        status: "scheduled",
       })
       .select()
       .single();
@@ -284,38 +281,6 @@ export async function POST(request: NextRequest) {
       confirmation_url: confirmationUrl,
     };
 
-    if (devBypass) {
-      await serviceRoleClient
-        .from("orders")
-        .update({ metadata: metadataWithConfirmation })
-        .eq("id", order.id);
-
-      try {
-        const { data: profile } = await serviceRoleClient
-          .from("profiles")
-          .select("*")
-          .eq("id", booking.user_id)
-          .single();
-
-        if (profile?.email) {
-          await sendBookingConfirmation(booking as any, profile);
-        }
-      } catch (emailError) {
-        console.error("Failed to send booking confirmation email:", emailError);
-      }
-
-      return NextResponse.json({
-        success: true,
-        booking,
-        order: {
-          ...order,
-          metadata: metadataWithConfirmation,
-        },
-        confirmationUrl,
-        requiresPayment: false,
-      });
-    }
-
     // Stripe requires all metadata values to be strings
     const checkoutMetadata: Record<string, string> = {
       description: orderDescription,
@@ -328,7 +293,6 @@ export async function POST(request: NextRequest) {
       specialInstructions: specialInstructions || "",
       setupFee: String(normalizedSetupFee),
       guest_booking: String(guestBooking),
-      dev_bypass: String(devBypass),
       original_amount: String(totalAmount),
       confirmation_token: confirmationToken,
       confirmation_url: confirmationUrl,
