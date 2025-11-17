@@ -58,38 +58,122 @@ export class BookingService {
     }
   }
 
-  // Calculate setup fee based on address
+  // Calculate setup fee based on address with real traffic data
   static async calculateSetupFee(address: Address): Promise<SetupFeeCalculation> {
-    // Default setup fee calculation
-    // In production, this would use Google Maps Distance Matrix API
-    const baseSetupFee = 25000; // $250.00 base fee
+    const baseSetupFee = 17500; // $175.00 base fee
 
-    // Mock distance calculation based on ZIP code
-    // In production, calculate actual distance from service area
-    const mockDistance = this.getMockDistance(address.zipCode);
-
-    // Distance-based fee: $5 per mile over 10 miles
-    const distanceFee = mockDistance > 10 ? (mockDistance - 10) * 500 : 0;
-
-    const totalSetupFee = baseSetupFee + distanceFee;
-
-    return {
-      baseSetupFee,
-      distanceFee,
-      totalSetupFee: Math.min(totalSetupFee, 50000), // Cap at $500
-      distance: mockDistance,
-      estimatedTravelTime: Math.round(mockDistance * 1.5), // Rough estimate: 1.5 minutes per mile
+    // Long Beach dispatch center coordinates
+    const DISPATCH_CENTER = {
+      address: 'Long Beach, CA',
+      lat: 33.7701,
+      lng: -118.1937
     };
+
+    try {
+      // Try to get real distance and traffic data from Google Maps
+      if (typeof window !== 'undefined' && window.google) {
+        const service = new window.google.maps.DistanceMatrixService();
+
+        const result = await new Promise<any>((resolve, reject) => {
+          service.getDistanceMatrix(
+            {
+              origins: [DISPATCH_CENTER.address],
+              destinations: [address.lat && address.lng
+                ? { lat: address.lat, lng: address.lng }
+                : `${address.street}, ${address.city}, ${address.state} ${address.zipCode}`],
+              travelMode: window.google.maps.TravelMode.DRIVING,
+              drivingOptions: {
+                departureTime: new Date(), // Current time for real-time traffic
+                trafficModel: window.google.maps.TrafficModel.BEST_GUESS
+              },
+              unitSystem: window.google.maps.UnitSystem.IMPERIAL,
+            },
+            (response: any, status: any) => {
+              if (status === 'OK' && response.rows[0].elements[0].status === 'OK') {
+                resolve(response);
+              } else {
+                reject(new Error('Distance Matrix API failed'));
+              }
+            }
+          );
+        });
+
+        const element = result.rows[0].elements[0];
+        const distanceInMiles = element.distance.value / 1609.34; // meters to miles
+        const durationInMinutes = Math.ceil(element.duration_in_traffic
+          ? element.duration_in_traffic.value / 60
+          : element.duration.value / 60);
+
+        // Distance-based fee: $5 per mile over 10 miles
+        const distanceFee = distanceInMiles > 10 ? Math.ceil((distanceInMiles - 10) * 500) : 0;
+
+        const totalSetupFee = baseSetupFee + distanceFee;
+
+        return {
+          baseSetupFee,
+          distanceFee,
+          totalSetupFee: Math.min(totalSetupFee, 50000), // Cap at $500
+          distance: Math.round(distanceInMiles * 10) / 10, // Round to 1 decimal
+          estimatedTravelTime: durationInMinutes, // Real-time traffic estimate
+        };
+      } else {
+        // Fallback to mock calculation if Google Maps not available
+        throw new Error('Google Maps not available');
+      }
+    } catch (error) {
+      console.warn('Using fallback distance calculation:', error);
+
+      // Fallback: Use mock distance based on ZIP code
+      const mockDistance = this.getMockDistanceFromLongBeach(address.zipCode);
+      const distanceFee = mockDistance > 10 ? Math.ceil((mockDistance - 10) * 500) : 0;
+      const totalSetupFee = baseSetupFee + distanceFee;
+
+      return {
+        baseSetupFee,
+        distanceFee,
+        totalSetupFee: Math.min(totalSetupFee, 50000),
+        distance: mockDistance,
+        estimatedTravelTime: Math.round(mockDistance * 2), // 2 minutes per mile with traffic buffer
+      };
+    }
   }
 
-  // Mock distance calculation (replace with real Google Maps API)
-  private static getMockDistance(zipCode: string): number {
-    // Mock distances based on ZIP code patterns
+  // Mock distance calculation from Long Beach dispatch center (fallback)
+  private static getMockDistanceFromLongBeach(zipCode: string): number {
+    // Approximate distances from Long Beach based on ZIP code patterns
     const zip = parseInt(zipCode);
-    if (zip >= 90210 && zip <= 90299) return 5; // Beverly Hills area - close
-    if (zip >= 90001 && zip <= 90099) return 15; // Downtown LA - medium
-    if (zip >= 91000 && zip <= 91999) return 25; // Valley - far
-    return 12; // Default medium distance
+
+    // Long Beach area (90801-90815)
+    if (zip >= 90801 && zip <= 90815) return 3;
+
+    // Signal Hill, Lakewood (90755, 90840, 90713, 90805)
+    if (zip === 90755 || zip === 90840 || zip === 90713 || zip === 90805) return 5;
+
+    // Seal Beach, Los Alamitos (90740, 90720)
+    if (zip === 90740 || zip === 90720) return 8;
+
+    // Huntington Beach, Fountain Valley (92646-92649, 92708)
+    if ((zip >= 92646 && zip <= 92649) || zip === 92708) return 12;
+
+    // Costa Mesa, Newport Beach (92626-92663, 92625)
+    if ((zip >= 92626 && zip <= 92663) || zip === 92625) return 18;
+
+    // Irvine area (92602-92620)
+    if (zip >= 92602 && zip <= 92620) return 22;
+
+    // Laguna Beach (92651-92654)
+    if (zip >= 92651 && zip <= 92654) return 28;
+
+    // Anaheim area (92801-92899)
+    if (zip >= 92801 && zip <= 92899) return 20;
+
+    // Downtown LA (90001-90099)
+    if (zip >= 90001 && zip <= 90099) return 25;
+
+    // Torrance, Redondo (90501-90510, 90277-90278)
+    if ((zip >= 90501 && zip <= 90510) || zip === 90277 || zip === 90278) return 15;
+
+    return 20; // Default ~20 miles
   }
 
   // Check for booking conflicts

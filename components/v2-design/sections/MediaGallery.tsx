@@ -141,12 +141,11 @@ const MediaGallery: React.FC = () => {
 
   // Real media items with images and videos
   const media: MediaItem[] = [
-    { type: 'video', src: '/promo-video.mp4', label: 'Recovery Machine in Action' },
-    { type: 'image', src: '/cold-plunge-photo.jpg', label: 'Cold Plunge Therapy' },
-    { type: 'image', src: '/sauna-photo.jpg', label: 'Infrared Sauna' },
-    { type: 'image', src: '/person-in-cold-plunge-photo.jpg', label: 'Recovery Experience' },
-    { type: 'image', src: '/van-exterior-photo.png', label: 'Mobile Recovery Unit' },
-    { type: 'image', src: '/images/recovery-setup.jpg', label: 'Full Setup' },
+    { type: 'video', src: '/nov-images/promo-1.mov', label: 'Recovery Machine in Action' },
+    { type: 'image', src: '/nov-images/van-still.png', label: 'Mobile Recovery Unit' },
+    { type: 'image', src: '/nov-images/full-front-interior-still.jpeg', label: 'Full Interior Setup' },
+    { type: 'image', src: '/nov-images/plunge-still.png', label: 'Cold Plunge Therapy' },
+    { type: 'image', src: '/nov-images/sauna-still.png', label: 'Infrared Sauna' },
   ];
 
   const handleMediaClick = (item: MediaItem, index: number): void => {
@@ -207,7 +206,7 @@ const MediaGallery: React.FC = () => {
               {item.type === 'video' ? (
                 <video
                   src={item.src}
-                  poster="/van-exterior-photo.png"
+                  poster="/nov-images/van-still.png"
                   className="w-full h-full object-cover"
                   muted
                   playsInline
@@ -290,7 +289,7 @@ const MediaGallery: React.FC = () => {
               {selectedMedia.type === 'video' ? (
                 <video
                   src={selectedMedia.src}
-                  poster="/van-exterior-photo.png"
+                  poster="/nov-images/van-still.png"
                   controls
                   autoPlay
                   playsInline
@@ -298,7 +297,7 @@ const MediaGallery: React.FC = () => {
                   className="w-full h-full"
                   aria-label={selectedMedia.label}
                 >
-                  <source src={selectedMedia.src} type="video/mp4" />
+                  <source src={selectedMedia.src} type="video/quicktime" />
                   {/* TODO: Add caption files for WCAG 1.2.2 compliance
                       <track kind="captions" src="/captions/promo-video.vtt" srclang="en" label="English" default />
                   */}
