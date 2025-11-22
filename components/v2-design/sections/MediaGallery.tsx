@@ -7,6 +7,7 @@ interface MediaItem {
   type: 'image' | 'video';
   src: string;
   label: string;
+  thumbnail?: string;
 }
 
 interface SelectedMedia extends MediaItem {
@@ -141,11 +142,11 @@ const MediaGallery: React.FC = () => {
 
   // Real media items with images and videos
   const media: MediaItem[] = [
-    { type: 'video', src: '/nov-images/promo-1.mov', label: 'Recovery Machine in Action' },
-    { type: 'image', src: '/nov-images/van-still.png', label: 'Mobile Recovery Unit' },
-    { type: 'image', src: '/nov-images/full-front-interior-still.jpeg', label: 'Full Interior Setup' },
-    { type: 'image', src: '/nov-images/plunge-still.png', label: 'Cold Plunge Therapy' },
-    { type: 'image', src: '/nov-images/sauna-still.png', label: 'Infrared Sauna' },
+    { type: 'video', src: '/nov-images/promo-1.mov', label: 'Recovery Machine in Action', thumbnail: '/thumbs/trm-logo-van.png' },
+    { type: 'image', src: '/nov-images/van-still.png', label: 'Mobile Recovery Unit', thumbnail: '/thumbs/mobile-recovery-unit.png' },
+    { type: 'image', src: '/nov-images/full-front-interior-still.jpeg', label: 'Full Interior Setup', thumbnail: '/thumbs/full-interior.png' },
+    { type: 'image', src: '/nov-images/plunge-still.png', label: 'Cold Plunge Therapy', thumbnail: '/thumbs/cold-plunge-therapy.png' },
+    { type: 'image', src: '/nov-images/sauna-still.png', label: 'Infrared Sauna', thumbnail: '/thumbs/thumb_2.png' },
   ];
 
   const handleMediaClick = (item: MediaItem, index: number): void => {
@@ -206,7 +207,7 @@ const MediaGallery: React.FC = () => {
               {item.type === 'video' ? (
                 <video
                   src={item.src}
-                  poster="/nov-images/van-still.png"
+                  poster={item.thumbnail || "/nov-images/van-still.png"}
                   className="w-full h-full object-cover"
                   muted
                   playsInline
@@ -215,7 +216,7 @@ const MediaGallery: React.FC = () => {
                 />
               ) : (
                 <Image
-                  src={item.src}
+                  src={item.thumbnail || item.src}
                   alt={item.label}
                   fill
                   className="object-cover"
@@ -289,7 +290,7 @@ const MediaGallery: React.FC = () => {
               {selectedMedia.type === 'video' ? (
                 <video
                   src={selectedMedia.src}
-                  poster="/nov-images/van-still.png"
+                  poster={selectedMedia.thumbnail || "/nov-images/van-still.png"}
                   controls
                   autoPlay
                   playsInline
