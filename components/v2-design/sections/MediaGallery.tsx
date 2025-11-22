@@ -146,7 +146,8 @@ const MediaGallery: React.FC = () => {
     { type: 'image', src: '/nov-images/van-still.png', label: 'Mobile Recovery Unit', thumbnail: '/thumbs/mobile-recovery-unit.png' },
     { type: 'image', src: '/nov-images/full-front-interior-still.jpeg', label: 'Full Interior Setup', thumbnail: '/thumbs/full-interior.png' },
     { type: 'image', src: '/nov-images/plunge-still.png', label: 'Cold Plunge Therapy', thumbnail: '/thumbs/cold-plunge-therapy.png' },
-    { type: 'image', src: '/nov-images/sauna-still.png', label: 'Infrared Sauna', thumbnail: '/thumbs/thumb_2.png' },
+    { type: 'image', src: '/nov-images/sauna-still.png', label: 'Infrared Sauna' },
+    { type: 'image', src: '/thumbs/thumb_2.png', label: 'Recovery Experience' },
   ];
 
   const handleMediaClick = (item: MediaItem, index: number): void => {
