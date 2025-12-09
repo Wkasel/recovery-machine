@@ -60,7 +60,7 @@ export class BookingService {
 
   // Calculate setup fee based on address with real traffic data
   static async calculateSetupFee(address: Address): Promise<SetupFeeCalculation> {
-    const baseSetupFee = 17500; // $175.00 base fee
+    const baseSetupFee = 7999; // $79.99 base fee
 
     // Costa Mesa dispatch center coordinates
     const DISPATCH_CENTER = {
