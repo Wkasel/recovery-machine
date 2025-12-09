@@ -62,11 +62,11 @@ export class BookingService {
   static async calculateSetupFee(address: Address): Promise<SetupFeeCalculation> {
     const baseSetupFee = 17500; // $175.00 base fee
 
-    // Long Beach dispatch center coordinates
+    // Costa Mesa dispatch center coordinates
     const DISPATCH_CENTER = {
-      address: 'Long Beach, CA',
-      lat: 33.7701,
-      lng: -118.1937
+      address: '2777 Bristol St Unit E, Costa Mesa, CA 92626',
+      lat: 33.6846,
+      lng: -117.8871
     };
 
     try {
@@ -124,7 +124,7 @@ export class BookingService {
       console.warn('Using fallback distance calculation:', error);
 
       // Fallback: Use mock distance based on ZIP code
-      const mockDistance = this.getMockDistanceFromLongBeach(address.zipCode);
+      const mockDistance = this.getMockDistanceFromCostaMesa(address.zipCode);
       const distanceFee = mockDistance > 10 ? Math.ceil((mockDistance - 10) * 500) : 0;
       const totalSetupFee = baseSetupFee + distanceFee;
 
@@ -138,40 +138,49 @@ export class BookingService {
     }
   }
 
-  // Mock distance calculation from Long Beach dispatch center (fallback)
-  private static getMockDistanceFromLongBeach(zipCode: string): number {
-    // Approximate distances from Long Beach based on ZIP code patterns
+  // Mock distance calculation from Costa Mesa dispatch center (fallback)
+  private static getMockDistanceFromCostaMesa(zipCode: string): number {
+    // Approximate distances from Costa Mesa (2777 Bristol St) based on ZIP code patterns
     const zip = parseInt(zipCode);
 
-    // Long Beach area (90801-90815)
-    if (zip >= 90801 && zip <= 90815) return 3;
+    // Costa Mesa (92626-92629)
+    if (zip >= 92626 && zip <= 92629) return 3;
 
-    // Signal Hill, Lakewood (90755, 90840, 90713, 90805)
-    if (zip === 90755 || zip === 90840 || zip === 90713 || zip === 90805) return 5;
+    // Newport Beach (92660-92663, 92625)
+    if ((zip >= 92660 && zip <= 92663) || zip === 92625) return 5;
 
-    // Seal Beach, Los Alamitos (90740, 90720)
-    if (zip === 90740 || zip === 90720) return 8;
+    // Huntington Beach (92646-92649)
+    if (zip >= 92646 && zip <= 92649) return 8;
 
-    // Huntington Beach, Fountain Valley (92646-92649, 92708)
-    if ((zip >= 92646 && zip <= 92649) || zip === 92708) return 12;
-
-    // Costa Mesa, Newport Beach (92626-92663, 92625)
-    if ((zip >= 92626 && zip <= 92663) || zip === 92625) return 18;
+    // Fountain Valley (92708)
+    if (zip === 92708) return 6;
 
     // Irvine area (92602-92620)
-    if (zip >= 92602 && zip <= 92620) return 22;
+    if (zip >= 92602 && zip <= 92620) return 8;
+
+    // Santa Ana (92701-92799)
+    if (zip >= 92701 && zip <= 92799) return 6;
 
     // Laguna Beach (92651-92654)
-    if (zip >= 92651 && zip <= 92654) return 28;
+    if (zip >= 92651 && zip <= 92654) return 12;
+
+    // Tustin, Orange (92780-92869)
+    if (zip >= 92780 && zip <= 92869) return 10;
 
     // Anaheim area (92801-92899)
-    if (zip >= 92801 && zip <= 92899) return 20;
+    if (zip >= 92801 && zip <= 92899) return 15;
+
+    // Long Beach area (90801-90815)
+    if (zip >= 90801 && zip <= 90815) return 20;
+
+    // Seal Beach, Los Alamitos (90740, 90720)
+    if (zip === 90740 || zip === 90720) return 15;
 
     // Downtown LA (90001-90099)
-    if (zip >= 90001 && zip <= 90099) return 25;
+    if (zip >= 90001 && zip <= 90099) return 40;
 
     // Torrance, Redondo (90501-90510, 90277-90278)
-    if ((zip >= 90501 && zip <= 90510) || zip === 90277 || zip === 90278) return 15;
+    if ((zip >= 90501 && zip <= 90510) || zip === 90277 || zip === 90278) return 30;
 
     return 20; // Default ~20 miles
   }
