@@ -17,6 +17,7 @@ if (typeof window !== 'undefined') {
 
 const Header: React.FC = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState<boolean>(false);
+  const [mounted, setMounted] = useState(false);
   const pathname = usePathname();
   const router = useRouter();
   const isHomePage = pathname === '/';
@@ -26,6 +27,11 @@ const Header: React.FC = () => {
   const headerRef = useRef<HTMLElement>(null);
   const navRef = useRef<HTMLElement>(null);
   const mobileMenuRef = useRef<HTMLDivElement>(null);
+
+  // Set mounted state
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   // Close mobile menu on route change
   useEffect(() => {
@@ -112,6 +118,9 @@ const Header: React.FC = () => {
       );
     }
   }, [mobileMenuOpen]);
+
+  // Don't render until mounted to prevent hydration mismatch
+  if (!mounted) return null;
 
   const closeMobileMenu = (): void => setMobileMenuOpen(false);
 

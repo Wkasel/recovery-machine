@@ -2,7 +2,6 @@
 
 import { AdminHeader } from "@/components/admin/AdminHeader";
 import { AdminSidebar } from "@/components/admin/AdminSidebar";
-import { AuthDebug } from "@/components/debug/AuthDebug";
 import { User } from "@supabase/supabase-js";
 import dynamic from "next/dynamic";
 import { useEffect, useState } from "react";
@@ -61,11 +60,6 @@ export function AdminClientWrapper({ children, user, adminData }: AdminClientWra
             {children}
           </div>
         </main>
-      </div>
-      <div className="pointer-events-none lg:ml-64">
-        <div className="pointer-events-auto">
-          <AuthDebug />
-        </div>
       </div>
     </div>
   );

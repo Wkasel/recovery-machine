@@ -1,10 +1,19 @@
 'use client';
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { Instagram } from 'lucide-react';
 
 const Footer: React.FC = () => {
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  // Don't render until mounted to prevent hydration mismatch
+  if (!mounted) return null;
+
   const orangeCountyCities = [
     { name: 'Irvine', slug: 'irvine' },
     { name: 'Newport Beach', slug: 'newport-beach' },

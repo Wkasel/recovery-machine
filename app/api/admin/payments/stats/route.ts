@@ -1,30 +1,12 @@
 // @ts-nocheck
 import { createServerSupabaseClient } from "@/lib/supabase/server";
+import { requireAdminAccess } from "@/lib/utils/admin/auth";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(request: NextRequest) {
   try {
+    await requireAdminAccess(request, "operator");
     const supabase = await createServerSupabaseClient();
-    const {
-      data: { user },
-      error: authError,
-    } = await supabase.auth.getUser();
-
-    if (authError || !user) {
-      return NextResponse.json({ error: "Authentication required" }, { status: 401 });
-    }
-
-    // Check if user is admin
-    const { data: admin } = await supabase
-      .from("admins")
-      .select("*")
-      .eq("user_id", user.id)
-      .eq("is_active", true)
-      .single();
-
-    if (!admin) {
-      return NextResponse.json({ error: "Admin access required" }, { status: 403 });
-    }
 
     // Get date range (last 30 days by default)
     const { searchParams } = new URL(request.url);

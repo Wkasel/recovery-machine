@@ -4,7 +4,6 @@ import { useState, useEffect } from "react";
 import { User } from "@supabase/supabase-js";
 import { AdminHeader } from "@/components/admin/AdminHeader";
 import { AdminSidebar } from "@/components/admin/AdminSidebar";
-import { AuthDebug } from "@/components/debug/AuthDebug";
 
 interface AdminPanelClientProps {
   children: React.ReactNode;
@@ -24,7 +23,7 @@ export function AdminPanelClient({ children, user, adminData }: AdminPanelClient
   // Don't render anything until mounted to prevent hydration issues
   if (!mounted) {
     return (
-      <div className="min-h-screen bg-background text-charcoal">
+      <div className="min-h-screen bg-background text-charcoal" data-admin-panel>
         <div className="animate-pulse">
           <div className="h-16 bg-mint-accent/20 border-b border-mint-accent/30"></div>
           <div className="flex">
@@ -52,7 +51,7 @@ export function AdminPanelClient({ children, user, adminData }: AdminPanelClient
   }
 
   return (
-    <div className="min-h-screen bg-background text-charcoal">
+    <div className="min-h-screen bg-background text-charcoal" data-admin-panel>
       <AdminHeader
         user={user}
         admin={{
@@ -72,11 +71,6 @@ export function AdminPanelClient({ children, user, adminData }: AdminPanelClient
             {children}
           </div>
         </main>
-      </div>
-      <div className="pointer-events-none lg:ml-64">
-        <div className="pointer-events-auto">
-          <AuthDebug />
-        </div>
       </div>
     </div>
   );

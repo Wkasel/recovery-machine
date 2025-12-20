@@ -52,9 +52,19 @@ export default async function AdminLayout({
 
     // Pass the authenticated user and admin data to the client panel
     return (
-      <AdminPanelClient user={user} adminData={adminData}>
-        {children}
-      </AdminPanelClient>
+      <>
+        {/* Inline script to add admin-page class immediately - runs before React hydration */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `document.body.classList.add('admin-page');`
+          }}
+        />
+        <div data-admin-panel>
+          <AdminPanelClient user={user} adminData={adminData}>
+            {children}
+          </AdminPanelClient>
+        </div>
+      </>
     );
   } catch (error) {
     console.error("Admin layout error:", error);

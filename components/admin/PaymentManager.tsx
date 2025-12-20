@@ -430,7 +430,7 @@ export function PaymentManager() {
                               </div>
                               <div>
                                 <label className="text-sm font-medium">Status</label>
-                                <p>{getStatusBadge(selectedOrder.status)}</p>
+                                <div>{getStatusBadge(selectedOrder.status)}</div>
                               </div>
                             </div>
 

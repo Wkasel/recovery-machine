@@ -3,12 +3,14 @@
 import { useState, useEffect } from 'react';
 
 const AnnouncementBar: React.FC = () => {
-  const [isVisible, setIsVisible] = useState<boolean>(true);
+  const [isVisible, setIsVisible] = useState<boolean>(false);
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
+    setMounted(true);
     const dismissed = localStorage.getItem('announcementDismissed');
-    if (dismissed === 'true') {
-      setIsVisible(false);
+    if (dismissed !== 'true') {
+      setIsVisible(true);
     }
   }, []);
 
@@ -17,6 +19,8 @@ const AnnouncementBar: React.FC = () => {
     localStorage.setItem('announcementDismissed', 'true');
   };
 
+  // Don't render until mounted to prevent hydration mismatch
+  if (!mounted) return null;
   if (!isVisible) return null;
 
   return (

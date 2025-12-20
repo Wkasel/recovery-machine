@@ -374,3 +374,18 @@ select {
   }
 }
 
+/* ===== ADMIN PAGE LAYOUT OVERRIDES ===== */
+/* Hide site navigation (Header, Footer, AnnouncementBar) on admin pages
+   Uses admin-page class on body (set via inline script in admin layout) */
+
+/* When body has admin-page class, hide the site header and footer */
+body.admin-page > div > header,
+body.admin-page > div > footer {
+  display: none !important;
+}
+
+/* Reset main content spacing for admin pages (no fixed header to account for) */
+body.admin-page main#main-content {
+  min-height: auto;
+}
+
