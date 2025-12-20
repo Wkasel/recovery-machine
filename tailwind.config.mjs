@@ -6,6 +6,10 @@ export default {
     './app/**/*.{ts,tsx}',
     './src/**/*.{ts,tsx}',
   ],
+  // Safelist classes that are added dynamically via JavaScript
+  safelist: [
+    'admin-page',
+  ],
   darkMode: 'class',
   theme: {
     extend: {

@@ -1,10 +1,12 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { usePathname } from 'next/navigation';
 
 const AnnouncementBar: React.FC = () => {
   const [isVisible, setIsVisible] = useState<boolean>(false);
   const [mounted, setMounted] = useState(false);
+  const pathname = usePathname();
 
   useEffect(() => {
     setMounted(true);
@@ -19,8 +21,13 @@ const AnnouncementBar: React.FC = () => {
     localStorage.setItem('announcementDismissed', 'true');
   };
 
+  // Hide announcement bar on admin pages - check this FIRST
+  const isAdminPage = pathname?.startsWith('/admin');
+  if (isAdminPage) return null;
+
   // Don't render until mounted to prevent hydration mismatch
   if (!mounted) return null;
+
   if (!isVisible) return null;
 
   return (

@@ -3,13 +3,19 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { Instagram } from 'lucide-react';
+import { usePathname } from 'next/navigation';
 
 const Footer: React.FC = () => {
   const [mounted, setMounted] = useState(false);
+  const pathname = usePathname();
 
   useEffect(() => {
     setMounted(true);
   }, []);
+
+  // Hide footer on admin pages - check this FIRST, even before mounted
+  const isAdminPage = pathname?.startsWith('/admin');
+  if (isAdminPage) return null;
 
   // Don't render until mounted to prevent hydration mismatch
   if (!mounted) return null;

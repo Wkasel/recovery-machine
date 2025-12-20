@@ -51,19 +51,20 @@ export default async function AdminLayout({
     }
 
     // Pass the authenticated user and admin data to the client panel
+    // Include inline CSS to hide site navigation immediately (before React hydration)
     return (
       <>
-        {/* Inline script to add admin-page class immediately - runs before React hydration */}
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `document.body.classList.add('admin-page');`
-          }}
-        />
-        <div data-admin-panel>
-          <AdminPanelClient user={user} adminData={adminData}>
-            {children}
-          </AdminPanelClient>
-        </div>
+        <style dangerouslySetInnerHTML={{ __html: `
+          /* Hide site navigation on admin pages - injected inline for immediate effect */
+          header.fixed[class*="top-16"],
+          footer.py-16,
+          .fixed.top-0.left-0.right-0.z-\\[60\\] {
+            display: none !important;
+          }
+        ` }} />
+        <AdminPanelClient user={user} adminData={adminData}>
+          {children}
+        </AdminPanelClient>
       </>
     );
   } catch (error) {

@@ -119,6 +119,11 @@ const Header: React.FC = () => {
     }
   }, [mobileMenuOpen]);
 
+  // Hide header on admin pages - check this FIRST, even before mounted
+  // This ensures we don't render at all on admin pages
+  const isAdminPage = pathname?.startsWith('/admin');
+  if (isAdminPage) return null;
+
   // Don't render until mounted to prevent hydration mismatch
   if (!mounted) return null;
 
