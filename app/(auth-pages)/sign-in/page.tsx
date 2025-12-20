@@ -40,8 +40,15 @@ function SignInForm(): React.ReactElement {
       const formData = new FormData();
       formData.append("email", email);
       formData.append("password", password);
+
+      // Pass the redirect URL if specified in query params
+      const redirectTo = searchParams.get("redirect");
+      if (redirectTo) {
+        formData.append("redirectTo", redirectTo);
+      }
+
       await signIn(formData);
-      // If successful, signIn will redirect to /profile
+      // If successful, signIn will redirect to the specified URL or /profile
     } catch (err: any) {
       console.error("Password sign-in error:", err);
       setError(err.message || "Invalid login credentials");
@@ -61,6 +68,13 @@ function SignInForm(): React.ReactElement {
     try {
       const formData = new FormData();
       formData.append("email", email);
+
+      // Pass the redirect URL if specified in query params
+      const redirectTo = searchParams.get("redirect");
+      if (redirectTo) {
+        formData.append("redirectTo", redirectTo);
+      }
+
       const result = await sendMagicLink(formData);
       console.log("Magic link result:", result);
       setMagicLinkSent(true);

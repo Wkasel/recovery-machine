@@ -26,6 +26,8 @@ export async function signIn(formData: FormData) {
     password: formData.get("password"),
   });
 
+  const redirectTo = formData.get("redirectTo") as string | null;
+
   const supabase = await createServerSupabaseClient();
 
   const { error } = await supabase.auth.signInWithPassword(data);
@@ -35,7 +37,10 @@ export async function signIn(formData: FormData) {
     throw new Error("Invalid login credentials");
   }
 
-  redirect("/profile");
+  // Redirect to the specified URL or default to /profile
+  // Only allow internal redirects (starting with /)
+  const targetUrl = redirectTo && redirectTo.startsWith("/") ? redirectTo : "/profile";
+  redirect(targetUrl);
 }
 
 export async function signUp(formData: FormData) {
@@ -60,6 +65,8 @@ export async function sendMagicLink(formData: FormData) {
     email: formData.get("email"),
   });
 
+  const redirectTo = formData.get("redirectTo") as string | null;
+
   const supabase = await createServerSupabaseClient();
 
   // Auto-detect the current URL from Vercel or other environment
@@ -71,10 +78,16 @@ export async function sendMagicLink(formData: FormData) {
         ? "http://localhost:3002"
         : "https://therecoverymachine.co");
 
+  // Build the callback URL with optional redirect
+  const callbackUrl = new URL(`${baseUrl}/auth/callback`);
+  if (redirectTo && redirectTo.startsWith("/")) {
+    callbackUrl.searchParams.set("next", redirectTo);
+  }
+
   const { error } = await supabase.auth.signInWithOtp({
     email: data.email,
     options: {
-      emailRedirectTo: `${baseUrl}/auth/callback`,
+      emailRedirectTo: callbackUrl.toString(),
     },
   });
 
