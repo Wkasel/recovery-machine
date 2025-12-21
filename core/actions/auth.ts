@@ -19,13 +19,22 @@ const magicLinkSchema = z.object({
   email: z.string().email(),
 });
 
+// Auth action result types
+type AuthResult = { success: true } | { success: false; error: string };
+
 // Auth actions
-export async function signIn(formData: FormData) {
-  const data = signInSchema.parse({
+export async function signIn(formData: FormData): Promise<AuthResult> {
+  // Validate input first
+  const parseResult = signInSchema.safeParse({
     email: formData.get("email"),
     password: formData.get("password"),
   });
 
+  if (!parseResult.success) {
+    return { success: false, error: "Please enter a valid email and password" };
+  }
+
+  const data = parseResult.data;
   const redirectTo = formData.get("redirectTo") as string | null;
 
   const supabase = await createServerSupabaseClient();
@@ -33,8 +42,8 @@ export async function signIn(formData: FormData) {
   const { error } = await supabase.auth.signInWithPassword(data);
 
   if (error) {
-    // Return a friendlier error message
-    throw new Error("Invalid login credentials");
+    // Return error instead of throwing to prevent Server Components render errors
+    return { success: false, error: "Invalid login credentials" };
   }
 
   // Redirect to the specified URL or default to /profile
