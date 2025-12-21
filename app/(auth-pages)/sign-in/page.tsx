@@ -145,9 +145,18 @@ function SignInForm(): React.ReactElement {
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="password" className="text-charcoal" style={{ fontFamily: 'Futura, "Futura PT", "Century Gothic", sans-serif' }}>
-              Password
-            </Label>
+            <div className="flex items-center justify-between">
+              <Label htmlFor="password" className="text-charcoal" style={{ fontFamily: 'Futura, "Futura PT", "Century Gothic", sans-serif' }}>
+                Password
+              </Label>
+              <Link
+                href="/forgot-password"
+                className="text-xs text-charcoal-light hover:text-charcoal transition-colors"
+                style={{ fontFamily: 'Futura, "Futura PT", "Century Gothic", sans-serif' }}
+              >
+                Forgot password?
+              </Link>
+            </div>
             <Input
               id="password"
               name="password"

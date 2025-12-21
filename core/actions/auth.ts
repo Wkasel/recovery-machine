@@ -145,3 +145,71 @@ export async function getUser() {
 
   return user;
 }
+
+// Password reset request
+const resetPasswordSchema = z.object({
+  email: z.string().email(),
+});
+
+export async function requestPasswordReset(formData: FormData): Promise<AuthResult> {
+  const parseResult = resetPasswordSchema.safeParse({
+    email: formData.get("email"),
+  });
+
+  if (!parseResult.success) {
+    return { success: false, error: "Please enter a valid email address" };
+  }
+
+  const { email } = parseResult.data;
+
+  const supabase = await createServerSupabaseClient();
+
+  // Get the base URL for the reset callback
+  const baseUrl = process.env.VERCEL_URL
+    ? `https://${process.env.VERCEL_URL}`
+    : process.env.NEXT_PUBLIC_APP_URL ||
+      process.env.SITE_URL ||
+      (process.env.NODE_ENV === "development"
+        ? "http://localhost:3000"
+        : "https://therecoverymachine.co");
+
+  const { error } = await supabase.auth.resetPasswordForEmail(email, {
+    redirectTo: `${baseUrl}/auth/callback?next=/reset-password`,
+  });
+
+  if (error) {
+    // Don't reveal if email exists or not for security
+    console.error("Password reset error:", error);
+  }
+
+  // Always return success to prevent email enumeration attacks
+  return { success: true };
+}
+
+// Update password (after clicking reset link)
+const updatePasswordSchema = z.object({
+  password: z.string().min(8, "Password must be at least 8 characters"),
+});
+
+export async function updatePassword(formData: FormData): Promise<AuthResult> {
+  const parseResult = updatePasswordSchema.safeParse({
+    password: formData.get("password"),
+  });
+
+  if (!parseResult.success) {
+    return { success: false, error: parseResult.error.errors[0]?.message || "Invalid password" };
+  }
+
+  const { password } = parseResult.data;
+
+  const supabase = await createServerSupabaseClient();
+
+  const { error } = await supabase.auth.updateUser({ password });
+
+  if (error) {
+    console.error("Password update error:", error);
+    return { success: false, error: "Failed to update password. Please try again." };
+  }
+
+  redirect("/profile");
+}
