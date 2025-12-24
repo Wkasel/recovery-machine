@@ -291,11 +291,9 @@ export default function ReviewsManager() {
 
                   <div className="flex space-x-2">
                     <Button
-                      variant="outline"
+                      variant={review.is_featured ? "secondary" : "outline"}
                       size="sm"
                       onClick={() => toggleFeatured(review.id, review.is_featured)}
-                      className={review.is_featured ? "" : ""}
-                      variant={review.is_featured ? "warning" : "outline"}
                     >
                       {review.is_featured ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                     </Button>

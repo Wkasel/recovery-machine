@@ -30,6 +30,7 @@ import {
 } from "@/components/ui/table";
 import { Textarea } from "@/components/ui/textarea";
 import { createBrowserSupabaseClient } from "@/lib/supabase/client";
+import { useToast } from "@/lib/hooks/use-toast";
 import {
   Edit,
   MapPin,
