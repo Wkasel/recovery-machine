@@ -46,6 +46,7 @@ import {
 
 // V2 Design Components
 import AnnouncementBar from "@/components/v2-design/layout/AnnouncementBar";
+import AdminBanner from "@/components/v2-design/layout/AdminBanner";
 import Header from "@/components/v2-design/layout/Header";
 import Footer from "@/components/v2-design/layout/Footer";
 import HashScrollHandler from "@/components/HashScrollHandler";
@@ -121,6 +122,9 @@ export default function RootLayout({
           <div className="min-h-screen relative">
             {/* Top Banner - Appears on all pages, dismissible */}
             <AnnouncementBar />
+
+            {/* Admin Banner - Shows for admin users outside admin pages */}
+            <AdminBanner />
 
             {/* Fixed Navigation - V2 Design with floating effect */}
             <Header />

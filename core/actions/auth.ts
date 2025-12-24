@@ -46,6 +46,18 @@ export async function signIn(formData: FormData): Promise<AuthResult> {
     return { success: false, error: "Invalid login credentials" };
   }
 
+  // Check if user is an admin
+  const { data: adminData } = await supabase
+    .from("admins")
+    .select("id, role")
+    .eq("email", data.email)
+    .single();
+
+  // If admin, redirect to admin panel
+  if (adminData) {
+    redirect("/admin");
+  }
+
   // Redirect to the specified URL or default to /profile
   // Only allow internal redirects (starting with /)
   const targetUrl = redirectTo && redirectTo.startsWith("/") ? redirectTo : "/profile";
